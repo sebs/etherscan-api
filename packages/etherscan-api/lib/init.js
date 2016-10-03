@@ -27,6 +27,51 @@ module.exports = function (apiKey) {
   }
 
   return {
+    ethsupply() {
+      const module = 'stats';
+      const action = 'ethsupply';
+      var query = querystring.stringify({
+        module, action, apiKey
+      });
+      return getRequest(query);
+    },
+    ethprice() {
+      const module = 'stats';
+      const action = 'ethprice';
+      var query = querystring.stringify({
+        module, action, apiKey
+      });
+      return getRequest(query);
+    },
+    getblockreward(address, blockno) {
+      const module = 'block';
+      const action = 'getblockreward';
+      if (!blockno) {
+        blockno = 0;
+      }
+      var query = querystring.stringify({
+        module, action, address, blockno, apiKey
+      });
+      return getRequest(query);
+    },
+    getstatus(txhash) {
+      const module = 'transaction';
+      const action = 'getstatus';
+      var query = querystring.stringify({
+        module, action, txhash, apiKey
+      });
+      return getRequest(query);
+    },
+    getabi(address) {
+      const module = 'contract';
+      const action = 'getabi';
+
+      var query = querystring.stringify({
+        module, action, address, apiKey
+      });
+
+      return getRequest(query);
+    },
     txlist(address, startblock, endblock, sort) {
       const module = 'account';
       const action = 'txlist';
