@@ -16,7 +16,7 @@ module.exports = function (apiKey) {
 
   function getRequest(query) {
     var p = new Promise(function(resolve, reject) {
-      client.get(url+query, function(err, req, res, data) {
+      client.get(url+'?'+query, function(err, req, res, data) {
         if (err) {
           return reject(err);
         }
