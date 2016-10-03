@@ -1,0 +1,37 @@
+{
+  "name": "etherscan-api",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "readme": "Readme.md",
+  "scripts": {
+    "test": "mocha",
+    "posttest": "npm run lint",
+    "prebundle": "npm test",
+    "lint": "jshint lib test",
+    "docs": "jsdoc -c ./jsdoc.json -R ./Readme.md -u ./docs",
+    "preversion": "npm run lint",
+    "postversion": "git push && git push --tags",
+    "build": "npm run test && npm run docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Michikoid/module-template.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Michikoid/module-template/issues"
+  },
+  "homepage": "https://github.com/Michikoid/module-template#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
+    "watch": "^0.19.2",
+    "jsdoc": "^3.4.0",
+    "jshint": "^2.9.3"
+  },
+  "dependencies": {
+  
+  }
+}
