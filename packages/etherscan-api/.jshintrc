@@ -1,0 +1,20 @@
+{
+    "browserify": true,
+    "bitwise": false,
+    "camelcase": false,
+    "eqeqeq": false,
+    "freeze": true,
+    "funcscope": false,
+    "maxcomplexity": 12, /* our target is 3! */
+    "maxdepth": 3,
+    "maxerr": 50,
+    "nonew": true,
+    "unused": true,
+    "undef": true,
+    "node": true,
+    "mocha": true,
+    "esversion": 6,
+    "predef": [
+        "console"
+    ]
+}
