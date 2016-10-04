@@ -1,6 +1,6 @@
 # Etherscan API
 
-[![npm version](https://badge.fury.io/js/etherscna-api.svg)](https://badge.fury.io/js/etherscan-api) [![Build Status](https://travis-ci.org/sebs/etherscan-api.svg?branch=master)](https://travis-ci.org/sebs/etherscan-api)[![npm](https://img.shields.io/npm/dt/etherscan-api.svg?maxAge=2592000)]()
+[![npm version](https://badge.fury.io/js/etherscan-api.svg)](https://badge.fury.io/js/etherscan-api) [![Build Status](https://travis-ci.org/sebs/etherscan-api.svg?branch=master)](https://travis-ci.org/sebs/etherscan-api)[![npm](https://img.shields.io/npm/dt/etherscan-api.svg?maxAge=2592000)]()
 
 Promised API to access the etherscan.io REST interface
 
