@@ -5,15 +5,19 @@
 Promised API to access the etherscan.io REST interface
 
 * account.getminedblocks
+* account.tokensupply
+* account.tokenbalance by name
+* account.tokenbalance by address
 * account.txlist
 * account.txlistinternal
 * account.balance
 * account.balance multi
-* stats.ethsuppyl
+* stats.ethsupply
+* stats.tokensupply
 * stats.ethprice
 * block.getblockreward
 * transaction.getstatus
-* contract.getabi 
+* contract.getabi
 
 
 ```javascript

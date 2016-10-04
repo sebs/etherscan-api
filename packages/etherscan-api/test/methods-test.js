@@ -12,6 +12,34 @@ describe('methods', function() {
     });
   });
 
+  it('account.tokensupply', function(done){
+    var api = init();
+    var supply = api.account.tokensupply('0x57d90b64a1a57749b0f932f1a3395792e12e7055');
+    supply.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('account.tokenbalance by name', function(done){
+    var api = init();
+    var supply = api.account.tokenbalance('0x0a869d79a7052c7f1b55a8ebabbea3420f0d1e13', 'TheDAO');
+    supply.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('account.tokenbalance by address', function(done){
+    var api = init();
+    var supply = api.account.tokenbalance('0xe04f27eb70e025b78871a2ad7eabe85e61212761', false, '0x57d90b64a1a57749b0f932f1a3395792e12e7055');
+    supply.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+
   it('account.txlist', function(done){
     var api = init();
     var txlist = api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
@@ -49,9 +77,18 @@ describe('methods', function() {
     });
   });
 
-  it('stats.ethsuppyl', function(done){
+  it('stats.ethsupply', function(done){
     var api = init();
     var supply = api.stats.ethsupply();
+    supply.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('stats.tokensupply', function(done){
+    var api = init();
+    var supply = api.stats.tokensupply('MKR');
     supply.then(function(res){
       assert.ok(res);
       done();
