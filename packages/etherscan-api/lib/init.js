@@ -27,6 +27,76 @@ module.exports = function (apiKey) {
   }
 
   return {
+    accounts: {
+      balance(address) {
+
+        const module = 'account';
+        let action = 'balance';
+        const tag = 'latest';
+
+        if (typeof address != 'string' && address.length) {
+          address = address.join(',');
+          action = 'balancemulti';
+        }
+
+        var query = querystring.stringify({
+          module, action, tag, address, apiKey
+        });
+        return getRequest(query);
+      },
+      txlistinternal(address, startblock, endblock, sort) {
+        const module = 'account';
+        const action = 'txlistinternal';
+
+        if (!startblock) {
+          startblock = 0;
+        }
+
+        if (!endblock) {
+          endblock = 'latest';
+        }
+
+        if (!sort) {
+          sort = 'asc';
+        }
+
+        var query = querystring.stringify({
+          module, action, startblock, endblock, sort, address, apiKey
+        });
+
+        return getRequest(query);
+      },
+      txlist(address, startblock, endblock, sort) {
+        const module = 'account';
+        const action = 'txlist';
+
+        if (!startblock) {
+          startblock = 0;
+        }
+
+        if (!endblock) {
+          endblock = 'latest';
+        }
+
+        if (!sort) {
+          sort = 'asc';
+        }
+
+        var query = querystring.stringify({
+          module, action, startblock, endblock, sort, address, apiKey
+        });
+
+        return getRequest(query);
+      },
+      getminedblocks(txhash) {
+        const module = 'account';
+        const action = 'getminedblock';
+        var query = querystring.stringify({
+          module, action, txhash, apiKey
+        });
+        return getRequest(query);
+      }
+    },
     ethsupply() {
       const module = 'stats';
       const action = 'ethsupply';
@@ -70,38 +140,6 @@ module.exports = function (apiKey) {
         module, action, address, apiKey
       });
 
-      return getRequest(query);
-    },
-    txlist(address, startblock, endblock, sort) {
-      const module = 'account';
-      const action = 'txlist';
-
-      if (!startblock) {
-        startblock = 0;
-      }
-
-      if (!endblock) {
-        endblock = 'latest';
-      }
-
-      if (!sort) {
-        sort = 'asc';
-      }
-
-      var query = querystring.stringify({
-        module, action, startblock, endblock, sort, address, apiKey
-      });
-
-      return getRequest(query);
-    },
-    balance(address) {
-      const module = 'account';
-      const action = 'balance';
-      const tag = 'latest';
-
-      var query = querystring.stringify({
-        module, action, tag, address, apiKey
-      });
       return getRequest(query);
     }
   };

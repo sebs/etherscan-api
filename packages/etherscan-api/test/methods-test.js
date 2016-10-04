@@ -3,18 +3,37 @@ const assert = require('chai').assert;
 const init = require('../.').init;
 describe('methods', function() {
 
-  it('txlist', function(done){
+  it('accounts.txlist', function(done){
     var api = init();
-    var balance = api.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+    var txlist = api.accounts.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+    txlist.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('accounts.txlistinternal', function(done){
+    var api = init();
+    var txlist = api.accounts.txlistinternal('0x40eb908387324f2b575b4879cd9d7188f69c8fc9d87c901b9e2daaea4b442170');
+    txlist.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('accounts.balance', function(done){
+    var api = init();
+    var balance = api.accounts.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
     balance.then(function(res){
       assert.ok(res);
       done();
     });
   });
 
-  it('balance', function(done){
+
+  it('accounts.balance multi', function(done){
     var api = init();
-    var balance = api.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+    var balance = api.accounts.balance(['0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae']);
     balance.then(function(res){
       assert.ok(res);
       done();
