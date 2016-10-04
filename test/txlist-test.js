@@ -1,22 +1,9 @@
 'use strict';
 const assert = require('chai').assert;
 const init = require('../.').init;
-describe('txlist', function() {
-  it('returns a promise', function( ){
-    var api = init();
-    var balance = api.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
-    assert.ok(balance.then);
-  });
+describe('methods', function() {
 
-  it('executes the promise', function(done){
-    var api = init();
-    var balance = api.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
-    balance.then(function(){
-      done();
-    });
-  });
-
-  it('has data', function(done){
+  it('txlist', function(done){
     var api = init();
     var balance = api.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
     balance.then(function(res){
@@ -25,4 +12,57 @@ describe('txlist', function() {
     });
   });
 
+  it('balance', function(done){
+    var api = init();
+    var balance = api.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+    balance.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('ethsuppyl', function(done){
+    var api = init();
+    var supply = api.ethsupply();
+    supply.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('ethprice', function(done){
+    var api = init();
+    var price = api.ethprice();
+    price.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('getblockreward', function(done){
+    var api = init();
+    var blockreward = api.getblockreward();
+    blockreward.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('getstatus', function(done){
+    var api = init();
+    var status = api.getstatus('0x15f8e5ea1079d9a0bb04a4c58ae5fe7654b5b2b4463375ff7ffb490aa0032f3a');
+    status.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('getabi', function(done){
+    var api = init();
+    var abi = api.getabi('0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413');
+    abi.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
 });
