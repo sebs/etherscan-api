@@ -4,18 +4,21 @@
 
 Promised API to access the etherscan.io REST interface
 
-* txlist
-* balance
-* ethsuppyl
-* ethprice
-* getblockreward
-* getstatus
-* getabi
+* account.getminedblocks
+* account.txlist
+* account.txlistinternal
+* account.balance
+* account.balance multi
+* stats.ethsuppyl
+* stats.ethprice
+* block.getblockreward
+* transaction.getstatus
+* contract.getabi 
 
 
 ```javascript
 var api = require('etherscan-api').init();
-var balance = api.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+var balance = api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
 balance.then(function(balanceData){
   console.log(balanceData);
 });
