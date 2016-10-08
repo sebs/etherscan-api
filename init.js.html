@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: init.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: init.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var restify = require('restify');
+const querystring = require('querystring');
+
+const url = 'https://api.etherscan.io/api';
+
+module.exports = function (apiKey) {
+
+  if (!apiKey) {
+    apiKey = 'YourApiKeyToken';
+  }
+
+  var client = restify.createJsonClient({
+    url: url,
+    version: '*'
+  });
+
+  function getRequest(query) {
+    var p = new Promise(function(resolve, reject) {
+      client.get(url+'?'+query, function(err, req, res, data) {
+        if (err) {
+          return reject(err);
+        }
+        resolve(data);
+      });
+    });
+    return p;
+  }
+
+  return {
+    /** @namespace */
+    stats: {
+      /*
+      *  Refer to this by {@link stats.tokensupply}
+       * Returns the supply of Tokens
+       * @namespace
+       */
+      tokensupply(tokenname) {
+        const module = 'stats';
+        const action = 'tokensupply';
+        var query = querystring.stringify({
+          module, action, tokenname, apiKey
+        });
+        return getRequest(query);
+      },
+      /*
+       * Returns total supply of ether
+       */
+      ethsupply() {
+        const module = 'stats';
+        const action = 'ethsupply';
+        var query = querystring.stringify({
+          module, action, apiKey
+        });
+        return getRequest(query);
+      },
+
+      /*
+       * Returns tthe price of ether now
+       */
+      ethprice() {
+        const module = 'stats';
+        const action = 'ethprice';
+        var query = querystring.stringify({
+          module, action, apiKey
+        });
+        return getRequest(query);
+      }
+    },
+    /** @namespace */
+    block: {
+      /*
+       * Find the block reward for a given address and block
+       */
+      getblockreward(address, blockno) {
+        const module = 'block';
+        const action = 'getblockreward';
+        if (!blockno) {
+          blockno = 0;
+        }
+        var query = querystring.stringify({
+          module, action, address, blockno, apiKey
+        });
+        return getRequest(query);
+      }
+    },
+    /** @namespace */
+    transaction: {
+      /*
+       * returns the status of a specific transaction hash
+       */
+      getstatus(txhash) {
+        const module = 'transaction';
+        const action = 'getstatus';
+        var query = querystring.stringify({
+          module, action, txhash, apiKey
+        });
+        return getRequest(query);
+      }
+    },
+    /** @namespace */
+    contract: {
+      /*
+       * Returns the ABI/Interface of a given contract
+       */
+      getabi(address) {
+        const module = 'contract';
+        const action = 'getabi';
+
+        var query = querystring.stringify({
+          module, action, address, apiKey
+        });
+
+        return getRequest(query);
+      }
+    },
+    /** @namespace */
+    account: {
+      /*
+       * Returns the supply of tokens, given a specific address of one token account
+       */
+      tokensupply(contractaddress) {
+        const module = 'account';
+        const action = 'tokensupply';
+        var query = querystring.stringify({
+          module, action, contractaddress, apiKey
+        });
+        return getRequest(query);
+      },
+      /*
+       * Returns the amount of Tokens a specific account owns
+       */
+      tokenbalance(address, tokenname, contractaddress){
+        const module = 'account';
+        const action = 'tokenbalance';
+        const  tag = 'latest';
+
+        var queryObject = {
+          module, action, apiKey, tag
+        };
+
+        if (contractaddress) {
+          queryObject.contractaddress = contractaddress;
+        }
+
+        if (tokenname) {
+          queryObject.tokenname = tokenname;
+        }
+        var query = querystring.stringify(queryObject);
+        return getRequest(query);
+      },
+      /*
+       * Returns the balance of a sepcific account
+       */
+      balance(address) {
+        const module = 'account';
+        let action = 'balance';
+        const tag = 'latest';
+
+        if (typeof address != 'string' &amp;&amp; address.length) {
+          address = address.join(',');
+          action = 'balancemulti';
+        }
+
+        var query = querystring.stringify({
+          module, action, tag, address, apiKey
+        });
+        return getRequest(query);
+      },
+      /*
+       * Get a list of internal transactions
+       */
+      txlistinternal(address, startblock, endblock, sort) {
+        const module = 'account';
+        const action = 'txlistinternal';
+
+        if (!startblock) {
+          startblock = 0;
+        }
+
+        if (!endblock) {
+          endblock = 'latest';
+        }
+
+        if (!sort) {
+          sort = 'asc';
+        }
+
+        var query = querystring.stringify({
+          module, action, startblock, endblock, sort, address, apiKey
+        });
+
+        return getRequest(query);
+      },
+      /*
+       * Get a list of transactions for a specfic address
+       */
+      txlist(address, startblock, endblock, sort) {
+        const module = 'account';
+        const action = 'txlist';
+
+        if (!startblock) {
+          startblock = 0;
+        }
+
+        if (!endblock) {
+          endblock = 'latest';
+        }
+
+        if (!sort) {
+          sort = 'asc';
+        }
+
+        var query = querystring.stringify({
+          module, action, startblock, endblock, sort, address, apiKey
+        });
+
+        return getRequest(query);
+      },
+      /*
+       * Get a list of blocks that a specific account has mineds
+       */
+      getminedblocks(address) {
+        const module = 'account';
+        const action = 'getminedblocks';
+        var query = querystring.stringify({
+          module, action, address, apiKey
+        });
+        return getRequest(query);
+      }
+    }
+  };
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="account.html">account</a></li><li><a href="block.html">block</a></li><li><a href="contract.html">contract</a></li><li><a href="stats.html">stats</a></li><li><a href="transaction.html">transaction</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-tutorial.html">tutorial</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Sun Oct 09 2016 01:08:32 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
