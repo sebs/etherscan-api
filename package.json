@@ -10,7 +10,8 @@
     "lint": "jshint lib test",
     "docs": "jsdoc -c ./jsdoc.json -R ./Readme.md -u ./docs",
     "preversion": "npm run lint",
-    "postversion": "git push && git push --tags",
+    "pages": "node ./scripts/publish-gh.js",
+    "postversion": "git push && git push --tags && npm run pages",
     "build": "npm run test && npm run docs"
   },
   "repository": {
