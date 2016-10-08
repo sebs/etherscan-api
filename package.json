@@ -6,9 +6,9 @@
   "scripts": {
     "test": "mocha",
     "posttest": "npm run lint",
-    "prebundle": "npm test",
     "lint": "jshint lib test",
     "docs": "jsdoc -c ./jsdoc.json -R ./Readme.md -u ./docs",
+    "bundle": "browserify index.js -s etherscanApi -o dist/bundle.js",
     "preversion": "npm run lint",
     "pages": "node ./scripts/publish-gh.js",
     "postversion": "git push && git push --tags && npm run pages",
@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/sebs/etherscan-api#readme",
   "devDependencies": {
+    "browserify": "^13.1.0",
     "chai": "^3.5.0",
     "gh-pages": "^0.11.0",
     "jsdoc": "^3.4.0",
