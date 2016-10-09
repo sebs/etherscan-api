@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/etherscan-api.svg)](https://badge.fury.io/js/etherscan-api) [![Build Status](https://travis-ci.org/sebs/etherscan-api.svg?branch=master)](https://travis-ci.org/sebs/etherscan-api)[![npm](https://img.shields.io/npm/dt/etherscan-api.svg?maxAge=2592000)]()
 
-Promised API to access the etherscan.io REST interface
+A way to access the [etherscan.io api](https://etherscan.io/apis) using promises. Fetch a diverse set of information about the blockchain 
 
 * account.getminedblocks
 * account.tokensupply
@@ -18,6 +18,20 @@ Promised API to access the etherscan.io REST interface
 * block.getblockreward
 * transaction.getstatus
 * contract.getabi
+* proxy.eth_blockNumber
+* proxy.eth_getBlockByNumber
+* proxy.eth_getUncleByBlockNumberAndIndex
+* proxy.eth_getBlockTransactionCountByNumber
+* proxy.eth_getTransactionByHash
+* proxy.eth_getTransactionByBlockNumberAndIndex
+* proxy.eth_getTransactionCount
+* proxy.eth_sendRawTransaction
+* proxy.eth_getTransactionReceipt
+* proxy.eth_call
+* proxy.eth_getCode
+* proxy.eth_getStorageAt
+* proxy.eth_gasPrice
+* proxy.eth_estimateGas
 
 
 ```javascript

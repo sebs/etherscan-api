@@ -130,4 +130,140 @@ describe('methods', function() {
       done();
     });
   });
+
+  it('proxy.eth_blockNumber', function(done){
+    var api = init();
+    var res = api.proxy.eth_blockNumber();
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+
+  it('proxy.eth_getBlockByNumber', function(done){
+    var api = init();
+    var res = api.proxy.eth_getBlockByNumber('0x10d4f', true);
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+
+  it('proxy.eth_getUncleByBlockNumberAndIndex', function(done){
+    var api = init();
+    var res = api.proxy.eth_getUncleByBlockNumberAndIndex('0x210A9B', '0x0');
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('proxy.eth_getBlockTransactionCountByNumber', function(done){
+    var api = init();
+    var res = api.proxy.eth_getBlockTransactionCountByNumber('0x10FB78');
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('proxy.eth_getTransactionByHash', function(done){
+    var api = init();
+    var res = api.proxy.eth_getTransactionByHash('0x1e2910a262b1008d0616a0beb24c1a491d78771baa54a33e66065e03b1f46bc1');
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+
+  it('proxy.eth_getTransactionByBlockNumberAndIndex', function(done){
+    var api = init();
+    var res = api.proxy.eth_getTransactionByBlockNumberAndIndex('0x10d4f', '0x0');
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('proxy.eth_getTransactionCount', function(done){
+    var api = init();
+    var res = api.proxy.eth_getTransactionCount('0x2910543af39aba0cd09dbb2d50200b3e800a63d2', 'latest');
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('proxy.eth_sendRawTransaction', function(done){
+    var api = init();
+    var res = api.proxy.eth_sendRawTransaction('0xf904808000831cfde080');
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('proxy.eth_getTransactionReceipt', function(done){
+    var api = init();
+    var res = api.proxy.eth_getTransactionReceipt('0x1e2910a262b1008d0616a0beb24c1a491d78771baa54a33e66065e03b1f46bc1');
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('proxy.eth_call', function(done){
+    var api = init();
+    var res = api.proxy.eth_call('0xAEEF46DB4855E25702F8237E8f403FddcaF931C0', '0x70a08231000000000000000000000000e16359506c028e51f16be38986ec5746251e9724', 'latest');
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('proxy.eth_getCode', function(done){
+    var api = init();
+    var res = api.proxy.eth_getCode('0xf75e354c5edc8efed9b59ee9f67a80845ade7d0c',  'latest');
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('proxy.eth_getStorageAt', function(done){
+    var api = init();
+    var res = api.proxy.eth_getStorageAt('0x6e03d9cce9d60f3e9f2597e13cd4c54c55330cfd', '0x0',  'latest');
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('proxy.eth_gasPrice', function(done){
+    var api = init();
+    var res = api.proxy.eth_gasPrice();
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+  it('proxy.eth_estimateGas', function(done){
+    var api = init();
+    var res = api.proxy.eth_estimateGas(
+      '0xf0160428a8552ac9bb7e050d90eeade4ddd52843',
+      '0xff22',
+      '0x051da038cc',
+      '0xffffff'
+    );
+    res.then(function(res){
+      assert.ok(res);
+      done();
+    });
+  });
+
+
 });
