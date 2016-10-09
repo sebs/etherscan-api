@@ -4,7 +4,7 @@
   "description": "API to etherscan with a simple interface",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha -t 20000",
     "posttest": "npm run lint",
     "lint": "jshint lib test",
     "docs": "jsdoc -c ./jsdoc.json -R ./Readme.md -u ./docs",
@@ -15,6 +15,13 @@
     "changelog": "rm CHANGELOG.md && changelog https://github.com/sebs/etherscan-api all > CHANGELOG.md && git add . && git commit . -m changelog",
     "build": "npm run test && npm run docs"
   },
+  "keywords": [
+    "ethereum",
+    "etherscan",
+    "api",
+    "transaction",
+    "rest"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sebs/etherscan-api.git"
