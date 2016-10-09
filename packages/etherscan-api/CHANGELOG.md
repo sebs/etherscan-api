@@ -1,8 +1,10 @@
 2016-10-09
 ==========
 
-  * 1.3.2
+  * 2.0.0
+  * (feature): eth api tests and proxy
   * changelog
+  * 1.3.2
   * 1.3.1
   * (docs): cdn
   * 1.3.0
