@@ -12,6 +12,7 @@
     "preversion": "npm run lint",
     "pages": "node ./scripts/publish-gh.js",
     "postversion": "git push && git push --tags && npm run pages",
+    "changelog": "rm CHANGELOG.md && changelog https://github.com/sebs/etherscan-api all > CHANGELOG.md && git add . && git commit . -m changelog",
     "build": "npm run test && npm run docs"
   },
   "repository": {
@@ -31,7 +32,8 @@
     "jsdoc": "^3.4.0",
     "jshint": "^2.9.3",
     "mocha": "^3.0.2",
-    "watch": "^0.19.2"
+    "watch": "^0.19.2",
+    "changelog": "^1.0.7"
   },
   "dependencies": {
     "restify": "^4.1.1"
