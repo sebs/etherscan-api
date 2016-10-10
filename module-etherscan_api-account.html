@@ -71,7 +71,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line373">line 373</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line421">line 421</a>
     </li></ul></dd>
     
 
@@ -107,7 +107,7 @@
 
     
 
-    <h4 class="name" id=".balance"><span class="type-signature">(static) </span>balance<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".balance"><span class="type-signature">(static) </span>balance<span class="signature">(address)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
 
     
 
@@ -125,6 +125,55 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -158,7 +207,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line405">line 405</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line459">line 459</a>
     </li></ul></dd>
     
 
@@ -181,6 +230,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -189,7 +256,7 @@
 
     
 
-    <h4 class="name" id=".getminedblocks"><span class="type-signature">(static) </span>getminedblocks<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".getminedblocks"><span class="type-signature">(static) </span>getminedblocks<span class="signature">(address)</span><span class="type-signature"></span></h4>
 
     
 
@@ -207,6 +274,55 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Transaction hash</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -240,7 +356,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line461">line 461</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line523">line 523</a>
     </li></ul></dd>
     
 
@@ -271,14 +387,14 @@
 
     
 
-    <h4 class="name" id=".tokenbalance"><span class="type-signature">(static) </span>tokenbalance<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".tokenbalance"><span class="type-signature">(static) </span>tokenbalance<span class="signature">(address, tokenname, contractaddress)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Returns the amount of Tokens a specific account owns
+    Returns the amount of Tokens a specific account owns.
 </div>
 
 
@@ -289,6 +405,101 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Contract address</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tokenname</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name of the token</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>contractaddress</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Contract address</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -322,7 +533,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line377">line 377</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line429">line 429</a>
     </li></ul></dd>
     
 
@@ -345,6 +556,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -353,7 +582,7 @@
 
     
 
-    <h4 class="name" id=".txlist"><span class="type-signature">(static) </span>txlist<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".txlist"><span class="type-signature">(static) </span>txlist<span class="signature">(address, startblock, endblock, sort)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
 
     
 
@@ -371,6 +600,124 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Transaction address</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>startblock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">start looking here</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>endblock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">end looking there</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sort</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Sort asc/desc</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -404,7 +751,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line436">line 436</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line497">line 497</a>
     </li></ul></dd>
     
 
@@ -427,6 +774,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -435,7 +800,7 @@
 
     
 
-    <h4 class="name" id=".txlistinternal"><span class="type-signature">(static) </span>txlistinternal<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".txlistinternal"><span class="type-signature">(static) </span>txlistinternal<span class="signature">(txhash)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
 
     
 
@@ -453,6 +818,55 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>txhash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Transaction hash</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -486,7 +900,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line423">line 423</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line479">line 479</a>
     </li></ul></dd>
     
 
@@ -509,6 +923,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -534,7 +966,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Mon Oct 10 2016 16:25:34 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Mon Oct 10 2016 21:44:43 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

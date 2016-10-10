@@ -107,7 +107,7 @@
 
     
 
-    <h4 class="name" id=".eth_blockNumber"><span class="type-signature">(static) </span>eth_blockNumber<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".eth_blockNumber"><span class="type-signature">(static) </span>eth_blockNumber<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;integer>}</span></h4>
 
     
 
@@ -158,7 +158,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line114">line 114</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line115">line 115</a>
     </li></ul></dd>
     
 
@@ -181,6 +181,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;integer></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -189,7 +207,7 @@
 
     
 
-    <h4 class="name" id=".eth_call"><span class="type-signature">(static) </span>eth_call<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".eth_call"><span class="type-signature">(static) </span>eth_call<span class="signature">(to, tag)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
 
     
 
@@ -207,496 +225,76 @@
 
 
 
-
-
-
-
-<dl class="details">
-
+    <h5>Parameters:</h5>
     
 
-    
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line214">line 214</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <th>Type</th>
 
         
-            
-
-    
-
-    <h4 class="name" id=".eth_estimateGas"><span class="type-signature">(static) </span>eth_estimateGas<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Makes a call or transaction, which won't be added to the blockchain and returns the used gas, which can be used for estimating the used gas
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line258">line 258</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>to</code></td>
             
 
-    
-
-    <h4 class="name" id=".eth_gasPrice"><span class="type-signature">(static) </span>eth_gasPrice<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
 
 
-<div class="description">
-    Returns the current price per gas in wei.
-</div>
+            
+            </td>
 
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line247">line 247</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
             
 
-    
-
-    <h4 class="name" id=".eth_getBlockByNumber"><span class="type-signature">(static) </span>eth_getBlockByNumber<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Returns information about a block by block number.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line125">line 125</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
             
 
-    
-
-    <h4 class="name" id=".eth_getBlockTransactionCountByNumber"><span class="type-signature">(static) </span>eth_getBlockTransactionCountByNumber<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Returns the number of transactions in a block from a block matching the given block number
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
+            <td class="description last">Address to execute from</td>
+        </tr>
 
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line148">line 148</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
+        <tr>
+            
+                <td class="name"><code>tag</code></td>
             
 
-    
-
-    <h4 class="name" id=".eth_getCode"><span class="type-signature">(static) </span>eth_getCode<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
 
 
-<div class="description">
-    Returns code at a given address
-</div>
+            
+            </td>
 
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line225">line 225</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
             
 
+            
+
+            <td class="description last">Content</td>
+        </tr>
+
     
-
-    <h4 class="name" id=".eth_getStorageAt"><span class="type-signature">(static) </span>eth_getStorageAt<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Returns the value from a storage position at a given address.
-</div>
-
-
-
-
-
-
-
+    </tbody>
+</table>
 
 
 
@@ -755,6 +353,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -763,7 +379,990 @@
 
     
 
-    <h4 class="name" id=".eth_getTransactionByBlockNumberAndIndex"><span class="type-signature">(static) </span>eth_getTransactionByBlockNumberAndIndex<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".eth_estimateGas"><span class="type-signature">(static) </span>eth_estimateGas<span class="signature">(to, value, gasPrice, gas)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Makes a call or transaction, which won't be added to the blockchain and returns the used gas, which can be used for estimating the used gas
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>to</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address to get code from</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Storage position</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>gasPrice</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">??</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>gas</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">??</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line293">line 293</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".eth_gasPrice"><span class="type-signature">(static) </span>eth_gasPrice<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the current price per gas in wei.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line277">line 277</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".eth_getBlockByNumber"><span class="type-signature">(static) </span>eth_getBlockByNumber<span class="signature">(tag)</span><span class="type-signature"> &rarr; {Promise.&lt;integer>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns information about a block by block number.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Tag to look up</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line128">line 128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;integer></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".eth_getBlockTransactionCountByNumber"><span class="type-signature">(static) </span>eth_getBlockTransactionCountByNumber<span class="signature">(tag)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the number of transactions in a block from a block matching the given block number
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Tag to look up</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line156">line 156</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".eth_getCode"><span class="type-signature">(static) </span>eth_getCode<span class="signature">(address, tag)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns code at a given address
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address to get code from</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">??</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line250">line 250</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".eth_getStorageAt"><span class="type-signature">(static) </span>eth_getStorageAt<span class="signature">(address, position, tag)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the value from a storage position at a given address.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address to get code from</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>position</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Storage position</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">??</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line265">line 265</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".eth_getTransactionByBlockNumberAndIndex"><span class="type-signature">(static) </span>eth_getTransactionByBlockNumberAndIndex<span class="signature">(tag, index)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
 
     
 
@@ -781,6 +1380,78 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Tag to look up</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Index</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -814,7 +1485,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line170">line 170</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line183">line 183</a>
     </li></ul></dd>
     
 
@@ -837,6 +1508,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -845,7 +1534,7 @@
 
     
 
-    <h4 class="name" id=".eth_getTransactionByHash"><span class="type-signature">(static) </span>eth_getTransactionByHash<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".eth_getTransactionByHash"><span class="type-signature">(static) </span>eth_getTransactionByHash<span class="signature">(hash)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
 
     
 
@@ -863,6 +1552,55 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>hash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Transaction hash</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -896,7 +1634,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line159">line 159</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line169">line 169</a>
     </li></ul></dd>
     
 
@@ -919,6 +1657,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -927,7 +1683,7 @@
 
     
 
-    <h4 class="name" id=".eth_getTransactionCount"><span class="type-signature">(static) </span>eth_getTransactionCount<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".eth_getTransactionCount"><span class="type-signature">(static) </span>eth_getTransactionCount<span class="signature">(address)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
 
     
 
@@ -945,6 +1701,55 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address of the transaction</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -978,7 +1783,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line181">line 181</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line196">line 196</a>
     </li></ul></dd>
     
 
@@ -1001,6 +1806,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1009,7 +1832,7 @@
 
     
 
-    <h4 class="name" id=".eth_getTransactionReceipt"><span class="type-signature">(static) </span>eth_getTransactionReceipt<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".eth_getTransactionReceipt"><span class="type-signature">(static) </span>eth_getTransactionReceipt<span class="signature">(txhash)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
 
     
 
@@ -1027,6 +1850,55 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>txhash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Transaction hash</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -1060,7 +1932,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line203">line 203</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line222">line 222</a>
     </li></ul></dd>
     
 
@@ -1083,6 +1955,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1091,7 +1981,7 @@
 
     
 
-    <h4 class="name" id=".eth_getUncleByBlockNumberAndIndex"><span class="type-signature">(static) </span>eth_getUncleByBlockNumberAndIndex<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".eth_getUncleByBlockNumberAndIndex"><span class="type-signature">(static) </span>eth_getUncleByBlockNumberAndIndex<span class="signature">(tag, index)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
 
     
 
@@ -1109,6 +1999,78 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Tag to look up</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Index</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -1142,7 +2104,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line137">line 137</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line143">line 143</a>
     </li></ul></dd>
     
 
@@ -1165,6 +2127,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1173,7 +2153,7 @@
 
     
 
-    <h4 class="name" id=".eth_sendRawTransaction"><span class="type-signature">(static) </span>eth_sendRawTransaction<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".eth_sendRawTransaction"><span class="type-signature">(static) </span>eth_sendRawTransaction<span class="signature">(hex)</span><span class="type-signature"> &rarr; {Promise.&lt;object>}</span></h4>
 
     
 
@@ -1191,6 +2171,55 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>hex</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Serialized Message</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -1224,7 +2253,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line192">line 192</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line209">line 209</a>
     </li></ul></dd>
     
 
@@ -1247,6 +2276,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1272,7 +2319,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Mon Oct 10 2016 16:25:34 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Mon Oct 10 2016 21:44:43 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
