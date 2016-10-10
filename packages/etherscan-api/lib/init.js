@@ -110,6 +110,7 @@ module.exports = function (apiKey) {
     proxy: {
       /**
       * Returns the number of most recent block
+      * @returns {Promise.<integer>}
       */
       eth_blockNumber() {
         const module = 'proxy';
@@ -121,6 +122,8 @@ module.exports = function (apiKey) {
       },
       /**
       * Returns information about a block by block number.
+      * @param {string} tag - Tag to look up
+      * @returns {Promise.<integer>}
       */
       eth_getBlockByNumber(tag) {
         const module = 'proxy';
@@ -133,6 +136,9 @@ module.exports = function (apiKey) {
       },
       /**
        * Returns information about a uncle by block number.
+       * @param {string} tag - Tag to look up
+       * @param {string} index - Index
+       * @returns {Promise.<object>}
        */
       eth_getUncleByBlockNumberAndIndex(tag, index) {
         const module = 'proxy';
@@ -144,6 +150,8 @@ module.exports = function (apiKey) {
       },
       /**
        * Returns the number of transactions in a block from a block matching the given block number
+       * @param {string} tag - Tag to look up
+       * @returns {Promise.<object>}
        */
       eth_getBlockTransactionCountByNumber(tag) {
         const module = 'proxy';
@@ -155,6 +163,8 @@ module.exports = function (apiKey) {
       },
       /**
        * Returns the information about a transaction requested by transaction hash
+       * @param {string} hash - Transaction hash
+       * @returns {Promise.<object>}
        */
       eth_getTransactionByHash(hash) {
         const module = 'proxy';
@@ -166,6 +176,9 @@ module.exports = function (apiKey) {
       },
       /**
       * Returns information about a transaction by block number and transaction index position
+      * @param {string} tag - Tag to look up
+      * @param {string} index - Index
+      * @returns {Promise.<object>}
       */
       eth_getTransactionByBlockNumberAndIndex(tag, index) {
         const module = 'proxy';
@@ -177,6 +190,8 @@ module.exports = function (apiKey) {
       },
       /**
       * Returns the number of transactions sent from an address
+      * @param {string} address - Address of the transaction
+      * @returns {Promise.<object>}
       */
       eth_getTransactionCount(address) {
         const module = 'proxy';
@@ -188,6 +203,8 @@ module.exports = function (apiKey) {
       },
       /**
       * Creates new message call transaction or a contract creation for signed transactions
+      * @param {string} hex - Serialized Message
+      * @returns {Promise.<object>}
       */
       eth_sendRawTransaction(hex) {
         const module = 'proxy';
@@ -199,6 +216,8 @@ module.exports = function (apiKey) {
       },
       /**
       * Returns the receipt of a transaction by transaction hash
+      * @param {string} txhash - Transaction hash
+      * @returns {Promise.<object>}
       */
       eth_getTransactionReceipt(txhash) {
         const module = 'proxy';
@@ -210,6 +229,9 @@ module.exports = function (apiKey) {
       },
       /**
       * Executes a new message call immediately without creating a transaction on the block chain
+      * @param {string} to - Address to execute from
+      * @param {string} tag - Content
+      * @returns {Promise.<object>}
       */
       eth_call(to, tag) {
         const module = 'proxy';
@@ -221,6 +243,9 @@ module.exports = function (apiKey) {
       },
       /**
       * Returns code at a given address
+      * @param {string} address - Address to get code from
+      * @param {string} tag - ??
+      * @returns {Promise.<object>}
       */
       eth_getCode(address, tag) {
         const module = 'proxy';
@@ -232,6 +257,10 @@ module.exports = function (apiKey) {
       },
       /**
       * Returns the value from a storage position at a given address.
+      * @param {string} address - Address to get code from
+      * @param {string} position - Storage position
+      * @param {string} tag - ??
+      * @returns {Promise.<object>}
       */
       eth_getStorageAt(address, position, tag) {
         const module = 'proxy';
@@ -243,6 +272,7 @@ module.exports = function (apiKey) {
       },
       /**
       * Returns the current price per gas in wei.
+      * @returns {Promise.<object>}
       */
       eth_gasPrice() {
         const module = 'proxy';
@@ -254,6 +284,11 @@ module.exports = function (apiKey) {
       },
       /**
       * Makes a call or transaction, which won't be added to the blockchain and returns the used gas, which can be used for estimating the used gas
+      * @param {string} to - Address to get code from
+      * @param {string} value - Storage position
+      * @param {string} gasPrice - ??
+      * @param {string} gas - ??
+      * @returns {Promise.<object>}
       */
       eth_estimateGas(to, value, gasPrice, gas) {
         const module = 'proxy';
@@ -270,6 +305,9 @@ module.exports = function (apiKey) {
     stats: {
       /**
        * Returns the supply of Tokens
+       * @param {string} tokenname - Name of the Token
+       * @param {string} contractaddress - Address from token contract
+       * @returns {Promise.<object>}
        */
       tokensupply(tokenname, contractaddress) {
         const module = 'stats';
@@ -290,8 +328,10 @@ module.exports = function (apiKey) {
         var query = querystring.stringify(params);
         return getRequest(query);
       },
+
       /**
        * Returns total supply of ether
+       * @returns {Promise.<integer>}
        */
       ethsupply() {
         const module = 'stats';
@@ -302,8 +342,9 @@ module.exports = function (apiKey) {
         return getRequest(query);
       },
 
-      /*
-       * Returns tthe price of ether now
+      /**
+       * Returns the price of ether now
+       * @returns {Promise.<integer>}
        */
       ethprice() {
         const module = 'stats';
@@ -320,6 +361,9 @@ module.exports = function (apiKey) {
     block: {
       /**
        * Find the block reward for a given address and block
+       * @param {string} address - Address of the block
+       * @param {string} blockno - Block number
+       * @returns {Promise.<object>}
        */
       getblockreward(address, blockno) {
         const module = 'block';
@@ -339,6 +383,8 @@ module.exports = function (apiKey) {
     transaction: {
       /**
        * returns the status of a specific transaction hash
+       * @param {string} txhash - Transaction hash
+       * @returns {Promise.<object>}
        */
       getstatus(txhash) {
         const module = 'transaction';
@@ -355,6 +401,8 @@ module.exports = function (apiKey) {
     contract: {
       /**
        * Returns the ABI/Interface of a given contract
+       * @param {string} address - Contract address
+       * @returns {Promise.<object>}
        */
       getabi(address) {
         const module = 'contract';
@@ -372,7 +420,11 @@ module.exports = function (apiKey) {
     */
     account: {
       /**
-       * Returns the amount of Tokens a specific account owns
+       * Returns the amount of Tokens a specific account owns.
+       * @param {string} address - Contract address
+       * @param {string} tokenname - Name of the token
+       * @param {string} contractaddress - Contract address
+       * @returns {Promise.<object>}
        */
       tokenbalance(address, tokenname, contractaddress){
 
@@ -401,6 +453,8 @@ module.exports = function (apiKey) {
       },
       /**
        * Returns the balance of a sepcific account
+       * @param {string} address - Address
+       * @returns {Promise.<object>}
        */
       balance(address) {
         const module = 'account';
@@ -419,6 +473,8 @@ module.exports = function (apiKey) {
       },
       /**
        * Get a list of internal transactions
+       * @param {string} txhash - Transaction hash
+       * @returns {Promise.<object>}
        */
       txlistinternal(txhash) {
         const module = 'account';
@@ -432,6 +488,11 @@ module.exports = function (apiKey) {
       },
       /**
        * Get a list of transactions for a specfic address
+       * @param {string} address - Transaction address
+       * @param {string} startblock - start looking here
+       * @param {string} endblock - end looking there
+       * @param {string} sort - Sort asc/desc
+       * @returns {Promise.<object>}
        */
       txlist(address, startblock, endblock, sort) {
         const module = 'account';
@@ -457,6 +518,7 @@ module.exports = function (apiKey) {
       },
       /**
        * Get a list of blocks that a specific account has mineds
+       * @param {string} address - Transaction hash
        */
       getminedblocks(address) {
         const module = 'account';
