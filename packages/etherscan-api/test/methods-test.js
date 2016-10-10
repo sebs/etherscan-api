@@ -4,7 +4,7 @@ const init = require('../.').init;
 describe('api', function() {
 
   describe('account', function() {
-    it('account.getminedblocks', function(done){
+    it('getminedblocks', function(done){
       var api = init();
       var txlist = api.account.getminedblocks('0x9dd134d14d1e65f84b706d6f205cd5b1cd03a46b');
       txlist.then(function(res){
@@ -13,7 +13,7 @@ describe('api', function() {
       });
     });
 
-    it('account.tokenbalance by name', function(done){
+    it('tokenbalance by name', function(done){
       var api = init();
 
       var supply = api.account.tokenbalance(
@@ -24,7 +24,7 @@ describe('api', function() {
         done();
       });
     });
-    it('account.tokenbalance by address', function(done){
+    it('tokenbalance by address', function(done){
       var api = init();
       var supply = api.account.tokenbalance('0xe04f27eb70e025b78871a2ad7eabe85e61212761', false, '0x57d90b64a1a57749b0f932f1a3395792e12e7055');
       supply.then(function(res){
@@ -32,7 +32,7 @@ describe('api', function() {
         done();
       });
     });
-    it('account.txlist', function(done){
+    it('txlist', function(done){
       var api = init();
       var txlist = api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
       txlist.then(function(res){
@@ -40,7 +40,7 @@ describe('api', function() {
         done();
       });
     });
-    it('account.txlistinternal', function(done){
+    it('txlistinternal', function(done){
       var api = init();
       var txlist = api.account.txlistinternal('0x40eb908387324f2b575b4879cd9d7188f69c8fc9d87c901b9e2daaea4b442170');
       txlist.then(function(res){
@@ -49,7 +49,7 @@ describe('api', function() {
       });
     });
 
-    it('account.balance', function(done){
+    it('balance', function(done){
       var api = init();
       var balance = api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
       balance.then(function(res){
@@ -57,7 +57,7 @@ describe('api', function() {
         done();
       });
     });
-    it('account.balance multi', function(done){
+    it('balance multi', function(done){
       var api = init();
       var balance = api.account.balance(['0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae']);
       balance.then(function(res){
@@ -67,7 +67,7 @@ describe('api', function() {
     });
   });
   describe('stats', function() {
-    it('stats.ethsupply', function(done){
+    it('ethsupply', function(done){
       var api = init();
       var supply = api.stats.ethsupply();
       supply.then(function(res){
@@ -76,7 +76,7 @@ describe('api', function() {
       });
     });
 
-    it('stats.tokensupply by tokenname', function(done){
+    it('tokensupply by tokenname', function(done){
       var api = init();
       var supply = api.stats.tokensupply('MKR');
       supply.then(function(res){
@@ -84,7 +84,7 @@ describe('api', function() {
         done();
       });
     });
-    it('stats.tokensupply by address', function(done){
+    it('tokensupply by address', function(done){
       var api = init();
       var supply = api.stats.tokensupply(null, '0x57d90b64a1a57749b0f932f1a3395792e12e7055');
       supply.then(function(res){
@@ -93,7 +93,7 @@ describe('api', function() {
       }).catch(done);
     });
 
-    it('stats.ethprice', function(done){
+    it('ethprice', function(done){
       var api = init();
       var price = api.stats.ethprice();
       price.then(function(res){
