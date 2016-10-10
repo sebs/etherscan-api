@@ -1,6 +1,14 @@
 2016-10-10
 ==========
 
+  * 2.1.2
+  * (feature): Header and Footer
+  * 2.1.1
+  * i(feature): docs in sexy now
+  * 2.1.0
+  * (docs): the big doxing ;)
+  * 2.0.4
+  * changelog
   * (feature): proper api docs with a desc per method
   * 2.0.3
   * (churn): removed prefixes
