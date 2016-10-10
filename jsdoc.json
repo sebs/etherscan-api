@@ -12,5 +12,10 @@
     "templates": {
         "cleverLinks": false,
         "monospaceLinks": false
-    }
+    },
+    "templates": {
+      "systemName"            : "etherscan-api",
+      "footer"                : "Access the Etherscan restful API with this NPM module",
+      "copyright"             :  "Sebastian Schürmann"
+  }
 }
