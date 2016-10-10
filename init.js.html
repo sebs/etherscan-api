@@ -30,7 +30,11 @@
 const querystring = require('querystring');
 
 const url = 'https://api.etherscan.io/api';
-
+/**
+ * The Etherscan JS API
+ * @exports init
+ * @namespace etherscan
+ */
 module.exports = function (apiKey) {
 
   if (!apiKey) {
@@ -54,13 +58,205 @@ module.exports = function (apiKey) {
     return p;
   }
 
+  /**
+   * @namespace etherscan/log
+   */
   return {
-    /** @namespace */
+
+
+    log: {
+      /**
+      * The Event Log API was designed to provide an alternative to the native eth_getLogs.
+      * @namespace etherscan/log
+      * @method getLogs
+      */
+      getLogs(
+        address,
+        fromBlock,
+        toBlock,
+        topic0,
+        topic0_1_opr,
+        topic1,
+        topic1_2_opr,
+        topic2,
+        topic2_3_opr,
+        topic3) {
+
+        const module = 'log';
+        const action = 'getLogs';
+        var params = {
+          module, action, apiKey, address
+        };
+
+        if (toBlock) {
+          params.tolock = toBlock;
+        }
+
+        if (fromBlock) {
+          params.fromBlock = fromBlock;
+        }
+
+        if (toBlock) {
+          params.tolock = toBlock;
+        }
+
+        if (topic0) {
+          params.topic0 = topic0;
+        }
+
+        if (topic0_1_opr) {
+          params.topic0_1_opr = topic0_1_opr;
+        }
+
+        if (topic1) {
+          params.topic1 = topic1;
+        }
+
+        if (topic1_2_opr) {
+          params.topic1_2_opr = topic1_2_opr;
+        }
+
+        if (topic2) {
+          params.topic2 = topic2;
+        }
+
+        if (topic2_3_opr) {
+          params.topic2_3_opr = topic2_3_opr;
+        }
+
+        if (topic3) {
+          params.topic3 = topic3;
+        }
+        var query = querystring.stringify(params);
+        return getRequest(query);
+      }
+    },
+    /**
+     * @namespace etherscan/proxy
+     */
+    proxy: {
+      eth_blockNumber() {
+        const module = 'proxy';
+        const action = 'eth_blockNumber';
+        var query = querystring.stringify({
+          module, action, apiKey
+        });
+        return getRequest(query);
+      },
+      eth_getBlockByNumber(tag) {
+        const module = 'proxy';
+        const action = 'eth_getBlockByNumber';
+        const boolean = true;
+        var query = querystring.stringify({
+          module, action, tag, apiKey, boolean
+        });
+        return getRequest(query);
+      },
+      eth_getUncleByBlockNumberAndIndex(tag, index) {
+        const module = 'proxy';
+        const action = 'eth_getUncleByBlockNumberAndIndex';
+        var query = querystring.stringify({
+          module, action, apiKey, tag, index
+        });
+        return getRequest(query);
+      },
+      eth_getBlockTransactionCountByNumber(tag) {
+        const module = 'proxy';
+        const action = 'eth_getBlockTransactionCountByNumber';
+        var query = querystring.stringify({
+          module, action, apiKey, tag
+        });
+        return getRequest(query);
+      },
+      eth_getTransactionByHash(hash) {
+        const module = 'proxy';
+        const action = 'eth_getTransactionByHash';
+        var query = querystring.stringify({
+          module, action, apiKey, hash
+        });
+        return getRequest(query);
+      },
+      eth_getTransactionByBlockNumberAndIndex(tag, index) {
+        const module = 'proxy';
+        const action = 'eth_getTransactionByBlockNumberAndIndex';
+        var query = querystring.stringify({
+          module, action, apiKey, tag, index
+        });
+        return getRequest(query);
+      },
+      eth_getTransactionCount(address) {
+        const module = 'proxy';
+        const action = 'eth_getTransactionCount';
+        var query = querystring.stringify({
+          module, action, apiKey, address
+        });
+        return getRequest(query);
+      },
+      eth_sendRawTransaction(hex) {
+        const module = 'proxy';
+        const action = 'eth_sendRawTransaction';
+        var query = querystring.stringify({
+          module, action, apiKey, hex
+        });
+        return getRequest(query);
+      },
+      eth_getTransactionReceipt(txhash) {
+        const module = 'proxy';
+        const action = 'eth_getTransactionReceipt';
+        var query = querystring.stringify({
+          module, action, apiKey, txhash
+        });
+        return getRequest(query);
+      },
+      eth_call(to, tag) {
+        const module = 'proxy';
+        const action = 'eth_call';
+        var query = querystring.stringify({
+          module, action, apiKey, to, tag
+        });
+        return getRequest(query);
+      },
+      eth_getCode(address, tag) {
+        const module = 'proxy';
+        const action = 'eth_getCode';
+        var query = querystring.stringify({
+          module, action, apiKey, address, tag
+        });
+        return getRequest(query);
+      },
+      eth_getStorageAt(address, position, tag) {
+        const module = 'proxy';
+        const action = 'eth_getStorageAt';
+        var query = querystring.stringify({
+          module, action, apiKey, address, position, tag
+        });
+        return getRequest(query);
+      },
+      eth_gasPrice() {
+        const module = 'proxy';
+        const action = 'eth_gasPrice';
+        var query = querystring.stringify({
+          module, action, apiKey
+        });
+        return getRequest(query);
+      },
+      eth_estimateGas(to, value, gasPrice, gas) {
+        const module = 'proxy';
+        const action = 'eth_estimateGas';
+        var query = querystring.stringify({
+          module, action, apiKey, to, value, gasPrice, gas
+        });
+        return getRequest(query);
+      },
+
+
+    },
+    /**
+     * @namespace etherscan/stats
+     */
     stats: {
       /*
-      *  Refer to this by {@link stats.tokensupply}
        * Returns the supply of Tokens
-       * @namespace
        */
       tokensupply(tokenname) {
         const module = 'stats';
@@ -94,7 +290,9 @@ module.exports = function (apiKey) {
         return getRequest(query);
       }
     },
-    /** @namespace */
+    /**
+     * @namespace etherscan/block
+     */
     block: {
       /*
        * Find the block reward for a given address and block
@@ -111,7 +309,9 @@ module.exports = function (apiKey) {
         return getRequest(query);
       }
     },
-    /** @namespace */
+    /**
+     * @namespace etherscan/transaction
+     */
     transaction: {
       /*
        * returns the status of a specific transaction hash
@@ -125,7 +325,9 @@ module.exports = function (apiKey) {
         return getRequest(query);
       }
     },
-    /** @namespace */
+    /**
+     * @namespace etherscan/contract
+     */
     contract: {
       /*
        * Returns the ABI/Interface of a given contract
@@ -141,7 +343,9 @@ module.exports = function (apiKey) {
         return getRequest(query);
       }
     },
-    /** @namespace */
+    /**
+     * @namespace etherscan/accounts
+     */
     account: {
       /*
        * Returns the supply of tokens, given a specific address of one token account
@@ -268,13 +472,13 @@ module.exports = function (apiKey) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="account.html">account</a></li><li><a href="block.html">block</a></li><li><a href="contract.html">contract</a></li><li><a href="stats.html">stats</a></li><li><a href="transaction.html">transaction</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-tutorial.html">tutorial</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="etherscan.html">etherscan</a></li><li><a href="etherscan_accounts.html">etherscan/accounts</a></li><li><a href="etherscan_block.html">etherscan/block</a></li><li><a href="etherscan_contract.html">etherscan/contract</a></li><li><a href="etherscan_log.html">etherscan/log</a></li><li><a href="etherscan_proxy.html">etherscan/proxy</a></li><li><a href="etherscan_stats.html">etherscan/stats</a></li><li><a href="etherscan_transaction.html">etherscan/transaction</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-tutorial.html">tutorial</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getLogs">getLogs</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Sun Oct 09 2016 01:08:32 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Mon Oct 10 2016 14:05:58 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
