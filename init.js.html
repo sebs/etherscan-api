@@ -30,10 +30,9 @@
 const querystring = require('querystring');
 
 const url = 'https://api.etherscan.io/api';
+
 /**
- * The Etherscan JS API
- * @exports init
- * @namespace etherscan
+ * @module etherscan/api
  */
 module.exports = function (apiKey) {
 
@@ -52,24 +51,26 @@ module.exports = function (apiKey) {
         if (err) {
           return reject(err);
         }
+        // reject a error from the normal RPC
+        if (data.status &amp;&amp; data.status != 1) {
+          return reject(data.message);
+        }
+
         resolve(data);
       });
     });
     return p;
   }
-
-  /**
-   * @namespace etherscan/log
-   */
+  /** @lends module:etherscan/api */
   return {
-
-
+    /**
+    * @namespace
+    */
     log: {
+
       /**
-      * The Event Log API was designed to provide an alternative to the native eth_getLogs.
-      * @namespace etherscan/log
-      * @method getLogs
-      */
+       * The Event Log API was designed to provide an alternative to the native eth_getLogs.
+       */
       getLogs(
         address,
         fromBlock,
@@ -132,9 +133,12 @@ module.exports = function (apiKey) {
       }
     },
     /**
-     * @namespace etherscan/proxy
-     */
+    * @namespace
+    */
     proxy: {
+      /**
+      * Returns the number of most recent block
+      */
       eth_blockNumber() {
         const module = 'proxy';
         const action = 'eth_blockNumber';
@@ -143,6 +147,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns information about a block by block number.
+      */
       eth_getBlockByNumber(tag) {
         const module = 'proxy';
         const action = 'eth_getBlockByNumber';
@@ -152,6 +159,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+       * Returns information about a uncle by block number.
+       */
       eth_getUncleByBlockNumberAndIndex(tag, index) {
         const module = 'proxy';
         const action = 'eth_getUncleByBlockNumberAndIndex';
@@ -160,6 +170,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+       * Returns the number of transactions in a block from a block matching the given block number
+       */
       eth_getBlockTransactionCountByNumber(tag) {
         const module = 'proxy';
         const action = 'eth_getBlockTransactionCountByNumber';
@@ -168,6 +181,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+       * Returns the information about a transaction requested by transaction hash
+       */
       eth_getTransactionByHash(hash) {
         const module = 'proxy';
         const action = 'eth_getTransactionByHash';
@@ -176,6 +192,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns information about a transaction by block number and transaction index position
+      */
       eth_getTransactionByBlockNumberAndIndex(tag, index) {
         const module = 'proxy';
         const action = 'eth_getTransactionByBlockNumberAndIndex';
@@ -184,6 +203,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns the number of transactions sent from an address
+      */
       eth_getTransactionCount(address) {
         const module = 'proxy';
         const action = 'eth_getTransactionCount';
@@ -192,6 +214,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Creates new message call transaction or a contract creation for signed transactions
+      */
       eth_sendRawTransaction(hex) {
         const module = 'proxy';
         const action = 'eth_sendRawTransaction';
@@ -200,6 +225,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns the receipt of a transaction by transaction hash
+      */
       eth_getTransactionReceipt(txhash) {
         const module = 'proxy';
         const action = 'eth_getTransactionReceipt';
@@ -208,6 +236,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Executes a new message call immediately without creating a transaction on the block chain
+      */
       eth_call(to, tag) {
         const module = 'proxy';
         const action = 'eth_call';
@@ -216,6 +247,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns code at a given address
+      */
       eth_getCode(address, tag) {
         const module = 'proxy';
         const action = 'eth_getCode';
@@ -224,6 +258,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns the value from a storage position at a given address.
+      */
       eth_getStorageAt(address, position, tag) {
         const module = 'proxy';
         const action = 'eth_getStorageAt';
@@ -232,6 +269,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns the current price per gas in wei.
+      */
       eth_gasPrice() {
         const module = 'proxy';
         const action = 'eth_gasPrice';
@@ -240,6 +280,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Makes a call or transaction, which won't be added to the blockchain and returns the used gas, which can be used for estimating the used gas
+      */
       eth_estimateGas(to, value, gasPrice, gas) {
         const module = 'proxy';
         const action = 'eth_estimateGas';
@@ -248,25 +291,34 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
-
-
     },
     /**
-     * @namespace etherscan/stats
-     */
+    * @namespace
+    */
     stats: {
-      /*
+      /**
        * Returns the supply of Tokens
        */
-      tokensupply(tokenname) {
+      tokensupply(tokenname, contractaddress) {
         const module = 'stats';
         const action = 'tokensupply';
-        var query = querystring.stringify({
-          module, action, tokenname, apiKey
-        });
+
+        let params = {
+          module, action, apiKey
+        };
+
+        if (tokenname) {
+          params.tokenname = tokenname;
+        }
+
+        if (contractaddress) {
+          params.contractaddress = contractaddress;
+        }
+
+        var query = querystring.stringify(params);
         return getRequest(query);
       },
-      /*
+      /**
        * Returns total supply of ether
        */
       ethsupply() {
@@ -291,10 +343,10 @@ module.exports = function (apiKey) {
       }
     },
     /**
-     * @namespace etherscan/block
-     */
+    * @namespace
+    */
     block: {
-      /*
+      /**
        * Find the block reward for a given address and block
        */
       getblockreward(address, blockno) {
@@ -310,10 +362,10 @@ module.exports = function (apiKey) {
       }
     },
     /**
-     * @namespace etherscan/transaction
-     */
+    * @namespace
+    */
     transaction: {
-      /*
+      /**
        * returns the status of a specific transaction hash
        */
       getstatus(txhash) {
@@ -326,10 +378,10 @@ module.exports = function (apiKey) {
       }
     },
     /**
-     * @namespace etherscan/contract
-     */
+    * @namespace
+    */
     contract: {
-      /*
+      /**
        * Returns the ABI/Interface of a given contract
        */
       getabi(address) {
@@ -344,24 +396,14 @@ module.exports = function (apiKey) {
       }
     },
     /**
-     * @namespace etherscan/accounts
-     */
+    * @namespace
+    */
     account: {
-      /*
-       * Returns the supply of tokens, given a specific address of one token account
-       */
-      tokensupply(contractaddress) {
-        const module = 'account';
-        const action = 'tokensupply';
-        var query = querystring.stringify({
-          module, action, contractaddress, apiKey
-        });
-        return getRequest(query);
-      },
-      /*
+      /**
        * Returns the amount of Tokens a specific account owns
        */
       tokenbalance(address, tokenname, contractaddress){
+
         const module = 'account';
         const action = 'tokenbalance';
         const  tag = 'latest';
@@ -377,10 +419,15 @@ module.exports = function (apiKey) {
         if (tokenname) {
           queryObject.tokenname = tokenname;
         }
+
+        if (address) {
+          queryObject.address = address;
+        }
+
         var query = querystring.stringify(queryObject);
         return getRequest(query);
       },
-      /*
+      /**
        * Returns the balance of a sepcific account
        */
       balance(address) {
@@ -398,32 +445,20 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
-      /*
+      /**
        * Get a list of internal transactions
        */
-      txlistinternal(address, startblock, endblock, sort) {
+      txlistinternal(txhash) {
         const module = 'account';
         const action = 'txlistinternal';
 
-        if (!startblock) {
-          startblock = 0;
-        }
-
-        if (!endblock) {
-          endblock = 'latest';
-        }
-
-        if (!sort) {
-          sort = 'asc';
-        }
-
         var query = querystring.stringify({
-          module, action, startblock, endblock, sort, address, apiKey
+          module, action, txhash, apiKey
         });
 
         return getRequest(query);
       },
-      /*
+      /**
        * Get a list of transactions for a specfic address
        */
       txlist(address, startblock, endblock, sort) {
@@ -448,7 +483,7 @@ module.exports = function (apiKey) {
 
         return getRequest(query);
       },
-      /*
+      /**
        * Get a list of blocks that a specific account has mineds
        */
       getminedblocks(address) {
@@ -472,13 +507,13 @@ module.exports = function (apiKey) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="etherscan.html">etherscan</a></li><li><a href="etherscan_accounts.html">etherscan/accounts</a></li><li><a href="etherscan_block.html">etherscan/block</a></li><li><a href="etherscan_contract.html">etherscan/contract</a></li><li><a href="etherscan_log.html">etherscan/log</a></li><li><a href="etherscan_proxy.html">etherscan/proxy</a></li><li><a href="etherscan_stats.html">etherscan/stats</a></li><li><a href="etherscan_transaction.html">etherscan/transaction</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-tutorial.html">tutorial</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getLogs">getLogs</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-etherscan_api.html">etherscan/api</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-etherscan_api-account.html">account</a></li><li><a href="module-etherscan_api-block.html">block</a></li><li><a href="module-etherscan_api-contract.html">contract</a></li><li><a href="module-etherscan_api-log.html">log</a></li><li><a href="module-etherscan_api-proxy.html">proxy</a></li><li><a href="module-etherscan_api-stats.html">stats</a></li><li><a href="module-etherscan_api-transaction.html">transaction</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-tutorial.html">tutorial</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Mon Oct 10 2016 14:05:58 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Mon Oct 10 2016 16:25:34 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
