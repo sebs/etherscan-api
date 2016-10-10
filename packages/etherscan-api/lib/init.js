@@ -3,6 +3,9 @@ const querystring = require('querystring');
 
 const url = 'https://api.etherscan.io/api';
 
+/**
+ * @module etherscan/api
+ */
 module.exports = function (apiKey) {
 
   if (!apiKey) {
@@ -30,9 +33,16 @@ module.exports = function (apiKey) {
     });
     return p;
   }
-
+  /** @lends module:etherscan/api */
   return {
+    /**
+    * @namespace
+    */
     log: {
+
+      /**
+       * The Event Log API was designed to provide an alternative to the native eth_getLogs.
+       */
       getLogs(
         address,
         fromBlock,
@@ -94,7 +104,13 @@ module.exports = function (apiKey) {
         return getRequest(query);
       }
     },
+    /**
+    * @namespace
+    */
     proxy: {
+      /**
+      * Returns the number of most recent block
+      */
       eth_blockNumber() {
         const module = 'proxy';
         const action = 'eth_blockNumber';
@@ -103,6 +119,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns information about a block by block number.
+      */
       eth_getBlockByNumber(tag) {
         const module = 'proxy';
         const action = 'eth_getBlockByNumber';
@@ -112,6 +131,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+       * Returns information about a uncle by block number.
+       */
       eth_getUncleByBlockNumberAndIndex(tag, index) {
         const module = 'proxy';
         const action = 'eth_getUncleByBlockNumberAndIndex';
@@ -120,6 +142,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+       * Returns the number of transactions in a block from a block matching the given block number
+       */
       eth_getBlockTransactionCountByNumber(tag) {
         const module = 'proxy';
         const action = 'eth_getBlockTransactionCountByNumber';
@@ -128,6 +153,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+       * Returns the information about a transaction requested by transaction hash
+       */
       eth_getTransactionByHash(hash) {
         const module = 'proxy';
         const action = 'eth_getTransactionByHash';
@@ -136,6 +164,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns information about a transaction by block number and transaction index position
+      */
       eth_getTransactionByBlockNumberAndIndex(tag, index) {
         const module = 'proxy';
         const action = 'eth_getTransactionByBlockNumberAndIndex';
@@ -144,6 +175,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns the number of transactions sent from an address
+      */
       eth_getTransactionCount(address) {
         const module = 'proxy';
         const action = 'eth_getTransactionCount';
@@ -152,6 +186,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Creates new message call transaction or a contract creation for signed transactions
+      */
       eth_sendRawTransaction(hex) {
         const module = 'proxy';
         const action = 'eth_sendRawTransaction';
@@ -160,6 +197,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns the receipt of a transaction by transaction hash
+      */
       eth_getTransactionReceipt(txhash) {
         const module = 'proxy';
         const action = 'eth_getTransactionReceipt';
@@ -168,6 +208,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Executes a new message call immediately without creating a transaction on the block chain
+      */
       eth_call(to, tag) {
         const module = 'proxy';
         const action = 'eth_call';
@@ -176,6 +219,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns code at a given address
+      */
       eth_getCode(address, tag) {
         const module = 'proxy';
         const action = 'eth_getCode';
@@ -184,6 +230,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns the value from a storage position at a given address.
+      */
       eth_getStorageAt(address, position, tag) {
         const module = 'proxy';
         const action = 'eth_getStorageAt';
@@ -192,6 +241,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Returns the current price per gas in wei.
+      */
       eth_gasPrice() {
         const module = 'proxy';
         const action = 'eth_gasPrice';
@@ -200,6 +252,9 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
+      /**
+      * Makes a call or transaction, which won't be added to the blockchain and returns the used gas, which can be used for estimating the used gas
+      */
       eth_estimateGas(to, value, gasPrice, gas) {
         const module = 'proxy';
         const action = 'eth_estimateGas';
@@ -208,11 +263,12 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
-
-
     },
+    /**
+    * @namespace
+    */
     stats: {
-      /*
+      /**
        * Returns the supply of Tokens
        */
       tokensupply(tokenname, contractaddress) {
@@ -234,7 +290,7 @@ module.exports = function (apiKey) {
         var query = querystring.stringify(params);
         return getRequest(query);
       },
-      /*
+      /**
        * Returns total supply of ether
        */
       ethsupply() {
@@ -258,8 +314,11 @@ module.exports = function (apiKey) {
         return getRequest(query);
       }
     },
+    /**
+    * @namespace
+    */
     block: {
-      /*
+      /**
        * Find the block reward for a given address and block
        */
       getblockreward(address, blockno) {
@@ -274,8 +333,11 @@ module.exports = function (apiKey) {
         return getRequest(query);
       }
     },
+    /**
+    * @namespace
+    */
     transaction: {
-      /*
+      /**
        * returns the status of a specific transaction hash
        */
       getstatus(txhash) {
@@ -287,8 +349,11 @@ module.exports = function (apiKey) {
         return getRequest(query);
       }
     },
+    /**
+    * @namespace
+    */
     contract: {
-      /*
+      /**
        * Returns the ABI/Interface of a given contract
        */
       getabi(address) {
@@ -302,8 +367,11 @@ module.exports = function (apiKey) {
         return getRequest(query);
       }
     },
+    /**
+    * @namespace
+    */
     account: {
-      /*
+      /**
        * Returns the amount of Tokens a specific account owns
        */
       tokenbalance(address, tokenname, contractaddress){
@@ -331,7 +399,7 @@ module.exports = function (apiKey) {
         var query = querystring.stringify(queryObject);
         return getRequest(query);
       },
-      /*
+      /**
        * Returns the balance of a sepcific account
        */
       balance(address) {
@@ -349,7 +417,7 @@ module.exports = function (apiKey) {
         });
         return getRequest(query);
       },
-      /*
+      /**
        * Get a list of internal transactions
        */
       txlistinternal(txhash) {
@@ -362,7 +430,7 @@ module.exports = function (apiKey) {
 
         return getRequest(query);
       },
-      /*
+      /**
        * Get a list of transactions for a specfic address
        */
       txlist(address, startblock, endblock, sort) {
@@ -387,7 +455,7 @@ module.exports = function (apiKey) {
 
         return getRequest(query);
       },
-      /*
+      /**
        * Get a list of blocks that a specific account has mineds
        */
       getminedblocks(address) {
