@@ -1,9 +1,24 @@
+2016-10-10
+==========
+
+  * (feature): proper api docs with a desc per method
+  * 2.0.3
+  * (churn): removed prefixes
+  * 2.0.2
+  * (churn): splitting tests a bit more helpful
+  * 2.0.1
+  * (fix): Checking for the error codes of the API now. This is a bit more delicate
+    * fixed accounts and stats apis got a doublette
+    * methods renaming and forgotten parameters
+    * renaming of tests
+    * in general: its good to be anal (with errors)
+
 2016-10-09
 ==========
 
+  * changelog
   * 2.0.0
   * (feature): eth api tests and proxy
-  * changelog
   * 1.3.2
   * 1.3.1
   * (docs): cdn
