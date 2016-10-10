@@ -1,65 +1,134 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Documentation Index</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
+
 </head>
 
 <body>
 
-<div id="main">
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Documentation</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-etherscan_api-account.html">etherscan/api~account</a></li><li><a href="module-etherscan_api-block.html">etherscan/api~block</a></li><li><a href="module-etherscan_api-contract.html">etherscan/api~contract</a></li><li><a href="module-etherscan_api-log.html">etherscan/api~log</a></li><li><a href="module-etherscan_api-proxy.html">etherscan/api~proxy</a></li><li><a href="module-etherscan_api-stats.html">etherscan/api~stats</a></li><li><a href="module-etherscan_api-transaction.html">etherscan/api~transaction</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-etherscan_api.html">etherscan/api</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="tutorial-tutorial.html">tutorial</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
 
-    <h1 class="page-title">Home</h1>
-
-    
-
+</div>
+</div>
 
 
-    
+<div class="container" id="toc-content">
+<div class="row">
 
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
+	
+	
 
 
 
 
-    <section>
-        <article><h1>Etherscan API</h1><p><a href="https://badge.fury.io/js/etherscan-api"><img src="https://badge.fury.io/js/etherscan-api.svg" alt="npm version"></a> <a href="https://travis-ci.org/sebs/etherscan-api"><img src="https://travis-ci.org/sebs/etherscan-api.svg?branch=master" alt="Build Status"></a><a href=""><img src="https://img.shields.io/npm/dt/etherscan-api.svg?maxAge=2592000" alt="npm"></a></p>
-<p>A way to access the <a href="https://etherscan.io/apis">etherscan.io api</a> using promises. Fetch a diverse set of information about the blockchain </p>
+
+
+
+
+
+
+
+	
+	
+
+
+
+
+
+    <section class="readme-section">
+        <article><h1>Etherscan API</h1><p><a href="https://badge.fury.io/js/etherscan-api"><img src="https://badge.fury.io/js/etherscan-api.svg" alt="npm version"></a> <a href="https://travis-ci.org/sebs/etherscan-api"><img src="https://travis-ci.org/sebs/etherscan-api.svg?branch=master" alt="Build Status"></a> <a href=""><img src="https://img.shields.io/npm/dt/etherscan-api.svg?maxAge=2592000" alt="npm"></a></p>
+<p>A way to access the <a href="https://etherscan.io/apis">etherscan.io api</a> using promises. Fetch a diverse set of information about the blockchain</p>
+<pre class="prettyprint source lang-javascript"><code>var api = require('etherscan-api').init('YourApiKey');
+var balance = api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+balance.then(function(balanceData){
+  console.log(balanceData);
+});</code></pre><h2>Install</h2><pre class="prettyprint source lang-bash"><code> npm install etherscan-api --save</code></pre><h2>Api</h2><p><a href="https://sebs.github.io/etherscan-api/">Full Api Docs</a></p>
 <ul>
-<li>account.getminedblocks</li>
-<li>account.tokensupply</li>
-<li>account.tokenbalance by name</li>
-<li>account.tokenbalance by address</li>
-<li>account.txlist</li>
-<li>account.txlistinternal</li>
-<li>account.balance</li>
-<li>account.balance multi</li>
-<li>stats.ethsupply</li>
-<li>stats.tokensupply</li>
-<li>stats.ethprice</li>
 <li>block.getblockreward</li>
 <li>transaction.getstatus</li>
 <li>contract.getabi</li>
+<li>account<ul>
+<li>getminedblocks</li>
+<li>tokenbalance by name</li>
+<li>tokenbalance by address</li>
+<li>txlist</li>
+<li>txlistinternal</li>
+<li>balance</li>
+<li>balance multi</li>
+</ul>
+</li>
+<li>stats<ul>
+<li>ethsupply</li>
+<li>tokensupply by tokenname</li>
+<li>tokensupply by address</li>
+<li>ethprice</li>
+</ul>
+</li>
+<li>proxy<ul>
 <li>proxy.eth_blockNumber</li>
 <li>proxy.eth_getBlockByNumber</li>
 <li>proxy.eth_getUncleByBlockNumberAndIndex</li>
@@ -75,11 +144,8 @@
 <li>proxy.eth_gasPrice</li>
 <li>proxy.eth_estimateGas</li>
 </ul>
-<pre class="prettyprint source lang-javascript"><code>var api = require('etherscan-api').init('YourApiKey');
-var balance = api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
-balance.then(function(balanceData){
-  console.log(balanceData);
-});</code></pre><h2>Install</h2><pre class="prettyprint source lang-bash"><code> npm install etherscan-api --save</code></pre></article>
+</li>
+</ul></article>
     </section>
 
 
@@ -87,19 +153,133 @@ balance.then(function(balanceData){
 
 
 
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-etherscan_api.html">etherscan/api</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-etherscan_api-account.html">account</a></li><li><a href="module-etherscan_api-block.html">block</a></li><li><a href="module-etherscan_api-contract.html">contract</a></li><li><a href="module-etherscan_api-log.html">log</a></li><li><a href="module-etherscan_api-proxy.html">proxy</a></li><li><a href="module-etherscan_api-stats.html">stats</a></li><li><a href="module-etherscan_api-transaction.html">transaction</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-tutorial.html">tutorial</a></li></ul>
-</nav>
 
-<br class="clear">
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Mon Oct 10 2016 21:44:43 GMT+0200 (CEST)
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a>
+	
+		on 2016-10-10T22:25:51+02:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
 </body>
 </html>
