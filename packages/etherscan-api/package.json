@@ -12,7 +12,7 @@
     "preversion": "npm run lint",
     "pages": "node ./scripts/publish-gh.js",
     "postversion": "git push && git push --tags && npm run pages",
-    "changelog": "rm CHANGELOG.md && changelog https://github.com/sebs/etherscan-api all > CHANGELOG.md && git add . && git commit . -m changelog",
+    "changelog": "rm ./docs/CHANGELOG.md && changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add . && git commit . -m changelog",
     "build": "npm run test && npm run docs"
   },
   "keywords": [
