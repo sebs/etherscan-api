@@ -7,7 +7,7 @@
     "test": "mocha -t 20000",
     "posttest": "npm run lint",
     "lint": "jshint lib test",
-    "docs": "jsdoc -c ./jsdoc.json -R ./Readme.md -u ./docs",
+    "docs": "jsdoc -c ./jsdoc.json -t ./node_modules/ink-docstrap/template -R ./Readme.md -u ./docs",
     "bundle": "browserify index.js -s etherscanApi -o dist/bundle.js",
     "preversion": "npm run lint",
     "pages": "node ./scripts/publish-gh.js",
@@ -35,12 +35,13 @@
   "devDependencies": {
     "browserify": "^13.1.0",
     "chai": "^3.5.0",
+    "changelog": "^1.0.7",
     "gh-pages": "^0.11.0",
+    "ink-docstrap": "^1.3.0",
     "jsdoc": "^3.4.0",
     "jshint": "^2.9.3",
     "mocha": "^3.0.2",
-    "watch": "^0.19.2",
-    "changelog": "^1.0.7"
+    "watch": "^0.19.2"
   },
   "dependencies": {
     "restify": "^4.1.1"
