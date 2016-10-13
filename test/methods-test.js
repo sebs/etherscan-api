@@ -146,7 +146,7 @@ describe('api', function() {
 
     it('proxy.eth_getBlockByNumber', function(done){
       var api = init();
-      var res = api.proxy.eth_getBlockByNumber('0x10d4f', true);
+      var res = api.proxy.eth_getBlockByNumber('0x10d4f');
       res.then(function(res){
         assert.ok(res);
         done();
