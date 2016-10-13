@@ -8,7 +8,7 @@
     "posttest": "npm run lint",
     "lint": "jshint lib test",
     "docs": "jsdoc -c ./jsdoc.json -t ./node_modules/ink-docstrap/template -R ./Readme.md -u ./docs",
-    "bundle": "browserify index.js -s etherscanApi -o dist/bundle.js",
+    "bundle": "browserify index.js -s etherscanApi -o dist/bundle.js && git commit ./dist -m bundle && git push",
     "preversion": "npm run lint",
     "pages": "node ./scripts/publish-gh.js",
     "postversion": "git push && git push --tags && npm run pages",
@@ -17,6 +17,7 @@
   },
   "keywords": [
     "ethereum",
+    "EtherScan.io",
     "etherscan",
     "api",
     "transaction",
