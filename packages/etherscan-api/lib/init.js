@@ -39,7 +39,6 @@ module.exports = function (apiKey) {
     * @namespace
     */
     log: {
-
       /**
        * The Event Log API was designed to provide an alternative to the native eth_getLogs.
        */
@@ -110,6 +109,8 @@ module.exports = function (apiKey) {
     proxy: {
       /**
       * Returns the number of most recent block
+      * @example
+      * var block = api.proxy.eth_blockNumber();
       * @returns {Promise.<integer>}
       */
       eth_blockNumber() {
@@ -123,6 +124,8 @@ module.exports = function (apiKey) {
       /**
       * Returns information about a block by block number.
       * @param {string} tag - Tag to look up
+      * @example
+      * var blockNumber = api.proxy.eth_getBlockByNumber('0x10d4f');
       * @returns {Promise.<integer>}
       */
       eth_getBlockByNumber(tag) {
@@ -138,6 +141,8 @@ module.exports = function (apiKey) {
        * Returns information about a uncle by block number.
        * @param {string} tag - Tag to look up
        * @param {string} index - Index
+       * @example
+       * var res = api.proxy.eth_getUncleByBlockNumberAndIndex('0x210A9B', '0x0');
        * @returns {Promise.<object>}
        */
       eth_getUncleByBlockNumberAndIndex(tag, index) {
@@ -151,6 +156,8 @@ module.exports = function (apiKey) {
       /**
        * Returns the number of transactions in a block from a block matching the given block number
        * @param {string} tag - Tag to look up
+       * @example
+       * var res = api.proxy.eth_getBlockTransactionCountByNumber('0x10FB78');
        * @returns {Promise.<object>}
        */
       eth_getBlockTransactionCountByNumber(tag) {
@@ -164,6 +171,8 @@ module.exports = function (apiKey) {
       /**
        * Returns the information about a transaction requested by transaction hash
        * @param {string} hash - Transaction hash
+       * @example
+       * var res = api.proxy.eth_getTransactionByHash('0x1e2910a262b1008d0616a0beb24c1a491d78771baa54a33e66065e03b1f46bc1');
        * @returns {Promise.<object>}
        */
       eth_getTransactionByHash(hash) {
@@ -178,6 +187,8 @@ module.exports = function (apiKey) {
       * Returns information about a transaction by block number and transaction index position
       * @param {string} tag - Tag to look up
       * @param {string} index - Index
+      * @example
+      * var res = api.proxy.eth_getTransactionByBlockNumberAndIndex('0x10d4f', '0x0');
       * @returns {Promise.<object>}
       */
       eth_getTransactionByBlockNumberAndIndex(tag, index) {
@@ -191,6 +202,8 @@ module.exports = function (apiKey) {
       /**
       * Returns the number of transactions sent from an address
       * @param {string} address - Address of the transaction
+      * @example
+      * var res = api.proxy.eth_getTransactionCount('0x2910543af39aba0cd09dbb2d50200b3e800a63d2', 'latest');
       * @returns {Promise.<object>}
       */
       eth_getTransactionCount(address) {
@@ -204,6 +217,8 @@ module.exports = function (apiKey) {
       /**
       * Creates new message call transaction or a contract creation for signed transactions
       * @param {string} hex - Serialized Message
+      * @example
+      * var res = api.proxy.eth_sendRawTransaction('0xf904808000831cfde080');
       * @returns {Promise.<object>}
       */
       eth_sendRawTransaction(hex) {
@@ -217,6 +232,8 @@ module.exports = function (apiKey) {
       /**
       * Returns the receipt of a transaction by transaction hash
       * @param {string} txhash - Transaction hash
+      * @example
+      * var ret = api.proxy.eth_getTransactionReceipt('0x1e2910a262b1008d0616a0beb24c1a491d78771baa54a33e66065e03b1f46bc1');
       * @returns {Promise.<object>}
       */
       eth_getTransactionReceipt(txhash) {
@@ -231,6 +248,8 @@ module.exports = function (apiKey) {
       * Executes a new message call immediately without creating a transaction on the block chain
       * @param {string} to - Address to execute from
       * @param {string} tag - Content
+      * @example
+      * var res = api.proxy.eth_call('0xAEEF46DB4855E25702F8237E8f403FddcaF931C0', '0x70a08231000000000000000000000000e16359506c028e51f16be38986ec5746251e9724', 'latest');
       * @returns {Promise.<object>}
       */
       eth_call(to, tag) {
@@ -245,6 +264,8 @@ module.exports = function (apiKey) {
       * Returns code at a given address
       * @param {string} address - Address to get code from
       * @param {string} tag - ??
+      * @example
+      * var res = api.proxy.eth_getCode('0xf75e354c5edc8efed9b59ee9f67a80845ade7d0c',  'latest');
       * @returns {Promise.<object>}
       */
       eth_getCode(address, tag) {
@@ -260,6 +281,8 @@ module.exports = function (apiKey) {
       * @param {string} address - Address to get code from
       * @param {string} position - Storage position
       * @param {string} tag - ??
+      * @example
+      * var res = api.proxy.eth_getStorageAt('0x6e03d9cce9d60f3e9f2597e13cd4c54c55330cfd', '0x0',  'latest');
       * @returns {Promise.<object>}
       */
       eth_getStorageAt(address, position, tag) {
@@ -272,6 +295,7 @@ module.exports = function (apiKey) {
       },
       /**
       * Returns the current price per gas in wei.
+      * var gasprice = api.proxy.eth_gasPrice();
       * @returns {Promise.<object>}
       */
       eth_gasPrice() {
@@ -288,6 +312,13 @@ module.exports = function (apiKey) {
       * @param {string} value - Storage position
       * @param {string} gasPrice - ??
       * @param {string} gas - ??
+      * @xample
+      * var res = api.proxy.eth_estimateGas(
+      *  '0xf0160428a8552ac9bb7e050d90eeade4ddd52843',
+      *  '0xff22',
+      *  '0x051da038cc',
+      *  '0xffffff'
+      *);
       * @returns {Promise.<object>}
       */
       eth_estimateGas(to, value, gasPrice, gas) {
@@ -307,6 +338,8 @@ module.exports = function (apiKey) {
        * Returns the supply of Tokens
        * @param {string} tokenname - Name of the Token
        * @param {string} contractaddress - Address from token contract
+       * @example
+       * var supply = api.stats.tokensupply(null, '0x57d90b64a1a57749b0f932f1a3395792e12e7055');
        * @returns {Promise.<object>}
        */
       tokensupply(tokenname, contractaddress) {
@@ -331,6 +364,7 @@ module.exports = function (apiKey) {
 
       /**
        * Returns total supply of ether
+       * var supply = api.stats.ethsupply();
        * @returns {Promise.<integer>}
        */
       ethsupply() {
@@ -344,6 +378,8 @@ module.exports = function (apiKey) {
 
       /**
        * Returns the price of ether now
+       * @example
+       * var price = api.stats.ethprice();
        * @returns {Promise.<integer>}
        */
       ethprice() {
@@ -402,6 +438,12 @@ module.exports = function (apiKey) {
       /**
        * Returns the ABI/Interface of a given contract
        * @param {string} address - Contract address
+       * @example
+       * api.contract
+       *  .getabi('0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359')
+       *  .at('0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359')
+       *  .memberId('0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359')
+       *  .then(console.log)
        * @returns {Promise.<object>}
        */
       getabi(address) {
@@ -424,6 +466,10 @@ module.exports = function (apiKey) {
        * @param {string} address - Contract address
        * @param {string} tokenname - Name of the token
        * @param {string} contractaddress - Contract address
+       * @example
+       *     var supply = api.account.tokenbalance(
+       *       '0x0a869d79a7052c7f1b55a8ebabbea3420f0d1e13',
+       *       'TheDAO');
        * @returns {Promise.<object>}
        */
       tokenbalance(address, tokenname, contractaddress){
@@ -454,6 +500,8 @@ module.exports = function (apiKey) {
       /**
        * Returns the balance of a sepcific account
        * @param {string} address - Address
+       * @example
+       * var balance = api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
        * @returns {Promise.<object>}
        */
       balance(address) {
@@ -474,6 +522,8 @@ module.exports = function (apiKey) {
       /**
        * Get a list of internal transactions
        * @param {string} txhash - Transaction hash
+       * @example
+       * var txlist = api.account.txlistinternal('0x40eb908387324f2b575b4879cd9d7188f69c8fc9d87c901b9e2daaea4b442170');
        * @returns {Promise.<object>}
        */
       txlistinternal(txhash) {
@@ -492,6 +542,8 @@ module.exports = function (apiKey) {
        * @param {string} startblock - start looking here
        * @param {string} endblock - end looking there
        * @param {string} sort - Sort asc/desc
+       * @example
+       * var txlist = api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 1, 'latest', 'asc');
        * @returns {Promise.<object>}
        */
       txlist(address, startblock, endblock, sort) {
@@ -518,6 +570,8 @@ module.exports = function (apiKey) {
       },
       /**
        * Get a list of blocks that a specific account has mineds
+       * @example
+       * var txlist = api.account.getminedblocks('0x9dd134d14d1e65f84b706d6f205cd5b1cd03a46b');
        * @param {string} address - Transaction hash
        */
       getminedblocks(address) {
