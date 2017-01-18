@@ -19,7 +19,8 @@ balance.then(function(balanceData){
 var api = require('etherscan-api').init('YourApiKey','testnet');
 
 ```
-This feature are NOT shipped to npm package yet!!
+**This feature are NOT shipped to npm package yet!!**
+to use this feature - include exactly this version of repo.
 
 ## Install
 
