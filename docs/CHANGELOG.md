@@ -1,7 +1,7 @@
 2017-01-18
 =========
 * 2.2.1
-* testnetapi (not test yet)
+* testnetapi 
 
 2016-10-10
 ==========

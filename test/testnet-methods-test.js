@@ -44,7 +44,7 @@ describe('api', function() {
     });
     it('txlistinternal', function(done){
       var api = init('YourApiKeyToken','testnet');
-      var txlist = api.account.txlistinternal('0x7e61933A749ee94e900D46Ca6f31810811e01524');
+      var txlist = api.account.txlistinternal('0xf2aa030a0b889706206d262377cd45489faa2ff7dedbccda3693bf6c5370ed0c');
       txlist.then(function(res){
         assert.ok(res);
         done();

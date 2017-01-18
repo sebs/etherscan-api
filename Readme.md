@@ -14,7 +14,7 @@ balance.then(function(balanceData){
 ```
 
 ## For testnet usage
-(not test yet)
+all test passes
 ```javascript
 var api = require('etherscan-api').init('YourApiKey','testnet');
 
