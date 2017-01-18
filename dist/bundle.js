@@ -12,7 +12,7 @@ var restify = require('restify');
 const querystring = require('querystring');
 
 const url = 'https://api.etherscan.io/api';
-const testUrl = 'testnet.etherscan.io';
+const testUrl = 'https://testnet.etherscan.io/api';
 
 
 /**
