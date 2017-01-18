@@ -13,7 +13,12 @@ balance.then(function(balanceData){
 });
 ```
 
- ## Install
+## For testnet usage
+```javascript
+var api = require('etherscan-api').init('YourApiKey','testnet');
+
+```
+## Install
 
  ```bash
  npm install etherscan-api --save
