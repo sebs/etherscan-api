@@ -14,11 +14,13 @@ balance.then(function(balanceData){
 ```
 
 ## For testnet usage
-all test passes
+
 ```javascript
 var api = require('etherscan-api').init('YourApiKey','testnet');
 
 ```
+This feature are NOT shipped to npm package yet!!
+
 ## Install
 
  ```bash
