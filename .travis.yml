@@ -1,8 +1,8 @@
 language: node_js
 node_js:
-  - "6.5.0"
+- 6.5.0
 env:
-  - CXX=g++-4.8
+- CXX=g++-4.8
 addons:
   apt:
     sources:
@@ -11,3 +11,11 @@ addons:
     - g++-4.8
 notifications:
   email: false
+deploy:
+  provider: npm
+  email: sebs@2xs.org
+  api_key:
+    secure: ZMYkz4iqD5vKzjT6EWi9Dck/nMqSDU545J3eL62uCtyfD/LWriIgbL7D9vYAmOe8TrTjKMN/i2vdGPC64FjwWv7zljw0P+YfoRi+l9/8xZjtVRr5YUGtiPt+8/eTD6yHySXnJxFusnTfWAz8kFju8+elWxeOm+3VAPgMQJLzoRTIAmFNzTUfbV0+4VvPmniA/qnmC+SPqQASYYNitgjw/FEopr8cE0lSm+3ku1uAODLOXO92ur8dhxSb3Koayvug85+wLC3SjxGsk/xri1zbQ9LrXPlew8CPNXmbQfDVpq9S6jRyNXf1kPYpF0LiC7GFcR6IW4bL0vR4+wwEpr7YBtDjptyOEaLliDJhfQc7S1NHRcKzVNItqYW+3a4Bb2R/uotjxngHeDI5zr+CLQpGZOimCFvpQjZnG4VjlpvWkbPkK74cKtJCd1EwTPPz1LArH+YgnxoaY91NTex7kocVNHVeWk0Zi4xkeFuqc5bNfZB8GzvsngYOJoCszCEgHZdaXpDaf9Q8PmaORYxMr0H5Y9L0wn3x2cRwhSJ4xmbAsVLaFnXFjeC8ZF9qfmoxAsI2pq3cMxQ5g0VdCGusCUIzFvunRCBF5JFmlt+H91zitt6DVF3d/XDZyCWKOGY16NP2J0IB4eaZtNKEsuWI5cH9vXo0+nLmOH6kueA01b2Uw0k=
+  on:
+    tags: true
+    repo: sebs/etherscan-api
