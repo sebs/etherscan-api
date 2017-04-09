@@ -1,7 +1,63 @@
+2017-04-04
+==========
+
+  * 2.3.2
+  * Autorelease
+  * 2.3.1
+  * License
+
+2017-01-27
+==========
+
+  * bundle
+  * 2.3.0
+  * Churn: correct versuion number
+  * Merge pull request [#3](https://github.com/sebs/etherscan-api/issues/3) from JackBekket/master
+    Testnet support added
+
+2017-01-18
+==========
+
+  * Update README.md
+    noticed that npm package not upgrade with this repo
+  * notice npm
+  * clean
+  * testnet all test passes
+  * method test testnet
+  * eth-test testnet passes
+  * 1st testnet test pass
+  * mainnet test passes
+  * testing
+  * minor bug fixes
+  * build it
+  * Readme upd
+  * testnet input added
+
+2017-01-09
+==========
+
+  * 2.2.0
+  * 2.1.8
+  * Updated dependencies
+  * 2.1.7
+  * Feature: Added a global "use strict"; for meteor
+
+2016-10-13
+==========
+
+  * 2.1.6
+  * (feature): tracking for docs
+  * 2.1.5
+  * (docs): examples for api docs
+  * 2.1.4
+  * (churn): a better keyword
 
 2016-10-10
 ==========
 
+  * (fix): bundle was not updated
+  * 2.1.3
+  * changelog
   * 2.1.2
   * (feature): Header and Footer
   * 2.1.1
@@ -9,7 +65,6 @@
   * 2.1.0
   * (docs): the big doxing ;)
   * 2.0.4
-  * changelog
   * (feature): proper api docs with a desc per method
   * 2.0.3
   * (churn): removed prefixes
