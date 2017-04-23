@@ -122,7 +122,7 @@ describe('api', function() {
     });
   });
 
-  it('contract.getabi', function(done){
+  xit('contract.getabi', function(done){
     var api = init();
     var abi = api.contract.getabi('0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413');
     abi.then(function(res){
