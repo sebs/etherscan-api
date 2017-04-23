@@ -5,6 +5,8 @@
 A way to access the [etherscan.io api](https://etherscan.io/apis) using promises. Fetch a diverse set of information about the blockchain
 
 
+Livenet
+
 ```javascript
 var api = require('etherscan-api').init('YourApiKey');
 var balance = api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
@@ -15,12 +17,23 @@ balance.then(function(balanceData){
 
 ## For testnet usage
 
+Supported:
+
+* morden
+* ropsten
+* rinkeby
+
+Latest
+
+```javascript
+var api = require('etherscan-api').init('YourApiKey','rinkeby');
+```
+
+Old Default
+
 ```javascript
 var api = require('etherscan-api').init('YourApiKey','testnet');
-
 ```
-**This feature are NOT shipped to npm package yet!!**
-to use this feature - include exactly this version of repo.
 
 ## Install
 

@@ -3,23 +3,39 @@ var restify = require('restify');
 const querystring = require('querystring');
 
 const url = 'https://api.etherscan.io/api';
-const testUrl = 'https://testnet.etherscan.io/api';
-
+const testUrls = {
+  // old default defaults to rinkeb
+  'ropsten': 'https://ropsten.etherscan.io/api',
+  'kovan': 'https://kovan.etherscan.io/api',
+  'rinkeby': 'https://rinkeby.etherscan.io/api'
+};
 
 /**
  * @module etherscan/api
  */
 
- // chain is for testnet
+ // chain is for testnet (ropsten, rinkeby, kovan)
 module.exports = function (apiKey, chain) {
 
   if (!apiKey) {
     apiKey = 'YourApiKeyToken';
   }
 
+  function pickChainUrl(chain) {
+    if (!chain) {
+      return url;
+    }
+
+    if (!testUrls[chain]) {
+      throw Error('Chain missing ' + chain);
+    }
+
+    return testUrls[chain];
+  }
+
   var client = restify.createJsonClient({
     // added testnet condition
-    url: chain === 'testnet' ? testUrl : url,
+    url: pickChainUrl(chain),
   //  url: url,
     version: '*'
   });
