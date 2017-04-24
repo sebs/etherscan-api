@@ -6,6 +6,7 @@
   "scripts": {
     "test": "mocha -t 20000",
     "posttest": "npm run lint",
+    "prerelease": "npm run changelog",
     "lint": "jshint lib test",
     "docs": "jsdoc -c ./jsdoc.json -t ./node_modules/ink-docstrap/template -R ./Readme.md -u ./docs",
     "bundle": "browserify index.js -s etherscanApi -o dist/bundle.js && git commit ./dist -m bundle && git push",
