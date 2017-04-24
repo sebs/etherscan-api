@@ -1,6 +1,9 @@
 2017-04-24
 ==========
 
+  * Updated Readme for dev
+  * changelog
+  * Autochangelog
   * 3.0.1
 
 2017-04-23
@@ -151,5 +154,3 @@
   * i(feature): transaction list
   * 0.1.0
   * (feature): balance and tests
-  * A first method
-  * Initial commit
