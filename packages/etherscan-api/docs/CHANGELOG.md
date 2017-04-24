@@ -1,3 +1,21 @@
+2017-04-24
+==========
+
+  * 3.0.1
+
+2017-04-23
+==========
+
+  * 3.0.0
+  * 2.3.3
+  * Improved the testnet parameter
+    * testnet is no more: ropsten, rinkeby, kovan is the new testnet
+
+2017-04-09
+==========
+
+  * changelog
+
 2017-04-04
 ==========
 
