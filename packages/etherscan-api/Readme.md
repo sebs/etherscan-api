@@ -44,34 +44,16 @@ var api = require('etherscan-api').init('YourApiKey','testnet');
 
 [Full Api Docs](https://sebs.github.io/etherscan-api/)
 
-* block.getblockreward
-* transaction.getstatus
-* contract.getabi
-* account
-  * getminedblocks
-  * tokenbalance by name
-  * tokenbalance by address
-  * txlist
-  * txlistinternal
-  * balance
-  * balance multi
-* stats
-  * ethsupply
-  * tokensupply by tokenname
-  * tokensupply by address
-  * ethprice
-* proxy
-  * proxy.eth_blockNumber
-  * proxy.eth_getBlockByNumber
-  * proxy.eth_getUncleByBlockNumberAndIndex
-  * proxy.eth_getBlockTransactionCountByNumber
-  * proxy.eth_getTransactionByHash
-  * proxy.eth_getTransactionByBlockNumberAndIndex
-  * proxy.eth_getTransactionCount
-  * proxy.eth_sendRawTransaction
-  * proxy.eth_getTransactionReceipt
-  * proxy.eth_call
-  * proxy.eth_getCode
-  * proxy.eth_getStorageAt
-  * proxy.eth_gasPrice
-  * proxy.eth_estimateGas
+## Development workflow
+
+* npm test  - runs tests
+  * npm run posttest - starts the linter
+* npm run lint - preconfigured linter 
+* npm run docs - generates the apidocs
+* npm run bundle - builds a new bundle
+* npm run preversion - Steps before we create a new Tag 
+  * lint 
+  * changelog
+* npm run pages - pushes generated apidocs to the server
+* postversion - after generating a new version, push the tag to the server
+* npm run changelog - generates a changelog and pushes it
