@@ -1,8 +1,26 @@
+2017-06-02
+==========
+
+  * Update to node 8
+  * Add package log
+
+2017-05-22
+==========
+
+  * Merge pull request [#4](https://github.com/sebs/etherscan-api/issues/4) from sebs/snyk-fix-ece25e9d
+    [Snyk Update] New fixes for 1 vulnerable dependency path
+  * fix: package.json & .snyk to reduce vulnerabilities
+    The following vulnerabilities are fixed with a Snyk patch:
+    - https://snyk.io/vuln/npm:ms:20170412
+    Latest report for sebs/etherscan-api:
+    https://snyk.io/test/github/sebs/etherscan-api
+
 2017-04-24
 ==========
 
-  * Updated Readme for dev
+  * 3.0.2
   * changelog
+  * Updated Readme for dev
   * Autochangelog
   * 3.0.1
 
@@ -144,13 +162,3 @@
   * (feature): completeted the first set of tests for all existing implementations
   * 0.2.1
   * (churn): featurelist
-
-2016-10-03
-==========
-
-  * 0.2.0
-  * (feature): 30% of apis
-  * 0.1.1
-  * i(feature): transaction list
-  * 0.1.0
-  * (feature): balance and tests
