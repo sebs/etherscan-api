@@ -1,6 +1,14 @@
+2017-06-19
+==========
+
+  * fix: missing data parameter.
+    * Thanks for the report
+
 2017-06-02
 ==========
 
+  * 3.0.3
+  * changelog
   * Update to node 8
   * Add package log
 
@@ -159,6 +167,3 @@
   * 0.3.0
   * (docs): naming and a little example for the docs
   * (docs): Badges and a usable readme
-  * (feature): completeted the first set of tests for all existing implementations
-  * 0.2.1
-  * (churn): featurelist
