@@ -1,6 +1,13 @@
+2017-06-20
+==========
+
+  * Updated dev deps
+
 2017-06-19
 ==========
 
+  * 3.0.4
+  * changelog
   * fix: missing data parameter.
     * Thanks for the report
 
@@ -164,6 +171,3 @@
     * .accounts.txlist internal
     * .accounts.getminedblocks
   * 0.3.1
-  * 0.3.0
-  * (docs): naming and a little example for the docs
-  * (docs): Badges and a usable readme
