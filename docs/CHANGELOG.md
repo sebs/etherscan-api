@@ -1,6 +1,13 @@
+2017-06-21
+==========
+
+  * Added more tests for the tokenbalance
+
 2017-06-20
 ==========
 
+  * 3.0.5
+  * changelog
   * Updated dev deps
 
 2017-06-19
@@ -164,10 +171,3 @@
   * (churn): fix
   * (feature): token methods
   * 1.0.0
-  * (feature): resorted apis and a first 1.0 release candidate
-  * (refactor): rename apis and complete astuff
-    * .accounts for accounts related stuff
-    * .accounts.balance for multiple entries
-    * .accounts.txlist internal
-    * .accounts.getminedblocks
-  * 0.3.1
