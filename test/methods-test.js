@@ -17,10 +17,10 @@ describe('api', function() {
       var api = init();
 
       var supply = api.account.tokenbalance(
-        '0x0a869d79a7052c7f1b55a8ebabbea3420f0d1e13',
-        'TheDAO');
+        '0x4366ddc115d8cf213c564da36e64c8ebaa30cdbd',
+        'DGD');
       supply.then(function(res){
-        assert.ok(res);
+        assert.ok(res.result);
         done();
       });
     });
