@@ -1,6 +1,13 @@
+2017-06-29
+==========
+
+  * chore(deps): Updated
+
 2017-06-21
 ==========
 
+  * 3.0.6
+  * changelog
   * Added more tests for the tokenbalance
 
 2017-06-20
@@ -168,6 +175,3 @@
   * 1.1.1
   * fix
   * 1.1.0
-  * (churn): fix
-  * (feature): token methods
-  * 1.0.0
