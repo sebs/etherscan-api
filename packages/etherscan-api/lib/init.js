@@ -1,5 +1,5 @@
 "use strict";
-var restify = require('restify');
+var restify = require('restify-clients');
 const querystring = require('querystring');
 
 const url = 'https://api.etherscan.io/api';
