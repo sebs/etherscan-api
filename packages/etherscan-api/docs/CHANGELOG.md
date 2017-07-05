@@ -1,6 +1,14 @@
+2017-07-05
+==========
+
+  * chore(deps): outdated and moving from restify to only the clients.
+    * This should reduce package sizes
+
 2017-06-29
 ==========
 
+  * 3.0.7
+  * changelog
   * chore(deps): Updated
 
 2017-06-21
@@ -168,10 +176,3 @@
 
   * 1.1.2
   * (docs): api docs
-
-2016-10-04
-==========
-
-  * 1.1.1
-  * fix
-  * 1.1.0
