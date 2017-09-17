@@ -1,13 +1,15 @@
 2017-09-17
 ==========
 
+  * I need new example values for the blockchain
+  * 3.0.10
+  * changelog
   * Merge pull request [#10](https://github.com/sebs/etherscan-api/issues/10) from mvayngrib/movebrowserify
     move dev deps to devDependencies
   * Merge pull request [#9](https://github.com/sebs/etherscan-api/issues/9) from mvayngrib/fixTxByHash
     fix error handling edge case
   * Merge branch 'master' into movebrowserify
   * 3.0.9
-  * changelog
   * Removed snyk
 
 2017-09-15
@@ -184,5 +186,3 @@
   * 2.0.0
   * (feature): eth api tests and proxy
   * 1.3.2
-  * 1.3.1
-  * (docs): cdn
