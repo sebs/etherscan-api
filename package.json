@@ -1,6 +1,6 @@
 {
   "name": "etherscan-api",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "description": "API to etherscan with a simple interface",
   "main": "index.js",
   "scripts": {
@@ -13,9 +13,7 @@
     "pages": "node ./scripts/publish-gh.js",
     "postversion": "git push && git push --tags && npm run pages",
     "changelog": "rm ./docs/CHANGELOG.md && changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add . && git commit . -m changelog",
-    "build": "npm run test && npm run docs",
-    "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "build": "npm run test && npm run docs"
   },
   "keywords": [
     "ethereum",
@@ -48,6 +46,5 @@
   },
   "dependencies": {
     "restify-clients": "^1.5.0"
-  },
-  "snyk": true
+  }
 }
