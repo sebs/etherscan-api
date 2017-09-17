@@ -222,7 +222,7 @@ describe('testnet methods', function() {
       });
     });
 
-    it('proxy.eth_sendRawTransaction', function(done){
+    xit('proxy.eth_sendRawTransaction', function(done){
 
       var res = api.proxy.eth_sendRawTransaction('0xf904808000831cfde080');
       res.then(function(res){
@@ -276,7 +276,7 @@ describe('testnet methods', function() {
       });
     });
 
-    it('proxy.eth_estimateGas', function(done){
+    xit('proxy.eth_estimateGas', function(done){
 
       var res = api.proxy.eth_estimateGas(
         '0xf0160428a8552ac9bb7e050d90eeade4ddd52843',
