@@ -1,7 +1,24 @@
 2017-09-17
 ==========
 
+  * Merge pull request [#10](https://github.com/sebs/etherscan-api/issues/10) from mvayngrib/movebrowserify
+    move dev deps to devDependencies
+  * Merge pull request [#9](https://github.com/sebs/etherscan-api/issues/9) from mvayngrib/fixTxByHash
+    fix error handling edge case
+  * Merge branch 'master' into movebrowserify
+  * 3.0.9
+  * changelog
   * Removed snyk
+
+2017-09-15
+==========
+
+  * move browserify to devDependencies
+
+2017-09-14
+==========
+
+  * fix error handling edge case
 
 2017-07-05
 ==========
@@ -169,10 +186,3 @@
   * 1.3.2
   * 1.3.1
   * (docs): cdn
-  * 1.3.0
-  * (feature): Bundled version
-  * 1.2.0
-  * (feature): added the complete eth proxy api
-  * 1.1.4
-  * Pages
-  * 1.1.3
