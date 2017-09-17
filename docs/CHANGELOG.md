@@ -1,6 +1,13 @@
+2017-09-17
+==========
+
+  * Removed snyk
+
 2017-07-05
 ==========
 
+  * 3.0.8
+  * changelog
   * chore(deps): outdated and moving from restify to only the clients.
     * This should reduce package sizes
 
@@ -169,10 +176,3 @@
   * 1.1.4
   * Pages
   * 1.1.3
-  * Add pages script
-
-2016-10-06
-==========
-
-  * 1.1.2
-  * (docs): api docs
