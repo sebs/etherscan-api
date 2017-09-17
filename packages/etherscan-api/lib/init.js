@@ -51,6 +51,10 @@ module.exports = function (apiKey, chain) {
           return reject(data.message);
         }
 
+        if (data.error) {
+          return reject(data.error.message);
+        }
+
         resolve(data);
       });
     });
@@ -198,11 +202,11 @@ module.exports = function (apiKey, chain) {
        * var res = api.proxy.eth_getTransactionByHash('0x1e2910a262b1008d0616a0beb24c1a491d78771baa54a33e66065e03b1f46bc1');
        * @returns {Promise.<object>}
        */
-      eth_getTransactionByHash(hash) {
+      eth_getTransactionByHash(txhash) {
         const module = 'proxy';
         const action = 'eth_getTransactionByHash';
         var query = querystring.stringify({
-          module, action, apiKey, hash
+          module, action, apiKey, txhash
         });
         return getRequest(query);
       },
@@ -494,7 +498,7 @@ module.exports = function (apiKey, chain) {
        *     var supply = api.account.tokenbalance(
        *       '0x4366ddc115d8cf213c564da36e64c8ebaa30cdbd',
        *       'DGD',
-       *       '' 
+       *       ''
        * );
        * @returns {Promise.<object>}
        */
@@ -519,7 +523,7 @@ module.exports = function (apiKey, chain) {
         if (address) {
           queryObject.address = address;
         }
-        
+
         var query = querystring.stringify(queryObject);
         return getRequest(query);
       },
