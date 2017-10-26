@@ -17,10 +17,10 @@ describe('api', function() {
       var api = init();
 
       var supply = api.account.tokenbalance(
-        '0x0a869d79a7052c7f1b55a8ebabbea3420f0d1e13',
-        'TheDAO');
+        '0x4366ddc115d8cf213c564da36e64c8ebaa30cdbd',
+        'DGD');
       supply.then(function(res){
-        assert.ok(res);
+        assert.ok(res.result);
         done();
       });
     });
@@ -200,7 +200,7 @@ describe('api', function() {
       });
     });
 
-    it('proxy.eth_sendRawTransaction', function(done){
+    xit('proxy.eth_sendRawTransaction', function(done){
       var api = init();
       var res = api.proxy.eth_sendRawTransaction('0xf904808000831cfde080');
       res.then(function(res){
@@ -254,7 +254,7 @@ describe('api', function() {
       });
     });
 
-    it('proxy.eth_estimateGas', function(done){
+    xit('proxy.eth_estimateGas', function(done){
       var api = init();
       var res = api.proxy.eth_estimateGas(
         '0xf0160428a8552ac9bb7e050d90eeade4ddd52843',

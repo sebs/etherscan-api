@@ -1,6 +1,6 @@
 {
   "name": "etherscan-api",
-  "version": "3.0.2",
+  "version": "3.0.11",
   "description": "API to etherscan with a simple interface",
   "main": "index.js",
   "scripts": {
@@ -13,9 +13,7 @@
     "pages": "node ./scripts/publish-gh.js",
     "postversion": "git push && git push --tags && npm run pages",
     "changelog": "rm ./docs/CHANGELOG.md && changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add . && git commit . -m changelog",
-    "build": "npm run test && npm run docs",
-    "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "build": "npm run test && npm run docs"
   },
   "keywords": [
     "ethereum",
@@ -36,23 +34,17 @@
   },
   "homepage": "https://github.com/sebs/etherscan-api#readme",
   "devDependencies": {
-    "browserify": "^13.1.0",
-    "chai": "^3.5.0",
-    "changelog": "^1.0.7",
-    "gh-pages": "^0.11.0",
+    "browserify": "^14.4.0",
+    "chai": "^4.0.2",
+    "changelog": "^1.3.0",
+    "gh-pages": "^1.0.0",
     "ink-docstrap": "^1.3.0",
     "jsdoc": "^3.4.0",
-    "jshint": "^2.9.3",
+    "jshint": "^2.9.5",
     "mocha": "^3.0.2",
-    "watch": "^0.19.2"
+    "watch": "^1.0.2"
   },
   "dependencies": {
-    "browserify": "^13.3.0",
-    "jsdoc": "^3.4.3",
-    "jshint": "^2.9.4",
-    "mocha": "^3.2.0",
-    "restify": "^4.3.0",
-    "snyk": "^1.30.1"
-  },
-  "snyk": true
+    "restify-clients": "^1.5.0"
+  }
 }
