@@ -47,9 +47,17 @@ describe('testnet methods', function() {
         done();
       });
     });
-    xit('txlistinternal', function(done){
+    xit('txlistinternal by hash', function(done){
 
       var txlist = api.account.txlistinternal('0xf2aa030a0b889706206d262377cd45489faa2ff7dedbccda3693bf6c5370ed0c');
+      txlist.then(function(res){
+        assert.ok(res);
+        done();
+      });
+    });
+    xit('txlistinternal by address', function(done){
+
+      var txlist = api.account.txlistinternal(null,'0x3FAcfa472e86E3EDaEaa837f6BA038ac01F7F539');
       txlist.then(function(res){
         assert.ok(res);
         done();
