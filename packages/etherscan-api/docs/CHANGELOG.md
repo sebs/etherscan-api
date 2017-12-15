@@ -1,9 +1,44 @@
+2017-12-15
+==========
+
+  * Package.lock
+  * Merge pull request [#15](https://github.com/sebs/etherscan-api/issues/15) from morrislaptop/patch-1
+    Don't pass full URL in again as it is already set
+  * Merge pull request [#16](https://github.com/sebs/etherscan-api/issues/16) from muxa/master
+    Support internal transactions by address
+
+2017-12-14
+==========
+
+  * Added support for fetching internal transactions by address, as well as specifying start/end block and sort order
+
+2017-11-28
+==========
+
+  * Don't pass full URL in again as it is already set
+    When creating the jsonClient, otherwise this confuses tools like `nock` when trying to match requests.
+
+2017-11-22
+==========
+
+  * Merge pull request [#14](https://github.com/sebs/etherscan-api/issues/14) from vicnaum/patch-1
+    getLogs fixed
+
+2017-11-21
+==========
+
+  * getLogs fixed
+    typo in "tolock" - should be "toBlock"
+    no "address" field set
+    module should be = 'logs', not 'log'
+
 2017-09-17
 ==========
 
+  * 3.0.11
+  * changelog
   * I need new example values for the blockchain
   * 3.0.10
-  * changelog
   * Merge pull request [#10](https://github.com/sebs/etherscan-api/issues/10) from mvayngrib/movebrowserify
     move dev deps to devDependencies
   * Merge pull request [#9](https://github.com/sebs/etherscan-api/issues/9) from mvayngrib/fixTxByHash
@@ -171,18 +206,3 @@
   * 2.0.3
   * (churn): removed prefixes
   * 2.0.2
-  * (churn): splitting tests a bit more helpful
-  * 2.0.1
-  * (fix): Checking for the error codes of the API now. This is a bit more delicate
-    * fixed accounts and stats apis got a doublette
-    * methods renaming and forgotten parameters
-    * renaming of tests
-    * in general: its good to be anal (with errors)
-
-2016-10-09
-==========
-
-  * changelog
-  * 2.0.0
-  * (feature): eth api tests and proxy
-  * 1.3.2
