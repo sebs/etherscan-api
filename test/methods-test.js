@@ -92,6 +92,7 @@ describe('api', function () {
       });
     });
   });
+
   describe('stats', function () {
     it('ethsupply', function (done) {
       var api = init();
@@ -110,6 +111,7 @@ describe('api', function () {
         done();
       });
     });
+
     it('tokensupply by address', function (done) {
       var api = init();
       var supply = api.stats.tokensupply(null, '0x57d90b64a1a57749b0f932f1a3395792e12e7055');
@@ -125,10 +127,9 @@ describe('api', function () {
       price.then(function (res) {
         assert.ok(res);
         done();
-      });
+      }).catch(done);
     });
   });
-
 
   it('block.getblockreward', function (done) {
     var api = init();
