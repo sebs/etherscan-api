@@ -19,7 +19,6 @@ describe('testnet methods', function () {
         })
         .catch(done);
     });
-
     /**
      * @deprecated by Etherscan
      * https://etherscan.io/apis#tokens
@@ -67,7 +66,6 @@ describe('testnet methods', function () {
         done();
       }).catch(done);
     });
-
     xit('txlistinternal by address', function (done) {
 
       var txlist = api.account.txlistinternal(null, '0x3FAcfa472e86E3EDaEaa837f6BA038ac01F7F539');
@@ -216,9 +214,7 @@ describe('testnet methods', function () {
 
     it('proxy.eth_getTransactionByHash', function (done) {
 
-      var res = api.proxy.eth_getTransactionByHash(
-        '0x1e2910a262b1008d0616a0beb24c1a491d78771baa54a33e66065e03b1f46bc1'
-      );
+      var res = api.proxy.eth_getTransactionByHash('0x1e2910a262b1008d0616a0beb24c1a491d78771baa54a33e66065e03b1f46bc1');
       res.then(function (res) {
         assert.ok(res);
         done();
@@ -255,9 +251,7 @@ describe('testnet methods', function () {
 
     it('proxy.eth_getTransactionReceipt', function (done) {
 
-      var res = api.proxy.eth_getTransactionReceipt(
-        '0x1e2910a262b1008d0616a0beb24c1a491d78771baa54a33e66065e03b1f46bc1'
-      );
+      var res = api.proxy.eth_getTransactionReceipt('0x1e2910a262b1008d0616a0beb24c1a491d78771baa54a33e66065e03b1f46bc1');
       res.then(function (res) {
         assert.ok(res);
         done();
