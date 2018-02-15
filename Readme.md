@@ -4,8 +4,7 @@
 
 A way to access the [etherscan.io api](https://etherscan.io/apis) using promises. Fetch a diverse set of information about the blockchain
 
-
-Livenet
+Mainnet
 
 ```javascript
 var api = require('etherscan-api').init('YourApiKey');
@@ -14,6 +13,7 @@ balance.then(function(balanceData){
   console.log(balanceData);
 });
 ```
+
 
 ## For testnet usage
 
@@ -29,20 +29,18 @@ Latest
 var api = require('etherscan-api').init('YourApiKey','rinkeby');
 ```
 
-Old Default
-
-```javascript
-var api = require('etherscan-api').init('YourApiKey','testnet');
-```
 
 ## Install
 
  ```bash
  npm install etherscan-api --save
  ```
-## Api
+ 
+ 
+## API Documentation
 
 [Full Api Docs](https://sebs.github.io/etherscan-api/)
+
 
 ## Development workflow
 
