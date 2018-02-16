@@ -12,19 +12,23 @@ describe('api', function() {
         done();
       });
     });
-
-    it('tokenbalance by name', function(done){
-      var api = init();
-
-      var supply = api.account.tokenbalance(
-        '0x4366ddc115d8cf213c564da36e64c8ebaa30cdbd',
-        'DGD');
-      supply.then(function(res){
-        assert.ok(res.result);
-        done();
-      });
-    });
-    it('tokenbalance by address', function(done){
+    /**
+     * @deprecated by Etherscan
+     * https://etherscan.io/apis#tokens
+     */
+    // it('tokenbalance by name', function (done) {
+    //   var api = init();
+    //
+    //   var supply = api.account.tokenbalance(
+    //     '0x4366ddc115d8cf213c564da36e64c8ebaa30cdbd',
+    //     'DGD'
+    //   );
+    //   supply.then(function (res) {
+    //     assert.ok(res.result);
+    //     done();
+    //   });
+    // });
+    it('tokenbalance by address', function(done) {
       var api = init();
       var supply = api.account.tokenbalance('0xe04f27eb70e025b78871a2ad7eabe85e61212761', false, '0x57d90b64a1a57749b0f932f1a3395792e12e7055');
       supply.then(function(res){
@@ -46,17 +50,16 @@ describe('api', function() {
       txlist.then(function(res){
         assert.ok(res);
         done();
-      });
+      }).catch(done);
     });
-    it('txlistinternal b yaddress', function(done){
+    it('txlistinternal by address', function(done){
       var api = init();
       var txlist = api.account.txlistinternal(null, '0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
-      txlist.then(function(res){
+      txlist.then(function(res) {
         assert.ok(res);
         done();
       });
     });
-
     it('balance', function(done){
       var api = init();
       var balance = api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
@@ -74,7 +77,7 @@ describe('api', function() {
       });
     });
   });
-  describe('stats', function() {
+  describe('stats', function(){
     it('ethsupply', function(done){
       var api = init();
       var supply = api.stats.ethsupply();
@@ -107,7 +110,7 @@ describe('api', function() {
       price.then(function(res){
         assert.ok(res);
         done();
-      });
+      }).catch(done);
     });
   });
 
@@ -201,7 +204,7 @@ describe('api', function() {
 
     it('proxy.eth_getTransactionCount', function(done){
       var api = init();
-      var res = api.proxy.eth_getTransactionCount('0x2910543af39aba0cd09dbb2d50200b3e800a63d2', 'latest');
+      var res = api.proxy.eth_getTransactionCount('0x2910543af39aba0cd09dbb2d50200b3e800a63d2');
       res.then(function(res){
         assert.ok(res);
         done();
@@ -228,7 +231,11 @@ describe('api', function() {
 
     it('proxy.eth_call', function(done){
       var api = init();
-      var res = api.proxy.eth_call('0xAEEF46DB4855E25702F8237E8f403FddcaF931C0', '0x70a08231000000000000000000000000e16359506c028e51f16be38986ec5746251e9724', 'latest');
+      var res = api.proxy.eth_call(
+        '0xAEEF46DB4855E25702F8237E8f403FddcaF931C0',
+        '0x70a08231000000000000000000000000e16359506c028e51f16be38986ec5746251e9724',
+        'latest'
+      );
       res.then(function(res){
         assert.ok(res);
         done();
@@ -237,7 +244,7 @@ describe('api', function() {
 
     it('proxy.eth_getCode', function(done){
       var api = init();
-      var res = api.proxy.eth_getCode('0xf75e354c5edc8efed9b59ee9f67a80845ade7d0c',  'latest');
+      var res = api.proxy.eth_getCode('0xf75e354c5edc8efed9b59ee9f67a80845ade7d0c', 'latest');
       res.then(function(res){
         assert.ok(res);
         done();
@@ -246,7 +253,7 @@ describe('api', function() {
 
     it('proxy.eth_getStorageAt', function(done){
       var api = init();
-      var res = api.proxy.eth_getStorageAt('0x6e03d9cce9d60f3e9f2597e13cd4c54c55330cfd', '0x0',  'latest');
+      var res = api.proxy.eth_getStorageAt('0x6e03d9cce9d60f3e9f2597e13cd4c54c55330cfd', '0x0', 'latest');
       res.then(function(res){
         assert.ok(res);
         done();

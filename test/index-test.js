@@ -8,4 +8,8 @@ describe('index.js', function() {
     var res = require('../.');
     assert.ok(res.init);
   });
+  it('init on mainnet', function(){
+    var client = require('../.');
+    assert.ok(client.init(null, 'mainnet'));
+  });
 });
