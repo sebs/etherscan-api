@@ -1,6 +1,8 @@
 2018-02-26
 ==========
 
+  * 5.0.0
+  * changelog
   * Foo
 
 2018-02-16
@@ -223,9 +225,3 @@
   * Updated dependencies
   * 2.1.7
   * Feature: Added a global "use strict"; for meteor
-
-2016-10-13
-==========
-
-  * 2.1.6
-  * (feature): tracking for docs
