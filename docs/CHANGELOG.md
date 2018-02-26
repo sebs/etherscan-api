@@ -1,9 +1,13 @@
 2018-02-26
 ==========
 
+  * latest jsdoc
+  * js
+  * Fix vuln (marked via gh-pages)
+  * 6.0.1
+  * changelog
   * no pages
   * 6.0.0
-  * changelog
   * 5.0.0
   * Foo
 
@@ -215,12 +219,3 @@
   * mainnet test passes
   * testing
   * minor bug fixes
-  * build it
-  * Readme upd
-  * testnet input added
-
-2017-01-09
-==========
-
-  * 2.2.0
-  * 2.1.8
