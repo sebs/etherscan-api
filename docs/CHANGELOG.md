@@ -1,8 +1,10 @@
 2018-02-26
 ==========
 
-  * 5.0.0
+  * no pages
+  * 6.0.0
   * changelog
+  * 5.0.0
   * Foo
 
 2018-02-16
@@ -222,6 +224,3 @@
 
   * 2.2.0
   * 2.1.8
-  * Updated dependencies
-  * 2.1.7
-  * Feature: Added a global "use strict"; for meteor
