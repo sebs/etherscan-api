@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/etherscan-api.svg)](https://badge.fury.io/js/etherscan-api) [![Build Status](https://travis-ci.org/sebs/etherscan-api.svg?branch=master)](https://travis-ci.org/sebs/etherscan-api) [![npm](https://img.shields.io/npm/dt/etherscan-api.svg?maxAge=2592000)]()
 
-A way to access the [etherscan.io api](https://etherscan.io/apis) using promises. Fetch a diverse set of information about the blockchain
+A way to access the [etherscan.io api](https://etherscan.io/apis) using promises. Fetch a diverse set of information about the blockchain.
 
 Mainnet
 
@@ -35,8 +35,8 @@ var api = require('etherscan-api').init('YourApiKey','rinkeby');
  ```bash
  npm install etherscan-api --save
  ```
- 
- 
+
+
 ## API Documentation
 
 [Full Api Docs](https://sebs.github.io/etherscan-api/)
@@ -46,11 +46,11 @@ var api = require('etherscan-api').init('YourApiKey','rinkeby');
 
 * npm test  - runs tests
   * npm run posttest - starts the linter
-* npm run lint - preconfigured linter 
+* npm run lint - preconfigured linter
 * npm run docs - generates the apidocs
 * npm run bundle - builds a new bundle
-* npm run preversion - Steps before we create a new Tag 
-  * lint 
+* npm run preversion - Steps before we create a new Tag
+  * lint
   * changelog
 * npm run pages - pushes generated apidocs to the server
 * postversion - after generating a new version, push the tag to the server
