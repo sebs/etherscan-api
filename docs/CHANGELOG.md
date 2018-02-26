@@ -1,6 +1,51 @@
+2018-02-26
+==========
+
+  * Foo
+
+2018-02-16
+==========
+
+  * Merge pull request [#20](https://github.com/sebs/etherscan-api/issues/20) from m-tymchyk/master
+    Change Client to Axios and fix some code style
+
+2018-02-15
+==========
+
+  * Fixed Readme.MD
+
+2018-02-14
+==========
+
+  * Latest Updates of Whitespaces cleaning
+  * All fixes of Whitespaces
+
+2018-02-13
+==========
+
+  * Fixed WhiteSpaces at test/testnet-balance-test.js
+  * Fixed whitespaces at test/testnet-eth-test.js
+  * Other fixes of WhiteSpaces
+  * Some fixes
+  * Fixed some whitespaces
+  * Pushed for retry build
+  * Fixed mainet default value
+  * Up Etherscan API Version
+  * Return a dist to .gitignore
+  * bundle
+  * Fixed tests
+
+2018-02-12
+==========
+
+  * Added universal client Axios as HTTP client for Node.js and Browser
+  * Code style and add Axios
+
 2017-12-15
 ==========
 
+  * 4.0.0
+  * changelog
   * Package.lock
   * Merge pull request [#15](https://github.com/sebs/etherscan-api/issues/15) from morrislaptop/patch-1
     Don't pass full URL in again as it is already set
@@ -184,25 +229,3 @@
 
   * 2.1.6
   * (feature): tracking for docs
-  * 2.1.5
-  * (docs): examples for api docs
-  * 2.1.4
-  * (churn): a better keyword
-
-2016-10-10
-==========
-
-  * (fix): bundle was not updated
-  * 2.1.3
-  * changelog
-  * 2.1.2
-  * (feature): Header and Footer
-  * 2.1.1
-  * i(feature): docs in sexy now
-  * 2.1.0
-  * (docs): the big doxing ;)
-  * 2.0.4
-  * (feature): proper api docs with a desc per method
-  * 2.0.3
-  * (churn): removed prefixes
-  * 2.0.2
