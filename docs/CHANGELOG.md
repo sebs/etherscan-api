@@ -1,11 +1,19 @@
+2018-03-01
+==========
+
+  * New urls for the nextworks ..
+    * api- prefix
+    * changed for all 3 testnets
+
 2018-02-26
 ==========
 
+  * 6.0.2
+  * changelog
   * latest jsdoc
   * js
   * Fix vuln (marked via gh-pages)
   * 6.0.1
-  * changelog
   * no pages
   * 6.0.0
   * 5.0.0
@@ -216,6 +224,3 @@
   * method test testnet
   * eth-test testnet passes
   * 1st testnet test pass
-  * mainnet test passes
-  * testing
-  * minor bug fixes
