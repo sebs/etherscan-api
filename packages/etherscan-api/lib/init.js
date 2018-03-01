@@ -6,7 +6,8 @@ const MAIN_API_URL = 'https://api.etherscan.io';
 const TESTNET_API_URL_MAP = {
   ropsten: 'http://api-ropsten.etherscan.io',
   kovan: 'http://api-kovan.etherscan.io',
-  rinkeby: 'https://api-rinkeby.etherscan.io'
+  rinkeby: 'https://api-rinkeby.etherscan.io',
+  homestead: 'https://api.etherscan.io'
 };
 
 /**
