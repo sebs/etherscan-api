@@ -56,12 +56,11 @@ module.exports = function(apiKey, chain) {
         }
 
         if (data.error) {
-          return reject(data.error.message);
+          return reject(new Error(data.error));
         }
-
         resolve(data);
       }).catch(function(error) {
-        return reject(error);
+        return reject(new Error(error));
       });
     });
   }
@@ -544,7 +543,7 @@ module.exports = function(apiKey, chain) {
         let action = 'balance';
         const tag = 'latest';
 
-        if (typeof address != 'string' && address.length) {
+        if (typeof address !== 'string' && address && address.length) {
           address = address.join(',');
           action = 'balancemulti';
         }
