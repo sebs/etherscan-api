@@ -1,9 +1,11 @@
 2018-03-01
 ==========
 
+  * New error handling
+  * 7.0.1
+  * changelog
   * Add possibillity to set up livenet via 'homestead' parameter
   * 7.0.0
-  * changelog
   * New urls for the nextworks ..
     * api- prefix
     * changed for all 3 testnets
@@ -221,6 +223,3 @@
 
   * Update README.md
     noticed that npm package not upgrade with this repo
-  * notice npm
-  * clean
-  * testnet all test passes
