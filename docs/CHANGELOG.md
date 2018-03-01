@@ -1,6 +1,9 @@
 2018-03-01
 ==========
 
+  * Add possibillity to set up livenet via 'homestead' parameter
+  * 7.0.0
+  * changelog
   * New urls for the nextworks ..
     * api- prefix
     * changed for all 3 testnets
@@ -221,6 +224,3 @@
   * notice npm
   * clean
   * testnet all test passes
-  * method test testnet
-  * eth-test testnet passes
-  * 1st testnet test pass
