@@ -1,6 +1,9 @@
 2018-03-02
 ==========
 
+  * Missing docs and one parameter in getLogs
+  * 8.0.1
+  * changelog
   * optional timout parameter in ms for axios get requests
   * Splitting init to small files
 
@@ -213,10 +216,3 @@
 
   * 2.3.2
   * Autorelease
-  * 2.3.1
-  * License
-
-2017-01-27
-==========
-
-  * bundle
