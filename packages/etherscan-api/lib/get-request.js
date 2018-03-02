@@ -21,10 +21,10 @@ const TESTNET_API_URL_MAP = {
   homestead: 'https://api.etherscan.io'
 };
 
-module.exports = function(chain) {
+module.exports = function(chain, timeout) {
   var client = axios.create({
     baseURL: pickChainUrl(chain),
-    timeout: 3000
+    timeout: timeout
   });
 
   /**
