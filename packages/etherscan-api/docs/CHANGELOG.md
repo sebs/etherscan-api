@@ -1,9 +1,16 @@
+2018-03-02
+==========
+
+  * optional timout parameter in ms for axios get requests
+  * Splitting init to small files
+
 2018-03-01
 ==========
 
+  * 8.0.0
+  * changelog
   * New error handling
   * 7.0.1
-  * changelog
   * Add possibillity to set up livenet via 'homestead' parameter
   * 7.0.0
   * New urls for the nextworks ..
@@ -213,13 +220,3 @@
 ==========
 
   * bundle
-  * 2.3.0
-  * Churn: correct versuion number
-  * Merge pull request [#3](https://github.com/sebs/etherscan-api/issues/3) from JackBekket/master
-    Testnet support added
-
-2017-01-18
-==========
-
-  * Update README.md
-    noticed that npm package not upgrade with this repo
