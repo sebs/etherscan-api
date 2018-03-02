@@ -4,6 +4,20 @@ module.exports = function(getRequest, apiKey) {
     /**
      * The Event Log API was designed to provide an alternative to the native eth_getLogs.
      */
+     /**
+      * returns the status of a specific transaction hash
+      * @param {string} fromBlock - fromBlock
+      * @param {string} toBlock - toBlock
+      * @param {string} topic0 - topic (32 Bytes per topic)
+      * @param {string} topic0_1_opr - and|or between topic0 & topic1
+      * @param {string} topic1 - topic (32 Bytes per topic)
+      * @param {string} topic1_2_opr - and|or between topic1 & topic2
+      * @param {string} topic2 - topic (32 Bytes per topic)
+      * @param {string} topic2_3_opr - and|or between topic2 & topic3
+      * @param {string} topic3 - topic (32 Bytes per topic)
+      * @param {string} topic0_2_opr - and|or between topic0 & topic2
+      * @returns {Promise.<object>}
+      */
     getLogs(address,
             fromBlock,
             toBlock,
@@ -13,7 +27,8 @@ module.exports = function(getRequest, apiKey) {
             topic1_2_opr,
             topic2,
             topic2_3_opr,
-            topic3) {
+            topic3,
+            topic0_2_opr) {
 
       const module = 'logs';
       const action = 'getLogs';
@@ -55,6 +70,10 @@ module.exports = function(getRequest, apiKey) {
 
       if (topic2_3_opr) {
         params.topic2_3_opr = topic2_3_opr;
+      }
+
+      if (topic0_2_opr) {
+        params.topic0_2_opr = topic0_2_opr;
       }
 
       if (topic3) {
