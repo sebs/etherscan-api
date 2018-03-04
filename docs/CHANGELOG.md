@@ -1,9 +1,16 @@
+2018-03-04
+==========
+
+  * Typo
+
 2018-03-02
 ==========
 
+  * Docs
+  * 8.0.2
+  * changelog
   * Missing docs and one parameter in getLogs
   * 8.0.1
-  * changelog
   * optional timout parameter in ms for axios get requests
   * Splitting init to small files
 
@@ -203,16 +210,3 @@
 
   * 3.0.0
   * 2.3.3
-  * Improved the testnet parameter
-    * testnet is no more: ropsten, rinkeby, kovan is the new testnet
-
-2017-04-09
-==========
-
-  * changelog
-
-2017-04-04
-==========
-
-  * 2.3.2
-  * Autorelease
