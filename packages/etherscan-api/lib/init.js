@@ -22,7 +22,7 @@ module.exports = function(apiKey, chain, timeout) {
 
 
   if (!timeout) {
-    apiKey = 3000;
+    timeout = 3000;
   }
 
   var getRequest = require('./get-request')(chain, timeout);
