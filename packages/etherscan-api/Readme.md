@@ -26,7 +26,8 @@ Supported:
 Latest
 
 ```javascript
-var api = require('etherscan-api').init('YourApiKey','rinkeby');
+// apikey, network, timeout
+var api = require('etherscan-api').init('YourApiKey','rinkeby'. '3000');
 ```
 
 
