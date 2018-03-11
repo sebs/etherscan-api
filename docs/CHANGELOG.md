@@ -1,6 +1,13 @@
+2018-03-11
+==========
+
+  * 10 sec default timeout and added node 9 to travis
+
 2018-03-04
 ==========
 
+  * 8.0.3
+  * changelog
   * Typo
 
 2018-03-02
@@ -203,10 +210,3 @@
   * changelog
   * Updated Readme for dev
   * Autochangelog
-  * 3.0.1
-
-2017-04-23
-==========
-
-  * 3.0.0
-  * 2.3.3
