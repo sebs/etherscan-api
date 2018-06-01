@@ -1,6 +1,14 @@
+2018-06-01
+==========
+
+  * Added node 10 to test targets
+
 2018-03-11
 ==========
 
+  * Updated#
+  * 8.0.4
+  * changelog
   * 10 sec default timeout and added node 9 to travis
 
 2018-03-04
@@ -208,5 +216,3 @@
 
   * 3.0.2
   * changelog
-  * Updated Readme for dev
-  * Autochangelog
