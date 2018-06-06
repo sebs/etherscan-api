@@ -1,6 +1,20 @@
+2018-06-06
+==========
+
+  * Merge pull request [#29](https://github.com/sebs/etherscan-api/issues/29) from mazikwyry/feature/add-tokentx-action
+    Add tokentx action support to account module which allows getting a list of ERC20 tokes transfer events
+  * Add tokentx action support to account module which allows getting a list of ERC20 tokes transfer events
+
+2018-06-05
+==========
+
+  * bundle
+
 2018-06-01
 ==========
 
+  * 8.0.5
+  * changelog
   * Added node 10 to test targets
 
 2018-03-11
@@ -198,21 +212,3 @@
   * 3.0.3
   * changelog
   * Update to node 8
-  * Add package log
-
-2017-05-22
-==========
-
-  * Merge pull request [#4](https://github.com/sebs/etherscan-api/issues/4) from sebs/snyk-fix-ece25e9d
-    [Snyk Update] New fixes for 1 vulnerable dependency path
-  * fix: package.json & .snyk to reduce vulnerabilities
-    The following vulnerabilities are fixed with a Snyk patch:
-    - https://snyk.io/vuln/npm:ms:20170412
-    Latest report for sebs/etherscan-api:
-    https://snyk.io/test/github/sebs/etherscan-api
-
-2017-04-24
-==========
-
-  * 3.0.2
-  * changelog
