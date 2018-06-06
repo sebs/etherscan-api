@@ -76,6 +76,18 @@ describe('api', function() {
         done();
       });
     });
+    it('tokentx', function(done){
+      var api = init();
+      var txlist = api.account.tokentx(
+        '0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae',
+        '0x6beb418fc6e1958204ac8baddcf109b8e9694966',
+        1, 'latest', 'asc'
+      );
+      txlist.then(function(res){
+        assert.ok(res);
+        done();
+      });
+    });
   });
   describe('stats', function(){
     it('ethsupply', function(done){
