@@ -47,6 +47,22 @@ describe('testnet methods', function () {
       }).catch(done);
     });
 
+    it('tokentx', function (done) {
+      /**
+       * No transaction found in testnet
+       * var txlist = api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+       */
+      var txlist = api.account.tokentx(
+        '0x293bae8584ed8df4a0319d95ffef5fb3645a22b6',
+        '0x4fa5333ecfe1afca2624e14b039268c4591ef8b9'
+      );
+
+      txlist.then(function (res) {
+        assert.ok(res);
+        done();
+      }).catch(done);
+    });
+
     xit('txlist', function (done) {
       /**
        * No transaction found in testnet
