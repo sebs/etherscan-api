@@ -1,6 +1,13 @@
+2018-06-08
+==========
+
+  * Fix dependencies
+
 2018-06-06
 ==========
 
+  * 8.1.0
+  * changelog
   * Merge pull request [#29](https://github.com/sebs/etherscan-api/issues/29) from mazikwyry/feature/add-tokentx-action
     Add tokentx action support to account module which allows getting a list of ERC20 tokes transfer events
   * Add tokentx action support to account module which allows getting a list of ERC20 tokes transfer events
@@ -205,10 +212,3 @@
   * changelog
   * fix: missing data parameter.
     * Thanks for the report
-
-2017-06-02
-==========
-
-  * 3.0.3
-  * changelog
-  * Update to node 8
