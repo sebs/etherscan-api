@@ -1,6 +1,14 @@
+2018-06-12
+==========
+
+  * Add gh pages
+  * bundle
+
 2018-06-08
 ==========
 
+  * 8.1.1
+  * changelog
   * Fix dependencies
 
 2018-06-06
@@ -203,12 +211,3 @@
 
   * 3.0.5
   * changelog
-  * Updated dev deps
-
-2017-06-19
-==========
-
-  * 3.0.4
-  * changelog
-  * fix: missing data parameter.
-    * Thanks for the report
