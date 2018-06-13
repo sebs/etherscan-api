@@ -21,9 +21,9 @@ class TestAppApp extends PolymerElement {
         ></paper-input>
 
       <ul>
-        <li>{{result.status}}</li>
-        <li>{{result.message}}</li>
-        <li>{{result.result}}</li>
+        <li>{{status}}</li>
+        <li>{{message}}</li>
+        <li>{{result}}</li>
       </ul>
     `;
   }
@@ -32,15 +32,35 @@ class TestAppApp extends PolymerElement {
     this._triggerBalance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae'); 
   }
   _triggerBalance(address) {
+   
+    if (address.detail) {
+      address = this.address;
+    }
+   
     var api = etherscanApi.init('');
     var balance = api.account.balance(address);
     var me = this; 
     balance.then(function(balanceData){
-      me.result = balanceData
+      me.status = balanceData.status
+      me.result = balanceData.result;
+      me.message = balanceData.message;
+      
+    }).catch((err)=>{
+      me.status = 'err';
+      me.result = 'err'
+      me.message = err
     }); 
   }
   static get properties() {
     return {
+      status: {
+        type: String, 
+        notify: true
+      },
+      message: {
+        type: String, 
+        notify: true
+      },
       result: {
         type: Object,
         notify: true
