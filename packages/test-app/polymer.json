@@ -1,0 +1,23 @@
+{
+  "npm": true,
+  "lint": {
+    "rules": [
+      "polymer-3"
+    ]
+  },
+  "sources": [
+    "src/**.js",
+    "manifest/**",
+    "package.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/bundles/**"
+  ],
+  "entrypoint": "index.html",
+  "shell": "src/test-app-app/test-app-app.js",
+  "builds": [
+    {"name": "modern", "browserCapabilities": ["es2015", "push"]},
+    {"name": "fallback"}
+  ]
+}

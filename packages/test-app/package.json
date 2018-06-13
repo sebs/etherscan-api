@@ -1,0 +1,18 @@
+{
+  "name": "@hiherto-elements/test-app",
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "express": "^4.16.3",
+    "polymer-cli": "^1.7.3",
+    "prpl-server": "^1.2.0"
+  },
+  "scripts": {
+    "test": "npm run build",
+    "build": "polymer build", 
+    "serve": ""
+  },
+  "devDependencies": {
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "wct-browser-legacy": "^1.0.0"
+  }
+}
