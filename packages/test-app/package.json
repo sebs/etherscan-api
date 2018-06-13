@@ -8,11 +8,13 @@
   },
   "scripts": {
     "test": "npm run build",
-    "build": "polymer build", 
-    "serve": ""
+    "build": "polymer build",
+    "prepublish": "npm run build",
+    "publish": "gh-pages --dist ./build/fallback"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^2.0.0",
+    "gh-pages": "^1.2.0",
     "wct-browser-legacy": "^1.0.0"
   }
 }
