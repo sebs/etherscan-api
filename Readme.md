@@ -6,6 +6,7 @@ A way to access the [etherscan.io api](https://etherscan.io/apis) using promises
 
 Mainnet
 
+
 ```javascript
 var api = require('etherscan-api').init('YourApiKey');
 var balance = api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
@@ -13,7 +14,9 @@ balance.then(function(balanceData){
   console.log(balanceData);
 });
 ```
+## Example in the wild
 
+* [Polymer3 based example](https://github.com/hiherto-elements/test-app)
 
 ## For testnet usage
 
