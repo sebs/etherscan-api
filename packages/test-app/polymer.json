@@ -12,7 +12,8 @@
   ],
   "extraDependencies": [
     "manifest.json",
-    "node_modules/@webcomponents/webcomponentsjs/*"
+    "node_modules/@webcomponents/webcomponentsjs/*",
+    "node_modules/@webcomponents/webcomponentsjs/bundles/*"
   ],
   "entrypoint": "index.html",
   "shell": "src/test-app-app/test-app-app.js",
