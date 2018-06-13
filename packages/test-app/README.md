@@ -1,5 +1,14 @@
 # \<test-app\>
+
 [![Build Status](https://travis-ci.org/hiherto-elements/test-app.svg?branch=master)](https://travis-ci.org/hiherto-elements/test-app)
+
+
+* uses etherscan-api to aaccess etherscan.io
+* Polymer 3
+* deploys when master successfully builds 
+* chrome, firefox, safari supported
+* comes with a travis.yml
+* [Demo](https://github.com/hiherto-elements/test-app)
 
 
 ## Install the Polymer-CLI
