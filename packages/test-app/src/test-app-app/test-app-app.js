@@ -1,6 +1,8 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import 'etherscan-api/dist/bundle.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-listbox/paper-listbox.js';
 /**
  * @customElement
  * @polymer
@@ -13,24 +15,33 @@ class TestAppApp extends PolymerElement {
           display: block;
         }
       </style>
-      <h2>Hello [[prop1]]!</h2>
-      <paper-input
-        label="Account Address"
-        value="{{address}}"
-        on-change="_triggerBalance"
-        ></paper-input>
-
-      <ul>
-        <li>{{status}}</li>
-        <li>{{message}}</li>
-        <li>{{result}}</li>
-      </ul>
+      <h1>[[name]] SUPPLY [[supply]]</h1>
+      <paper-listbox selected="{{selectedToken}}">
+        <template is="dom-repeat" items="{{tokens}}">
+          <paper-item value="{{item.address}}">{{item.name}}</paper-item>
+        </template>
+        
+      </paper-listbox>
     `;
   }
   ready() {
     super.ready();
-    this._triggerBalance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae'); 
+    this._triggerTokenSupply(this.tokens[0]); 
   }
+
+  _triggerTokenSupply(token) {
+    var api = etherscanApi.init('');
+    var supply = api.stats.tokensupply(null, token.address);
+    supply.then((res)=>{
+      this.name = token.name;
+      this.supply = res.result
+    })
+  }
+
+  _changeToken(token) {
+    this._triggerTokenSupply(this.tokens[token])
+  }
+
   _triggerBalance(address) {
    
     if (address.detail) {
@@ -44,7 +55,6 @@ class TestAppApp extends PolymerElement {
       me.status = balanceData.status
       me.result = balanceData.result;
       me.message = balanceData.message;
-      
     }).catch((err)=>{
       me.status = 'err';
       me.result = 'err'
@@ -53,23 +63,31 @@ class TestAppApp extends PolymerElement {
   }
   static get properties() {
     return {
-      status: {
-        type: String, 
-        notify: true
-      },
-      message: {
-        type: String, 
-        notify: true
-      },
-      result: {
-        type: Object,
-        notify: true
-      },
-      address: {
-        type: String,
-        value: 'test-app-app',
+      tokens: {
+        type: Array, 
         notify: true, 
-        value: '0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae'
+        value: [
+          {
+            address: '0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0',
+            name: 'EOS'
+          }, {
+            address: '0xf230b790e05390fc8295f4d3f60332c93bed42e2', 
+            name: 'Tronix'
+          }
+        ]
+      },      
+      selectedToken: {
+        type: Number, 
+        notify: true, 
+        observer: '_changeToken'
+      }, 
+      supply: {
+        type: Number, 
+        notify: true
+      }, 
+      name: {
+        type: String, 
+        notify: true
       }
     };
   }

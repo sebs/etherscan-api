@@ -2,6 +2,8 @@
   "name": "@hiherto-elements/test-app",
   "dependencies": {
     "@polymer/paper-input": "^3.0.0-pre.19",
+    "@polymer/paper-item": "^3.0.0-pre.19",
+    "@polymer/paper-listbox": "^3.0.0-pre.19",
     "@polymer/polymer": "^3.0.0",
     "etherscan-api": "^8.1.2",
     "express": "^4.16.3",
