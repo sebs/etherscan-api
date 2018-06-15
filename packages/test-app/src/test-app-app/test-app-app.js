@@ -54,7 +54,7 @@ class TestAppApp extends PolymerElement {
   }
   _triggerHistory(token) {
     var me = this;
-    fetch('http://coincap.io/history/1day/'+token.name)
+    fetch('https://coincap.io/history/1day/'+token.name)
       .then(function(response) {
         return response.json();
       })
