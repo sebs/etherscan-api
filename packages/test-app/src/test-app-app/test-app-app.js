@@ -8,7 +8,7 @@ import 'chartjs-web-components/src/base.js'
 import '@polymer/app-layout/app-toolbar/app-toolbar.js'
 import '@polymer/paper-tabs/paper-tabs.js'
 import '@polymer/paper-tabs/paper-tab.js'
-
+import '@polymer/paper-slider/paper-slider.js'
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-icon-button/paper-icon-button.js'
@@ -24,14 +24,11 @@ class TestAppApp extends PolymerElement {
           display: block;
         }
         #chartbox {
-          width: 70%;
-          float: left;
+       
+          
         }
 
-        #optionbox {
-          width: 25%;
-          float: left;
-        }
+        
 
         body {
           margin: 0px;
@@ -53,9 +50,17 @@ class TestAppApp extends PolymerElement {
             <app-toolbar>
                 <paper-icon-button icon="close"></paper-icon-button>
                 <div main-title>App name</div>
+                <paper-listbox selected="{{dataset}}">
+                <template is="dom-repeat" items="{{datasets}}">
+                  <paper-icon-button icon="{{_symbolForIndex(index)}}"></paper-icon-button>
+                </template> 
+              </paper-listbox>
+           
               </app-toolbar>
               <app-toolbar>
                 <div main-title>[[name]] SUPPLY </div>
+                [[_durationForIndex(duration)]]
+                <paper-slider min="0", max="5" value="{{duration}}"></paper-slider>
               </app-toolbar>
               <paper-tabs selected="{{selectedToken}}" sticky>
                 <template is="dom-repeat" items="{{tokens}}">
@@ -74,23 +79,7 @@ class TestAppApp extends PolymerElement {
                   data="{{chartData}}" 
                   options="{{chartOptions}}">
                 </base-chart>
-              </div>
-              <div id="optionbox"> 
-              <paper-listbox selected="{{dataset}}">
-              <template is="dom-repeat" items="{{datasets}}">
-                  <paper-item>{{item}}</paper-item>
-                </template> 
-                
-              </paper-listbox>
-              <paper-listbox selected="{{duration}}">
-                <template is="dom-repeat" items="{{durations}}">
-                  <paper-item>{{item}}</paper-item>
-                </template>        
-              </paper-listbox>
-
-              
-              </div>
-                        
+              </div>          
             </div>
           </app-header-layout>
     `;
@@ -107,6 +96,13 @@ class TestAppApp extends PolymerElement {
       this.name = token.name;
       this.supply = res.result
     })
+  }
+  _symbolForIndex(index) {
+    return this.datasetsIcons[index]
+  }
+  _durationForIndex(index) {
+
+    return this.durations[index]
   }
   _changeOption() {
      let token = this.tokens[this.selectedToken];
@@ -175,6 +171,12 @@ class TestAppApp extends PolymerElement {
   }
   static get properties() {
     return {
+      datasetsIcons: {
+        type: Array, 
+        value: [
+          'euro-symbol', 'forward', 'fingerprint'
+        ]
+      },
       datasets: {
         type: Array, 
         value: [
