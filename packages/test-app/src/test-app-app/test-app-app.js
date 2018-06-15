@@ -19,6 +19,13 @@ class TestAppApp extends PolymerElement {
         :host {
           display: block;
         }
+
+        body {
+          margin: 0px;
+        }
+        app-header-layout {
+          margin: 0px;
+        }
         app-toolbar {
           /* Toolbar is the main header, so give it some color */
           background-color: #1E88E5;
@@ -47,7 +54,7 @@ class TestAppApp extends PolymerElement {
             <div>
 
               <div>SUPPLY [[supply]]</div>
-              <base-chart id="chart" type="bar" data="{{chartData}}" options="{{chartOptions}}"></base-chart>
+              <base-chart id="chart" type="line" data="{{chartData}}" options="{{chartOptions}}"></base-chart>
 
               <paper-listbox selected="{{selectedToken}}">
                 <template is="dom-repeat" items="{{tokens}}">
