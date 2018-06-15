@@ -1,9 +1,11 @@
 {
   "name": "@hiherto-elements/test-app",
   "dependencies": {
+    "@polymer/app-layout": "^3.0.0-pre.19",
     "@polymer/paper-input": "^3.0.0-pre.19",
     "@polymer/paper-item": "^3.0.0-pre.19",
     "@polymer/paper-listbox": "^3.0.0-pre.19",
+    "@polymer/paper-tabs": "^3.0.0-pre.19",
     "@polymer/polymer": "^3.0.0",
     "@webcomponents/shadycss": "^1.3.1",
     "chart.js": "^2.7.2",

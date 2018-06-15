@@ -5,6 +5,9 @@ import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@webcomponents/shadycss/apply-shim.min.js';
 import 'chartjs-web-components/src/base.js'
+import '@polymer/app-layout/app-toolbar/app-toolbar.js'
+import '@polymer/paper-tabs/paper-tabs.js'
+import '@polymer/paper-tabs/paper-tab.js'
 /**
  * @customElement
  * @polymer
@@ -16,22 +19,43 @@ class TestAppApp extends PolymerElement {
         :host {
           display: block;
         }
-
+        app-toolbar {
+          /* Toolbar is the main header, so give it some color */
+          background-color: #1E88E5;
+          font-family: 'Roboto', Helvetica, sans-serif;
+          color: white;
+          --app-toolbar-font-size: 24px;
+        }
         base-chart {
       
           width: 300px;
           height: 300px;
         }
       </style>
-      <h1>[[name]] SUPPLY [[supply]]</h1>
-      <base-chart id="chart" type="bar" data="{{chartData}}" options="{{chartOptions}}"></base-chart>
 
-      <paper-listbox selected="{{selectedToken}}">
-        <template is="dom-repeat" items="{{tokens}}">
-          <paper-item value="{{item.address}}">{{item.name}}</paper-item>
-        </template>
-        
-      </paper-listbox>
+          <app-header-layout>
+            <app-header fixed condenses effects="waterfall" slot="header">
+              <app-toolbar>
+                <div main-title>[[name]] SUPPLY </div>
+              </app-toolbar>
+              <paper-tabs selected="{{selectedToken}}" sticky>
+                <template is="dom-repeat" items="{{tokens}}">
+                  <paper-tab value="{{item.address}}">{{item.name}}</paper-tab>
+                </template> 
+              </paper-tabs>
+            </app-header>
+            <div>
+
+              <div>SUPPLY [[supply]]</div>
+              <base-chart id="chart" type="bar" data="{{chartData}}" options="{{chartOptions}}"></base-chart>
+
+              <paper-listbox selected="{{selectedToken}}">
+                <template is="dom-repeat" items="{{tokens}}">
+                  <paper-item value="{{item.address}}">{{item.name}}</paper-item>
+                </template> 
+              </paper-listbox>             
+            </div>
+          </app-header-layout>
     `;
   }
   ready() {
