@@ -2,6 +2,8 @@
   "name": "@hiherto-elements/test-app",
   "dependencies": {
     "@polymer/app-layout": "^3.0.0-pre.19",
+    "@polymer/iron-icons": "^3.0.0-pre.19",
+    "@polymer/paper-icon-button": "^3.0.0-pre.19",
     "@polymer/paper-input": "^3.0.0-pre.19",
     "@polymer/paper-item": "^3.0.0-pre.19",
     "@polymer/paper-listbox": "^3.0.0-pre.19",

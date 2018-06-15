@@ -8,6 +8,10 @@ import 'chartjs-web-components/src/base.js'
 import '@polymer/app-layout/app-toolbar/app-toolbar.js'
 import '@polymer/paper-tabs/paper-tabs.js'
 import '@polymer/paper-tabs/paper-tab.js'
+
+import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/paper-icon-button/paper-icon-button.js'
 /**
  * @customElement
  * @polymer
@@ -18,6 +22,15 @@ class TestAppApp extends PolymerElement {
       <style>
         :host {
           display: block;
+        }
+        #chartbox {
+          width: 70%;
+          float: left;
+        }
+
+        #optionbox {
+          width: 25%;
+          float: left;
         }
 
         body {
@@ -33,15 +46,14 @@ class TestAppApp extends PolymerElement {
           color: white;
           --app-toolbar-font-size: 24px;
         }
-        base-chart {
-      
-          width: 300px;
-          height: 300px;
-        }
       </style>
 
           <app-header-layout>
             <app-header fixed condenses effects="waterfall" slot="header">
+            <app-toolbar>
+                <paper-icon-button icon="close"></paper-icon-button>
+                <div main-title>App name</div>
+              </app-toolbar>
               <app-toolbar>
                 <div main-title>[[name]] SUPPLY </div>
               </app-toolbar>
@@ -54,13 +66,30 @@ class TestAppApp extends PolymerElement {
             <div>
 
               <div>SUPPLY [[supply]]</div>
-              <base-chart id="chart" type="line" data="{{chartData}}" options="{{chartOptions}}"></base-chart>
-
-              <paper-listbox selected="{{selectedToken}}">
-                <template is="dom-repeat" items="{{tokens}}">
-                  <paper-item value="{{item.address}}">{{item.name}}</paper-item>
+              <div id="chartbox"> 
+                <base-chart 
+                  id="chart" 
+                  type="line" 
+                  data="{{chartData}}" 
+                  options="{{chartOptions}}">
+                </base-chart>
+              </div>
+              <div id="optionbox"> 
+              <paper-listbox selected="{{dataset}}">
+              <template is="dom-repeat" items="{{datasets}}">
+                  <paper-item>{{item}}</paper-item>
                 </template> 
-              </paper-listbox>             
+                
+              </paper-listbox>
+              <paper-listbox selected="{{duration}}">
+                <template is="dom-repeat" items="{{durations}}">
+                  <paper-item>{{item}}</paper-item>
+                </template>        
+              </paper-listbox>
+
+              
+              </div>
+                        
             </div>
           </app-header-layout>
     `;
@@ -78,19 +107,24 @@ class TestAppApp extends PolymerElement {
       this.supply = res.result
     })
   }
-
+  _changeOption() {
+     let token = this.tokens[this.selectedToken];
+      this._triggerHistory(token);   
+  }
   _changeToken(token) {
     this._triggerTokenSupply(this.tokens[token])
     this._triggerHistory(this.tokens[token]);
   }
   _triggerHistory(token) {
     var me = this;
-    fetch('https://coincap.io/history/1day/'+token.name)
+    let url = `https://coincap.io/history/${this.durations[this.duration]}/${token.name}`;
+    fetch(url)
       .then(function(response) {
         return response.json();
       })
       .then((data)=>{
-        return data.price
+        let pick = me.datasets[me.dataset]
+        return data[pick]
       })
       .then(function(data) {
         var labels = data.map((row, index)=>{
@@ -132,6 +166,30 @@ class TestAppApp extends PolymerElement {
   }
   static get properties() {
     return {
+      datasets: {
+        type: Array, 
+        value: [
+          'price', 'market_cap', 'volume'
+        ]
+      },
+      dataset: {
+        type: Number,
+        notify: true,
+        observer: '_changeOption',
+        value: 0
+      },
+      duration: {
+        type: Number,
+        notify: true,
+        observer: '_changeOption',
+        value: 0
+      },
+      durations: {
+        type: Array, 
+        value: [
+          '1day', '7day', '30day', '90day', '180day', '365day'
+        ]
+      },
       tokens: {
         type: Array, 
         notify: true, 
