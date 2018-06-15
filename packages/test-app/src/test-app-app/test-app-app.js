@@ -67,7 +67,8 @@ class TestAppApp extends PolymerElement {
 
               <div>SUPPLY [[supply]]</div>
               <div id="chartbox"> 
-                <base-chart 
+                <base-chart
+                  responsive 
                   id="chart" 
                   type="line" 
                   data="{{chartData}}" 
@@ -118,6 +119,11 @@ class TestAppApp extends PolymerElement {
   _triggerHistory(token) {
     var me = this;
     let url = `https://coincap.io/history/${this.durations[this.duration]}/${token.name}`;
+    
+    function _createLabel(token, dataset, duration) {
+      return token.name + ' ' + dataset + ' ' + duration;
+    }
+    
     fetch(url)
       .then(function(response) {
         return response.json();
@@ -133,11 +139,14 @@ class TestAppApp extends PolymerElement {
         var data = data.map((row, index)=>{
           return row[1];
         });
-        
+        let dataset = me.datasets[me.dataset];
+        let duration = me.durations[me.duration]; 
+        console.log
         var data = {
           labels: labels,
           datasets: [
-              {
+              {   
+                label: _createLabel(token, dataset, duration),
                   data: data
               }]
       };
