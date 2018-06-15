@@ -76,7 +76,11 @@ class TestAppApp extends PolymerElement {
           }, {
             address: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52', 
             name: 'BNB'
-          } 
+          }, {
+            address: '0xd850942ef8811f2a866692a623011bde52a462c1', 
+            name: 'VeChain'
+          }
+
         ]
       },      
       selectedToken: {
