@@ -73,13 +73,17 @@ class TestAppApp extends PolymerElement {
           }, {
             address: '0xf230b790e05390fc8295f4d3f60332c93bed42e2', 
             name: 'Tronix'
-          }
+          }, {
+            address: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52', 
+            name: 'BNB'
+          } 
         ]
       },      
       selectedToken: {
         type: Number, 
         notify: true, 
-        observer: '_changeToken'
+        observer: '_changeToken', 
+        value: 0
       }, 
       supply: {
         type: Number, 
