@@ -79,6 +79,10 @@ class TestAppApp extends PolymerElement {
           }, {
             address: '0xd850942ef8811f2a866692a623011bde52a462c1', 
             name: 'VeChain'
+          },
+          {
+            address: '0xd26114cd6EE289AccF82350c8d8487fedB8A0C07', 
+            name: 'OmiseGO'
           }
 
         ]
