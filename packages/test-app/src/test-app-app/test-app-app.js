@@ -54,6 +54,18 @@ class TestAppApp extends PolymerElement {
           color: white;
           --app-toolbar-font-size: 24px;
         }
+
+
+        .container {
+          display: flex;
+          flex-direction: row;
+        }
+        .left {
+          flex-grow: 5;
+        }
+        .right {
+          flex-grow: 0;
+        }
       </style>
 
           <app-header-layout>
@@ -68,7 +80,7 @@ class TestAppApp extends PolymerElement {
                 <div slot="dropdown-content">
                   <h2>Buy</h2>
                   <paper-input label="Buy [[name]]"></paper-input> 
-                  <paper-button label="kaufen">Kaufen</paper-button>
+                  <paper-button label="kaufen" raised>Kaufen</paper-button>
                 </div>
               </iron-dropdown>
               <paper-icon-button icon="svg-sample-icons:settings" on-tap="_openSettings"></paper-icon-button>
@@ -83,25 +95,32 @@ class TestAppApp extends PolymerElement {
            
             <app-toolbar>
                 <div main-title>[[name]]</div>
-                 <paper-dropdown-menu>
+                <paper-dropdown-menu>
               <paper-listbox slot="dropdown-content" selected="{{selectedToken}}">
                 <template is="dom-repeat" items="{{tokens}}">
                   <paper-item>{{item.name}}</paper-item>
                 </template> 
                 </paper-listbox>
               </paper-dropdown-menu>
-                [[_durationForIndex(duration)]] <paper-slider min="0", max="5" value="{{duration}}"></paper-slider>
-                <paper-listbox selected="{{dataset}}">
+              </app-toolbar>
+            </app-header>
+            <div class="container">
+            <div class="left">
+            <paper-listbox selected="{{dataset}}">
                 <template is="dom-repeat" items="{{datasets}}">
-                  <paper-icon-button icon="{{_symbolForIndex(index)}}">foo</paper-icon-button>
+                  <paper-button raised>
+                  {{_nameForIndex(index)}}
+                  <iron-icon icon="{{_symbolForIndex(index)}}"></iron-icon>
+                  </paper-button>
                 </template> 
               </paper-listbox>
-              </app-toolbar>
-             
-            </app-header>
-            <div>
 
-              <div>SUPPLY [[supply]]</div>
+          </div>
+          <div class="right">
+            [[_durationForIndex(duration)]]
+            <paper-slider min="0", max="5" value="{{duration}}"></paper-slider>
+          </div>
+        </div>  
               <div id="chartbox"> 
                 <base-chart
                   responsive 
@@ -111,7 +130,7 @@ class TestAppApp extends PolymerElement {
                   options="{{chartOptions}}">
                 </base-chart>
               </div>          
-            </div>
+           
           </app-header-layout>
     `;
   }
@@ -145,6 +164,11 @@ class TestAppApp extends PolymerElement {
   }
   _symbolForIndex(index) {
     return this.datasetsIcons[index]
+  }
+
+  _nameForIndex(index) {
+    let names = ['Price', 'Cap', 'Volume'];
+    return names[index];
   }
   _durationForIndex(index) {
 
