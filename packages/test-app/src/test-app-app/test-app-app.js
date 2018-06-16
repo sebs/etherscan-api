@@ -146,6 +146,14 @@ class TestAppApp extends PolymerElement {
     function _createLabel(token, dataset, duration) {
       return token.name + ' ' + dataset + ' ' + duration;
     }
+
+    if (this.sendTelemetry == true) {
+      ga('send', 'event', 'history', token.name, this.durations[this.duration], {
+        nonInteraction: false
+      });
+      console.log('send', 'event', 'history', token.name, this.durations[this.duration])
+    }
+
     
     fetch(url)
       .then(function(response) {
