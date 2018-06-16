@@ -308,8 +308,16 @@ class TestAppApp extends PolymerElement {
             name: 'ZIL'
           },
           {
-            address: '	0xcb97e65f07da24d46bcdd078ebebd7c6e6e3d750', 
+            address: '0xcb97e65f07da24d46bcdd078ebebd7c6e6e3d750', 
             name: 'BTM'
+          },
+          {
+            address: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52', 
+            name: 'BNB'
+          },
+          {
+            address: '0x5ca9a71b1d01849c0a95490cc00559717fcf0d1d', 
+            name: 'AE'
           },
           
           
