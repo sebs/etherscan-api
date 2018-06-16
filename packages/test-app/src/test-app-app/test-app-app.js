@@ -8,12 +8,14 @@ import 'chartjs-web-components/src/base.js'
 import '@polymer/app-layout/app-toolbar/app-toolbar.js'
 import '@polymer/paper-tabs/paper-tabs.js'
 import '@polymer/paper-tabs/paper-tab.js'
-import '@polymer/paper-item/paper-item.js'
+import '@polymer/paper-input/paper-input.js'
 import '@polymer/paper-slider/paper-slider.js'
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-dropdown/iron-dropdown.js';
 import '@polymer/paper-icon-button/paper-icon-button.js'
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-checkbox/paper-checkbox.js';
 import './svg-sample-icons.js'
 /**
  * @customElement
@@ -57,15 +59,17 @@ class TestAppApp extends PolymerElement {
               <paper-icon-button icon="svg-sample-icons:cart" on-tap="_openBuy"></paper-icon-button>
               <iron-dropdown id="buy" horizontal-align="right" vertical-align="top">
                 <div slot="dropdown-content">
-                  <h2>Buy</h2> 
-                  <paper-item>foo</paper-item>
+                  <h2>Buy</h2>
+                  <paper-input label="Buy [[name]]"></paper-input> 
+                  <paper-button label="kaufen">Kaufen</paper-button>
                 </div>
               </iron-dropdown>
               <paper-icon-button icon="svg-sample-icons:settings" on-tap="_openSettings"></paper-icon-button>
               <iron-dropdown id="settings" horizontal-align="right" vertical-align="top">
                 <div slot="dropdown-content">
                   <h2>Settings</h2> 
-                  <paper-item>foo</paper-item>
+                  <paper-checkbox>Send Telemetry Data</paper-checkbox>
+                  <div>Uses Google Analytics</div>
                 </div>
               </iron-dropdown>
             </app-toolbar>

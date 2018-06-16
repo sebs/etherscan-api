@@ -4,6 +4,8 @@
     "@polymer/app-layout": "^3.0.0-pre.19",
     "@polymer/iron-dropdown": "^3.0.0-pre.19",
     "@polymer/iron-icons": "^3.0.0-pre.19",
+    "@polymer/paper-button": "^3.0.0-pre.19",
+    "@polymer/paper-checkbox": "^3.0.0-pre.19",
     "@polymer/paper-icon-button": "^3.0.0-pre.19",
     "@polymer/paper-input": "^3.0.0-pre.19",
     "@polymer/paper-item": "^3.0.0-pre.19",
