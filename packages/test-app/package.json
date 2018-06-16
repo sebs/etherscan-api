@@ -19,7 +19,8 @@
     "etherscan-api": "^8.1.2",
     "express": "^4.16.3",
     "polymer-cli": "^1.7.3",
-    "prpl-server": "^1.2.0"
+    "prpl-server": "^1.2.0",
+    "pwa-helpers": "^0.8.2"
   },
   "scripts": {
     "test": "npm run build",

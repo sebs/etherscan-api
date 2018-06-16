@@ -17,6 +17,7 @@ import '@polymer/paper-icon-button/paper-icon-button.js'
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
 import './svg-sample-icons.js'
+import { installOfflineWatcher } from 'pwa-helpers/network.js';
 /**
  * @customElement
  * @polymer
@@ -35,6 +36,9 @@ class TestAppApp extends PolymerElement {
           color: green;
         }
 
+        #statusicon[disabled], statusicon[disabled="disabled"] {
+          border: 1px solid red;
+        }
         body {
           margin: 0px;
         }
@@ -54,7 +58,9 @@ class TestAppApp extends PolymerElement {
             <app-header fixed condenses effects="waterfall" slot="header">
             <app-toolbar>
             <paper-icon-button icon="svg-sample-icons:info" on-tap="_openInfo"></paper-icon-button>
-              <div main-title>Token Explorer</div>
+            <paper-icon-button id="statusicon" icon="svg-sample-icons:online-status"></paper-icon-button>
+            
+            <div main-title>Token Explorer</div>
               <paper-icon-button icon="svg-sample-icons:cart" on-tap="_openBuy"></paper-icon-button>
               <iron-dropdown id="buy" horizontal-align="right" vertical-align="top">
                 <div slot="dropdown-content">
@@ -107,6 +113,14 @@ class TestAppApp extends PolymerElement {
   ready() {
     super.ready();
     this._triggerTokenSupply(this.tokens[0]); 
+    installOfflineWatcher((offline) => {
+
+      if (offline) {
+        this.$.statusicon.setAttribute('disabled', true);
+      } else {
+        this.$.statusicon.removeAttribute('disabled');
+      }
+    })
   }
 
   _openSettings() {
@@ -151,9 +165,7 @@ class TestAppApp extends PolymerElement {
       ga('send', 'event', 'history', token.name, this.durations[this.duration], {
         nonInteraction: false
       });
-      console.log('send', 'event', 'history', token.name, this.durations[this.duration])
     }
-
     
     fetch(url)
       .then(function(response) {
