@@ -8,9 +8,11 @@ import 'chartjs-web-components/src/base.js'
 import '@polymer/app-layout/app-toolbar/app-toolbar.js'
 import '@polymer/paper-tabs/paper-tabs.js'
 import '@polymer/paper-tabs/paper-tab.js'
+import '@polymer/paper-item/paper-item.js'
 import '@polymer/paper-slider/paper-slider.js'
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-dropdown/iron-dropdown.js';
 import '@polymer/paper-icon-button/paper-icon-button.js'
 import './svg-sample-icons.js'
 /**
@@ -24,12 +26,12 @@ class TestAppApp extends PolymerElement {
         :host {
           display: block;
         }
-        #chartbox {
-       
-          
+ 
+        iron-dropdown {
+          width: 300px;
+          background-color: white;
+          color: green;
         }
-
-        
 
         body {
           margin: 0px;
@@ -49,8 +51,23 @@ class TestAppApp extends PolymerElement {
           <app-header-layout>
             <app-header fixed condenses effects="waterfall" slot="header">
             <app-toolbar>
-            <div main-title>Token Explorer</div>
+            <paper-icon-button icon="svg-sample-icons:info" on-tap="_openInfo"></paper-icon-button>
               
+              <div main-title>Token Explorer</div>
+              <paper-icon-button icon="svg-sample-icons:cart" on-tap="_openBuy"></paper-icon-button>
+              <iron-dropdown id="buy" horizontal-align="right" vertical-align="top">
+                <div slot="dropdown-content">
+                  <h2>Buy</h2> 
+                  <paper-item>foo</paper-item>
+                </div>
+              </iron-dropdown>
+              <paper-icon-button icon="svg-sample-icons:settings" on-tap="_openSettings"></paper-icon-button>
+              <iron-dropdown id="settings" horizontal-align="right" vertical-align="top">
+                <div slot="dropdown-content">
+                  <h2>Settings</h2> 
+                  <paper-item>foo</paper-item>
+                </div>
+              </iron-dropdown>
             </app-toolbar>
            
             <app-toolbar>
@@ -87,6 +104,13 @@ class TestAppApp extends PolymerElement {
   ready() {
     super.ready();
     this._triggerTokenSupply(this.tokens[0]); 
+  }
+
+  _openSettings() {
+    this.$.settings.toggle();
+  }
+  _openBuy() {
+    this.$.buy.toggle();
   }
 
   _triggerTokenSupply(token) {
@@ -228,6 +252,11 @@ class TestAppApp extends PolymerElement {
             address: '0x05f4a42e251f2d52b8ed15e9fedaacfcef1fad27', 
             name: 'ZIL'
           },
+          {
+            address: '	0xcb97e65f07da24d46bcdd078ebebd7c6e6e3d750', 
+            name: 'BTM'
+          },
+          
           
         ]
       },      
