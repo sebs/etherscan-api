@@ -54,7 +54,6 @@ class TestAppApp extends PolymerElement {
             <app-header fixed condenses effects="waterfall" slot="header">
             <app-toolbar>
             <paper-icon-button icon="svg-sample-icons:info" on-tap="_openInfo"></paper-icon-button>
-              
               <div main-title>Token Explorer</div>
               <paper-icon-button icon="svg-sample-icons:cart" on-tap="_openBuy"></paper-icon-button>
               <iron-dropdown id="buy" horizontal-align="right" vertical-align="top">
@@ -68,7 +67,7 @@ class TestAppApp extends PolymerElement {
               <iron-dropdown id="settings" horizontal-align="right" vertical-align="top">
                 <div slot="dropdown-content">
                   <h2>Settings</h2> 
-                  <paper-checkbox>Send Telemetry Data</paper-checkbox>
+                  <paper-checkbox checked="{{sendTelemetry}}">Send Telemetry Data</paper-checkbox>
                   <div>Uses Google Analytics</div>
                 </div>
               </iron-dropdown>
@@ -165,7 +164,7 @@ class TestAppApp extends PolymerElement {
         });
         let dataset = me.datasets[me.dataset];
         let duration = me.durations[me.duration]; 
-        console.log
+        
         var data = {
           labels: labels,
           datasets: [
@@ -199,6 +198,10 @@ class TestAppApp extends PolymerElement {
   }
   static get properties() {
     return {
+      sendTelemetry: {
+        type: Boolean,  
+        value: false
+      },
       datasetsIcons: {
         type: Array, 
         value: [

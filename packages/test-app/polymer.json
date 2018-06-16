@@ -18,7 +18,33 @@
   "entrypoint": "index.html",
   "shell": "src/test-app-app/test-app-app.js",
   "builds": [
-    {"name": "modern", "browserCapabilities": ["es2015", "push"]},
-    {"name": "fallback"}
+    { "name": "modern", 
+      "browserCapabilities": ["es2015", "push"],
+      "js": {
+        "minify": true
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      },
+      "bundle": true,
+      "addServiceWorker": true
+    },
+    {
+      "name": "fallback",  
+      "js": {
+        "minify": true
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      },
+      "bundle": false,
+      "addServiceWorker": false
+    }
   ]
 }
