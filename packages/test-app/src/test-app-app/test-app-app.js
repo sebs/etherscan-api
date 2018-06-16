@@ -75,12 +75,15 @@ class TestAppApp extends PolymerElement {
             <paper-icon-button id="statusicon" icon="svg-sample-icons:online-status"></paper-icon-button>
             
             <div main-title>Token Explorer</div>
-              <paper-icon-button icon="svg-sample-icons:cart" on-tap="_openBuy"></paper-icon-button>
+              <paper-button raised on-tap="_openBuy">
+                  <iron-icon icon="svg-sample-icons:cart"></iron-icon>
+                  Buy
+                  </paper-button>
               <iron-dropdown id="buy" horizontal-align="right" vertical-align="top">
                 <div slot="dropdown-content">
                   <h2>Buy</h2>
-                  <paper-input label="Buy [[name]]"></paper-input> 
-                  <paper-button label="kaufen" raised>Kaufen</paper-button>
+                  <paper-input id="amount" label="Buy [[name]]" value="10" tab-index="0"></paper-input> 
+                  <paper-button on-tap="_purchaseCoin" raised>Buy</paper-button>
                 </div>
               </iron-dropdown>
               <paper-icon-button icon="svg-sample-icons:settings" on-tap="_openSettings"></paper-icon-button>
@@ -136,7 +139,6 @@ class TestAppApp extends PolymerElement {
   }
   ready() {
     super.ready();
-    this._triggerTokenSupply(this.tokens[0]); 
     installOfflineWatcher((offline) => {
 
       if (offline) {
@@ -145,8 +147,14 @@ class TestAppApp extends PolymerElement {
         this.$.statusicon.removeAttribute('disabled');
       }
     })
+    this.name = this.tokens[this.selectedToken].name
   }
+  _purchaseCoin() {
 
+    this.$.buy.close();
+    let buyAmount = this.$.amount.value;
+    console.log(buyAmount);
+  }
   _openSettings() {
     this.$.settings.toggle();
   }
@@ -154,14 +162,6 @@ class TestAppApp extends PolymerElement {
     this.$.buy.toggle();
   }
 
-  _triggerTokenSupply(token) {
-    var api = etherscanApi.init('');
-    var supply = api.stats.tokensupply(null, token.address);
-    supply.then((res)=>{
-      this.name = token.name;
-      this.supply = res.result
-    })
-  }
   _symbolForIndex(index) {
     return this.datasetsIcons[index]
   }
@@ -179,7 +179,6 @@ class TestAppApp extends PolymerElement {
       this._triggerHistory(token);   
   }
   _changeToken(token) {
-    this._triggerTokenSupply(this.tokens[token])
     this._triggerHistory(this.tokens[token]);
   }
   _triggerHistory(token) {
