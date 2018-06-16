@@ -19,7 +19,7 @@
   "shell": "src/test-app-app/test-app-app.js",
   "builds": [
     { "name": "modern", 
-      "browserCapabilities": ["es2015", "push"],
+      "browserCapabilities": ["es2015", "push", "serviceworker"],
       "js": {
         "minify": true
       },
