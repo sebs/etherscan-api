@@ -25,7 +25,7 @@
     "test": "npm run build",
     "build": "polymer build",
     "prepublish": "npm run build",
-    "publish": "gh-pages --dist ./build/modern"
+    "publish": "gh-pages --dist ./build/fallback"
   },
   "slack": "https://hiherto-components.slack.com/",
   "devDependencies": {

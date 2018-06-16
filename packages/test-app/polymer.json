@@ -44,7 +44,7 @@
         "minify": true
       },
       "bundle": false,
-      "addServiceWorker": false
+      "addServiceWorker": true
     }
   ]
 }
