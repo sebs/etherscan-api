@@ -12,6 +12,7 @@ import '@polymer/paper-slider/paper-slider.js'
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-icon-button/paper-icon-button.js'
+import './svg-sample-icons.js'
 /**
  * @customElement
  * @polymer
@@ -48,19 +49,18 @@ class TestAppApp extends PolymerElement {
           <app-header-layout>
             <app-header fixed condenses effects="waterfall" slot="header">
             <app-toolbar>
-                <paper-icon-button icon="close"></paper-icon-button>
-                <div main-title>App name</div>
+            <div main-title>Token Explorer</div>
+              
+            </app-toolbar>
+           
+            <app-toolbar>
+                <div main-title>[[name]]</div>
+                [[_durationForIndex(duration)]] <paper-slider min="0", max="5" value="{{duration}}"></paper-slider>
                 <paper-listbox selected="{{dataset}}">
                 <template is="dom-repeat" items="{{datasets}}">
                   <paper-icon-button icon="{{_symbolForIndex(index)}}">foo</paper-icon-button>
                 </template> 
               </paper-listbox>
-           
-              </app-toolbar>
-              <app-toolbar>
-                <div main-title>[[name]] SUPPLY </div>
-                [[_durationForIndex(duration)]]
-                <paper-slider min="0", max="5" value="{{duration}}"></paper-slider>
               </app-toolbar>
               <paper-tabs selected="{{selectedToken}}" sticky>
                 <template is="dom-repeat" items="{{tokens}}">
@@ -174,7 +174,7 @@ class TestAppApp extends PolymerElement {
       datasetsIcons: {
         type: Array, 
         value: [
-          'euro-symbol', 'forward', 'fingerprint'
+          'euro-symbol', 'svg-sample-icons:cap', 'svg-sample-icons:volume'
         ]
       },
       datasets: {
