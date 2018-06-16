@@ -16,6 +16,8 @@ import '@polymer/iron-dropdown/iron-dropdown.js';
 import '@polymer/paper-icon-button/paper-icon-button.js'
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
+import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
+
 import './svg-sample-icons.js'
 import { installOfflineWatcher } from 'pwa-helpers/network.js';
 /**
@@ -81,6 +83,13 @@ class TestAppApp extends PolymerElement {
            
             <app-toolbar>
                 <div main-title>[[name]]</div>
+                 <paper-dropdown-menu>
+              <paper-listbox slot="dropdown-content" selected="{{selectedToken}}">
+                <template is="dom-repeat" items="{{tokens}}">
+                  <paper-item>{{item.name}}</paper-item>
+                </template> 
+                </paper-listbox>
+              </paper-dropdown-menu>
                 [[_durationForIndex(duration)]] <paper-slider min="0", max="5" value="{{duration}}"></paper-slider>
                 <paper-listbox selected="{{dataset}}">
                 <template is="dom-repeat" items="{{datasets}}">
@@ -88,11 +97,7 @@ class TestAppApp extends PolymerElement {
                 </template> 
               </paper-listbox>
               </app-toolbar>
-              <paper-tabs selected="{{selectedToken}}" sticky>
-                <template is="dom-repeat" items="{{tokens}}">
-                  <paper-tab value="{{item.address}}">{{item.name}}</paper-tab>
-                </template> 
-              </paper-tabs>
+             
             </app-header>
             <div>
 

@@ -12,7 +12,8 @@
   ],
   "extraDependencies": [
     "manifest.json",
-    "node_modules/@webcomponents/webcomponentsjs/*",
+    "node_modules/web-animations-js/*",
+    "node_modules/@webcomponents/webcomponentsjs/*",    
     "node_modules/@webcomponents/webcomponentsjs/bundles/*"
   ],
   "entrypoint": "index.html",

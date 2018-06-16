@@ -6,6 +6,7 @@
     "@polymer/iron-icons": "^3.0.0-pre.19",
     "@polymer/paper-button": "^3.0.0-pre.19",
     "@polymer/paper-checkbox": "^3.0.0-pre.19",
+    "@polymer/paper-dropdown-menu": "^3.0.0-pre.19",
     "@polymer/paper-icon-button": "^3.0.0-pre.19",
     "@polymer/paper-input": "^3.0.0-pre.19",
     "@polymer/paper-item": "^3.0.0-pre.19",
@@ -20,7 +21,8 @@
     "express": "^4.16.3",
     "polymer-cli": "^1.7.3",
     "prpl-server": "^1.2.0",
-    "pwa-helpers": "^0.8.2"
+    "pwa-helpers": "^0.8.2",
+    "web-animations-js": "^2.3.1"
   },
   "scripts": {
     "test": "npm run build",
