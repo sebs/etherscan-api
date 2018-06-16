@@ -52,7 +52,7 @@ class TestAppApp extends PolymerElement {
                 <div main-title>App name</div>
                 <paper-listbox selected="{{dataset}}">
                 <template is="dom-repeat" items="{{datasets}}">
-                  <paper-icon-button icon="{{_symbolForIndex(index)}}"></paper-icon-button>
+                  <paper-icon-button icon="{{_symbolForIndex(index)}}">foo</paper-icon-button>
                 </template> 
               </paper-listbox>
            
@@ -221,8 +221,14 @@ class TestAppApp extends PolymerElement {
           {
             address: '0xd26114cd6EE289AccF82350c8d8487fedB8A0C07', 
             name: 'OMG'
-          }
-
+          },{
+            address: '0xb5a5f22694352c15b00323844ad545abb2b11028', 
+            name: 'ICX'
+          },{
+            address: '0x05f4a42e251f2d52b8ed15e9fedaacfcef1fad27', 
+            name: 'ZIL'
+          },
+          
         ]
       },      
       selectedToken: {
