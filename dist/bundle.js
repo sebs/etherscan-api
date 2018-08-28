@@ -269,8 +269,8 @@ function pickChainUrl(chain) {
 
 const MAIN_API_URL = 'https://api.etherscan.io';
 const TESTNET_API_URL_MAP = {
-  ropsten: 'http://api-ropsten.etherscan.io',
-  kovan: 'http://api-kovan.etherscan.io',
+  ropsten: 'https://api-ropsten.etherscan.io',
+  kovan: 'https://api-kovan.etherscan.io',
   rinkeby: 'https://api-rinkeby.etherscan.io',
   homestead: 'https://api.etherscan.io'
 };
@@ -295,8 +295,15 @@ module.exports = function(chain, timeout) {
         }
 
         if (data.error) {
-          return reject(new Error(data.error));
+          var message = data.error;
+
+          if(typeof data.error === 'object' && data.error.message){
+            message = data.error.message;
+          }
+
+          return reject(new Error(message));
         }
+
         resolve(data);
       }).catch(function(error) {
         return reject(new Error(error));
