@@ -1,6 +1,32 @@
+2018-08-28
+==========
+
+  * Merge pull request [#35](https://github.com/sebs/etherscan-api/issues/35) from noriega3/master
+    Change testnet urls to use https
+  * bundle
+  * change testnet urls to use https
+
+2018-08-16
+==========
+
+  * Merge pull request [#33](https://github.com/sebs/etherscan-api/issues/33) from dibrovadev/patch-1
+    Fixed  error message from getRequest function
+
+2018-08-15
+==========
+
+  * Fixed  error message from getRequest function
+
+2018-06-13
+==========
+
+  * Linking demo
+
 2018-06-12
 ==========
 
+  * 8.1.2
+  * changelog
   * Add gh pages
   * bundle
 
@@ -191,23 +217,3 @@
   * changelog
   * chore(deps): outdated and moving from restify to only the clients.
     * This should reduce package sizes
-
-2017-06-29
-==========
-
-  * 3.0.7
-  * changelog
-  * chore(deps): Updated
-
-2017-06-21
-==========
-
-  * 3.0.6
-  * changelog
-  * Added more tests for the tokenbalance
-
-2017-06-20
-==========
-
-  * 3.0.5
-  * changelog
