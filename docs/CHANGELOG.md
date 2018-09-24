@@ -1,6 +1,14 @@
+2018-09-24
+==========
+
+  * Move to node 9 and 10 only, update deps
+  * remove autodeploy
+
 2018-08-28
 ==========
 
+  * 8.1.3
+  * changelog
   * Merge pull request [#35](https://github.com/sebs/etherscan-api/issues/35) from noriega3/master
     Change testnet urls to use https
   * bundle
@@ -204,16 +212,3 @@
 ==========
 
   * move browserify to devDependencies
-
-2017-09-14
-==========
-
-  * fix error handling edge case
-
-2017-07-05
-==========
-
-  * 3.0.8
-  * changelog
-  * chore(deps): outdated and moving from restify to only the clients.
-    * This should reduce package sizes
