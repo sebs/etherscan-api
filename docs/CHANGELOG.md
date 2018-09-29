@@ -1,6 +1,17 @@
+2018-09-29
+==========
+
+  * In order to reduce the chance for test fails, I am reducing this to ONE build,
+    However, in long term I need to collect responses to actual calls and do testing with mocks/stubs.
+    This will come with the move to 100% es6
+
 2018-09-24
 ==========
 
+  * remove lock
+  * Badges
+  * 8.1.4
+  * changelog
   * Move to node 9 and 10 only, update deps
   * remove autodeploy
 
@@ -204,11 +215,3 @@
     move dev deps to devDependencies
   * Merge pull request [#9](https://github.com/sebs/etherscan-api/issues/9) from mvayngrib/fixTxByHash
     fix error handling edge case
-  * Merge branch 'master' into movebrowserify
-  * 3.0.9
-  * Removed snyk
-
-2017-09-15
-==========
-
-  * move browserify to devDependencies
