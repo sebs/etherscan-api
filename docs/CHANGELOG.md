@@ -1,6 +1,16 @@
+2018-10-08
+==========
+
+  * fix(account): Update error message when asking for a contract that is not verified by etherscan
+    * BC break, major release
+    * error is not 'NOTOK' anymore, ubt a conrete error message
+    * still ways to improve
+
 2018-09-29
 ==========
 
+  * 8.1.5
+  * changelog
   * In order to reduce the chance for test fails, I am reducing this to ONE build,
     However, in long term I need to collect responses to actual calls and do testing with mocks/stubs.
     This will come with the move to 100% es6
@@ -211,7 +221,3 @@
   * changelog
   * I need new example values for the blockchain
   * 3.0.10
-  * Merge pull request [#10](https://github.com/sebs/etherscan-api/issues/10) from mvayngrib/movebrowserify
-    move dev deps to devDependencies
-  * Merge pull request [#9](https://github.com/sebs/etherscan-api/issues/9) from mvayngrib/fixTxByHash
-    fix error handling edge case
