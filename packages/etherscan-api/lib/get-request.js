@@ -37,7 +37,11 @@ module.exports = function(chain, timeout) {
         var data = response.data;
 
         if (data.status && data.status != 1) {
-          return reject(data.message);
+          let returnMessage = 'NOTOK';
+          if (data.result && typeof data.result === 'string') {
+            returnMessage = data.result;
+          }
+          return reject(returnMessage);
         }
 
         if (data.error) {

@@ -144,12 +144,15 @@ describe('api', function() {
       done();
     });
   });
-
-  xit('contract.getabi', function(done){
-    var api = init();
+  // test for bug #31
+  // see https://github.com/sebs/etherscan-api/issues/31
+  it('contract.getabi for a contract that is not verified by etherscan: error', function(done){
+    var api = init('test', 'ropsten', 10000);
     var abi = api.contract.getabi('0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413');
-    abi.then(function(res){
-      assert.ok(res);
+    abi.then(function(){
+      assert.false(true, 'should not be a success');
+    }).catch(err=> {
+      assert.equal(err, 'Contract source code not verified');
       done();
     });
   });
