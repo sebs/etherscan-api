@@ -1,6 +1,13 @@
+2018-11-15
+==========
+
+  * docs(account): Added a better example to account for deprecated method
+
 2018-10-08
 ==========
 
+  * 9.0.0
+  * changelog
   * fix(account): Update error message when asking for a contract that is not verified by etherscan
     * BC break, major release
     * error is not 'NOTOK' anymore, ubt a conrete error message
@@ -218,6 +225,3 @@
 ==========
 
   * 3.0.11
-  * changelog
-  * I need new example values for the blockchain
-  * 3.0.10
