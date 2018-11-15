@@ -1,8 +1,10 @@
 2018-11-15
 ==========
 
-  * Fuck off, who ever made package-lock.json mandatory. Really FU!
+  * Package-lock .. its a thing
+  * 9.0.2
   * changelog
+  * Fuck off, who ever made package-lock.json mandatory. Really FU!
   * docs(package): Add new keyword
   * refactor(changelog): Be a bit more specific with paths
   * refactor(release): changelog generation
@@ -183,14 +185,3 @@
   * Return a dist to .gitignore
   * bundle
   * Fixed tests
-
-2018-02-12
-==========
-
-  * Added universal client Axios as HTTP client for Node.js and Browser
-  * Code style and add Axios
-
-2017-12-15
-==========
-
-  * 4.0.0
