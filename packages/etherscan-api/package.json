@@ -11,7 +11,7 @@
     "bundle": "browserify index.js -s etherscanApi -o dist/bundle.js && git commit ./dist -m bundle && git push",
     "preversion": "npm run lint && npm run changelog",
     "postversion": "git push && git push --tags",
-    "changelog": "rm ./docs/CHANGELOG.md && changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add . && git commit . -m changelog",
+    "changelog": "rm ./docs/CHANGELOG.md && changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add ./docs/CHANGELOG.md && git commit . -m changelog",
     "build": "npm run test && npm run docs"
   },
   "keywords": [
