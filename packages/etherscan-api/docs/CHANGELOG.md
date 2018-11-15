@@ -1,8 +1,9 @@
 2018-11-15
 ==========
 
-  * refactor(changelog): Be a bit more specific with paths
+  * docs(package): Add new keyword
   * changelog
+  * refactor(changelog): Be a bit more specific with paths
   * refactor(release): changelog generation
   * docs(account): Added a better example to account for deprecated method
 
@@ -194,7 +195,3 @@
   * 4.0.0
   * changelog
   * Package.lock
-  * Merge pull request [#15](https://github.com/sebs/etherscan-api/issues/15) from morrislaptop/patch-1
-    Don't pass full URL in again as it is already set
-  * Merge pull request [#16](https://github.com/sebs/etherscan-api/issues/16) from muxa/master
-    Support internal transactions by address
