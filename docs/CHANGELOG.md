@@ -1,8 +1,9 @@
 2018-11-15
 ==========
 
-  * docs(package): Add new keyword
+  * Fuck off, who ever made package-lock.json mandatory. Really FU!
   * changelog
+  * docs(package): Add new keyword
   * refactor(changelog): Be a bit more specific with paths
   * refactor(release): changelog generation
   * docs(account): Added a better example to account for deprecated method
@@ -193,5 +194,3 @@
 ==========
 
   * 4.0.0
-  * changelog
-  * Package.lock
