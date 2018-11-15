@@ -1,6 +1,8 @@
 2018-11-15
 ==========
 
+  * refactor(release): changelog generation
+  * changelog
   * docs(account): Added a better example to account for deprecated method
 
 2018-10-08
@@ -212,16 +214,3 @@
 
   * Merge pull request [#14](https://github.com/sebs/etherscan-api/issues/14) from vicnaum/patch-1
     getLogs fixed
-
-2017-11-21
-==========
-
-  * getLogs fixed
-    typo in "tolock" - should be "toBlock"
-    no "address" field set
-    module should be = 'logs', not 'log'
-
-2017-09-17
-==========
-
-  * 3.0.11
