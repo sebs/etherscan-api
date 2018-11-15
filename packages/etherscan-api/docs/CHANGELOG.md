@@ -1,6 +1,7 @@
 2018-11-15
 ==========
 
+  * refactor(changelog): Be a bit more specific with paths
   * changelog
   * refactor(release): changelog generation
   * docs(account): Added a better example to account for deprecated method
@@ -197,14 +198,3 @@
     Don't pass full URL in again as it is already set
   * Merge pull request [#16](https://github.com/sebs/etherscan-api/issues/16) from muxa/master
     Support internal transactions by address
-
-2017-12-14
-==========
-
-  * Added support for fetching internal transactions by address, as well as specifying start/end block and sort order
-
-2017-11-28
-==========
-
-  * Don't pass full URL in again as it is already set
-    When creating the jsonClient, otherwise this confuses tools like `nock` when trying to match requests.
