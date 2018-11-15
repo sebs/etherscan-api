@@ -1,8 +1,8 @@
 2018-11-15
 ==========
 
-  * refactor(release): changelog generation
   * changelog
+  * refactor(release): changelog generation
   * docs(account): Added a better example to account for deprecated method
 
 2018-10-08
@@ -208,9 +208,3 @@
 
   * Don't pass full URL in again as it is already set
     When creating the jsonClient, otherwise this confuses tools like `nock` when trying to match requests.
-
-2017-11-22
-==========
-
-  * Merge pull request [#14](https://github.com/sebs/etherscan-api/issues/14) from vicnaum/patch-1
-    getLogs fixed
