@@ -1,9 +1,20 @@
+2018-11-27
+==========
+
+  * deps
+  * Merge pull request [#39](https://github.com/sebs/etherscan-api/issues/39) from nnqq/page-offset-parameters-txlist-method
+    Page and Offset parameters to account.txlist method
+  * typo fixed
+  * Add Page and Offset parameters to account.txlist method
+    src: https://etherscan.io/apis#accounts
+
 2018-11-15
 ==========
 
+  * 9.0.3
+  * changelog
   * Package-lock .. its a thing
   * 9.0.2
-  * changelog
   * Fuck off, who ever made package-lock.json mandatory. Really FU!
   * docs(package): Add new keyword
   * refactor(changelog): Be a bit more specific with paths
@@ -179,9 +190,3 @@
   * Other fixes of WhiteSpaces
   * Some fixes
   * Fixed some whitespaces
-  * Pushed for retry build
-  * Fixed mainet default value
-  * Up Etherscan API Version
-  * Return a dist to .gitignore
-  * bundle
-  * Fixed tests
