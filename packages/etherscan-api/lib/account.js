@@ -109,12 +109,14 @@ module.exports = function(getRequest, apiKey) {
      * @param {string} address - Transaction address
      * @param {string} startblock - start looking here
      * @param {string} endblock - end looking there
+     * @param {number} page - Page number
+     * @param {number} offset - Max records to return
      * @param {string} sort - Sort asc/desc
      * @example
-     * var txlist = api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 1, 'latest', 'asc');
+     * var txlist = api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 1, 'latest', 1, 100, 'asc');
      * @returns {Promise.<object>}
      */
-    txlist(address, startblock, endblock, sort) {
+    txlist(address, startblock, endblock, page, offset, sort) {
       const module = 'account';
       const action = 'txlist';
 
@@ -126,12 +128,20 @@ module.exports = function(getRequest, apiKey) {
         endblock = 'latest';
       }
 
+      if (!page) {
+        page = 1;
+      }
+
+      if (!offset) {
+        offset = 100;
+      }
+
       if (!sort) {
         sort = 'asc';
       }
 
       var query = querystring.stringify({
-        module, action, startblock, endblock, sort, address, apiKey
+        module, action, startblock, endblock, page, offset, sort, address, apiKey
       });
 
       return getRequest(query);
