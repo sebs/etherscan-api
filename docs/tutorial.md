@@ -14,5 +14,5 @@ Latest
 A specific version
 
 ```html
-<script src="https://cdn.rawgit.com/sebs/etherscan-api/v1.3.0/dist/bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/sebs/etherscan-api@v1.3.0/dist/bundle.js"></script>
 ```
