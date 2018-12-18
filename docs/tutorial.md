@@ -8,7 +8,7 @@ Just use the cdn.
 Latest
 
 ```html
-<script src="https://cdn.rawgit.com/sebs/etherscan-api/dist/bundle.js"></script>
+<script src="ttps://cdn.jsdelivr.net/gh/sebs/etherscan-api/dist/bundle.js"></script>
 ```
 
 A specific version
