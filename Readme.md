@@ -12,8 +12,8 @@ Mainnet
 
 
 ```javascript
-var api = require('etherscan-api').init('YourApiKey');
-var balance = api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+var api = require('etherscan-api').init('TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W');
+var balance = api.account.balance('0xFD829f296242663f2D4c29D5D99384E2ac0B79bB');
 balance.then(function(balanceData){
   console.log(balanceData);
 });
