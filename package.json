@@ -12,7 +12,9 @@
     "preversion": "npm run lint && npm run changelog",
     "postversion": "git push && git push --tags",
     "changelog": "rm ./docs/CHANGELOG.md && changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add ./docs/CHANGELOG.md && git commit ./docs/CHANGELOG.md -m changelog",
-    "build": "npm run test && npm run docs"
+    "build": "npm run test && npm run docs",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "keywords": [
     "ethereum",
@@ -46,6 +48,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "gh-pages": "^2.0.1",
-    "querystring": "^0.2.0"
-  }
+    "querystring": "^0.2.0",
+    "snyk": "^1.161.1"
+  },
+  "snyk": true
 }
