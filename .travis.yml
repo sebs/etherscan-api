@@ -1,1 +1,17 @@
+ <<<<<<< t4n6a1ka-patch-1
+language: node_js
+node_js:
+- 9
+env:
+- CXX=g++-4.8
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
+notifications:
+  email: 
+ =======
 
+ >>>>>>> master
