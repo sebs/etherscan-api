@@ -1,3 +1,4 @@
+ <<<<<<< t4n6a1ka-patch-1
 language: node_js
 node_js:
 - 9
@@ -11,3 +12,6 @@ addons:
     - g++-4.8
 notifications:
   email: 
+ =======
+
+ >>>>>>> master
