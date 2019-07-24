@@ -22,9 +22,12 @@
     "url": "https://github.com/sebs/etherscan-api/issues"
   },
   "homepage": "https://github.com/sebs/etherscan-api#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "swagger-cli": "^2.3.0"
+    "ava": "^2.2.0",
+    "ava-ts": "^0.25.2",
+    "swagger-cli": "^2.3.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
   }
 }
