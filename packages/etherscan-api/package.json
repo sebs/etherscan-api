@@ -1,51 +1,30 @@
 {
   "name": "etherscan-api",
-  "version": "10.0.0",
-  "description": "API to etherscan with a simple interface",
+  "version": "100.0.0",
+  "description": "Next generation etherscan-api ",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -t 20000",
-    "posttest": "npm run lint",
-    "lint": "jshint lib test",
-    "docs": "documentation build ./lib/init.js -f html -o out",
-    "bundle": "browserify index.js -s etherscanApi -o dist/bundle.js && git commit ./dist -m bundle && git push",
-    "preversion": "npm run lint && npm run changelog",
-    "postversion": "git push && git push --tags",
-    "changelog": "rm ./docs/CHANGELOG.md && changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add ./docs/CHANGELOG.md && git commit ./docs/CHANGELOG.md -m changelog",
-    "build": "npm run test && npm run docs"
+    "test": "ava-ts",
+    "lint:api": "swagger-cli validate ./api/swagger/swagger.yaml"
   },
-  "keywords": [
-    "ethereum",
-    "EtherScan.io",
-    "etherscan",
-    "blockchain",
-    "api",
-    "transaction",
-    "rest"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sebs/etherscan-api.git"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "ethereum",
+    "api",
+    "eth"
+  ],
+  "author": "S.Schürmann",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/sebs/etherscan-api/issues"
   },
   "homepage": "https://github.com/sebs/etherscan-api#readme",
-  "devDependencies": {
-    "browserify": "^16.2.3",
-    "chai": "^4.2.0",
-    "changelog": "^1.4.2",
-    "documentation": "^9.1.1",
-    "ink-docstrap": "^1.3.2",
-    "jshint": "^2.9.6",
-    "mocha": "^5.2.0",
-    "watch": "^1.0.2"
-  },
   "dependencies": {
-    "axios": "^0.18.0",
-    "gh-pages": "^2.0.1",
-    "querystring": "^0.2.0"
+  },
+  "devDependencies": {
+    "swagger-cli": "^2.3.0"
   }
 }
