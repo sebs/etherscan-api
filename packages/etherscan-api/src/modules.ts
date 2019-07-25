@@ -1,4 +1,4 @@
-export const modules = new Map()
+import { mapFromArray } from './util/mapFromArray'
 const moduleNames = [
 	'account',
 	'contract', 
@@ -8,4 +8,4 @@ const moduleNames = [
 	'proxy',
 	'stats'
 ]
-moduleNames.map(name => modules.set(name, name))
+export const modules = mapFromArray(moduleNames)
