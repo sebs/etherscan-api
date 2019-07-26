@@ -4,7 +4,7 @@
   "description": "Next generation etherscan-api ",
   "main": "index.js",
   "scripts": {
-    "test": "ava-ts",
+    "test": "ava-ts -v",
     "lint:api": "swagger-cli validate ./api/swagger/swagger.yaml"
   },
   "repository": {
