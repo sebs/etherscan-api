@@ -11,8 +11,11 @@ test('containts https', t => {
 	t.regex(res, /https/)
 })
 
-
 test('containts /api', t => {
 	const res = requestBuilder('account', 'balance')
 	t.regex(res, /\/api/)
+})
+
+test('throws on unknown module', t => {
+	t.throws(()=> requestBuilder('foomodulenotexist', 'balance'))
 })
