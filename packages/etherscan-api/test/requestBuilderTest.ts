@@ -1,6 +1,7 @@
 import test from 'ava'
 import { requestBuilder } from '../src/requestBuilder'
 
+
 test('builds a valid url', t => {
 	const res = requestBuilder('account', 'balance')
 	t.truthy(res)
@@ -18,4 +19,8 @@ test('containts /api', t => {
 
 test('throws on unknown module', t => {
 	t.throws(()=> requestBuilder('foomodulenotexist', 'balance'))
+})
+
+test('throws on unknown actions', t => {
+	t.throws(()=> requestBuilder('account', 'idontknow'))
 })

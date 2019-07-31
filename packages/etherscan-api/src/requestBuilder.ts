@@ -1,6 +1,28 @@
 
 const base =  'https://api.etherscan.io/api'
 import { modules } from './modules'
+import { encode} from 'querystring'
+import { 
+	account, 
+	block, 
+	contract, 
+	logs, 
+	proxy, 
+	stats, 
+	tokens, 
+	transaction 
+} from './actions/index'
+
+const actions = new Map()
+actions.set('account', account)
+actions.set('block', block)
+actions.set('contract', contract)
+actions.set('logs', logs)
+actions.set('proxy', proxy)
+actions.set('stats', stats)
+actions.set('tokens', tokens)
+actions.set('transaction', transaction)
+
 
 export const requestBuilder =  function(module: string, action: string): string {
 
@@ -8,5 +30,15 @@ export const requestBuilder =  function(module: string, action: string): string 
 		throw Error('unknown module')
 	}
 
-	return `${base}?module=${module}&action=${action}`
+
+	if (!actions.get(module).get(action)) {
+		throw Error('unknown action')	
+	}
+
+	const query:string = encode({
+		module, 
+		action
+	})
+	
+	return `${base}?${query}`
 }
