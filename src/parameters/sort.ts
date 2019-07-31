@@ -1,0 +1,1 @@
+export enum sort {asc, desc}
