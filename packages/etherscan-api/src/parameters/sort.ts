@@ -1,1 +1,1 @@
-export enum sort {asc, desc}
+export enum sort {asc = 'asc', desc = 'desc'}
