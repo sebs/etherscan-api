@@ -7,3 +7,10 @@ test('Instantiated', (t)=> {
 	const a = new ApiKey(apiKey)
 	t.truthy(a)
 })
+
+test('is valid', (t)=> {
+	const apiKey = 'TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W'
+	const a = new ApiKey(apiKey)
+	t.truthy(a.valid())
+})
+
