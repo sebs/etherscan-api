@@ -1,17 +1,14 @@
 
 import { Entity } from '../interfaces/Entity'
+import { EntityBase } from './EntityBase'
 
-export class ApiKey implements Entity {
+export class ApiKey extends EntityBase implements Entity {
+	public errorMessage:string =  'invalid'
 	private apiKey
 	private keyLength: number = 33
 	constructor(apiKey: string) {
+		super()
 		this.apiKey = apiKey
-	}
-
-	validate(): void {
-		if (!this.valid()) {
-			throw new Error('invalid')
-		}
 	}
 
 	valid(): boolean {
