@@ -4,17 +4,22 @@ import { EntityBase } from './EntityBase'
 /*
  * @see https://stackoverflow.com/questions/57803/how-to-convert-decimal-to-hexadecimal-in-javascript
  */
-export class HexQuantity extends EntityBase implements Entity {
+export class PositiveNumber extends EntityBase implements Entity {
 	public errorMessage:string =  'invalid'
-	private hexString:string
+	private positiveNumber:any
 	
-	constructor(hexString: string) {
+	constructor(positiveNumber: any) {
 		super()
-		this.hexString = hexString
+		this.positiveNumber = positiveNumber
 	}
 
 	valid(): boolean {
-		var a = parseInt(this.hexString,16);
-		return (a.toString(16) === this.hexString)
+
+		let numerical = parseInt(this.positiveNumber)
+
+		if (numerical < 0) {
+			return false
+		}
+		return true
 	}
 }
