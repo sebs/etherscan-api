@@ -3,6 +3,7 @@ import { Entity } from '../interfaces/Entity'
 import { EntityBase } from './EntityBase'
 import { sort } from '../parameters/sort'
 
+// Sort Parameter asc or desc
 export class Sort extends EntityBase implements Entity {
 	public errorMessage:string =  'invalid'
 	private sortParam:string
