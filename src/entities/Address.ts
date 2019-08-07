@@ -2,6 +2,7 @@
 import { Entity } from '../interfaces/Entity'
 import { EntityBase } from './EntityBase'
 
+// a ethereum address
 export class Address extends EntityBase implements Entity {
 	public errorMessage:string =  'invalid'
 	private address

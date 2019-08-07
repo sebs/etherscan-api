@@ -1,9 +1,8 @@
 
 import { Entity } from '../interfaces/Entity'
 import { EntityBase } from './EntityBase'
-/*
- * @see https://stackoverflow.com/questions/57803/how-to-convert-decimal-to-hexadecimal-in-javascript
- */
+
+// a positive number
 export class PositiveNumber extends EntityBase implements Entity {
 	public errorMessage:string =  'invalid'
 	private positiveNumber:any

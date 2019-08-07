@@ -2,6 +2,7 @@
 import { Entity } from '../interfaces/Entity'
 import { EntityBase } from './EntityBase'
 
+// api key for etherscan.io
 export class ApiKey extends EntityBase implements Entity {
 	public errorMessage:string =  'invalid'
 	private apiKey
