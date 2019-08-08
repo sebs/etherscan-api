@@ -1,4 +1,4 @@
-export interface Entity {
-	validate(): void
-	valid(): boolean
+export interface IEntity {
+    validate(): void
+    valid(): boolean
 }

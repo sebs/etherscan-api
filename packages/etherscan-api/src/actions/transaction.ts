@@ -1,6 +1,6 @@
-import { mapFromArray } from '../util/mapFromArray'
+import { mapFromArray } from "../util/mapFromArray"
 const actionNames = [
-	'getstatus',
-	'gettxreceiptstatus'
+    "getstatus",
+    "gettxreceiptstatus",
 ]
 export const transaction = mapFromArray(actionNames)
