@@ -2,13 +2,13 @@
   "name": "etherscan-api",
   "version": "100.0.0",
   "description": "Next generation etherscan-api ",
-  "main": "index.js",
   "scripts": {
     "test": "ava-ts -v",
     "posttest": "npm run lint",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "docs": "typedoc --module etherscan-api --out docs ./src",
-    "lint:api": "swagger-cli validate ./api/swagger/swagger.yaml"
+    "lint:api": "swagger-cli validate ./api/swagger/swagger.yaml",
+    "prepublish": "tsc"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,8 @@
     "api",
     "eth"
   ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "S.Schürmann",
   "license": "MIT",
   "bugs": {
