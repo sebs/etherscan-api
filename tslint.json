@@ -10,5 +10,6 @@
         "quotemark": [true, "single", "avoid-escape"],
         "member-access": [true, "no-public"]
     },
+    "declaration": true, 
     "rulesDirectory": []
 }
