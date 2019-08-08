@@ -2,15 +2,18 @@
 // base class for entities
 export abstract class EntityBase {
     // basic error message for exceptions on validations
-    public errorMessage: string
+    errorMessage: string
     // checks valid() and throws errorMessage
-    public validate(): void {
+    constructor() {
+        this.errorMessage = 'invalid value'
+    }
+    validate(): void {
         if (!this.valid()) {
             throw new Error(this.errorMessage)
         }
     }
 
-    public valid(): boolean {
+    valid(): boolean {
         return true
     }
 }
