@@ -6,7 +6,8 @@
     "jsRules": {},
     "rules": {
         "semicolon": [true, "never"],
-        "indent": [true, "spaces", 4]
+        "indent": [true, "spaces", 4],
+        "quotemark": [true, "single", "avoid-escape"]
     },
     "rulesDirectory": []
 }
