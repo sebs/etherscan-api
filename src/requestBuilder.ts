@@ -1,44 +1,42 @@
 
-const base =  'https://api.etherscan.io/api'
-import { modules } from './modules'
-import { encode} from 'querystring'
-import { 
-	account, 
-	block, 
-	contract, 
-	logs, 
-	proxy, 
-	stats, 
-	tokens, 
-	transaction 
-} from './actions/index'
+const base =  "https://api.etherscan.io/api"
+import { encode} from "querystring"
+import {
+    account,
+    block,
+    contract,
+    logs,
+    proxy,
+    stats,
+    tokens,
+    transaction,
+} from "./actions/index"
+import { modules } from "./modules"
 
 const actions = new Map()
-actions.set('account', account)
-actions.set('block', block)
-actions.set('contract', contract)
-actions.set('logs', logs)
-actions.set('proxy', proxy)
-actions.set('stats', stats)
-actions.set('tokens', tokens)
-actions.set('transaction', transaction)
+actions.set("account", account)
+actions.set("block", block)
+actions.set("contract", contract)
+actions.set("logs", logs)
+actions.set("proxy", proxy)
+actions.set("stats", stats)
+actions.set("tokens", tokens)
+actions.set("transaction", transaction)
 
+export const requestBuilder =  (module: string, action: string): string => {
 
-export const requestBuilder =  function(module: string, action: string): string {
+    if (!modules.get(module)) {
+        throw Error("unknown module")
+    }
 
-	if (!modules.get(module)) {
-		throw Error('unknown module')
-	}
+    if (!actions.get(module).get(action)) {
+        throw Error("unknown action")
+    }
 
+    const query: string = encode({
+        action,
+        module,
+    })
 
-	if (!actions.get(module).get(action)) {
-		throw Error('unknown action')	
-	}
-
-	const query:string = encode({
-		module, 
-		action
-	})
-	
-	return `${base}?${query}`
+    return `${base}?${query}`
 }

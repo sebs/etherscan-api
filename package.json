@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "ava-ts -v",
+    "posttest": "npm run lint",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "docs": "typedoc --module etherscan-api --out docs ./src",
     "lint:api": "swagger-cli validate ./api/swagger/swagger.yaml"
   },
@@ -29,6 +31,7 @@
     "ava-ts": "^0.25.2",
     "swagger-cli": "^2.3.0",
     "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
     "typedoc": "^0.15.0",
     "typescript": "^3.5.3"
   }

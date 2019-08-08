@@ -1,24 +1,24 @@
 
-import { Entity } from '../interfaces/Entity'
-import { EntityBase } from './EntityBase'
+import { IEntity } from "../interfaces/Entity"
+import { EntityBase } from "./EntityBase"
 
 // a positive number
-export class PositiveNumber extends EntityBase implements Entity {
-	public errorMessage:string =  'invalid'
-	private positiveNumber:any
-	
-	constructor(positiveNumber: any) {
-		super()
-		this.positiveNumber = positiveNumber
-	}
+export class PositiveNumber extends EntityBase implements IEntity {
+    public errorMessage: string =  "invalid"
+    private positiveNumber: any
 
-	valid(): boolean {
+    constructor(positiveNumber: any) {
+        super()
+        this.positiveNumber = positiveNumber
+    }
 
-		let numerical = parseInt(this.positiveNumber)
+    public valid(): boolean {
 
-		if (numerical < 0) {
-			return false
-		}
-		return true
-	}
+        const numerical = parseInt(this.positiveNumber, 3)
+
+        if (numerical < 0) {
+            return false
+        }
+        return true
+    }
 }
