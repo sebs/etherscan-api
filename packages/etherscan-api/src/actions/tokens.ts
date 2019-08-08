@@ -1,6 +1,6 @@
-import { mapFromArray } from "../util/mapFromArray"
+import { mapFromArray } from '../util/mapFromArray'
 const actionNames = [
-    "tokenbalance",
-    "tokensupply",
+    'tokenbalance',
+    'tokensupply',
 ]
 export const tokens = mapFromArray(actionNames)

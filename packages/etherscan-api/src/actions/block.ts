@@ -1,5 +1,5 @@
-import { mapFromArray } from "../util/mapFromArray"
+import { mapFromArray } from '../util/mapFromArray'
 const actionNames = [
-    "getblockreward",
+    'getblockreward',
 ]
 export const block = mapFromArray(actionNames)
