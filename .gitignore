@@ -3,4 +3,6 @@ out
 node_modules
 docs
 dist
+coverage
+.nyc_output
 
