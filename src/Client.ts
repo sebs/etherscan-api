@@ -11,5 +11,6 @@ export class Client {
     if (!account.get(action)) {
       throw new Error('unknown action')
     }
+    return
   }
 }
