@@ -1,10 +1,21 @@
 import { Address } from '../entities/Address'
 import { IClientRequest } from './Entity'
 
+/**
+ * Interface to the Account/Balance api
+ */
 export interface IClientAccountBalanceRequest extends IClientRequest {
+  /**
+   * Ethereum address
+   */
   address: Address
+  /**
+   * Tag to limit results
+   */
   tag: string
 }
+
+/*
 
 export interface IClientAccountBalanceMultiRequest extends IClientRequest {
   address: Address
@@ -31,3 +42,4 @@ export interface IClientAccountTokentx extends IClientRequest {
   offset?: string
   sort?: string
 }
+*/

@@ -2,8 +2,13 @@
 import { IEntity } from '../interfaces/Entity'
 import { EntityBase } from './EntityBase'
 
-// a positive number
+/**
+ * a positive number entity
+ */
 export class PositiveNumber extends EntityBase implements IEntity {
+    /**
+     * Error Message on validation
+     */
     errorMessage: string
 
     constructor(positiveNumber: any) {
@@ -11,7 +16,9 @@ export class PositiveNumber extends EntityBase implements IEntity {
         this.errorMessage = 'invalid number'
         this.value = positiveNumber
     }
-
+    /**
+     * Validates if the value is a positive number
+     */
     valid(): boolean {
 
         const numerical = parseInt(this.value, 3)
