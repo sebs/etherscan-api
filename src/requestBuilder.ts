@@ -40,6 +40,5 @@ export const requestBuilder =  (module: string, action: string, params?: object)
 
     const toEncodeParams = Object.assign(baseParams, params)
     const query: string = encode(toEncodeParams)
-    
     return `${base}?${query}`
 }

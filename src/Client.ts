@@ -15,9 +15,8 @@ export class Client {
       throw new Error('unknown action')
     }
 
-    var me = this;
-    const actions:{ [key: string]: any } =  {
-      'balance': (address: string, tag: string): ClientAccountBalance => {
+    const actions: { [key: string]: any } = {
+      balance: (address: string, tag: string): ClientAccountBalance => {
         const oAddress = new Address(address)
         return new ClientAccountBalance(this.apiKey, 'account', action, oAddress, tag)
       },

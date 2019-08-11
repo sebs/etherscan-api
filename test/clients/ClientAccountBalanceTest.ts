@@ -21,7 +21,6 @@ test('executing the function', t =>  {
 	t.truthy(concreteClient)
 })
 
-
 test('no param translates to [object Object]', t =>  {
 	const client = new Client('TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W')
 	const url = client.account('balance')('address', 'latest').toUrl()
@@ -32,11 +31,9 @@ test('no param translates to [object Object]', t =>  {
 	t.not(parsedQuery.address, '[object Object]')
 })
 
-
-
 test('the correct url is generated', t =>  {
 	const client = new Client('TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W')
-	const resultingUrl = 'https://api.etherscan.io/api?action=balance&module=account&address=address&tag=latest&apiKey=TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W'
+	const resultingUrl = 'https://api.etherscan.io/api?action=balance&module=account&address=address&apiKey=TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W&tag=latest'
 	const url = client.account('balance')('address', 'latest').toUrl()
 	t.is(url, resultingUrl)
 })
