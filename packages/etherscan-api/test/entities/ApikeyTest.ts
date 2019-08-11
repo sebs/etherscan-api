@@ -14,11 +14,14 @@ test('key TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W is valid', (t)=> {
 	t.truthy(a.valid())
 })
 
-test('foo is valid', (t)=> {
+test('foo is invalid', (t)=> {
 	const apiKey = 'foo'
 	const a = new ApiKey(apiKey)
 	t.false(a.valid())
 })
 
-
-
+test('to string works', (t)=> {
+	const apiKey = 'TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W'
+	const a = new ApiKey(apiKey)
+	t.truthy(a.toString())
+})
