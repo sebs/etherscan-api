@@ -6,15 +6,12 @@ import { EntityBase } from './EntityBase'
  */
 export class HexQuantity extends EntityBase implements IEntity {
     errorMessage: string =  'invalid'
-    private hexString: string
-
     constructor(hexString: string) {
-        super()
-        this.hexString = hexString
+        super(hexString)
     }
 
     valid(): boolean {
-        const a = parseInt(this.hexString, 16)
-        return (a.toString(16) === this.hexString)
+        const a = parseInt(this.value, 16)
+        return (a.toString(16) === this.value)
     }
 }

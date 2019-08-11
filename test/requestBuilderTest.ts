@@ -17,6 +17,16 @@ test('containts /api', t => {
 	t.regex(res, /\/api/)
 })
 
+test('contains additional parameters', t => {
+	const res = requestBuilder('account', 'balance', {
+		foo: 'bar'
+	})
+	t.regex(res, /foo/)
+	t.regex(res, /bar/)
+})
+
+
+
 test('throws on unknown module', t => {
 	t.throws(()=> requestBuilder('foomodulenotexist', 'balance'))
 })

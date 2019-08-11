@@ -23,7 +23,7 @@ actions.set('stats', stats)
 actions.set('tokens', tokens)
 actions.set('transaction', transaction)
 
-export const requestBuilder =  (module: string, action: string): string => {
+export const requestBuilder =  (module: string, action: string, params?: object): string => {
 
     if (!modules.get(module)) {
         throw Error('unknown module')
@@ -33,10 +33,13 @@ export const requestBuilder =  (module: string, action: string): string => {
         throw Error('unknown action')
     }
 
-    const query: string = encode({
+    const baseParams = {
         action,
         module,
-    })
+    }
 
+    const toEncodeParams = Object.assign(baseParams, params)
+    const query: string = encode(toEncodeParams)
+    
     return `${base}?${query}`
 }
