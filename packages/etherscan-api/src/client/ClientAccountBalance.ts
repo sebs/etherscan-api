@@ -22,9 +22,8 @@ export class ClientAccountBalance implements IClientAccountBalanceRequest {
   toUrl(): string {
     return requestBuilder(this.module, this.action, {
       address: this.address.toString(),
-      tag: this.tag.toString(), 
-      apiKey: this.apiKey.toString()
+      apiKey: this.apiKey.toString(),
+      tag: this.tag.toString(),
     })
   }
-
 }

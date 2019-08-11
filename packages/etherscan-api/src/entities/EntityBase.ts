@@ -3,7 +3,7 @@
 export abstract class EntityBase {
     protected value: any
     // basic error message for exceptions on validations
-    errorMessage: string
+    protected errorMessage: string
     // checks valid() and throws errorMessage
     constructor(value: any) {
         this.value = value
