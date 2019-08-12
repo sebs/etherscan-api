@@ -1,6 +1,9 @@
 2019-08-12
 ==========
 
+  * bundle
+  * 10.0.1
+  * changelog
   * remove useless service
   * Updated dependencies to fix vulns
 
@@ -197,5 +200,3 @@
   * Fix vuln (marked via gh-pages)
   * 6.0.1
   * no pages
-  * 6.0.0
-  * 5.0.0
