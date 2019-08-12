@@ -1,6 +1,42 @@
+2019-08-12
+==========
+
+  * remove useless service
+  * Updated dependencies to fix vulns
+
+2019-08-04
+==========
+
+  * Update Readme.md
+
+2019-01-04
+==========
+
+  * remove jsdoc
+  * Add documentation
+
+2019-01-03
+==========
+
+  * Improved tests
+
+2018-12-18
+==========
+
+  * Update tutorial.md
+  * Merge pull request [#40](https://github.com/sebs/etherscan-api/issues/40) from jsdelivrbot/master
+    RawGit is shutting down, replace it with jsDelivr
+
+2018-12-08
+==========
+
+  * Replace RawGit with jsDelivr
+
 2018-11-27
 ==========
 
+  * 10.0.0
+  * changelog
   * deps
   * Merge pull request [#39](https://github.com/sebs/etherscan-api/issues/39) from nnqq/page-offset-parameters-txlist-method
     Page and Offset parameters to account.txlist method
@@ -163,30 +199,3 @@
   * no pages
   * 6.0.0
   * 5.0.0
-  * Foo
-
-2018-02-16
-==========
-
-  * Merge pull request [#20](https://github.com/sebs/etherscan-api/issues/20) from m-tymchyk/master
-    Change Client to Axios and fix some code style
-
-2018-02-15
-==========
-
-  * Fixed Readme.MD
-
-2018-02-14
-==========
-
-  * Latest Updates of Whitespaces cleaning
-  * All fixes of Whitespaces
-
-2018-02-13
-==========
-
-  * Fixed WhiteSpaces at test/testnet-balance-test.js
-  * Fixed whitespaces at test/testnet-eth-test.js
-  * Other fixes of WhiteSpaces
-  * Some fixes
-  * Fixed some whitespaces
