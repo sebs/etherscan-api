@@ -210,7 +210,7 @@ describe('testnet methods', function () {
     });
 
 
-    it('proxy.eth_getUncleByBlockNumberAndIndex', function (done) {
+    it.skip('proxy.eth_getUncleByBlockNumberAndIndex', function (done) {
 
       var res = api.proxy.eth_getUncleByBlockNumberAndIndex('0x210A9B', '0x0');
       res.then(function (res) {
@@ -238,7 +238,7 @@ describe('testnet methods', function () {
     });
 
 
-    it('proxy.eth_getTransactionByBlockNumberAndIndex', function (done) {
+    it.skip('proxy.eth_getTransactionByBlockNumberAndIndex', function (done) {
 
       var res = api.proxy.eth_getTransactionByBlockNumberAndIndex('0x10d4f', '0x0');
       res.then(function (res) {
