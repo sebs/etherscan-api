@@ -1,7 +1,7 @@
+import * as request from 'request-promise-native'
 import { Address } from '../entities/Address'
 import { ApiKey } from '../entities/Apikey'
 import { IClientAccountBalanceRequest } from '../interfaces/Account'
-
 import { requestBuilder } from '../requestBuilder'
 
 /**
@@ -46,5 +46,14 @@ export class ClientAccountBalance implements IClientAccountBalanceRequest {
       apiKey: this.apiKey.toString(),
       tag: this.tag.toString(),
     })
+  }
+  /**
+   * Dies the actual request to the server
+   */
+  async request(): Promise<any> {
+    const options = {
+      uri: this.toUrl(),
+    }
+    return request.get(options)
   }
 }
