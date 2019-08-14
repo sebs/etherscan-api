@@ -4,8 +4,7 @@ import { Address } from '../../src/entities/Address'
 import { ApiKey } from '../../src/entities/Apikey'
 import { decode } from 'querystring'
 const nock = require('nock')
-import { parse } from 'querystring'
-import { parse as parseUrl } from 'url'
+import { parse } from 'url'
 import { readFile } from 'fs'
 import { promisify } from 'util'
 const _readFile = promisify(readFile)
@@ -37,8 +36,8 @@ test('generates the right url', t => {
 	const c = new ClientAccountBalancemulti(oApiKey, 'account', 'balancemulti', arrAddress, tag)
 	const url = c.toUrl()
 
-	const parsedUrl = parse(url)
-	const parsedExpectedUrl = parse(expectedUrl)
+	const parsedUrl = decode(url)
+	const parsedExpectedUrl = decode(expectedUrl)
 
 	t.is(parsedUrl.action, parsedExpectedUrl.action, 'actionnot as expected')
 	t.is(parsedUrl.module, parsedExpectedUrl.module)
@@ -46,13 +45,12 @@ test('generates the right url', t => {
 	t.is(parsedUrl.tag, parsedExpectedUrl.tag)
 })
 
-
 test('actually request and get an response', async t => {
 	const arrAddress = address.map(a =>  new Address(a))
 	const oApiKey = new ApiKey(apiKey)
 	const c = new ClientAccountBalancemulti(oApiKey, 'account', 'balancemulti', arrAddress, tag)
 	const url = c.toUrl()
-	const parsedUrl = parseUrl(url)
+	const parsedUrl = parse(url)
 	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
 
 	nock(`${parsedUrl.protocol}//${parsedUrl.host}`)

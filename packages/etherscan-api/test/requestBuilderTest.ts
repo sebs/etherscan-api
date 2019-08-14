@@ -25,8 +25,6 @@ test('contains additional parameters', t => {
 	t.regex(res, /bar/)
 })
 
-
-
 test('throws on unknown module', t => {
 	t.throws(()=> requestBuilder('foomodulenotexist', 'balance'))
 })
