@@ -1,5 +1,6 @@
 import { account } from './actions/account'
 import { ClientAccountBalance } from './client/ClientAccountBalance'
+import { ClientAccountBalancemulti } from './client/ClientAccountBalancemulti'
 import { Address } from './entities/Address'
 import { ApiKey } from './entities/Apikey'
 
@@ -28,6 +29,10 @@ export class Client {
       balance: (address: string, tag: string): ClientAccountBalance => {
         const oAddress = new Address(address)
         return new ClientAccountBalance(this.apiKey, 'account', action, oAddress, tag)
+      },
+      balancemulti(address: string[], tag: string) {
+        const oAddress = address.map((addresString) => new Address(addresString))
+        return new ClientAccountBalancemulti(this.apiKey, 'account', action, oAddress, tag)
       },
     }
 
