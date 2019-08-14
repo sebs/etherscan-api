@@ -29,15 +29,38 @@ export interface IClientAccountBalanceMultiRequest extends IClientRequest {
   tag: string
 }
 
-/*
+/**
+ * Interface to Account/txlist
+ */
 export interface IClientAccountTxlistRequest extends IClientRequest {
+  /**
+   * Ethereum address
+   */
   address: Address
+  /**
+   * Block to start reading data
+   */
   startblock: string
+  /**
+   * Read data to
+   */
   endblock: string
+  /**
+   * Paging actual page
+   */
   page?: string
+  /**
+   * Paging start
+   */
   offset?: string
+  /**
+   * Sort Parameter
+   */
   sort?: string
 }
+
+/*
+
 export interface IClientAccountTxlistInternalRequest extends IClientAccountTxlistRequest {
   txhash: string
 }
