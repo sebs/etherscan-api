@@ -15,13 +15,21 @@ export interface IClientAccountBalanceRequest extends IClientRequest {
   tag: string
 }
 
-/*
-
+/**
+ * Interface to Account/Balancemulti
+ */
 export interface IClientAccountBalanceMultiRequest extends IClientRequest {
-  address: Address
+  /**
+   * Array of ethereum addresses
+   */
+  address: Address[]
+  /**
+   * Tag to limit results
+   */
   tag: string
 }
 
+/*
 export interface IClientAccountTxlistRequest extends IClientRequest {
   address: Address
   startblock: string
