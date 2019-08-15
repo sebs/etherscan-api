@@ -3,11 +3,12 @@ import { Address } from '../entities/Address'
 import { ApiKey } from '../entities/Apikey'
 import { IClientAccountTxlistRequest } from '../interfaces/Account'
 import { requestBuilder } from '../requestBuilder'
+import { ClientBase } from './ClientBase'
 
 /**
  * Client for the account balance
  */
-export class ClientAccountTxlist implements IClientAccountTxlistRequest {
+export class ClientAccountTxlist extends ClientBase implements IClientAccountTxlistRequest {
   /**
    * Api key to send with the request
    */
@@ -55,7 +56,7 @@ export class ClientAccountTxlist implements IClientAccountTxlistRequest {
       sort?: string,
       page?: string,
       offset?: string) {
-
+    super()
     this.apiKey = apiKey
     this.module = module
     this.action = action
@@ -105,6 +106,7 @@ export class ClientAccountTxlist implements IClientAccountTxlistRequest {
     const options = {
       uri: this.toUrl(),
     }
-    return request.get(options)
+    const res = await request.get(options)
+    return this.processResult(res)
   }
 }

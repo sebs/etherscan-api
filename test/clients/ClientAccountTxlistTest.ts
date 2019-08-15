@@ -14,7 +14,6 @@ const address = '0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a'
 const startblock = '0'
 const endblock = '99999999'
 const expectedUrl = 'http://api.etherscan.io/api?module=account&action=txlist&address=0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken'
-const fixtureLocation= './test/fixtures/account/txlist/address-startblock-endblock.json'
 
 test('exists', t => {
 	t.truthy(ClientAccountTxlist)
@@ -26,7 +25,6 @@ test('can be instantiated', t => {
 	new ClientAccountTxlist(oApiKey, 'account', 'balancemulti', oAddress, startblock, endblock)
 	t.pass()
 })
-
 
 test('generates the right url', t => {
 	const oAddress = new Address(address)
@@ -60,11 +58,13 @@ test('start end endblock', t => {
 	t.is(parsedUrl.page, '10')
 })
 
+test('actually request and get an response ordering', async t => {
+	const expectedUrl = 'http://api.etherscan.io/api?module=account&action=txlist&address=0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken'
+	const fixtureLocation= './test/fixtures/account/txlist/address-startblock-endblock.json'
 
-test('actually request and get an response', async t => {
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
-	const c = new ClientAccountTxlist(oApiKey, 'account', 'txlist', oAddress, startblock, endblock, 'desc', '10')
+	const c = new ClientAccountTxlist(oApiKey, 'account', 'txlist', oAddress, startblock, endblock)
 	
 	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
 	const parsedUrl = parse(c.toUrl())
@@ -76,3 +76,42 @@ test('actually request and get an response', async t => {
 	const result = await c.request()
 	t.truthy(result)
 })
+
+test('actually request and get an response with ordering but without paging', async t => {
+	const fixtureLocation= './test/fixtures/account/txlist/address-startblock-endblock.json'
+
+	const oAddress = new Address(address)
+	const oApiKey = new ApiKey(apiKey)
+	const c = new ClientAccountTxlist(oApiKey, 'account', 'txlist', oAddress, startblock, endblock, 'desc')
+	
+	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
+	const parsedUrl = parse(c.toUrl())
+
+	nock(`${parsedUrl.protocol}//${parsedUrl.host}`)
+		.get(parsedUrl.path)
+		.reply(200, resultFixture)	
+
+	const result = await c.request()
+	t.truthy(result)
+})
+
+test('actually request and get an response with ordering and paging' , async t => { 
+	const fixtureLocation= './test/fixtures/account/txlist/address-startblock-endblock-paging.json'
+	const oAddress = new Address(address)
+	const oApiKey = new ApiKey(apiKey)
+
+	const c = new ClientAccountTxlist(oApiKey, 'account', 'txlist', oAddress, startblock, endblock, 'desc', '1', '10')
+
+	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
+	const parsedUrl = parse(c.toUrl())
+
+	nock(`${parsedUrl.protocol}//${parsedUrl.host}`)
+		.get(parsedUrl.path)
+		.reply(200, resultFixture)	
+	
+	const result = await c.request()
+	t.is(typeof result, 'object')
+	t.truthy(result)
+
+});
+
