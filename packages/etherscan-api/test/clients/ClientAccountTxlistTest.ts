@@ -22,7 +22,7 @@ test('exists', t => {
 test('can be instantiated', t => {
  	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
-	new ClientAccountTxlist(oApiKey, 'account', 'balancemulti', oAddress, startblock, endblock)
+	new ClientAccountTxlist(oApiKey, 'account', 'txlist', oAddress, startblock, endblock)
 	t.pass()
 })
 
