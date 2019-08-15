@@ -3,11 +3,11 @@ import { Address } from '../entities/Address'
 import { ApiKey } from '../entities/Apikey'
 import { IClientAccountBalanceMultiRequest } from '../interfaces/Account'
 import { requestBuilder } from '../requestBuilder'
-
+import { ClientBase } from './ClientBase'
 /**
  * Client for the account balance
  */
-export class ClientAccountBalancemulti implements IClientAccountBalanceMultiRequest {
+export class ClientAccountBalancemulti extends ClientBase implements IClientAccountBalanceMultiRequest {
   /**
    * Api key to send with the request
    */
@@ -30,6 +30,7 @@ export class ClientAccountBalancemulti implements IClientAccountBalanceMultiRequ
   tag: string
 
   constructor(apiKey: ApiKey, module: string, action: string, address: Address[], tag: string) {
+    super()
     this.apiKey = apiKey
     this.module = module
     this.action = action
@@ -54,6 +55,7 @@ export class ClientAccountBalancemulti implements IClientAccountBalanceMultiRequ
     const options = {
       uri: this.toUrl(),
     }
-    return request.get(options)
+    const result = await request.get(options)
+    return this.processResult(result)
   }
 }
