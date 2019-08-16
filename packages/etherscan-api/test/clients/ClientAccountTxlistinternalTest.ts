@@ -1,5 +1,5 @@
 import test from 'ava'
-import { ClientAccountTxlistinternal } from '../../src/client/ClientTxlistinternal'
+import { ClientAccountTxlistinternal } from '../../src/client/ClientAccountTxlistinternal'
 import { Address } from '../../src/entities/Address'
 import { ApiKey } from '../../src/entities/Apikey'
 import { decode } from 'querystring'
