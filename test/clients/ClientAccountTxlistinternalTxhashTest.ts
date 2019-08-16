@@ -1,5 +1,5 @@
 import test from 'ava'
-import { ClientAccountTxlistinternalTxhash } from '../../src/client/ClientTxlistinternalTxhash'
+import { ClientAccountTxlistinternalTxhash } from '../../src/client/ClientAccountTxlistinternalTxhash'
 import { Address } from '../../src/entities/Address'
 import { ApiKey } from '../../src/entities/Apikey'
 import { decode } from 'querystring'
@@ -26,7 +26,6 @@ test('can be instantiated', t => {
  t.pass()
 })
 
-
 test('generates the right url', t => {
 
 	const oApiKey = new ApiKey(apiKey)
@@ -38,8 +37,3 @@ test('generates the right url', t => {
 	
 	t.is(parsedUrl.txhash, parsedExpectedUrl.txhash)
 })
-
-/*
-
-
-*/

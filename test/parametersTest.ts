@@ -1,6 +1,7 @@
 import test from 'ava'
 import { sort } from '../src/parameters/sort'
 import { operand } from '../src/parameters/operand'
+import { blocktypes } from '../src/parameters/blocktypes'
 
 test('sort asc exists', t => {
 	t.truthy(sort.asc)
@@ -16,4 +17,12 @@ test('operand and', t => {
 
 test('operand or', t => {
 	t.is(operand.or, 'or')
+})
+
+test('blocktypes blocks', t => {
+	t.is(blocktypes.blocks, 'blocks')
+})
+
+test('blocktypes uncles', t => {
+	t.is(blocktypes.uncles, 'uncles')
 })

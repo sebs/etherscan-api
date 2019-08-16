@@ -30,7 +30,7 @@ export class Client {
         const oAddress = new Address(address)
         return new ClientAccountBalance(this.apiKey, 'account', action, oAddress, tag)
       },
-      balancemulti(address: string[], tag: string) {
+      balancemulti(address: string[], tag: string): ClientAccountBalancemulti {
         const oAddress = address.map((addresString) => new Address(addresString))
         return new ClientAccountBalancemulti(this.apiKey, 'account', action, oAddress, tag)
       },
