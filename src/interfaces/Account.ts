@@ -30,7 +30,7 @@ export interface IClientAccountBalanceMultiRequest extends IClientRequest {
 }
 
 /**
- * Interface to Account/txlist
+ * Interface to Account/txlist and Txlistinternal
  */
 export interface IClientAccountTxlistRequest extends IClientRequest {
   /**
@@ -59,12 +59,34 @@ export interface IClientAccountTxlistRequest extends IClientRequest {
   sort?: string
 }
 
-/*
-
-export interface IClientAccountTxlistInternalRequest extends IClientAccountTxlistRequest {
+export interface IClientAccountTxlistInternalTxhash extends IClientRequest {
+  /**
+   * Block to start reading data
+   */
+  startblock: string
+  /**
+   * hash of the transaction
+   */
   txhash: string
+  /**
+   * Read data to
+   */
+  endblock: string
+  /**
+   * Paging actual page
+   */
+  page?: string
+  /**
+   * Paging start
+   */
+  offset?: string
+  /**
+   * Sort Parameter
+   */
+  sort?: string
 }
 
+/*
 export interface IClientAccountTokentx extends IClientRequest {
   contractaddress: string
   startblock?: string
