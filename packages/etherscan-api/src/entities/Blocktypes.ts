@@ -14,7 +14,6 @@ export class Blocktypes extends EntityBase implements IEntity {
 
     constructor(sortParam: string) {
         super(sortParam)
-
     }
     /**
      * Validates if the error is invalid
