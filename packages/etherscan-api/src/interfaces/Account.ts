@@ -1,4 +1,5 @@
 import { Address } from '../entities/Address'
+import { Contractaddress } from '../entities/Contractaddress'
 import { IClientRequest } from './Entity'
 
 /**
@@ -65,9 +66,36 @@ export interface IClientAccountTxlistInternalTxhash extends IClientRequest {
    */
   startblock: string
   /**
+   * Read data to
+   */
+  endblock: string
+  /**
    * hash of the transaction
    */
   txhash: string
+  /**
+   * Paging actual page
+   */
+  page?: string
+  /**
+   * Paging start
+   */
+  offset?: string
+  /**
+   * Sort Parameter
+   */
+  sort?: string
+}
+
+export interface IClientAccountTokentx extends IClientRequest {
+  /**
+   * Ethereum address
+   */
+  address?: Address | Contractaddress
+  /**
+   * Block to start reading data
+   */
+  startblock: string
   /**
    * Read data to
    */
@@ -85,14 +113,3 @@ export interface IClientAccountTxlistInternalTxhash extends IClientRequest {
    */
   sort?: string
 }
-
-/*
-export interface IClientAccountTokentx extends IClientRequest {
-  contractaddress: string
-  startblock?: string
-  endblock?: string
-  page?: string
-  offset?: string
-  sort?: string
-}
-*/

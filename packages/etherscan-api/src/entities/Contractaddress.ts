@@ -5,7 +5,7 @@ import { EntityBase } from './EntityBase'
 /**
  * A ethereum address
  */
-export class Address extends EntityBase implements IEntity {
+export class Contractaddress extends EntityBase implements IEntity {
 
     constructor(address: string) {
         super(address)
