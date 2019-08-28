@@ -113,3 +113,26 @@ export interface IClientAccountTokentx extends IClientRequest {
    */
   sort?: string
 }
+
+export interface IClientAccountGetminedblocks extends IClientRequest {
+  /**
+   * Ethereum address
+   */
+  address?: Address | Contractaddress
+  /**
+   * Type of block (block/uncle)
+   */
+  type: string
+  /**
+   * Paging actual page
+   */
+  page?: string
+  /**
+   * Paging start
+   */
+  offset?: string
+  /**
+   * Sort Parameter
+   */
+  sort?: string
+}
