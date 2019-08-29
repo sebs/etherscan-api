@@ -9,7 +9,7 @@ import { ClientBase } from './ClientBase'
 /**
  * Client for the account balance
  */
-export class ClientGetminedblocks extends ClientBase implements IClientAccountGetminedblocks  {
+export class ClientAccountGetminedblocks extends ClientBase implements IClientAccountGetminedblocks  {
 
     /**
      * ApiKey to use the service
@@ -49,4 +49,29 @@ export class ClientGetminedblocks extends ClientBase implements IClientAccountGe
       this.action = action
       this.type = type
     }
+
+  /**
+   * Returns the serice url
+   * @returns url
+   */
+  toUrl(): string {
+
+    const params = {
+      address: this.address.toString(),
+      apiKey: this.apiKey.toString(),
+      type: this.type.toString(),
+    }
+
+    return requestBuilder(this.module, this.action, params)
+  }
+  /**
+   * Dies the actual request to the server
+   */
+  async request(): Promise<any> {
+    const options = {
+      uri: this.toUrl(),
+    }
+    const res = await request.get(options)
+    return this.processResult(res)
+  }
 }
