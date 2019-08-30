@@ -1,0 +1,22 @@
+{
+  "name": "etherscan-api-monorepo",
+  "version": "100.0.0",
+  "description": "next generation etherscan-api",
+  "main": "index.js",
+  "scripts": {
+    "test": "lerna run test "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebs/etherscan-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sebs/etherscan-api/issues"
+  },
+  "homepage": "https://github.com/sebs/etherscan-api#readme",
+  "devDependencies": {
+    "lerna": "^3.16.4"
+  }
+}
