@@ -10,8 +10,9 @@
     "module": "commonjs",
     "lib": ["es2017", "es7", "es6", "dom"],
     "outDir": "./dist",                        /* Redirect output structure to the directory. */
-    "rootDir": "./",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
-    "strict": true,                           /* Enable all strict type-checking options. */
-    "esModuleInterop": true                   /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+    "rootDir": "./",                        /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    "strict": true,                         /* Enable all strict type-checking options. */
+    "esModuleInterop": true,                /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+    "resolveJsonModule": true                  
   }
 }
