@@ -3,6 +3,7 @@
   "version": "100.0.0",
   "description": "Next generation etherscan-api ",
   "scripts": {
+    "bundle": "./node_modules/.bin/babel --out-file dist/bundle.js src/Client.ts",
     "test": "nyc ava-ts test/ -v",
     "posttest": "npm run lint",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
@@ -33,6 +34,9 @@
     "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-typescript": "^7.3.3",
     "ava": "^2.2.0",
     "ava-ts": "^0.25.2",
     "nock": "^10.0.6",
