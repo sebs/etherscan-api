@@ -8,7 +8,6 @@
     "posttest": "npm run lint",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "docs": "typedoc --module etherscan-api --out docs ./src --tsBuildInfoFile ,/tsconfig.json",
-    "lint:api": "swagger-cli validate ./api/swagger/swagger.yaml",
     "prepublish": "tsc"
   },
   "repository": {
@@ -30,7 +29,6 @@
   "homepage": "https://github.com/sebs/etherscan-api#readme",
   "dependencies": {
     "@types/request-promise-native": "^1.0.16",
-    "request": "^2.88.0",
     "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
@@ -41,7 +39,6 @@
     "ava-ts": "^0.25.2",
     "nock": "^10.0.6",
     "nyc": "^14.1.1",
-    "swagger-cli": "^2.3.0",
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
     "typedoc": "^0.15.0",
