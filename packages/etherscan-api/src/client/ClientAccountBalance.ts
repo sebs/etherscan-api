@@ -49,13 +49,4 @@ export class ClientAccountBalance extends ClientBase implements IClientAccountBa
       tag: this.tag.toString(),
     })
   }
-  /**
-   * Dies the actual request to the server
-   */
-  async request(): Promise<any> {
-    const options = {
-      uri: this.toUrl(),
-    }
-    return request.get(options)
-  }
 }
