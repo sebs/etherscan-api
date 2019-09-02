@@ -3,11 +3,12 @@ import { Address } from '../entities/Address'
 import { ApiKey } from '../entities/Apikey'
 import { IClientAccountBalanceRequest } from '../interfaces/Account'
 import { requestBuilder } from '../requestBuilder'
+import { ClientBase } from './ClientBase'
 
 /**
  * Client for the account balance
  */
-export class ClientAccountBalance implements IClientAccountBalanceRequest {
+export class ClientAccountBalance extends ClientBase implements IClientAccountBalanceRequest {
   /**
    * Api key to send with the request
    */
@@ -30,6 +31,7 @@ export class ClientAccountBalance implements IClientAccountBalanceRequest {
   tag: string
 
   constructor(apiKey: ApiKey, module: string, action: string, address: Address, tag: string) {
+    super()
     this.apiKey = apiKey
     this.module = module
     this.action = action
