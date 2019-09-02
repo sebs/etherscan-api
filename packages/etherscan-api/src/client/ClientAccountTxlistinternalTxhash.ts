@@ -1,4 +1,3 @@
-import * as request from 'request-promise-native'
 import { Address } from '../entities/Address'
 import { ApiKey } from '../entities/Apikey'
 import { IClientAccountTxlistInternalTxhash } from '../interfaces/Account'
@@ -98,15 +97,5 @@ export class ClientAccountTxlistinternalTxhash extends ClientBase implements ICl
       })
     }
     return requestBuilder(this.module, this.action, params)
-  }
-  /**
-   * Dies the actual request to the server
-   */
-  async request(): Promise<any> {
-    const options = {
-      uri: this.toUrl(),
-    }
-    const res = await request.get(options)
-    return this.processResult(res)
   }
 }
