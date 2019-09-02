@@ -33,11 +33,11 @@ export class Client {
     const actions: { [key: string]: any } = {
       balance: (address: string, tag: string): ClientAccountBalance => {
         const oAddress = new Address(address)
-        return new ClientAccountBalance(this.apiKey, 'account', action, oAddress, tag)
+        return new ClientAccountBalance(this.apiKey, oAddress, tag)
       },
       balancemulti(address: string[], tag: string): ClientAccountBalancemulti {
         const oAddress = address.map((addresString) => new Address(addresString))
-        return new ClientAccountBalancemulti(this.apiKey, 'account', action, oAddress, tag)
+        return new ClientAccountBalancemulti(this.apiKey, oAddress, tag)
       },
     }
 

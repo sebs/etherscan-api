@@ -19,11 +19,11 @@ export class ClientAccountTxlistinternalTxhash extends ClientBase implements ICl
   /**
    * module of the etherscan api to request
    */
-  module: string
+  module: string = 'account'
   /**
    * action of the etherscan api to request
    */
-  action: string
+  action: string = 'txlistinternal'
   /**
    * Block to start reading data
    */
@@ -47,8 +47,6 @@ export class ClientAccountTxlistinternalTxhash extends ClientBase implements ICl
 
   constructor(
       apiKey: ApiKey,
-      module: string,
-      action: string,
       txhash: string,
       startblock: string,
       endblock: string,
@@ -57,8 +55,6 @@ export class ClientAccountTxlistinternalTxhash extends ClientBase implements ICl
       offset?: string) {
     super()
     this.apiKey = apiKey
-    this.module = module
-    this.action = action
     this.txhash = txhash
     this.startblock = startblock
     this.endblock = endblock

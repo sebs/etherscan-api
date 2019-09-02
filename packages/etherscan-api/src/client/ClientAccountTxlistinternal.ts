@@ -19,11 +19,11 @@ export class ClientAccountTxlistinternal extends ClientBase implements IClientAc
   /**
    * module of the etherscan api to request
    */
-  module: string
+  module: string = 'account'
   /**
    * action of the etherscan api to request
    */
-  action: string
+  action: string = 'txlistinternal'
   /**
    * Block to start reading data
    */
@@ -47,8 +47,6 @@ export class ClientAccountTxlistinternal extends ClientBase implements IClientAc
 
   constructor(
       apiKey: ApiKey,
-      module: string,
-      action: string,
       address: Address,
       startblock: string,
       endblock: string,
@@ -57,8 +55,6 @@ export class ClientAccountTxlistinternal extends ClientBase implements IClientAc
       offset?: string) {
     super()
     this.apiKey = apiKey
-    this.module = module
-    this.action = action
     this.address = address
     this.startblock = startblock
     this.endblock = endblock

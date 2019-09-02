@@ -23,14 +23,14 @@ test('exists', t => {
 test('can be instantiated', t => {
 	const oAddress = new Address(address)
  const oApiKey = new ApiKey(apiKey)
- new ClientAccountTxlistinternal(oApiKey, 'account', 'txlistinternal', oAddress, startblock, endblock)
+ new ClientAccountTxlistinternal(oApiKey, oAddress, startblock, endblock)
  t.pass()
 })
 
 test('generates the right url', t => {
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
-	const c = new ClientAccountTxlistinternal(oApiKey, 'account', 'txlistinternal', oAddress, startblock, endblock)
+	const c = new ClientAccountTxlistinternal(oApiKey, oAddress, startblock, endblock)
 	const url = c.toUrl()
 
 	const parsedUrl = decode(url)	

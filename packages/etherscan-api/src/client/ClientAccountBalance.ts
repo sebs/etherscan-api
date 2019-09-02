@@ -20,21 +20,19 @@ export class ClientAccountBalance extends ClientBase implements IClientAccountBa
   /**
    * module of the etherscan api to request
    */
-  module: string
+  module: string = 'account'
   /**
    * action of the etherscan api to request
    */
-  action: string
+  action: string = 'balance'
   /**
    * tag to limit the results
    */
   tag: string
 
-  constructor(apiKey: ApiKey, module: string, action: string, address: Address, tag: string) {
+  constructor(apiKey: ApiKey, address: Address, tag: string) {
     super()
     this.apiKey = apiKey
-    this.module = module
-    this.action = action
     this.address = address
     this.tag = tag
   }

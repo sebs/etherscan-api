@@ -26,14 +26,14 @@ test('exists', t => {
 test('can be instantiated', t => {
 	const arrAddress = address.map(a =>  new Address(a))
 	const oApiKey = new ApiKey(apiKey)
-	new ClientAccountBalancemulti(oApiKey, 'account', 'balancemulti', arrAddress, tag)
+	new ClientAccountBalancemulti(oApiKey, arrAddress, tag)
 	t.pass()
 })
 
 test('generates the right url', t => {
 	const arrAddress = address.map(a =>  new Address(a))
 	const oApiKey = new ApiKey(apiKey)
-	const c = new ClientAccountBalancemulti(oApiKey, 'account', 'balancemulti', arrAddress, tag)
+	const c = new ClientAccountBalancemulti(oApiKey, arrAddress, tag)
 	const url = c.toUrl()
 
 	const parsedUrl = decode(url)
@@ -48,7 +48,7 @@ test('generates the right url', t => {
 test('actually request and get an response', async t => {
 	const arrAddress = address.map(a =>  new Address(a))
 	const oApiKey = new ApiKey(apiKey)
-	const c = new ClientAccountBalancemulti(oApiKey, 'account', 'balancemulti', arrAddress, tag)
+	const c = new ClientAccountBalancemulti(oApiKey, arrAddress, tag)
 	const url = c.toUrl()
 	const parsedUrl = parse(url)
 	const resultFixture = await _readFile(fixtureLocation, 'utf-8')

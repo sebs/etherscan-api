@@ -20,11 +20,11 @@ export class ClientAccountTxlist extends ClientBase implements IClientAccountTxl
   /**
    * module of the etherscan api to request
    */
-  module: string
+  module: string = 'account'
   /**
    * action of the etherscan api to request
    */
-  action: string
+  action: string  = 'txlist'
   /**
    * Block to start reading data
    */
@@ -48,8 +48,6 @@ export class ClientAccountTxlist extends ClientBase implements IClientAccountTxl
 
   constructor(
       apiKey: ApiKey,
-      module: string,
-      action: string,
       address: Address,
       startblock: string,
       endblock: string,
@@ -58,8 +56,6 @@ export class ClientAccountTxlist extends ClientBase implements IClientAccountTxl
       offset?: string) {
     super()
     this.apiKey = apiKey
-    this.module = module
-    this.action = action
     this.address = address
     this.startblock = startblock
     this.endblock = endblock

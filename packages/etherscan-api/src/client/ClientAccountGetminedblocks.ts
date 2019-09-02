@@ -18,12 +18,12 @@ export class ClientAccountGetminedblocks extends ClientBase implements IClientAc
     /**
      * module of the etherscan api to request
      */
-    module: string
+    module: string = 'account'
 
     /**
      * action of the etherscan api to request
      */
-    action: string
+    action: string = 'getminedblocks'
 
     /**
      * Address to lookup the account balance
@@ -37,15 +37,11 @@ export class ClientAccountGetminedblocks extends ClientBase implements IClientAc
 
     constructor(
         apiKey: ApiKey,
-        module: string,
-        action: string,
         address: Address,
         type: string) {
       super()
       this.apiKey = apiKey
       this.address = address
-      this.module = module
-      this.action = action
       this.type = type
     }
 

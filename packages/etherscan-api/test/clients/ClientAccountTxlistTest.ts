@@ -22,14 +22,14 @@ test('exists', t => {
 test('can be instantiated', t => {
  	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
-	new ClientAccountTxlist(oApiKey, 'account', 'txlist', oAddress, startblock, endblock)
+	new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock)
 	t.pass()
 })
 
 test('generates the right url', t => {
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
-	const c = new ClientAccountTxlist(oApiKey, 'account', 'txlist', oAddress, startblock, endblock)
+	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock)
 	const url = c.toUrl()
 
 	const parsedUrl = decode(url)	
@@ -43,7 +43,7 @@ test('generates the right url', t => {
 test('sort', t => {
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
-	const c = new ClientAccountTxlist(oApiKey, 'account', 'txlist', oAddress, startblock, endblock, 'desc')
+	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock, 'desc')
 	const url = c.toUrl()
 	const parsedUrl = decode(url)	
 	t.is(parsedUrl.sort, 'desc')
@@ -52,7 +52,7 @@ test('sort', t => {
 test('start end endblock', t => {
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
-	const c = new ClientAccountTxlist(oApiKey, 'account', 'txlist', oAddress, startblock, endblock, 'desc', '10')
+	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock, 'desc', '10')
 	const url = c.toUrl()
 	const parsedUrl = decode(url)	
 	t.is(parsedUrl.page, '10')
@@ -64,7 +64,7 @@ test('actually request and get an response ordering', async t => {
 
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
-	const c = new ClientAccountTxlist(oApiKey, 'account', 'txlist', oAddress, startblock, endblock)
+	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock)
 	
 	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
 	const parsedUrl = parse(c.toUrl())
@@ -82,7 +82,7 @@ test('actually request and get an response with ordering but without paging', as
 
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
-	const c = new ClientAccountTxlist(oApiKey, 'account', 'txlist', oAddress, startblock, endblock, 'desc')
+	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock, 'desc')
 	
 	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
 	const parsedUrl = parse(c.toUrl())
@@ -100,7 +100,7 @@ test('actually request and get an response with ordering and paging' , async t =
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
 
-	const c = new ClientAccountTxlist(oApiKey, 'account', 'txlist', oAddress, startblock, endblock, 'desc', '1', '10')
+	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock, 'desc', '1', '10')
 
 	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
 	const parsedUrl = parse(c.toUrl())

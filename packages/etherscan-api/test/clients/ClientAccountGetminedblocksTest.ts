@@ -21,12 +21,12 @@ test('exists', t => {
 })
 
 test('can be instantiated', t => {
-	new ClientAccountGetminedblocks(apiKey, 'account', 'getminedblocks', address, tag)
+	new ClientAccountGetminedblocks(apiKey, address, tag)
 	t.pass()
 })
 
 test('generates the right url', t => {
-	const c = new ClientAccountGetminedblocks(apiKey, 'account', 'getminedblocks', address, tag)
+	const c = new ClientAccountGetminedblocks(apiKey, address, tag)
 	const url = c.toUrl()
 	const parsedUrl = parse(url, true).query
 	const parsedExpectedUrl = parse(expectedUrl, true).query
