@@ -28,8 +28,7 @@
   },
   "homepage": "https://github.com/sebs/etherscan-api#readme",
   "dependencies": {
-    "@types/request-promise-native": "^1.0.16",
-    "request-promise-native": "^1.0.7"
+    "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",

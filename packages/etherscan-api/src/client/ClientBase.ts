@@ -1,23 +1,19 @@
-import * as request from 'request-promise-native'
-
 /**
  * Basic functions shared by all clients
  */
 export class ClientBase {
   /**
-   * Creates the request url
+   * Creates a URL for the API
    */
   toUrl(): string {
     return ''
   }
+
   /**
    * Dies the actual request to the server
    */
   async request(): Promise<any> {
-    const options = {
-      uri: this.toUrl(),
-    }
-    return request.get(options)
+    return fetch(this.toUrl()).then((response: any) => response.json())
   }
   /**
    * Processes the result and return it

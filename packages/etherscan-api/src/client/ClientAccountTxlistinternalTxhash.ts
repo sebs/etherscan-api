@@ -1,4 +1,3 @@
-import { Address } from '../entities/Address'
 import { ApiKey } from '../entities/Apikey'
 import { IClientAccountTxlistInternalTxhash } from '../interfaces/Account'
 import { requestBuilder } from '../requestBuilder'

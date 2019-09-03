@@ -8,7 +8,6 @@ import { promisify } from 'util'
 const _readFile = promisify(readFile)
 
 
-
 const apiKey = 'TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W'
 const address = '0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae'
 const tag = 'latest'
@@ -49,7 +48,7 @@ test('the correct url is generated', t =>  {
 	t.is(url, expectedUrl)
 })
 
-test('actually request and get an response', async t => {
+test.skip('actually request and get an response', async t => {
 	const client = new Client(apiKey)
 	const accountClient = client.account('balance')(address, tag)
 	const resultFixture = await _readFile(fixtureLocation, 'utf-8')

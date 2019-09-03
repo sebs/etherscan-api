@@ -6,9 +6,9 @@
   ],
   "compilerOptions": {
     "incremental": true,                   /* Enable incremental compilation */
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
-    "lib": ["es2017", "es7", "es6", "dom"],
+    "lib": ["es2017", "es7", "dom"],
     "outDir": "./dist",                        /* Redirect output structure to the directory. */
     "rootDir": "./",                        /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     "strict": true,                         /* Enable all strict type-checking options. */

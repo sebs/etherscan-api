@@ -8,7 +8,7 @@ import { parse } from 'url'
 import { readFile } from 'fs'
 import { promisify } from 'util'
 const _readFile = promisify(readFile)
-
+const fetch = require('isomorphic-fetch');
 const apiKey = 'TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W'
 const address = '0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a'
 const startblock = '0'
@@ -65,7 +65,6 @@ test('actually request and get an response ordering', async t => {
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
 	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock)
-	
 	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
 	const parsedUrl = parse(c.toUrl())
 
@@ -83,7 +82,6 @@ test('actually request and get an response with ordering but without paging', as
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
 	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock, 'desc')
-	
 	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
 	const parsedUrl = parse(c.toUrl())
 
@@ -101,7 +99,6 @@ test('actually request and get an response with ordering and paging' , async t =
 	const oApiKey = new ApiKey(apiKey)
 
 	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock, 'desc', '1', '10')
-
 	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
 	const parsedUrl = parse(c.toUrl())
 

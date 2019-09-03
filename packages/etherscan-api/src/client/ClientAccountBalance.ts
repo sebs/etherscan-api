@@ -1,4 +1,3 @@
-import * as request from 'request-promise-native'
 import { Address } from '../entities/Address'
 import { ApiKey } from '../entities/Apikey'
 import { IClientAccountBalanceRequest } from '../interfaces/Account'

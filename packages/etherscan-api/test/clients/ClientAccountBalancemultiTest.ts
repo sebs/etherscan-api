@@ -7,6 +7,7 @@ const nock = require('nock')
 import { parse } from 'url'
 import { readFile } from 'fs'
 import { promisify } from 'util'
+const fetch = require('isomorphic-fetch');
 const _readFile = promisify(readFile)
 
 const apiKey = 'TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W'

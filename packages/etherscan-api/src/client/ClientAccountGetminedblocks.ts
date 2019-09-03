@@ -1,6 +1,5 @@
 import { Address } from '../entities/Address'
 import { ApiKey } from '../entities/Apikey'
-import { Contractaddress } from '../entities/Contractaddress'
 import { IClientAccountGetminedblocks } from '../interfaces/Account'
 import { requestBuilder } from '../requestBuilder'
 import { ClientBase } from './ClientBase'
