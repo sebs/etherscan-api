@@ -3,6 +3,9 @@
   "version": "100.0.0",
   "description": "Next generation etherscan-api ",
   "scripts": {
+    "bundle": "node ./scripts/bundler.js",
+    "exportpkgversion": "node ./scripts/export-version.js",
+    "pretest": "npm run exportpkgversion",
     "test": "nyc ava-ts test/ -v",
     "posttest": "npm run lint",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
@@ -32,6 +35,7 @@
   "devDependencies": {
     "ava": "^2.2.0",
     "ava-ts": "^0.25.2",
+    "fuse-box": "^3.7.1",
     "nock": "^11.3.2",
     "nyc": "^14.1.1",
     "ts-node": "^8.3.0",

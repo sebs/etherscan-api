@@ -1,9 +1,9 @@
-import { version } from '../package.json'
 import { account } from './actions/account'
 import { ClientAccountBalance } from './client/ClientAccountBalance'
 import { ClientAccountBalancemulti } from './client/ClientAccountBalancemulti'
 import { Address } from './entities/Address'
 import { ApiKey } from './entities/Apikey'
+import { VERSION } from './version'
 
 /**
  * Client for the api at etherscan.io
@@ -12,7 +12,7 @@ export class Client {
   /**
    * Version number of the client
    */
-  static version: string = version
+  static version: string = VERSION
   /**
    * Api key to access the etherscan api
    */
