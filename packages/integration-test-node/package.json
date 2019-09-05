@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "etherscan-api": "^100.0.0"
+    "etherscan-api": "100.0.0"
   },
   "devDependencies": {
     "mocha": "^6.2.0"
