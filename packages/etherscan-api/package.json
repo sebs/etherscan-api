@@ -3,13 +3,14 @@
   "version": "100.0.0",
   "description": "Next generation etherscan-api ",
   "scripts": {
-    "bundle": "node ./scripts/bundler.js",
+    "bundle": "tsc --project tsconfig.bundle.json",
+    "bundlejs": "browserify -p esmify ./bundle/src/Client.js -o ./bundle/etherscan-api.js",
     "exportpkgversion": "node ./scripts/export-version.js",
     "pretest": "npm run exportpkgversion",
     "test": "nyc ava-ts test/ -v",
     "posttest": "npm run lint",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "docs": "typedoc --module etherscan-api --out docs ./src --tsBuildInfoFile ,/tsconfig.json",
+    "docs": "typedoc --module etherscan-api --out docs ./src --tsBuildInfoFile ./tsconfig.json",
     "prepublish": "tsc"
   },
   "repository": {
@@ -35,6 +36,8 @@
   "devDependencies": {
     "ava": "^2.2.0",
     "ava-ts": "^0.25.2",
+    "browserify": "^16.5.0",
+    "esmify": "^2.1.1",
     "fuse-box": "^3.7.1",
     "nock": "^11.3.2",
     "nyc": "^14.1.1",
