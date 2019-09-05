@@ -1,6 +1,5 @@
 import { EntityBase } from './EntityBase'
 import { PositiveNumber } from './PositiveNumber'
-import { Sort } from './Sort'
 
 /**
  * A simple paging class
@@ -14,25 +13,37 @@ export class Paging extends EntityBase {
      * offset
      */
     private offset: PositiveNumber
-    /**
-     * How to sort (asc/desc)
-     */
-    private sort: Sort
 
     constructor(
             page: PositiveNumber = new PositiveNumber(1),
             offset: PositiveNumber = new PositiveNumber(0),
-            sort: Sort = new Sort('asc'),
         ) {
         super(page.toString())
         this.page = page
         this.offset = offset
-        this.sort = sort
     }
     /**
      * Validates the paging
      */
     valid(): boolean {
-        return  !!this.page && !!this.sort && !!this.offset
+        return  !!this.page && !!this.offset
+    }
+    /**
+     * Generates a string representing the data for paging
+     */
+    toString(): string {
+        return `Page: ${this.page.toString()}, Offset:  ${this.offset.toString()}`
+    }
+
+    /**
+     * Generates an object representing the sort parameters
+     */
+    toJson(): any {
+        const page = this.page.toString()
+        const offset = this.offset.toString()
+        return {
+            offset,
+            page,
+        }
     }
 }
