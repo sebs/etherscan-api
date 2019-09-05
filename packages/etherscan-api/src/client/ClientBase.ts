@@ -2,6 +2,7 @@
  * Basic functions shared by all clients
  */
 export class ClientBase {
+
   /**
    * Creates a URL for the API
    */

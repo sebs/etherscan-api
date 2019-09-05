@@ -2,12 +2,12 @@ import { Address } from '../entities/Address'
 import { ApiKey } from '../entities/Apikey'
 import { IClientAccountGetminedblocks } from '../interfaces/Account'
 import { requestBuilder } from '../requestBuilder'
-import { ClientBase } from './ClientBase'
+import { ClientPagingBase } from './ClientPagingBase'
 
 /**
  * Client for the account balance
  */
-export class ClientAccountGetminedblocks extends ClientBase implements IClientAccountGetminedblocks  {
+export class ClientAccountGetminedblocks extends ClientPagingBase implements IClientAccountGetminedblocks  {
 
     /**
      * ApiKey to use the service
@@ -56,6 +56,8 @@ export class ClientAccountGetminedblocks extends ClientBase implements IClientAc
       type: this.type.toString(),
     }
 
-    return requestBuilder(this.module, this.action, params)
+    const pagingParams = this.paging.toJson()
+
+    return requestBuilder(this.module, this.action, Object.assign(params, pagingParams))
   }
 }

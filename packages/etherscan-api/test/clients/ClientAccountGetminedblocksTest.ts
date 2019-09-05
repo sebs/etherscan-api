@@ -36,3 +36,15 @@ test('generates the right url', t => {
 	t.is(parsedUrl.address, parsedExpectedUrl.address)
 	t.is(parsedUrl.tag, parsedExpectedUrl.tag)
 })
+
+test('set paging generates the right parameters in the url', t => {
+	const c = new ClientAccountGetminedblocks(apiKey, address, tag)
+	c.setPaging('10', '100')
+	const url = c.toUrl()
+	const parsedUrl = parse(url, true).query
+	const parsedExpectedUrl = parse(expectedUrl, true).query
+	t.is(parsedUrl.page,'10')
+	t.is(parsedUrl.offset, '100')
+})
+
+
