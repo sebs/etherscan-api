@@ -1,7 +1,7 @@
 {
-  "name": "superern-etherscan-api",
+  "name": "etherscan-api",
   "version": "10.0.2",
-  "description": "API to etherscan with a simple interface. Modifying for personal use and improvements. Thanks to https://github.com/sebs",
+  "description": "API to etherscan with a simple interface",
   "main": "index.js",
   "scripts": {
     "test": "mocha -t 20000",
@@ -11,7 +11,7 @@
     "bundle": "browserify index.js -s etherscanApi -o dist/bundle.js && git commit ./dist -m bundle && git push",
     "preversion": "npm run lint && npm run changelog",
     "postversion": "git push && git push --tags",
-    "changelog": "rm ./docs/CHANGELOG.md && changelog https://github.com/superern/etherscan-api all > ./docs/CHANGELOG.md && git add ./docs/CHANGELOG.md && git commit ./docs/CHANGELOG.md -m changelog",
+    "changelog": "rm ./docs/CHANGELOG.md && changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add ./docs/CHANGELOG.md && git commit ./docs/CHANGELOG.md -m changelog",
     "build": "npm run test && npm run docs"
   },
   "keywords": [
@@ -25,14 +25,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/superern/etherscan-api.git"
+    "url": "git+https://github.com/sebs/etherscan-api.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/superern/etherscan-api/issues"
+    "url": "https://github.com/sebs/etherscan-api/issues"
   },
-  "homepage": "https://github.com/superern/etherscan-api#readme",
+  "homepage": "https://github.com/sebs/etherscan-api#readme",
   "devDependencies": {
     "browserify": "^16.5.0",
     "chai": "^4.2.0",
