@@ -1,0 +1,17 @@
+{
+  "name": "integration-test-browser",
+  "version": "1.0.0",
+  "description": "browser based integration tests for etherscan-api ",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha-headless-chrome -f test/test.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0",
+    "mocha-headless-chrome": "^2.0.3",
+    "puppeteer": "^1.19.0"
+  }
+}

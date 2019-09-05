@@ -3,8 +3,9 @@
   "version": "100.0.0",
   "description": "Next generation etherscan-api ",
   "scripts": {
+    "postinstall": "rm -rf ./bundle && npm run bundle && npm run bundlejs",
     "bundle": "tsc --project tsconfig.bundle.json",
-    "bundlejs": "browserify -p esmify ./bundle/src/Client.js -o ./bundle/etherscan-api.js",
+    "bundlejs": "browserify -p esmify ./bundle/src/Client.js -o ./bundle/etherscan-api.js -s EtherscanClient",
     "exportpkgversion": "node ./scripts/export-version.js",
     "pretest": "npm run exportpkgversion",
     "test": "nyc ava-ts test/ -v",
