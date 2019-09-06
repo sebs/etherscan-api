@@ -52,10 +52,11 @@ test('sort', t => {
 test('start end endblock', t => {
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
-	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock, 'desc', '10')
+	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock, 'desc')
 	const url = c.toUrl()
 	const parsedUrl = decode(url)	
-	t.is(parsedUrl.page, '10')
+	t.is(parsedUrl.startblock, startblock)
+	t.is(parsedUrl.endblock, endblock)
 })
 
 test('actually request and get an response ordering', async t => {
@@ -98,7 +99,7 @@ test('actually request and get an response with ordering and paging' , async t =
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
 
-	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock, 'desc', '1', '10')
+	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock, 'desc')
 	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
 	const parsedUrl = parse(c.toUrl())
 

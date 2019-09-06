@@ -2,12 +2,12 @@ import { Address } from '../entities/Address'
 import { ApiKey } from '../entities/Apikey'
 import { IClientAccountTxlistRequest } from '../interfaces/Account'
 import { requestBuilder } from '../requestBuilder'
-import { ClientBase } from './ClientBase'
+import { ClientPagingBase } from './ClientPagingBase'
 
 /**
  * Client for the account balance
  */
-export class ClientAccountTxlist extends ClientBase implements IClientAccountTxlistRequest {
+export class ClientAccountTxlist extends ClientPagingBase implements IClientAccountTxlistRequest {
   /**
    * Api key to send with the request
    */
@@ -36,14 +36,6 @@ export class ClientAccountTxlist extends ClientBase implements IClientAccountTxl
    * Sort
    */
   sort?: string
-  /**
-   * Page
-   */
-  page?: string
-  /**
-   * startpage
-   */
-  offset?: string
 
   constructor(
       apiKey: ApiKey,
@@ -51,16 +43,13 @@ export class ClientAccountTxlist extends ClientBase implements IClientAccountTxl
       startblock: string,
       endblock: string,
       sort?: string,
-      page?: string,
-      offset?: string) {
+    ) {
     super()
     this.apiKey = apiKey
     this.address = address
     this.startblock = startblock
     this.endblock = endblock
     this.sort = sort
-    this.page = page
-    this.offset = offset
   }
   /**
    * Returns the serice url
@@ -81,17 +70,8 @@ export class ClientAccountTxlist extends ClientBase implements IClientAccountTxl
       })
     }
 
-    if (this.page) {
-      params = Object.assign(params, {
-        page: this.page,
-      })
-    }
+    const pagingParams: any = this.paging.toJson()
 
-    if (this.offset) {
-      params = Object.assign(params, {
-        offset: this.offset,
-      })
-    }
-    return requestBuilder(this.module, this.action, params)
+    return requestBuilder(this.module, this.action, Object.assign(params, pagingParams))
   }
 }
