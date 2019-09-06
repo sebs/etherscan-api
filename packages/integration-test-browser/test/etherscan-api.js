@@ -61,7 +61,7 @@ class Client {
 exports.Client = Client;
 Client.version = _version.VERSION;
 
-},{"./actions/account":2,"./client/ClientAccountBalance":11,"./client/ClientAccountBalancemulti":12,"./entities/Address":14,"./entities/Apikey":15,"./version":20}],2:[function(require,module,exports){
+},{"./actions/account":2,"./client/ClientAccountBalance":11,"./client/ClientAccountBalancemulti":12,"./entities/Address":14,"./entities/Apikey":15,"./version":22}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -75,7 +75,7 @@ const actionNames = ['balance', 'balancemulti', 'txlist', 'txlistinternal', 'tok
 const account = (0, _mapFromArray.mapFromArray)(actionNames);
 exports.account = account;
 
-},{"../util/mapFromArray":19}],3:[function(require,module,exports){
+},{"../util/mapFromArray":21}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -89,7 +89,7 @@ const actionNames = ['getblockreward'];
 const block = (0, _mapFromArray.mapFromArray)(actionNames);
 exports.block = block;
 
-},{"../util/mapFromArray":19}],4:[function(require,module,exports){
+},{"../util/mapFromArray":21}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -103,7 +103,7 @@ const actionNames = ['getabi', 'getsourcecode'];
 const contract = (0, _mapFromArray.mapFromArray)(actionNames);
 exports.contract = contract;
 
-},{"../util/mapFromArray":19}],5:[function(require,module,exports){
+},{"../util/mapFromArray":21}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -188,7 +188,7 @@ const actionNames = ['getLogs'];
 const logs = (0, _mapFromArray.mapFromArray)(actionNames);
 exports.logs = logs;
 
-},{"../util/mapFromArray":19}],7:[function(require,module,exports){
+},{"../util/mapFromArray":21}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -202,7 +202,7 @@ const actionNames = ['eth_blockNumber', 'eth_getBlockByNumber', 'eth_getBlockByN
 const proxy = (0, _mapFromArray.mapFromArray)(actionNames);
 exports.proxy = proxy;
 
-},{"../util/mapFromArray":19}],8:[function(require,module,exports){
+},{"../util/mapFromArray":21}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -216,7 +216,7 @@ const actionNames = ['ethsupply', 'ethprice'];
 const stats = (0, _mapFromArray.mapFromArray)(actionNames);
 exports.stats = stats;
 
-},{"../util/mapFromArray":19}],9:[function(require,module,exports){
+},{"../util/mapFromArray":21}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -230,7 +230,7 @@ const actionNames = ['tokenbalance', 'tokensupply'];
 const tokens = (0, _mapFromArray.mapFromArray)(actionNames);
 exports.tokens = tokens;
 
-},{"../util/mapFromArray":19}],10:[function(require,module,exports){
+},{"../util/mapFromArray":21}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -244,7 +244,7 @@ const actionNames = ['getstatus', 'gettxreceiptstatus'];
 const transaction = (0, _mapFromArray.mapFromArray)(actionNames);
 exports.transaction = transaction;
 
-},{"../util/mapFromArray":19}],11:[function(require,module,exports){
+},{"../util/mapFromArray":21}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -283,7 +283,7 @@ class ClientAccountBalance extends _ClientBase.ClientBase {
 
 
   toUrl() {
-    return (0, _requestBuilder.requestBuilder)(this.module, this.action, {
+    return (0, _requestBuilder.requestBuilder)(this.chain, this.module, this.action, {
       address: this.address.toString(),
       apiKey: this.apiKey.toString(),
       tag: this.tag.toString()
@@ -294,7 +294,7 @@ class ClientAccountBalance extends _ClientBase.ClientBase {
 
 exports.ClientAccountBalance = ClientAccountBalance;
 
-},{"../requestBuilder":18,"./ClientBase":13}],12:[function(require,module,exports){
+},{"../requestBuilder":20,"./ClientBase":13}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -333,7 +333,7 @@ class ClientAccountBalancemulti extends _ClientBase.ClientBase {
 
 
   toUrl() {
-    return (0, _requestBuilder.requestBuilder)(this.module, this.action, {
+    return (0, _requestBuilder.requestBuilder)(this.chain, this.module, this.action, {
       address: this.address.toString(),
       apiKey: this.apiKey.toString(),
       tag: this.tag.toString()
@@ -344,13 +344,15 @@ class ClientAccountBalancemulti extends _ClientBase.ClientBase {
 
 exports.ClientAccountBalancemulti = ClientAccountBalancemulti;
 
-},{"../requestBuilder":18,"./ClientBase":13}],13:[function(require,module,exports){
+},{"../requestBuilder":20,"./ClientBase":13}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.ClientBase = void 0;
+
+var _Blockchain = require("../entities/Blockchain");
 
 var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
   function adopt(value) {
@@ -383,17 +385,24 @@ var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P
     step((generator = generator.apply(thisArg, _arguments || [])).next());
   });
 };
+
 /**
  * Basic functions shared by all clients
  */
-
-
 class ClientBase {
+  constructor() {
+    /**
+     * Blockchain to use for requests
+     */
+    this.chain = new _Blockchain.Blockchain();
+  }
   /**
    * Creates a URL for the API
    */
+
+
   toUrl() {
-    return '';
+    return this.chain.toUrl();
   }
   /**
    * Dies the actual request to the server
@@ -419,7 +428,7 @@ class ClientBase {
 
 exports.ClientBase = ClientBase;
 
-},{}],14:[function(require,module,exports){
+},{"../entities/Blockchain":16}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -451,7 +460,7 @@ class Address extends _EntityBase.EntityBase {
 
 exports.Address = Address;
 
-},{"./EntityBase":16}],15:[function(require,module,exports){
+},{"./EntityBase":17}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -491,7 +500,48 @@ class ApiKey extends _EntityBase.EntityBase {
 
 exports.ApiKey = ApiKey;
 
-},{"./EntityBase":16}],16:[function(require,module,exports){
+},{"./EntityBase":17}],16:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Blockchain = void 0;
+
+var _blockchains = require("../parameters/blockchains");
+
+var _EntityBase = require("./EntityBase");
+
+/**
+ * Value Object for the blockchains that are out there
+ */
+class Blockchain extends _EntityBase.EntityBase {
+  constructor(name = 'homestead') {
+    super(name);
+  }
+  /**
+   * Chgecks of the value is valid
+   */
+
+
+  valid() {
+    return Object.keys(_blockchains.blockchains).includes(this.value);
+  }
+  /**
+   * Gets the base url for each API
+   */
+
+
+  toUrl() {
+    const enumVal = _blockchains.blockchains[this.value];
+    return enumVal;
+  }
+
+}
+
+exports.Blockchain = Blockchain;
+
+},{"../parameters/blockchains":19,"./EntityBase":17}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -538,7 +588,7 @@ class EntityBase {
 
 exports.EntityBase = EntityBase;
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -552,7 +602,24 @@ const moduleNames = ['account', 'contract', 'transaction', 'block', 'logs', 'pro
 const modules = (0, _mapFromArray.mapFromArray)(moduleNames);
 exports.modules = modules;
 
-},{"./util/mapFromArray":19}],18:[function(require,module,exports){
+},{"./util/mapFromArray":21}],19:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.blockchains = void 0;
+var blockchains;
+exports.blockchains = blockchains;
+
+(function (blockchains) {
+  blockchains["ropsten"] = "https://api-ropsten.etherscan.io";
+  blockchains["kovan"] = "https://api-kovan.etherscan.io";
+  blockchains["rinkeby"] = "https://api-rinkeby.etherscan.io";
+  blockchains["homestead"] = "https://api.etherscan.io";
+})(blockchains || (exports.blockchains = blockchains = {}));
+
+},{}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -564,9 +631,10 @@ var _querystring = require("querystring");
 
 var _index = require("./actions/index");
 
+var _Blockchain = require("./entities/Blockchain");
+
 var _modules = require("./modules");
 
-const base = 'https://api.etherscan.io/api';
 const actions = new Map();
 actions.set('account', _index.account);
 actions.set('block', _index.block);
@@ -577,7 +645,9 @@ actions.set('stats', _index.stats);
 actions.set('tokens', _index.tokens);
 actions.set('transaction', _index.transaction);
 
-const requestBuilder = (module, action, params) => {
+const requestBuilder = (chain = new _Blockchain.Blockchain(), module, action, params) => {
+  const base = chain.toUrl();
+
   if (!_modules.modules.get(module)) {
     throw Error('unknown module');
   }
@@ -592,12 +662,12 @@ const requestBuilder = (module, action, params) => {
   };
   const toEncodeParams = Object.assign(baseParams, params);
   const query = (0, _querystring.encode)(toEncodeParams);
-  return `${base}?${query}`;
+  return `${base}/api?${query}`;
 };
 
 exports.requestBuilder = requestBuilder;
 
-},{"./actions/index":5,"./modules":17,"querystring":23}],19:[function(require,module,exports){
+},{"./actions/index":5,"./entities/Blockchain":16,"./modules":18,"querystring":25}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -614,7 +684,7 @@ function mapFromArray(arr) {
   return map;
 }
 
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -624,7 +694,7 @@ exports.VERSION = void 0;
 const VERSION = '100.0.0';
 exports.VERSION = VERSION;
 
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -710,7 +780,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -797,11 +867,11 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],23:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":21,"./encode":22}]},{},[1])(1)
+},{"./decode":23,"./encode":24}]},{},[1])(1)
 });

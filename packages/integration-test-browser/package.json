@@ -4,10 +4,14 @@
   "description": "browser based integration tests for etherscan-api ",
   "main": "index.js",
   "scripts": {
+    "pretest": "cp ./node_modules/etherscan-api/bundle/etherscan-api.js ./test/.",
     "test": "mocha-headless-chrome -f test/test.html"
   },
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "etherscan-api": "100.0.0"
+  },
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.2.0",
