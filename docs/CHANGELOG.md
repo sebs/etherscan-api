@@ -1,6 +1,10 @@
 2019-09-06
 ==========
 
+  * Merge pull request [#54](https://github.com/sebs/etherscan-api/issues/54) from DmitryPogodaev/patch-1
+    Update get-request.js
+  * 10.0.3
+  * changelog
   * Merge pull request [#47](https://github.com/sebs/etherscan-api/issues/47) from tipsysquid/patch/txlistinternal
     txlistinternal now utilizes user specified parameters
 
@@ -42,6 +46,12 @@
 ==========
 
   * Update Readme.md
+
+2019-06-18
+==========
+
+  * Update get-request.js
+    Without this fix library returns "NOTOK" on "No transactions found" error, while requesting txlist or tokentx
 
 2019-04-07
 ==========
@@ -212,11 +222,3 @@
   * 8.0.1
   * optional timout parameter in ms for axios get requests
   * Splitting init to small files
-
-2018-03-01
-==========
-
-  * 8.0.0
-  * changelog
-  * New error handling
-  * 7.0.1
