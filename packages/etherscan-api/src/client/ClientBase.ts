@@ -15,6 +15,13 @@ export class ClientBase {
   toUrl(): string {
     return this.chain.toUrl()
   }
+  /**
+   * Sets the correct network
+   * @param chain
+   */
+  setChain(chain: Blockchain) {
+    this.chain = chain
+  }
 
   /**
    * Dies the actual request to the server

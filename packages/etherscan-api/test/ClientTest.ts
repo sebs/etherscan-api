@@ -10,6 +10,10 @@ test('client can be instantiated', t =>  {
 	t.notThrows(() => new Client('TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W')) 
 });
 
+test('client can be instantiated', t =>  {
+	t.notThrows(() => new Client('TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W')) 
+});
+
 test('invalid api key throws', t =>  {
 	t.throws(() => new Client('y')) 
 });

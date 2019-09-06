@@ -3,6 +3,7 @@ import { ClientAccountBalance } from './client/ClientAccountBalance'
 import { ClientAccountBalancemulti } from './client/ClientAccountBalancemulti'
 import { Address } from './entities/Address'
 import { ApiKey } from './entities/Apikey'
+import { Blockchain } from './entities/Blockchain'
 import { VERSION } from './version'
 
 /**
@@ -14,12 +15,19 @@ export class Client {
    */
   static version: string = VERSION
   /**
+   * Network
+   */
+  protected chain: Blockchain
+  /**
    * Api key to access the etherscan api
    */
   private apiKey: ApiKey
-  constructor(apiKey: string) {
+  constructor(apiKey: string, network?: string) {
     this.apiKey = new ApiKey(apiKey)
     this.apiKey.validate()
+
+    this.chain = network ? new Blockchain(network) : new Blockchain()
+    this.chain.validate()
   }
   /**
    * methods to access ethereum accounts
@@ -33,11 +41,15 @@ export class Client {
     const actions: { [key: string]: any } = {
       balance: (address: string, tag: string): ClientAccountBalance => {
         const oAddress = new Address(address)
-        return new ClientAccountBalance(this.apiKey, oAddress, tag)
+        const client = new ClientAccountBalance(this.apiKey, oAddress, tag)
+        client.setChain(this.chain)
+        return client
       },
       balancemulti(address: string[], tag: string): ClientAccountBalancemulti {
         const oAddress = address.map((addresString) => new Address(addresString))
-        return new ClientAccountBalancemulti(this.apiKey, oAddress, tag)
+        const client = new ClientAccountBalancemulti(this.apiKey, oAddress, tag)
+        client.setChain(this.chain)
+        return client
       },
     }
 
