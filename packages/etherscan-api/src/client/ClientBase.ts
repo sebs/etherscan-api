@@ -1,8 +1,14 @@
+import { Blockchain } from '../entities/Blockchain'
+
 /**
  * Basic functions shared by all clients
  */
 export class ClientBase {
 
+  /**
+   * Blockchain to use for requests
+   */
+  protected chain: Blockchain = new Blockchain()
   /**
    * Creates a URL for the API
    */
