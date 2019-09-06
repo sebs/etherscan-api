@@ -1,9 +1,40 @@
+2019-09-06
+==========
+
+  * Merge pull request [#47](https://github.com/sebs/etherscan-api/issues/47) from tipsysquid/patch/txlistinternal
+    txlistinternal now utilizes user specified parameters
+
+2019-09-05
+==========
+
+  * Merge pull request [#59](https://github.com/sebs/etherscan-api/issues/59) from superern/master
+    Add Page, Offset for tokentx
+  * additional updates
+  * Fix page, offset as parameters of tokentx
+  * Add package description for personal use of superern
+  * change variable name to tokentx
+  * add page, offset to tokentx
+
+2019-08-22
+==========
+
+  * Merge pull request [#58](https://github.com/sebs/etherscan-api/issues/58) from kaizvn/master
+    Improve issue [#42](https://github.com/sebs/etherscan-api/issues/42): showing meaning message instead of 'NOTOK'
+
+2019-08-19
+==========
+
+  * chore : remove spacing line format.
+  * Showing message if available
+    - Currently if getting empty array result of transaction, will throw an error with message 'NOTOK!' only and it is really hard to debug. Base on my investigate of response format I think we can use `message = resp.data.message` as error message.
+
 2019-08-12
 ==========
 
+  * 10.0.2
+  * changelog
   * bundle
   * 10.0.1
-  * changelog
   * remove useless service
   * Updated dependencies to fix vulns
 
@@ -11,6 +42,11 @@
 ==========
 
   * Update Readme.md
+
+2019-04-07
+==========
+
+  * txlistinternal now respects passed in parameters
 
 2019-01-04
 ==========
@@ -184,19 +220,3 @@
   * changelog
   * New error handling
   * 7.0.1
-  * Add possibillity to set up livenet via 'homestead' parameter
-  * 7.0.0
-  * New urls for the nextworks ..
-    * api- prefix
-    * changed for all 3 testnets
-
-2018-02-26
-==========
-
-  * 6.0.2
-  * changelog
-  * latest jsdoc
-  * js
-  * Fix vuln (marked via gh-pages)
-  * 6.0.1
-  * no pages
