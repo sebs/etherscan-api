@@ -72,6 +72,6 @@ export class ClientAccountTxlist extends ClientPagingBase implements IClientAcco
 
     const pagingParams: any = this.paging.toJson()
 
-    return requestBuilder(this.module, this.action, Object.assign(params, pagingParams))
+    return requestBuilder(this.chain, this.module, this.action, Object.assign(params, pagingParams))
   }
 }

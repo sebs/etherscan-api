@@ -13,7 +13,7 @@ export class ClientBase {
    * Creates a URL for the API
    */
   toUrl(): string {
-    return ''
+    return this.chain.toUrl()
   }
 
   /**

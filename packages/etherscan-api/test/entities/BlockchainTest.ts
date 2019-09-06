@@ -22,10 +22,10 @@ test('foo is invalid', (t)=> {
 
 test('rinkeby is default', (t)=> {
 	const a = new Blockchain()
-	t.is(a.toString(), 'rinkeby')
+	t.is(a.toString(), 'homestead')
 })
 
-test('https://api-rinkeby.etherscan.io is the bas url for rinkeby', (t)=> {
+test('https://api.etherscan.io is the bas url for homestead', (t)=> {
 	const a = new Blockchain()
-	t.is(a.toUrl(), 'https://api-rinkeby.etherscan.io')
+	t.is(a.toUrl(), 'https://api.etherscan.io')
 })

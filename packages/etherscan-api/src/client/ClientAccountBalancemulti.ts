@@ -39,7 +39,7 @@ export class ClientAccountBalancemulti extends ClientBase implements IClientAcco
    * @returns url
    */
   toUrl(): string {
-    return requestBuilder(this.module, this.action, {
+    return requestBuilder(this.chain, this.module, this.action, {
       address: this.address.toString(),
       apiKey: this.apiKey.toString(),
       tag: this.tag.toString(),

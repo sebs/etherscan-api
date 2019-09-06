@@ -58,6 +58,6 @@ export class ClientAccountGetminedblocks extends ClientPagingBase implements ICl
 
     const pagingParams = this.paging.toJson()
 
-    return requestBuilder(this.module, this.action, Object.assign(params, pagingParams))
+    return requestBuilder(this.chain, this.module, this.action, Object.assign(params, pagingParams))
   }
 }

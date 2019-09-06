@@ -5,7 +5,7 @@ import { EntityBase } from './EntityBase'
  * Value Object for the blockchains that are out there
  */
 export class Blockchain extends EntityBase {
-    constructor(name: string = 'rinkeby') {
+    constructor(name: string = 'homestead') {
         super(name)
     }
     /**

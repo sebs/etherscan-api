@@ -93,6 +93,6 @@ export class ClientAccountTxlist extends ClientBase implements IClientAccountTok
         offset: this.offset,
       })
     }
-    return requestBuilder(this.module, this.action, params)
+    return requestBuilder(this.chain, this.module, this.action, params)
   }
 }

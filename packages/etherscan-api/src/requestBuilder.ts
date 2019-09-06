@@ -1,6 +1,5 @@
 
-const base =  'https://api.etherscan.io/api'
-import { encode} from 'querystring'
+import { encode } from 'querystring'
 import {
     account,
     block,
@@ -11,6 +10,7 @@ import {
     tokens,
     transaction,
 } from './actions/index'
+import { Blockchain } from './entities/Blockchain'
 import { modules } from './modules'
 
 const actions = new Map()
@@ -23,7 +23,13 @@ actions.set('stats', stats)
 actions.set('tokens', tokens)
 actions.set('transaction', transaction)
 
-export const requestBuilder =  (module: string, action: string, params?: object): string => {
+export const requestBuilder =  (
+        chain: Blockchain = new Blockchain(),
+        module: string,
+        action: string,
+        params?: object): string => {
+
+    const base =  chain.toUrl()
 
     if (!modules.get(module)) {
         throw Error('unknown module')
@@ -40,5 +46,5 @@ export const requestBuilder =  (module: string, action: string, params?: object)
 
     const toEncodeParams = Object.assign(baseParams, params)
     const query: string = encode(toEncodeParams)
-    return `${base}?${query}`
+    return `${base}/api?${query}`
 }

@@ -92,6 +92,6 @@ export class ClientAccountTxlistinternal extends ClientBase implements IClientAc
         offset: this.offset,
       })
     }
-    return requestBuilder(this.module, this.action, params)
+    return requestBuilder(this.chain, this.module, this.action, params)
   }
 }
