@@ -3,7 +3,7 @@ import { ClientAccountBalance } from './client/ClientAccountBalance'
 import { ClientAccountBalancemulti } from './client/ClientAccountBalancemulti'
 import { Address } from './entities/Address'
 import { ApiKey } from './entities/Apikey'
-import { Blockchain } from './entities/Blockchain'
+import { Network } from './entities/Network'
 import { VERSION } from './version'
 
 /**
@@ -17,7 +17,7 @@ export class Client {
   /**
    * Network
    */
-  protected chain: Blockchain
+  protected chain: Network
   /**
    * Api key to access the etherscan api
    */
@@ -26,7 +26,7 @@ export class Client {
     this.apiKey = new ApiKey(apiKey)
     this.apiKey.validate()
 
-    this.chain = network ? new Blockchain(network) : new Blockchain()
+    this.chain = network ? new Network(network) : new Network()
     this.chain.validate()
   }
   /**

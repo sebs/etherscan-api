@@ -10,7 +10,7 @@ import {
     tokens,
     transaction,
 } from './actions/index'
-import { Blockchain } from './entities/Blockchain'
+import { Network } from './entities/Network'
 import { modules } from './modules'
 
 const actions = new Map()
@@ -24,7 +24,7 @@ actions.set('tokens', tokens)
 actions.set('transaction', transaction)
 
 export const requestBuilder =  (
-        chain: Blockchain = new Blockchain(),
+        chain: Network = new Network(),
         module: string,
         action: string,
         params?: object): string => {

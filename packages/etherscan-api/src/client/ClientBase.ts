@@ -1,4 +1,4 @@
-import { Blockchain } from '../entities/Blockchain'
+import { Network } from '../entities/Network'
 
 /**
  * Basic functions shared by all clients
@@ -6,9 +6,9 @@ import { Blockchain } from '../entities/Blockchain'
 export class ClientBase {
 
   /**
-   * Blockchain to use for requests
+   * Network to use for requests
    */
-  protected chain: Blockchain = new Blockchain()
+  protected chain: Network = new Network()
   /**
    * Creates a URL for the API
    */
@@ -19,7 +19,7 @@ export class ClientBase {
    * Sets the correct network
    * @param chain
    */
-  setChain(chain: Blockchain) {
+  setChain(chain: Network) {
     this.chain = chain
   }
 

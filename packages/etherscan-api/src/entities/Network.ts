@@ -1,10 +1,10 @@
-import { blockchains } from '../parameters/blockchains'
+import { networks } from '../parameters/networks'
 import { EntityBase } from './EntityBase'
 
 /**
- * Value Object for the blockchains that are out there
+ * Value Object for the Networks that are out there
  */
-export class Blockchain extends EntityBase {
+export class Network extends EntityBase {
     constructor(name: string = 'homestead') {
         super(name)
     }
@@ -12,13 +12,13 @@ export class Blockchain extends EntityBase {
      * Chgecks of the value is valid
      */
     valid(): boolean {
-        return Object.keys(blockchains).includes(this.value)
+        return Object.keys(networks).includes(this.value)
     }
     /**
      * Gets the base url for each API
      */
     toUrl() {
-        const enumVal: string = (blockchains as any)[this.value] as string
+        const enumVal: string = (networks as any)[this.value] as string
         return enumVal
     }
 }
