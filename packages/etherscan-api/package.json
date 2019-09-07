@@ -37,6 +37,7 @@
     "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
+    "etherscan-api-test-fixtures": "1.0.0",
     "ava": "^2.2.0",
     "ava-ts": "^0.25.2",
     "browserify": "^16.5.0",

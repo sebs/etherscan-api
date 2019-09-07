@@ -5,10 +5,9 @@ import { ApiKey } from '../../src/entities/Apikey'
 import { decode } from 'querystring'
 const nock = require('nock')
 import { parse } from 'url'
-import { readFile } from 'fs'
-import { promisify } from 'util'
 const fetch = require('isomorphic-fetch');
-const _readFile = promisify(readFile)
+
+const resultFixture = require('etherscan-api-test-fixtures/account/balancemulti/address-latest.json')
 
 const apiKey = 'TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W'
 const address = [ 
@@ -18,8 +17,6 @@ const address = [
 ]
 const tag = 'latest'
 const expectedUrl = 'https://api.etherscan.io/api?action=balancemulti&module=account&address=0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a,0x63a9975ba31b0b9626b34300f7f627147df1f526,0x198ef1ec325a96cc354c7266a038be8b5c558f67&tag=latest&apikey=YourApiKeyToken'
-const fixtureLocation= './test/fixtures/account/balancemulti/address-latest.json'
-
 test('exists', t => {
 	t.truthy(ClientAccountBalancemulti)
 })
@@ -52,8 +49,7 @@ test('actually request and get an response', async t => {
 	const c = new ClientAccountBalancemulti(oApiKey, arrAddress, tag)
 	const url = c.toUrl()
 	const parsedUrl = parse(url)
-	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
-
+	
 	nock(`${parsedUrl.protocol}//${parsedUrl.host}`)
 		.get(parsedUrl.path)
 		.reply(200, resultFixture)	

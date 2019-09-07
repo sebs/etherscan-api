@@ -14,6 +14,8 @@ const address = '0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a'
 const startblock = '0'
 const endblock = '99999999'
 const expectedUrl = 'http://api.etherscan.io/api?module=account&action=txlist&address=0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken'
+const resultFixture = require('etherscan-api-test-fixtures/account/txlist/address-startblock-endblock.json')
+
 
 test('exists', t => {
 	t.truthy(ClientAccountTxlist)
@@ -61,12 +63,10 @@ test('start end endblock', t => {
 
 test('actually request and get an response ordering', async t => {
 	const expectedUrl = 'http://api.etherscan.io/api?module=account&action=txlist&address=0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken'
-	const fixtureLocation= './test/fixtures/account/txlist/address-startblock-endblock.json'
-
+	
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
 	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock)
-	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
 	const parsedUrl = parse(c.toUrl())
 
 	nock(`${parsedUrl.protocol}//${parsedUrl.host}`)
@@ -78,12 +78,10 @@ test('actually request and get an response ordering', async t => {
 })
 
 test('actually request and get an response with ordering but without paging', async t => {
-	const fixtureLocation= './test/fixtures/account/txlist/address-startblock-endblock.json'
 
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
 	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock, 'desc')
-	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
 	const parsedUrl = parse(c.toUrl())
 
 	nock(`${parsedUrl.protocol}//${parsedUrl.host}`)
@@ -95,12 +93,10 @@ test('actually request and get an response with ordering but without paging', as
 })
 
 test('actually request and get an response with ordering and paging' , async t => { 
-	const fixtureLocation= './test/fixtures/account/txlist/address-startblock-endblock-paging.json'
 	const oAddress = new Address(address)
 	const oApiKey = new ApiKey(apiKey)
 
 	const c = new ClientAccountTxlist(oApiKey, oAddress, startblock, endblock, 'desc')
-	const resultFixture = await _readFile(fixtureLocation, 'utf-8')
 	const parsedUrl = parse(c.toUrl())
 
 	nock(`${parsedUrl.protocol}//${parsedUrl.host}`)
