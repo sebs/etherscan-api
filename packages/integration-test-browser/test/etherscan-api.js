@@ -16,15 +16,19 @@ var _Address = require("./entities/Address");
 
 var _Apikey = require("./entities/Apikey");
 
+var _Blockchain = require("./entities/Blockchain");
+
 var _version = require("./version");
 
 /**
  * Client for the api at etherscan.io
  */
 class Client {
-  constructor(apiKey) {
+  constructor(apiKey, network) {
     this.apiKey = new _Apikey.ApiKey(apiKey);
     this.apiKey.validate();
+    this.chain = network ? new _Blockchain.Blockchain(network) : new _Blockchain.Blockchain();
+    this.chain.validate();
   }
   /**
    * methods to access ethereum accounts
@@ -40,12 +44,16 @@ class Client {
     const actions = {
       balance: (address, tag) => {
         const oAddress = new _Address.Address(address);
-        return new _ClientAccountBalance.ClientAccountBalance(this.apiKey, oAddress, tag);
+        const client = new _ClientAccountBalance.ClientAccountBalance(this.apiKey, oAddress, tag);
+        client.setChain(this.chain);
+        return client;
       },
 
       balancemulti(address, tag) {
         const oAddress = address.map(addresString => new _Address.Address(addresString));
-        return new _ClientAccountBalancemulti.ClientAccountBalancemulti(this.apiKey, oAddress, tag);
+        const client = new _ClientAccountBalancemulti.ClientAccountBalancemulti(this.apiKey, oAddress, tag);
+        client.setChain(this.chain);
+        return client;
       }
 
     };
@@ -61,7 +69,7 @@ class Client {
 exports.Client = Client;
 Client.version = _version.VERSION;
 
-},{"./actions/account":2,"./client/ClientAccountBalance":11,"./client/ClientAccountBalancemulti":12,"./entities/Address":14,"./entities/Apikey":15,"./version":22}],2:[function(require,module,exports){
+},{"./actions/account":2,"./client/ClientAccountBalance":11,"./client/ClientAccountBalancemulti":12,"./entities/Address":14,"./entities/Apikey":15,"./entities/Blockchain":16,"./version":22}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -403,6 +411,15 @@ class ClientBase {
 
   toUrl() {
     return this.chain.toUrl();
+  }
+  /**
+   * Sets the correct network
+   * @param chain
+   */
+
+
+  setChain(chain) {
+    this.chain = chain;
   }
   /**
    * Dies the actual request to the server
