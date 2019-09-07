@@ -5,9 +5,6 @@ import { ApiKey } from '../../src/entities/Apikey'
 import { decode } from 'querystring'
 const nock = require('nock')
 import { parse } from 'url'
-import { readFile } from 'fs'
-import { promisify } from 'util'
-const _readFile = promisify(readFile)
 const fetch = require('isomorphic-fetch');
 const apiKey = 'TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W'
 const address = '0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a'

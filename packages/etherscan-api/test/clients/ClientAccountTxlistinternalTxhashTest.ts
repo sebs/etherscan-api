@@ -4,12 +4,6 @@ import { Address } from '../../src/entities/Address'
 import { ApiKey } from '../../src/entities/Apikey'
 import { decode } from 'querystring'
 const nock = require('nock')
-import { parse } from 'url'
-import { readFile } from 'fs'
-import { promisify } from 'util'
-const _readFile = promisify(readFile)
-
-
 const expectedUrl = 'https://api.etherscan.io/api?module=account&action=txlistinternal&txhash=0x40eb908387324f2b575b4879cd9d7188f69c8fc9d87c901b9e2daaea4b442170&apikey=YourApiKeyToken'
 const startblock = '0'
 const endblock = '2702578'
