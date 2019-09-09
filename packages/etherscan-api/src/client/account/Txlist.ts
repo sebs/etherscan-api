@@ -41,8 +41,8 @@ export class ClientAccountTxlist extends ClientPagingBase implements IClientAcco
       address: Address,
       startblock: string,
       endblock: string,
-      paging: Paging = new Paging(),
       sort: Sort = new Sort('desc'),
+      paging: Paging = new Paging(),
     ) {
     super()
     this.address = address

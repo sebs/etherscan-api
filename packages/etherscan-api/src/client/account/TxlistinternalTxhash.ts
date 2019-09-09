@@ -40,8 +40,8 @@ export class ClientAccountTxlistinternalTxhash extends ClientPagingBase implemen
       txhash: string,
       startblock: string,
       endblock: string,
-      paging: Paging = new Paging(),
       sort: Sort = new Sort(),
+      paging: Paging = new Paging(),
       ) {
     super()
     this.txhash = txhash

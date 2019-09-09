@@ -42,8 +42,8 @@ export class ClientAccountTxlistinternal extends ClientPagingBase implements ICl
       address: Address,
       startblock: string,
       endblock: string,
-      paging: Paging = new Paging(),
       sort: Sort = new Sort(),
+      paging: Paging = new Paging(),
     ) {
     super()
     this.address = address
