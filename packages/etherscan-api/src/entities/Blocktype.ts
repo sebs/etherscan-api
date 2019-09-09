@@ -6,7 +6,7 @@ import { EntityBase } from './EntityBase'
 /**
  * Blocktypes: blocks or uncles
  */
-export class Blocktypes extends EntityBase implements IEntity {
+export class Blocktype extends EntityBase implements IEntity {
     /**
      * Error message to display when the value is invalid
      */

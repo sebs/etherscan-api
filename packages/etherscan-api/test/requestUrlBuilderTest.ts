@@ -24,7 +24,6 @@ test('contains additional parameters', t => {
 	})
 
 	const parsed = parse(url.split('?')[1])
-	console.log(parsed)
 	t.pass()
 })
 
