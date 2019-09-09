@@ -8,4 +8,5 @@ coverage
 .fusebox
 bundle
 package-lock.json
+packages/integration-test-browser/test/etherscan-api.js
 
