@@ -10,12 +10,16 @@ const assert = this.chai ? this.chai.assert : require('assert')
 				const client = new EtherscanClient.Client(validApiKey);
 			})
 
-			it('can make a call to an actual api', async function () {
+			it('can make a call to an actual api', function (done) {
 				const client = new EtherscanClient.Client(validApiKey);
-				const res  = await client.account('balance')('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 'latest').request()
-				assert.equal(res.status, '1')
-				assert.equal(res.message, 'OK')
-				assert.ok(res.result)
+				const promise = client.account('balance')('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 'latest')
+				promise.then(res => {
+					assert.ok(res) 
+					done()
+				}).catch(err => {
+					throw new Error('Err')
+				})
+		
 			})
 	})
 

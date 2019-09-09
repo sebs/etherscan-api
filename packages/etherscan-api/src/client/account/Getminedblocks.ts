@@ -1,19 +1,11 @@
-import { Address } from '../entities/Address'
-import { ApiKey } from '../entities/Apikey'
-import { IClientAccountGetminedblocks } from '../interfaces/Account'
-import { requestBuilder } from '../requestBuilder'
-import { ClientPagingBase } from './ClientPagingBase'
+import { Address } from '../../entities/Address'
+import { IClientAccountGetminedblocks } from '../../interfaces/Account'
+import { ClientPagingBase } from '../ClientPagingBase'
 
 /**
  * Client for the account balance
  */
 export class ClientAccountGetminedblocks extends ClientPagingBase implements IClientAccountGetminedblocks  {
-
-    /**
-     * ApiKey to use the service
-     */
-    apiKey: ApiKey
-
     /**
      * module of the etherscan api to request
      */
@@ -35,29 +27,22 @@ export class ClientAccountGetminedblocks extends ClientPagingBase implements ICl
     type: string
 
     constructor(
-        apiKey: ApiKey,
         address: Address,
         type: string) {
       super()
-      this.apiKey = apiKey
       this.address = address
       this.type = type
     }
 
   /**
-   * Returns the serice url
-   * @returns url
+   * generates a json represenatation of the
    */
-  toUrl(): string {
-
-    const params = {
+  toJson(): any {
+    return {
+      action: this.action,
       address: this.address.toString(),
-      apiKey: this.apiKey.toString(),
+      module: this.module,
       type: this.type.toString(),
     }
-
-    const pagingParams = this.paging.toJson()
-
-    return requestBuilder(this.chain, this.module, this.action, Object.assign(params, pagingParams))
   }
 }

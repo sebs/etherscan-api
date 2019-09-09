@@ -12,7 +12,7 @@ export class Sort extends EntityBase implements IEntity {
      */
     errorMessage: string =  'invalid'
 
-    constructor(sortParam: string) {
+    constructor(sortParam: string = 'desc') {
         super(sortParam)
 
     }

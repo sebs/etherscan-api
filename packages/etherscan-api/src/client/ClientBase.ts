@@ -8,19 +8,19 @@ export class ClientBase {
   /**
    * Network to use for requests
    */
-  protected chain: Network = new Network()
+  protected network: Network = new Network()
   /**
    * Creates a URL for the API
    */
   toUrl(): string {
-    return this.chain.toUrl()
+    return this.network.toUrl()
   }
   /**
    * Sets the correct network
    * @param chain
    */
-  setChain(chain: Network) {
-    this.chain = chain
+  setNetwork(network: Network) {
+    this.network = network
   }
 
   /**

@@ -12,10 +12,6 @@ export interface IClientRequest {
    * Concrete action to request
    */
   action: string
-  /**
-   * apiKey to authenticate with
-   */
-  apiKey: ApiKey
 }
 
 /**

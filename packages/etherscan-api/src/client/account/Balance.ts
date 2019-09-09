@@ -1,17 +1,11 @@
-import { Address } from '../entities/Address'
-import { ApiKey } from '../entities/Apikey'
-import { IClientAccountBalanceRequest } from '../interfaces/Account'
-import { requestBuilder } from '../requestBuilder'
-import { ClientBase } from './ClientBase'
+import { Address } from '../../entities/Address'
+import { IClientAccountBalanceRequest } from '../../interfaces/Account'
+import { ClientBase } from '../ClientBase'
 
 /**
  * Client for the account balance
  */
 export class ClientAccountBalance extends ClientBase implements IClientAccountBalanceRequest {
-  /**
-   * Api key to send with the request
-   */
-  apiKey: ApiKey
   /**
    * Address to lookup the account balance
    */
@@ -29,21 +23,20 @@ export class ClientAccountBalance extends ClientBase implements IClientAccountBa
    */
   tag: string
 
-  constructor(apiKey: ApiKey, address: Address, tag: string) {
+  constructor(address: Address, tag: string) {
     super()
-    this.apiKey = apiKey
     this.address = address
     this.tag = tag
   }
   /**
-   * Returns the serice url
-   * @returns url
+   * generates a json represenatation of the
    */
-  toUrl(): string {
-    return requestBuilder(this.chain, this.module, this.action, {
+  toJson(): any {
+    return {
+      action: this.action,
       address: this.address.toString(),
-      apiKey: this.apiKey.toString(),
+      module: this.module,
       tag: this.tag.toString(),
-    })
+    }
   }
 }

@@ -8,15 +8,17 @@ exports.Client = void 0;
 
 var _account = require("./actions/account");
 
-var _ClientAccountBalance = require("./client/ClientAccountBalance");
+var _Balance = require("./client/account/Balance");
 
-var _ClientAccountBalancemulti = require("./client/ClientAccountBalancemulti");
+var _Balancemulti = require("./client/account/Balancemulti");
 
 var _Address = require("./entities/Address");
 
 var _Apikey = require("./entities/Apikey");
 
-var _Blockchain = require("./entities/Blockchain");
+var _Network = require("./entities/Network");
+
+var _performRequest = require("./util/performRequest");
 
 var _version = require("./version");
 
@@ -27,8 +29,8 @@ class Client {
   constructor(apiKey, network) {
     this.apiKey = new _Apikey.ApiKey(apiKey);
     this.apiKey.validate();
-    this.chain = network ? new _Blockchain.Blockchain(network) : new _Blockchain.Blockchain();
-    this.chain.validate();
+    this.network = network ? new _Network.Network(network) : new _Network.Network();
+    this.network.validate();
   }
   /**
    * methods to access ethereum accounts
@@ -44,15 +46,17 @@ class Client {
     const actions = {
       balance: (address, tag) => {
         const oAddress = new _Address.Address(address);
-        const client = new _ClientAccountBalance.ClientAccountBalance(this.apiKey, oAddress, tag);
-        client.setChain(this.chain);
-        return client;
+        const client = new _Balance.ClientAccountBalance(oAddress, tag);
+        client.setNetwork(this.network);
+        const json = client.toJson();
+        json.apiKey = this.apiKey.toString();
+        return (0, _performRequest.performRequest)(this.network, 'account', 'balance', json);
       },
 
       balancemulti(address, tag) {
         const oAddress = address.map(addresString => new _Address.Address(addresString));
-        const client = new _ClientAccountBalancemulti.ClientAccountBalancemulti(this.apiKey, oAddress, tag);
-        client.setChain(this.chain);
+        const client = new _Balancemulti.ClientAccountBalancemulti(oAddress, tag);
+        client.setNetwork(this.chain);
         return client;
       }
 
@@ -69,7 +73,7 @@ class Client {
 exports.Client = Client;
 Client.version = _version.VERSION;
 
-},{"./actions/account":2,"./client/ClientAccountBalance":11,"./client/ClientAccountBalancemulti":12,"./entities/Address":14,"./entities/Apikey":15,"./entities/Blockchain":16,"./version":22}],2:[function(require,module,exports){
+},{"./actions/account":2,"./client/account/Balance":12,"./client/account/Balancemulti":13,"./entities/Address":14,"./entities/Apikey":15,"./entities/Network":17,"./util/performRequest":22,"./version":23}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -258,109 +262,9 @@ exports.transaction = transaction;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ClientAccountBalance = void 0;
-
-var _requestBuilder = require("../requestBuilder");
-
-var _ClientBase = require("./ClientBase");
-
-/**
- * Client for the account balance
- */
-class ClientAccountBalance extends _ClientBase.ClientBase {
-  constructor(apiKey, address, tag) {
-    super();
-    /**
-     * module of the etherscan api to request
-     */
-
-    this.module = 'account';
-    /**
-     * action of the etherscan api to request
-     */
-
-    this.action = 'balance';
-    this.apiKey = apiKey;
-    this.address = address;
-    this.tag = tag;
-  }
-  /**
-   * Returns the serice url
-   * @returns url
-   */
-
-
-  toUrl() {
-    return (0, _requestBuilder.requestBuilder)(this.chain, this.module, this.action, {
-      address: this.address.toString(),
-      apiKey: this.apiKey.toString(),
-      tag: this.tag.toString()
-    });
-  }
-
-}
-
-exports.ClientAccountBalance = ClientAccountBalance;
-
-},{"../requestBuilder":20,"./ClientBase":13}],12:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ClientAccountBalancemulti = void 0;
-
-var _requestBuilder = require("../requestBuilder");
-
-var _ClientBase = require("./ClientBase");
-
-/**
- * Client for the account balance
- */
-class ClientAccountBalancemulti extends _ClientBase.ClientBase {
-  constructor(apiKey, address, tag) {
-    super();
-    /**
-     * module of the etherscan api to request
-     */
-
-    this.module = 'account';
-    /**
-     * action of the etherscan api to request
-     */
-
-    this.action = 'balancemulti';
-    this.apiKey = apiKey;
-    this.address = address;
-    this.tag = tag;
-  }
-  /**
-   * Returns the serice url
-   * @returns url
-   */
-
-
-  toUrl() {
-    return (0, _requestBuilder.requestBuilder)(this.chain, this.module, this.action, {
-      address: this.address.toString(),
-      apiKey: this.apiKey.toString(),
-      tag: this.tag.toString()
-    });
-  }
-
-}
-
-exports.ClientAccountBalancemulti = ClientAccountBalancemulti;
-
-},{"../requestBuilder":20,"./ClientBase":13}],13:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 exports.ClientBase = void 0;
 
-var _Blockchain = require("../entities/Blockchain");
+var _Network = require("../entities/Network");
 
 var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
   function adopt(value) {
@@ -400,9 +304,9 @@ var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P
 class ClientBase {
   constructor() {
     /**
-     * Blockchain to use for requests
+     * Network to use for requests
      */
-    this.chain = new _Blockchain.Blockchain();
+    this.network = new _Network.Network();
   }
   /**
    * Creates a URL for the API
@@ -410,7 +314,7 @@ class ClientBase {
 
 
   toUrl() {
-    return this.chain.toUrl();
+    return this.network.toUrl();
   }
   /**
    * Sets the correct network
@@ -418,8 +322,8 @@ class ClientBase {
    */
 
 
-  setChain(chain) {
-    this.chain = chain;
+  setNetwork(network) {
+    this.network = network;
   }
   /**
    * Dies the actual request to the server
@@ -445,7 +349,101 @@ class ClientBase {
 
 exports.ClientBase = ClientBase;
 
-},{"../entities/Blockchain":16}],14:[function(require,module,exports){
+},{"../entities/Network":17}],12:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ClientAccountBalance = void 0;
+
+var _ClientBase = require("../ClientBase");
+
+/**
+ * Client for the account balance
+ */
+class ClientAccountBalance extends _ClientBase.ClientBase {
+  constructor(address, tag) {
+    super();
+    /**
+     * module of the etherscan api to request
+     */
+
+    this.module = 'account';
+    /**
+     * action of the etherscan api to request
+     */
+
+    this.action = 'balance';
+    this.address = address;
+    this.tag = tag;
+  }
+  /**
+   * generates a json represenatation of the
+   */
+
+
+  toJson() {
+    return {
+      action: this.action,
+      address: this.address.toString(),
+      module: this.module,
+      tag: this.tag.toString()
+    };
+  }
+
+}
+
+exports.ClientAccountBalance = ClientAccountBalance;
+
+},{"../ClientBase":11}],13:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ClientAccountBalancemulti = void 0;
+
+var _ClientBase = require("../ClientBase");
+
+/**
+ * Client for the account balance
+ */
+class ClientAccountBalancemulti extends _ClientBase.ClientBase {
+  constructor(address, tag) {
+    super();
+    /**
+     * module of the etherscan api to request
+     */
+
+    this.module = 'account';
+    /**
+     * action of the etherscan api to request
+     */
+
+    this.action = 'balancemulti';
+    this.address = address;
+    this.tag = tag;
+  }
+  /**
+   * generates a json represenatation of the
+   */
+
+
+  toJson() {
+    return {
+      action: this.action,
+      address: this.address.map(address => address.toString()),
+      module: this.module,
+      tag: this.tag.toString()
+    };
+  }
+
+}
+
+exports.ClientAccountBalancemulti = ClientAccountBalancemulti;
+
+},{"../ClientBase":11}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -477,7 +475,7 @@ class Address extends _EntityBase.EntityBase {
 
 exports.Address = Address;
 
-},{"./EntityBase":17}],15:[function(require,module,exports){
+},{"./EntityBase":16}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -517,48 +515,7 @@ class ApiKey extends _EntityBase.EntityBase {
 
 exports.ApiKey = ApiKey;
 
-},{"./EntityBase":17}],16:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Blockchain = void 0;
-
-var _blockchains = require("../parameters/blockchains");
-
-var _EntityBase = require("./EntityBase");
-
-/**
- * Value Object for the blockchains that are out there
- */
-class Blockchain extends _EntityBase.EntityBase {
-  constructor(name = 'homestead') {
-    super(name);
-  }
-  /**
-   * Chgecks of the value is valid
-   */
-
-
-  valid() {
-    return Object.keys(_blockchains.blockchains).includes(this.value);
-  }
-  /**
-   * Gets the base url for each API
-   */
-
-
-  toUrl() {
-    const enumVal = _blockchains.blockchains[this.value];
-    return enumVal;
-  }
-
-}
-
-exports.Blockchain = Blockchain;
-
-},{"../parameters/blockchains":19,"./EntityBase":17}],17:[function(require,module,exports){
+},{"./EntityBase":16}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -605,7 +562,48 @@ class EntityBase {
 
 exports.EntityBase = EntityBase;
 
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Network = void 0;
+
+var _networks = require("../parameters/networks");
+
+var _EntityBase = require("./EntityBase");
+
+/**
+ * Value Object for the Networks that are out there
+ */
+class Network extends _EntityBase.EntityBase {
+  constructor(name = 'homestead') {
+    super(name);
+  }
+  /**
+   * Chgecks of the value is valid
+   */
+
+
+  valid() {
+    return Object.keys(_networks.networks).includes(this.value);
+  }
+  /**
+   * Gets the base url for each API
+   */
+
+
+  toUrl() {
+    const enumVal = _networks.networks[this.value];
+    return enumVal;
+  }
+
+}
+
+exports.Network = Network;
+
+},{"../parameters/networks":19,"./EntityBase":16}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -625,16 +623,16 @@ exports.modules = modules;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.blockchains = void 0;
-var blockchains;
-exports.blockchains = blockchains;
+exports.networks = void 0;
+var networks;
+exports.networks = networks;
 
-(function (blockchains) {
-  blockchains["ropsten"] = "https://api-ropsten.etherscan.io";
-  blockchains["kovan"] = "https://api-kovan.etherscan.io";
-  blockchains["rinkeby"] = "https://api-rinkeby.etherscan.io";
-  blockchains["homestead"] = "https://api.etherscan.io";
-})(blockchains || (exports.blockchains = blockchains = {}));
+(function (networks) {
+  networks["ropsten"] = "https://api-ropsten.etherscan.io";
+  networks["kovan"] = "https://api-kovan.etherscan.io";
+  networks["rinkeby"] = "https://api-rinkeby.etherscan.io";
+  networks["homestead"] = "https://api.etherscan.io";
+})(networks || (exports.networks = networks = {}));
 
 },{}],20:[function(require,module,exports){
 "use strict";
@@ -642,13 +640,13 @@ exports.blockchains = blockchains;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.requestBuilder = void 0;
+exports.requestUrlBuilder = void 0;
 
 var _querystring = require("querystring");
 
 var _index = require("./actions/index");
 
-var _Blockchain = require("./entities/Blockchain");
+var _Network = require("./entities/Network");
 
 var _modules = require("./modules");
 
@@ -662,7 +660,7 @@ actions.set('stats', _index.stats);
 actions.set('tokens', _index.tokens);
 actions.set('transaction', _index.transaction);
 
-const requestBuilder = (chain = new _Blockchain.Blockchain(), module, action, params) => {
+const requestUrlBuilder = (chain = new _Network.Network(), module, action, params) => {
   const base = chain.toUrl();
 
   if (!_modules.modules.get(module)) {
@@ -682,9 +680,9 @@ const requestBuilder = (chain = new _Blockchain.Blockchain(), module, action, pa
   return `${base}/api?${query}`;
 };
 
-exports.requestBuilder = requestBuilder;
+exports.requestUrlBuilder = requestUrlBuilder;
 
-},{"./actions/index":5,"./entities/Blockchain":16,"./modules":18,"querystring":25}],21:[function(require,module,exports){
+},{"./actions/index":5,"./entities/Network":17,"./modules":18,"querystring":26}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -707,11 +705,39 @@ function mapFromArray(arr) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.performRequest = void 0;
+
+var _requestUrlBuilder = require("../requestUrlBuilder");
+
+const performRequest = (network, module, action, params, timeout = 3000) => {
+  const url = (0, _requestUrlBuilder.requestUrlBuilder)(network, module, action, params);
+  const timer = new Promise(resolve => {
+    setTimeout(resolve, timeout, {
+      timeout: true
+    });
+  });
+  return Promise.race([fetch(url), timer]).then(response => {
+    if (response.timeout) {
+      throw new Error('Request timeout');
+    }
+
+    return response;
+  });
+};
+
+exports.performRequest = performRequest;
+
+},{"../requestUrlBuilder":20}],23:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.VERSION = void 0;
 const VERSION = '100.0.0';
 exports.VERSION = VERSION;
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -797,7 +823,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -884,11 +910,11 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":23,"./encode":24}]},{},[1])(1)
+},{"./decode":24,"./encode":25}]},{},[1])(1)
 });

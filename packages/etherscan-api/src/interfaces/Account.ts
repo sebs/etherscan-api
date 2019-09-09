@@ -1,5 +1,7 @@
 import { Address } from '../entities/Address'
 import { Contractaddress } from '../entities/Contractaddress'
+import { Paging } from '../entities/Paging'
+import { Sort } from '../entities/Sort'
 import { IClientRequest } from './Entity'
 
 /**
@@ -49,15 +51,11 @@ export interface IClientAccountTxlistRequest extends IClientRequest {
   /**
    * Paging actual page
    */
-  page?: string
-  /**
-   * Paging start
-   */
-  offset?: string
+  paging: Paging
   /**
    * Sort Parameter
    */
-  sort?: string
+  sort: Sort
 }
 
 export interface IClientAccountTxlistInternalTxhash extends IClientRequest {
@@ -76,15 +74,11 @@ export interface IClientAccountTxlistInternalTxhash extends IClientRequest {
   /**
    * Paging actual page
    */
-  page?: string
-  /**
-   * Paging start
-   */
-  offset?: string
+  paging: Paging
   /**
    * Sort Parameter
    */
-  sort?: string
+  sort: Sort
 }
 
 export interface IClientAccountTokentx extends IClientRequest {
@@ -103,15 +97,12 @@ export interface IClientAccountTokentx extends IClientRequest {
   /**
    * Paging actual page
    */
-  page?: string
-  /**
-   * Paging start
-   */
-  offset?: string
+  paging: Paging
+
   /**
    * Sort Parameter
    */
-  sort?: string
+  sort: Sort
 }
 
 export interface IClientAccountGetminedblocks extends IClientRequest {

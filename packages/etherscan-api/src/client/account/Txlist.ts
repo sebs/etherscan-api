@@ -1,17 +1,12 @@
-import { Address } from '../entities/Address'
-import { ApiKey } from '../entities/Apikey'
-import { IClientAccountTxlistRequest } from '../interfaces/Account'
-import { requestBuilder } from '../requestBuilder'
-import { ClientPagingBase } from './ClientPagingBase'
-
+import { Address } from '../../entities/Address'
+import { Paging } from '../../entities/Paging'
+import { Sort } from '../../entities/Sort'
+import { IClientAccountTxlistRequest } from '../../interfaces/Account'
+import { ClientPagingBase } from '../ClientPagingBase'
 /**
  * Client for the account balance
  */
 export class ClientAccountTxlist extends ClientPagingBase implements IClientAccountTxlistRequest {
-  /**
-   * Api key to send with the request
-   */
-  apiKey: ApiKey
   /**
    * Address to lookup the account balance
    */
@@ -35,43 +30,43 @@ export class ClientAccountTxlist extends ClientPagingBase implements IClientAcco
   /**
    * Sort
    */
-  sort?: string
+  sort: Sort
+
+  /**
+   * Paging
+   */
+  paging: Paging
 
   constructor(
-      apiKey: ApiKey,
       address: Address,
       startblock: string,
       endblock: string,
-      sort?: string,
+      paging: Paging = new Paging(),
+      sort: Sort = new Sort('desc'),
     ) {
     super()
-    this.apiKey = apiKey
     this.address = address
     this.startblock = startblock
     this.endblock = endblock
+    this.paging = paging
     this.sort = sort
   }
-  /**
-   * Returns the serice url
-   * @returns url
-   */
-  toUrl(): string {
 
-    let params = {
+  /**
+   * generates a json represenatation of the
+   */
+  toJson(): any {
+    const json =  {
+      action: this.action,
       address: this.address.toString(),
-      apiKey: this.apiKey.toString(),
       endblock: this.endblock.toString(),
+      module: this.module,
+      sort: this.sort.toString(),
       startblock: this.startblock.toString(),
     }
 
-    if (this.sort) {
-      params = Object.assign(params, {
-        sort: this.sort,
-      })
-    }
+    const pagingJson = this.paging.toJson()
 
-    const pagingParams: any = this.paging.toJson()
-
-    return requestBuilder(this.chain, this.module, this.action, Object.assign(params, pagingParams))
+    return Object.assign(json, pagingJson)
   }
 }

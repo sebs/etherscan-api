@@ -23,7 +23,7 @@ actions.set('stats', stats)
 actions.set('tokens', tokens)
 actions.set('transaction', transaction)
 
-export const requestBuilder =  (
+export const requestUrlBuilder =  (
         chain: Network = new Network(),
         module: string,
         action: string,

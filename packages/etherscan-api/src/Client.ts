@@ -1,9 +1,10 @@
 import { account } from './actions/account'
-import { ClientAccountBalance } from './client/ClientAccountBalance'
-import { ClientAccountBalancemulti } from './client/ClientAccountBalancemulti'
+import { ClientAccountBalance } from './client/account/Balance'
+import { ClientAccountBalancemulti } from './client/account/Balancemulti'
 import { Address } from './entities/Address'
 import { ApiKey } from './entities/Apikey'
 import { Network } from './entities/Network'
+import { performRequest } from './util/performRequest'
 import { VERSION } from './version'
 
 /**
@@ -17,7 +18,7 @@ export class Client {
   /**
    * Network
    */
-  protected chain: Network
+  protected network: Network
   /**
    * Api key to access the etherscan api
    */
@@ -26,8 +27,8 @@ export class Client {
     this.apiKey = new ApiKey(apiKey)
     this.apiKey.validate()
 
-    this.chain = network ? new Network(network) : new Network()
-    this.chain.validate()
+    this.network = network ? new Network(network) : new Network()
+    this.network.validate()
   }
   /**
    * methods to access ethereum accounts
@@ -39,16 +40,18 @@ export class Client {
     }
 
     const actions: { [key: string]: any } = {
-      balance: (address: string, tag: string): ClientAccountBalance => {
+      balance: (address: string, tag: string): Promise<any> => {
         const oAddress = new Address(address)
-        const client = new ClientAccountBalance(this.apiKey, oAddress, tag)
-        client.setChain(this.chain)
-        return client
+        const client = new ClientAccountBalance(oAddress, tag)
+        client.setNetwork(this.network)
+        const json = client.toJson()
+        json.apiKey = this.apiKey.toString()
+        return performRequest(this.network, 'account', 'balance', json)
       },
       balancemulti(address: string[], tag: string): ClientAccountBalancemulti {
         const oAddress = address.map((addresString) => new Address(addresString))
-        const client = new ClientAccountBalancemulti(this.apiKey, oAddress, tag)
-        client.setChain(this.chain)
+        const client = new ClientAccountBalancemulti(oAddress, tag)
+        client.setNetwork(this.chain)
         return client
       },
     }

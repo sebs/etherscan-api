@@ -4,7 +4,7 @@ import { decode } from 'querystring'
 const nock = require('nock')
 import { parse } from 'url'
 const resultFixture = require('etherscan-api-test-fixtures/account/balance/address-latest.json')
-
+const fecth = require('isomorphic-fetch')
 const apiKey = 'TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W'
 const address = '0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae'
 const tag = 'latest'
@@ -27,31 +27,3 @@ test('executing the function', t =>  {
 	t.truthy(concreteClient)
 })
 
-test('no param translates to [object Object]', t =>  {
-	const client = new Client(apiKey)
-	const url = client.account('balance')(address, tag).toUrl()
-	const parsedQuery = decode(url)
-	t.not(parsedQuery.apiKey, '[object Object]')
-	t.not(parsedQuery.module, '[object Object]')
-	t.not(parsedQuery.account, '[object Object]')
-	t.not(parsedQuery.address, '[object Object]')
-})
-
-test('the correct url is generated', t =>  {
-	const client = new Client(apiKey)
-	const url = client.account('balance')(address, tag).toUrl()
-	t.is(url, expectedUrl)
-})
-
-test.skip('actually request and get an response', async t => {
-	const client = new Client(apiKey)
-	const accountClient = client.account('balance')(address, tag)
-	const parsedUrl = parse(accountClient.toUrl())
-
-	nock(`${parsedUrl.protocol}//${parsedUrl.host}`)
-		.get(parsedUrl.path)
-		.reply(200, resultFixture)	
-
-	const result = await accountClient.request()
-	t.truthy(result)
-})
