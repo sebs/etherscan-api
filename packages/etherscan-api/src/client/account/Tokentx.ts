@@ -8,7 +8,7 @@ import { ClientBase } from '../ClientBase'
 /**
  * Client for the account balance
  */
-export class ClientAccountTxlist extends ClientBase implements IClientAccountTokentx  {
+export class ClientAccountTokentx extends ClientBase implements IClientAccountTokentx  {
   /**
    * Address to lookup the account balance
    */
@@ -42,8 +42,8 @@ export class ClientAccountTxlist extends ClientBase implements IClientAccountTok
       address: Address | Contractaddress,
       startblock: string,
       endblock: string,
-      paging: Paging,
-      sort: Sort,
+      paging: Paging = new Paging(),
+      sort: Sort = new Sort(),
       ) {
     super()
     this.address = address
@@ -58,8 +58,10 @@ export class ClientAccountTxlist extends ClientBase implements IClientAccountTok
    */
   toJson(): any {
     const json = {
+      action: this.action,
       address: this.address.toString(),
       endblock: this.endblock.toString(),
+      module: this.module,
       sort: this.sort.toString(),
       startblock: this.startblock.toString(),
     }

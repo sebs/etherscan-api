@@ -14,11 +14,6 @@ test('can be instantiated', t => {
 	t.pass()
 })
 
-test('can be instantiated', t => {
-	const c = new ClientAccountTxlistinternalTxhash(txhash, startblock, endblock)
-	t.pass()
-})
-
 test('creates correct json', t => {
 	const c = new ClientAccountTxlistinternalTxhash(txhash, startblock, endblock)
 	const j = c.toJson()
