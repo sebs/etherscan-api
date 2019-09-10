@@ -1,10 +1,11 @@
 2019-09-06
 ==========
 
+  * 10.0.4
+  * changelog
   * Merge pull request [#54](https://github.com/sebs/etherscan-api/issues/54) from DmitryPogodaev/patch-1
     Update get-request.js
   * 10.0.3
-  * changelog
   * Merge pull request [#47](https://github.com/sebs/etherscan-api/issues/47) from tipsysquid/patch/txlistinternal
     txlistinternal now utilizes user specified parameters
 
@@ -220,5 +221,3 @@
   * changelog
   * Missing docs and one parameter in getLogs
   * 8.0.1
-  * optional timout parameter in ms for axios get requests
-  * Splitting init to small files
