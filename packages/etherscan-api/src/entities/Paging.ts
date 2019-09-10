@@ -16,7 +16,7 @@ export class Paging extends EntityBase {
 
     constructor(
             page: PositiveNumber = new PositiveNumber(1),
-            offset: PositiveNumber = new PositiveNumber(0),
+            offset: PositiveNumber = new PositiveNumber(10),
         ) {
         super(page.toString())
         this.page = page

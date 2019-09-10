@@ -11,5 +11,5 @@ test('default values', (t)=> {
 	const page = new Paging()
 	const res = page.toJson()
 	t.is(res.page, '1')
-	t.is(res.offset, '0')
+	t.is(res.offset, '10')
 })
