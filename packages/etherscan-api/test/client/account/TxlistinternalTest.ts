@@ -52,3 +52,11 @@ test('paging', t => {
 	t.is(j.page, '1')
 	t.is(j.offset, '10')
 })
+
+test('paging absent from json if not set', t => {
+	const oAddress = new Address(address)
+	const c = new ClientAccountTxlistinternal(oAddress, startblock, endblock, new Sort('asc'))
+	const j = c.toJson()
+	t.falsy(j.offset)
+	t.falsy(j.page)
+})

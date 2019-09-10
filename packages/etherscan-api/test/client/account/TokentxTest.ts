@@ -44,6 +44,15 @@ test('sorting asc', t => {
 	t.is(j.sort, 'asc')
 })
 
+test('paging absent if not set', t => {
+	const oAddress = new Address(address)
+	const c = new ClientAccountTokentx(oAddress, startblock, endblock, new Sort('asc'))
+	const j = c.toJson()
+	t.falsy(j.page)
+	t.falsy(j.page)
+})
+
+
 test('paging default', t => {
 	const oAddress = new Address(address)
 	const c = new ClientAccountTokentx(oAddress, startblock, endblock, new Sort('asc'), new Paging())

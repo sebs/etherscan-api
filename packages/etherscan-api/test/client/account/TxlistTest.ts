@@ -46,6 +46,14 @@ test('sort asc', t => {
 	t.is(json.sort, 'asc')
 })
 
+test('paging absent if not set', t => {
+	const oAddress = new Address(address)
+	const c = new ClientAccountTxlist(oAddress, startblock, endblock, new Sort('asc'))
+	const json = c.toJson()
+	t.falsy(json.offset)
+	t.falsy(json.page)
+})
+
 test('paging', t => {
 	const oAddress = new Address(address)
 	const c = new ClientAccountTxlist(oAddress, startblock, endblock, new Sort(), new Paging())

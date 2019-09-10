@@ -22,4 +22,3 @@ test('genertates the right json', t => {
 	t.is(j.action, ClientAccountGetminedblocks.action)
 	t.is(j.address, address.toString())
 })
-
