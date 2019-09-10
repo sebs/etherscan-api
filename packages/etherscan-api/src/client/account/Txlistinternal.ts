@@ -36,14 +36,14 @@ export class ClientAccountTxlistinternal extends ClientPagingBase implements ICl
   /**
    * Page
    */
-  paging: Paging
+  paging?: Paging
 
   constructor(
       address: Address,
       startblock: string,
       endblock: string,
       sort: Sort = new Sort(),
-      paging: Paging = new Paging(),
+      paging?: Paging,
     ) {
     super()
     this.address = address
@@ -64,6 +64,6 @@ export class ClientAccountTxlistinternal extends ClientPagingBase implements ICl
       sort: this.sort.toString(),
       startblock: this.startblock.toString(),
     }
-    return Object.assign(json, this.paging.toJson())
+    return this.addPagingToJson(json)
   }
 }

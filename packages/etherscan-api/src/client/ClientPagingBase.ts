@@ -9,7 +9,7 @@ export class ClientPagingBase extends ClientBase {
     /**
      *  Paging with the correct defaults
      */
-    protected paging: Paging = new Paging(
+    protected paging?: Paging = new Paging(
         new PositiveNumber('1'),
         new PositiveNumber('10'),
     )
@@ -23,5 +23,13 @@ export class ClientPagingBase extends ClientBase {
             new PositiveNumber(page),
             new PositiveNumber(offset),
         )
+    }
+    /**
+     * Adds the paging information to the json
+     * @param json
+     */
+    addPagingToJson(json: any) {
+        const pagingJson = this.paging ? this.paging.toJson() : {}
+        return Object.assign(json, pagingJson)
     }
 }

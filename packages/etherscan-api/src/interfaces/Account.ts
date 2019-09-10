@@ -50,7 +50,7 @@ export interface IClientAccountTxlistRequest {
   /**
    * Paging actual page
    */
-  paging: Paging
+  paging?: Paging
   /**
    * Sort Parameter
    */
@@ -73,7 +73,7 @@ export interface IClientAccountTxlistInternalTxhash  {
   /**
    * Paging actual page
    */
-  paging: Paging
+  paging?: Paging
   /**
    * Sort Parameter
    */
@@ -96,7 +96,7 @@ export interface IClientAccountTokentx {
   /**
    * Paging actual page
    */
-  paging: Paging
+  paging?: Paging
 
   /**
    * Sort Parameter

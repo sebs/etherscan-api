@@ -3,12 +3,12 @@ import { Contractaddress } from '../../entities/Contractaddress'
 import { Paging } from '../../entities/Paging'
 import { Sort } from '../../entities/Sort'
 import { IClientAccountTokentx } from '../../interfaces/Account'
-import { ClientBase } from '../ClientBase'
+import { ClientPagingBase } from '../ClientPagingBase'
 
 /**
  * Client for the account balance
  */
-export class ClientAccountTokentx extends ClientBase implements IClientAccountTokentx  {
+export class ClientAccountTokentx extends ClientPagingBase implements IClientAccountTokentx  {
   /**
    * module of the etherscan api to request
    */
@@ -36,14 +36,14 @@ export class ClientAccountTokentx extends ClientBase implements IClientAccountTo
   /**
    * Page
    */
-  paging: Paging
+  paging?: Paging
 
   constructor(
       address: Address | Contractaddress,
       startblock: string,
       endblock: string,
-      paging: Paging = new Paging(),
       sort: Sort = new Sort(),
+      paging?: Paging,
       ) {
     super()
     this.address = address
@@ -65,6 +65,7 @@ export class ClientAccountTokentx extends ClientBase implements IClientAccountTo
       sort: this.sort.toString(),
       startblock: this.startblock.toString(),
     }
-    return Object.assign(json, this.paging.toJson())
+
+    return this.addPagingToJson(json)
   }
 }

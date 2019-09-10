@@ -34,14 +34,14 @@ export class ClientAccountTxlistinternalTxhash extends ClientPagingBase implemen
   /**
    * Page
    */
-  paging: Paging
+  paging?: Paging
 
   constructor(
       txhash: string,
       startblock: string,
       endblock: string,
       sort: Sort = new Sort(),
-      paging: Paging = new Paging(),
+      paging?: Paging,
       ) {
     super()
     this.txhash = txhash
@@ -62,6 +62,7 @@ export class ClientAccountTxlistinternalTxhash extends ClientPagingBase implemen
       startblock: this.startblock.toString(),
       txhash: this.txhash.toString(),
     }
-    return Object.assign(json, this.paging.toJson())
+
+    return this.addPagingToJson(json)
   }
 }

@@ -35,14 +35,14 @@ export class ClientAccountTxlist extends ClientPagingBase implements IClientAcco
   /**
    * Paging
    */
-  paging: Paging
+  paging?: Paging
 
   constructor(
       address: Address,
       startblock: string,
       endblock: string,
       sort: Sort = new Sort('desc'),
-      paging: Paging = new Paging(),
+      paging?: Paging,
     ) {
     super()
     this.address = address
@@ -64,9 +64,6 @@ export class ClientAccountTxlist extends ClientPagingBase implements IClientAcco
       sort: this.sort.toString(),
       startblock: this.startblock.toString(),
     }
-
-    const pagingJson = this.paging.toJson()
-
-    return Object.assign(json, pagingJson)
+    return this.addPagingToJson(json)
   }
 }
