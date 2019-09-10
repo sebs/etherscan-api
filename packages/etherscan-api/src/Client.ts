@@ -43,10 +43,14 @@ export class Client {
       balance: (address: string, tag: string): Promise<any> => {
         const oAddress = new Address(address)
         const client = new ClientAccountBalance(oAddress, tag)
-        client.setNetwork(this.network)
         const json = client.toJson()
         json.apiKey = this.apiKey.toString()
-        return performRequest(this.network, 'account', 'balance', json)
+        return performRequest(
+          this.network,
+          ClientAccountBalance.module,
+          ClientAccountBalance.action,
+          json,
+        ).then((response) => response.json())
       },
       balancemulti(address: string[], tag: string): ClientAccountBalancemulti {
         const oAddress = address.map((addresString) => new Address(addresString))

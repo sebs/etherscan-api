@@ -2,12 +2,11 @@ import { Address } from '../entities/Address'
 import { Contractaddress } from '../entities/Contractaddress'
 import { Paging } from '../entities/Paging'
 import { Sort } from '../entities/Sort'
-import { IClientRequest } from './Entity'
 
 /**
  * Interface to the Account/Balance api
  */
-export interface IClientAccountBalanceRequest extends IClientRequest {
+export interface IClientAccountBalanceRequest  {
   /**
    * Ethereum address
    */
@@ -21,7 +20,7 @@ export interface IClientAccountBalanceRequest extends IClientRequest {
 /**
  * Interface to Account/Balancemulti
  */
-export interface IClientAccountBalanceMultiRequest extends IClientRequest {
+export interface IClientAccountBalanceMultiRequest {
   /**
    * Array of ethereum addresses
    */
@@ -35,7 +34,7 @@ export interface IClientAccountBalanceMultiRequest extends IClientRequest {
 /**
  * Interface to Account/txlist and Txlistinternal
  */
-export interface IClientAccountTxlistRequest extends IClientRequest {
+export interface IClientAccountTxlistRequest {
   /**
    * Ethereum address
    */
@@ -58,7 +57,7 @@ export interface IClientAccountTxlistRequest extends IClientRequest {
   sort: Sort
 }
 
-export interface IClientAccountTxlistInternalTxhash extends IClientRequest {
+export interface IClientAccountTxlistInternalTxhash  {
   /**
    * Block to start reading data
    */
@@ -81,7 +80,7 @@ export interface IClientAccountTxlistInternalTxhash extends IClientRequest {
   sort: Sort
 }
 
-export interface IClientAccountTokentx extends IClientRequest {
+export interface IClientAccountTokentx {
   /**
    * Ethereum address
    */
@@ -105,7 +104,7 @@ export interface IClientAccountTokentx extends IClientRequest {
   sort: Sort
 }
 
-export interface IClientAccountGetminedblocks extends IClientRequest {
+export interface IClientAccountGetminedblocks {
   /**
    * Ethereum address
    */

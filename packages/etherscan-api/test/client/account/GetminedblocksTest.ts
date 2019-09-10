@@ -18,8 +18,8 @@ test('can be instantiated', t => {
 test('genertates the right json', t => {
 	const c = new ClientAccountGetminedblocks(address, tag)
 	const j = c.toJson()
-	t.is(j.module, 'account')
-	t.is(j.action, 'getminedblocks')
+	t.is(j.module, ClientAccountGetminedblocks.module)
+	t.is(j.action, ClientAccountGetminedblocks.action)
 	t.is(j.address, address.toString())
 })
 

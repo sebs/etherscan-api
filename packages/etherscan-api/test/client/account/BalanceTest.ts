@@ -23,8 +23,8 @@ test('can be instantiated', t => {
 test('generates the right json', t => {
 	const c = new ClientAccountBalance(new Address(address), tag)
 	const json = c.toJson()
-	t.is(json.action, 'balance')
-	t.is(json.module, 'account')
+	t.is(json.action, ClientAccountBalance.action)
+	t.is(json.module, ClientAccountBalance.module)
 	t.is(json.address, address)
 	t.is(json.tag, tag)
 })

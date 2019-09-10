@@ -10,17 +10,17 @@ import { ClientBase } from '../ClientBase'
  */
 export class ClientAccountTokentx extends ClientBase implements IClientAccountTokentx  {
   /**
-   * Address to lookup the account balance
-   */
-  address: Address
-  /**
    * module of the etherscan api to request
    */
-  module: string = 'account'
+  static module: string = 'account'
   /**
    * action of the etherscan api to request
    */
-  action: string = 'tokentx'
+  static action: string = 'tokentx'
+  /**
+   * Address to lookup the account balance
+   */
+  address: Address
   /**
    * Block to start reading data
    */
@@ -58,10 +58,10 @@ export class ClientAccountTokentx extends ClientBase implements IClientAccountTo
    */
   toJson(): any {
     const json = {
-      action: this.action,
+      action: ClientAccountTokentx.action,
       address: this.address.toString(),
       endblock: this.endblock.toString(),
-      module: this.module,
+      module: ClientAccountTokentx.module,
       sort: this.sort.toString(),
       startblock: this.startblock.toString(),
     }

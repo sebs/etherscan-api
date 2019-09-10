@@ -9,12 +9,12 @@ export class ClientAccountGetminedblocks extends ClientPagingBase implements ICl
     /**
      * module of the etherscan api to request
      */
-    module: string = 'account'
+    static module: string = 'account'
 
     /**
      * action of the etherscan api to request
      */
-    action: string = 'getminedblocks'
+    static action: string = 'getminedblocks'
 
     /**
      * Address to lookup the account balance
@@ -39,9 +39,9 @@ export class ClientAccountGetminedblocks extends ClientPagingBase implements ICl
    */
   toJson(): any {
     return {
-      action: this.action,
+      action: ClientAccountGetminedblocks.action,
       address: this.address.toString(),
-      module: this.module,
+      module: ClientAccountGetminedblocks.module,
       type: this.type.toString(),
     }
   }

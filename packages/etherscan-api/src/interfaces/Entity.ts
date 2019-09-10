@@ -1,19 +1,3 @@
-import { ApiKey } from '../entities/Apikey'
-
-/**
- * Interface for a basic request to the etherscan api
- */
-export interface IClientRequest {
-  /**
-   * Module to request
-   */
-  module: string
-  /**
-   * Concrete action to request
-   */
-  action: string
-}
-
 /**
  * Basic Interface for an entitiy
  */

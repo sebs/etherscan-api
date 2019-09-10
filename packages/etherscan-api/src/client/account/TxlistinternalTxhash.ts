@@ -8,17 +8,17 @@ import { ClientPagingBase } from '../ClientPagingBase'
  */
 export class ClientAccountTxlistinternalTxhash extends ClientPagingBase implements IClientAccountTxlistInternalTxhash {
   /**
-   * Hash of the transaction
-   */
-  txhash: string
-  /**
    * module of the etherscan api to request
    */
-  module: string = 'account'
+  static module: string = 'account'
   /**
    * action of the etherscan api to request
    */
-  action: string = 'txlistinternal'
+  static action: string = 'txlistinternal'
+  /**
+   * Hash of the transaction
+   */
+  txhash: string
   /**
    * Block to start reading data
    */
@@ -55,9 +55,9 @@ export class ClientAccountTxlistinternalTxhash extends ClientPagingBase implemen
    */
   toJson(): any {
     const json = {
-      action: this.action,
+      action: ClientAccountTxlistinternalTxhash.action,
       endblock: this.endblock.toString(),
-      module: this.module,
+      module: ClientAccountTxlistinternalTxhash.module,
       sort: this.sort.toString(),
       startblock: this.startblock.toString(),
       txhash: this.txhash.toString(),

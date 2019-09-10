@@ -7,17 +7,17 @@ import { ClientBase } from '../ClientBase'
  */
 export class ClientAccountBalance extends ClientBase implements IClientAccountBalanceRequest {
   /**
-   * Address to lookup the account balance
-   */
-  address: Address
-  /**
    * module of the etherscan api to request
    */
-  module: string = 'account'
+  static module: string = 'account'
   /**
    * action of the etherscan api to request
    */
-  action: string = 'balance'
+  static action: string = 'balance'
+  /**
+   * Address to lookup the account balance
+   */
+  address: Address
   /**
    * tag to limit the results
    */
@@ -33,9 +33,9 @@ export class ClientAccountBalance extends ClientBase implements IClientAccountBa
    */
   toJson(): any {
     return {
-      action: this.action,
+      action: ClientAccountBalance.action,
       address: this.address.toString(),
-      module: this.module,
+      module: ClientAccountBalance.module,
       tag: this.tag.toString(),
     }
   }

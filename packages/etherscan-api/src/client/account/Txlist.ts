@@ -8,17 +8,17 @@ import { ClientPagingBase } from '../ClientPagingBase'
  */
 export class ClientAccountTxlist extends ClientPagingBase implements IClientAccountTxlistRequest {
   /**
-   * Address to lookup the account balance
-   */
-  address: Address
-  /**
    * module of the etherscan api to request
    */
-  module: string = 'account'
+  static module: string = 'account'
   /**
    * action of the etherscan api to request
    */
-  action: string  = 'txlist'
+  static action: string  = 'txlist'
+  /**
+   * Address to lookup the account balance
+   */
+  address: Address
   /**
    * Block to start reading data
    */
@@ -57,10 +57,10 @@ export class ClientAccountTxlist extends ClientPagingBase implements IClientAcco
    */
   toJson(): any {
     const json =  {
-      action: this.action,
+      action: ClientAccountTxlist.action,
       address: this.address.toString(),
       endblock: this.endblock.toString(),
-      module: this.module,
+      module: ClientAccountTxlist.module,
       sort: this.sort.toString(),
       startblock: this.startblock.toString(),
     }

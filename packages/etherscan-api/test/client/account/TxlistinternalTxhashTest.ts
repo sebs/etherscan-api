@@ -17,8 +17,8 @@ test('can be instantiated', t => {
 test('creates correct json', t => {
 	const c = new ClientAccountTxlistinternalTxhash(txhash, startblock, endblock)
 	const j = c.toJson()
-	t.is(j.module, 'account')
-	t.is(j.action, 'txlistinternal')
+	t.is(j.module, ClientAccountTxlistinternalTxhash.module)
+	t.is(j.action, ClientAccountTxlistinternalTxhash.action)
 	t.is(j.startblock, startblock)
 	t.is(j.endblock, endblock)
 	t.is(j.txhash, txhash)
