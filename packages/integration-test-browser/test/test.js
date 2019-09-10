@@ -11,6 +11,7 @@ describe('document', function () {
 		})
 
 		it('can make a call to an actual api', function (done) {
+			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.account('balance')('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 'latest')
 			promise.then(res => {
