@@ -1,9 +1,15 @@
 import { account } from './actions/account'
 import { ClientAccountBalance } from './client/account/Balance'
 import { ClientAccountBalancemulti } from './client/account/Balancemulti'
+import { ClientAccountGetminedblocks } from './client/account/Getminedblocks'
+import { ClientAccountTokentx } from './client/account/Tokentx'
+import { ClientAccountTxlist } from './client/account/Txlist'
+import { ClientAccountTxlistinternal } from './client/account/Txlistinternal'
+import { ClientAccountTxlistinternalTxhash } from './client/account/TxlistinternalTxhash'
 import { Address } from './entities/Address'
 import { ApiKey } from './entities/Apikey'
 import { Network } from './entities/Network'
+import { Sort } from './entities/Sort'
 import { performRequest } from './util/performRequest'
 import { VERSION } from './version'
 
@@ -35,8 +41,13 @@ export class Client {
    * @param action
    */
   account(action: string): any {
-    if (!account.get(action)) {
-      throw new Error('unknown action')
+
+    const validatingAction = action === 'txlistinternaltxhash' ? 'txlistinternal' : action
+    const apiKey = this.apiKey
+    const network = this.network
+
+    if (!account.get(validatingAction)) {
+      throw new Error('unknown action' + validatingAction)
     }
 
     const actions: { [key: string]: any } = {
@@ -44,19 +55,88 @@ export class Client {
         const oAddress = new Address(address)
         const client = new ClientAccountBalance(oAddress, tag)
         const json = client.toJson()
-        json.apiKey = this.apiKey.toString()
+        json.apiKey = apiKey.toString()
         return performRequest(
-          this.network,
+          network,
           ClientAccountBalance.module,
           ClientAccountBalance.action,
           json,
         ).then((response) => response.json())
       },
-      balancemulti(address: string[], tag: string): ClientAccountBalancemulti {
+      balancemulti(address: string[], tag: string): Promise<any> {
         const oAddress = address.map((addresString) => new Address(addresString))
         const client = new ClientAccountBalancemulti(oAddress, tag)
-        client.setNetwork(this.chain)
-        return client
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientAccountBalancemulti.module,
+          ClientAccountBalancemulti.action,
+          json,
+        ).then((response) => response.json())
+      },
+      getminedblocks(address: string, type: string): Promise<any> {
+        const oAddress = new Address(address)
+        const client = new ClientAccountGetminedblocks(oAddress, type)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientAccountGetminedblocks.module,
+          ClientAccountGetminedblocks.action,
+          json,
+        ).then((response) => response.json())
+      },
+      tokentx(address: string, startblock: string, endblock: string, sort?: string): Promise<any> {
+        const oAddress = new Address(address)
+        const oSort = !!sort ? new Sort(sort) : undefined
+        const client = new ClientAccountTokentx(oAddress, startblock, endblock, oSort)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientAccountTokentx.module,
+          ClientAccountTokentx.action,
+          json,
+        ).then((response) => response.json())
+      },
+      txlist(address: string, startblock: string, endblock: string, sort?: string): Promise<any> {
+        const oAddress = new Address(address)
+        const oSort = !!sort ? new Sort(sort) : undefined
+        const client = new ClientAccountTxlist(oAddress, startblock, endblock, oSort)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientAccountTokentx.module,
+          ClientAccountTokentx.action,
+          json,
+        ).then((response) => response.json())
+      },
+      txlistinternal(address: string, startblock: string, endblock: string, sort?: string): Promise<any> {
+        const oAddress = new Address(address)
+        const oSort = !!sort ? new Sort(sort) : undefined
+        const client = new ClientAccountTxlistinternal(oAddress, startblock, endblock, oSort)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientAccountTokentx.module,
+          ClientAccountTokentx.action,
+          json,
+        ).then((response) => response.json())
+      },
+      txlistinternaltxhash(txhash: string, startblock: string, endblock: string, sort?: string): Promise<any> {
+        const oSort = !!sort ? new Sort(sort) : undefined
+        const client = new ClientAccountTxlistinternalTxhash(txhash, startblock, endblock, oSort)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientAccountTokentx.module,
+          ClientAccountTokentx.action,
+          json,
+        ).then((response) => response.json())
       },
     }
     return actions[action]

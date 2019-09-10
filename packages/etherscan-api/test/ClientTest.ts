@@ -18,9 +18,45 @@ test('invalid api key throws', t =>  {
 	t.throws(() => new Client('y')) 
 });
 
-test('account api with valid action', t =>  {
+test('account/balance is valid', t =>  {
 	const client = new Client('TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W')
 	client.account('balance')
+	t.pass()
+});
+
+test('account/balancemulti is valid', t =>  {
+	const client = new Client('TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W')
+	client.account('balancemulti')
+	t.pass()
+});
+
+test('account/tokentx is valid', t =>  {
+	const client = new Client('TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W')
+	client.account('tokentx')
+	t.pass()
+});
+
+test('account/getminedblocks is valid', t =>  {
+	const client = new Client('TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W')
+	client.account('getminedblocks')
+	t.pass()
+});
+
+test('account/txlist is valid', t =>  {
+	const client = new Client('TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W')
+	client.account('txlist')
+	t.pass()
+});
+
+test('account/txlistinternal is valid', t =>  {
+	const client = new Client('TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W')
+	client.account('txlistinternal')
+	t.pass()
+});
+
+test('account/txlistinternaltxhash is valid', t =>  {
+	const client = new Client('TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W')
+	client.account('txlistinternaltxhash')
 	t.pass()
 });
 

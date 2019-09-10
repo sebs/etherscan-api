@@ -10,10 +10,27 @@ describe('document', function () {
 			const client = new EtherscanClient.Client(validApiKey);
 		})
 
-		it('can make a call to an actual api', function (done) {
+		it('account/balance', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.account('balance')('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 'latest')
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.status)
+				assert.equal(res.status, 1)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+
+
+		it('account/balancemulti', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const promise = client.account('balancemulti')([
+				'0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae'
+			], 'latest')
 			promise.then(res => {
 				assert.ok(res)
 				assert.ok(res.status)
