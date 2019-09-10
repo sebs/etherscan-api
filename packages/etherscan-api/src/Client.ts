@@ -59,7 +59,6 @@ export class Client {
         return client
       },
     }
-
     return actions[action]
   }
 }

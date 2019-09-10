@@ -24,6 +24,15 @@ export class ClientAccountBalancemulti extends ClientBase implements IClientAcco
 
   constructor(address: Address[], tag: string) {
     super()
+
+    if (!address.length || address.length === 0) {
+      throw new Error('At least one address needs to be provided')
+    }
+
+    if (address.length >= 20) {
+      throw new Error('A maximum of 20 adresses is allowed')
+    }
+
     this.address = address
     this.tag = tag
   }
