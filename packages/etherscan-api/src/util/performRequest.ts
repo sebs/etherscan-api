@@ -27,5 +27,10 @@ export const performRequest = (
             throw new Error('Request timeout')
          }
          return response
+     }).then((response: any)  => {
+        if (response.status === 500) {
+           throw new Error('Internal server error')
+        }
+        return response
      })
 }
