@@ -43,7 +43,7 @@ export class ClientAccountBalancemulti extends ClientBase implements IClientAcco
   toJson(): any {
     return {
       action: ClientAccountBalancemulti.action,
-      address: this.address.map((address) => address.toString()),
+      address: this.address.map((address) => address.toString()).join(', '),
       module: ClientAccountBalancemulti.module,
       tag: this.tag.toString(),
     }

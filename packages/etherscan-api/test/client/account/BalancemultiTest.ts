@@ -37,9 +37,7 @@ test('creates the correct json', t => {
 	const j = c.toJson()
 	t.is(j.module, ClientAccountBalancemulti.module)
 	t.is(j.action, ClientAccountBalancemulti.action)
-	t.is(j.address[0], address[0])
-	t.is(j.address[1], address[1])
-	t.is(j.address[2], address[2])
+	t.is(j.address, address.join(', '))
 	t.is(j.tag, 'latest')
 })
 
