@@ -15,7 +15,7 @@ test('can be instantiated', t => {
 
 test('static properties are correct', t => {
 	t.is(ClientContractGetsource.module, 'contract')
-	t.is(ClientContractGetsource.action, 'getsource')
+	t.is(ClientContractGetsource.action, 'getsourcecode')
 })
 
 test('creates the correct json', t => {

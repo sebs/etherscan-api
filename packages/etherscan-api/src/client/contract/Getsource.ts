@@ -14,7 +14,7 @@ export class ClientContractGetsource extends ClientBase implements IClientContra
     /**
      * Action
      */
-    static action: string = 'getsource'
+    static action: string = 'getsourcecode'
 
     /**
      * Address on the ethereum network

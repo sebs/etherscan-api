@@ -58,20 +58,20 @@ export class Client {
         json.apiKey = apiKey.toString()
         return performRequest(
           network,
-          ClientAccountBalance.module,
-          ClientAccountBalance.action,
+          ClientContractGetabi.module,
+          ClientContractGetabi.action,
           json,
         ).then((response) => response.json())
       },
-      getsource(address: string) {
+      getsourcecode(address: string) {
         const oAddress = new Address(address)
         const client = new ClientContractGetsource(oAddress)
         const json = client.toJson()
         json.apiKey = apiKey.toString()
         return performRequest(
           network,
-          ClientAccountBalance.module,
-          ClientAccountBalance.action,
+          ClientContractGetsource.module,
+          ClientContractGetsource.action,
           json,
         ).then((response) => response.json())
       },
