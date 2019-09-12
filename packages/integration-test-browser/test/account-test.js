@@ -125,4 +125,17 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+		it('stats/tokensupply', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const promise = client.stats('tokensupply')('0x57d90b64a1a57749b0f932f1a3395792e12e7055')
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.status)
+				assert.equal(res.status, 1)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
 })

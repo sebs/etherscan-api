@@ -1,6 +1,7 @@
 import { account } from './actions/account'
 import { block } from './actions/block'
 import { contract } from './actions/contract'
+import { stats } from './actions/stats'
 import { transaction } from './actions/transaction'
 import { ClientAccountBalance } from './client/account/Balance'
 import { ClientAccountBalancemulti } from './client/account/Balancemulti'
@@ -13,6 +14,7 @@ import { ClientAccountTxlistinternalTxhash } from './client/account/Txlistintern
 import { ClientBlockGetblockreward } from './client/block/Getblockreward'
 import { ClientContractGetabi } from './client/contract/Getabi'
 import { ClientContractGetsource } from './client/contract/Getsource'
+import { ClientStatsTokenupply } from './client/stats/Tokensupply'
 import { ClientTransactionGetstatus } from './client/transaction/Getstatus'
 import { ClientTransactionGettxreceiptstatus } from './client/transaction/Gettxreceiptstatus'
 import { Address } from './entities/Address'
@@ -46,6 +48,32 @@ export class Client {
     this.network = network ? new Network(network) : new Network()
     this.network.validate()
   }
+  /**
+   * Statistics methods
+   * @param action
+   */
+  stats(action: string): any {
+    const apiKey = this.apiKey
+    const network = this.network
+    if (!stats.get(action)) {
+      throw new Error('unknown action' + action)
+    }
+    const actions: { [key: string]: any } = {
+      tokensupply(contractaddress: string) {
+        const client = new ClientStatsTokenupply(contractaddress)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientStatsTokenupply.module,
+          ClientStatsTokenupply.action,
+          json,
+        ).then((response) => response.json())
+      },
+    }
+    return actions[action]
+  }
+
   /**
    * Block api
    * @param action

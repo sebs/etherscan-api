@@ -25,7 +25,7 @@ test('proxy has the right amount of modules', t => {
 })
 
 test('stats has the right amount of modules', t => {
-  t.is(stats.size, 2)
+  t.is(stats.size, 4)
 })
 
 test('tokens has the right amount of modules', t => {
