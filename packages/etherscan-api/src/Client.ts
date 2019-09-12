@@ -1,4 +1,5 @@
 import { account } from './actions/account'
+import { contract } from './actions/contract'
 import { ClientAccountBalance } from './client/account/Balance'
 import { ClientAccountBalancemulti } from './client/account/Balancemulti'
 import { ClientAccountGetminedblocks } from './client/account/Getminedblocks'
@@ -6,6 +7,8 @@ import { ClientAccountTokentx } from './client/account/Tokentx'
 import { ClientAccountTxlist } from './client/account/Txlist'
 import { ClientAccountTxlistinternal } from './client/account/Txlistinternal'
 import { ClientAccountTxlistinternalTxhash } from './client/account/TxlistinternalTxhash'
+import { ClientContractGetabi } from './client/contract/Getabi'
+import { ClientContractGetsource } from './client/contract/Getsource'
 import { Address } from './entities/Address'
 import { ApiKey } from './entities/Apikey'
 import { Network } from './entities/Network'
@@ -36,6 +39,46 @@ export class Client {
     this.network = network ? new Network(network) : new Network()
     this.network.validate()
   }
+  /**
+   * methods to access ethereum contract data
+   * @param action
+   */
+  contract(action: string): any {
+    const apiKey = this.apiKey
+    const network = this.network
+
+    if (!contract.get(action)) {
+      throw new Error('unknown action' + action)
+    }
+    const actions: { [key: string]: any } = {
+      getabi(address: string) {
+        const oAddress = new Address(address)
+        const client = new ClientContractGetabi(oAddress)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientAccountBalance.module,
+          ClientAccountBalance.action,
+          json,
+        ).then((response) => response.json())
+      },
+      getsource(address: string) {
+        const oAddress = new Address(address)
+        const client = new ClientContractGetsource(oAddress)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientAccountBalance.module,
+          ClientAccountBalance.action,
+          json,
+        ).then((response) => response.json())
+      },
+    }
+    return actions[action]
+  }
+
   /**
    * methods to access ethereum accounts
    * @param action

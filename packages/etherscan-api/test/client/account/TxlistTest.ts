@@ -20,6 +20,11 @@ test('can be instantiated', t => {
 	t.pass()
 })
 
+test('static properties are correct', t => {
+	t.is(ClientAccountTxlist.module, 'account')
+	t.is(ClientAccountTxlist.action, 'txlist')
+})
+
 test('creates correct json', t => {
 	const oAddress = new Address(address)
 	const c = new ClientAccountTxlist(oAddress, startblock, endblock)

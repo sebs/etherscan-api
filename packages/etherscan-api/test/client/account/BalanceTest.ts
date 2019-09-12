@@ -15,9 +15,9 @@ test('can be instantiated', t => {
 	t.pass()
 })
 
-test('can be instantiated', t => {
-	new ClientAccountBalance(new Address(address), tag)
-	t.pass()
+test('static properties are correct', t => {
+	t.is(ClientAccountBalance.module, 'account')
+	t.is(ClientAccountBalance.action, 'balance')
 })
 
 test('generates the right json', t => {

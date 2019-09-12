@@ -21,6 +21,11 @@ test('can be instantiated', t => {
 	t.pass()
 })
 
+test('static properties are correct', t => {
+	t.is(ClientAccountBalancemulti.module, 'account')
+	t.is(ClientAccountBalancemulti.action, 'balancemulti')
+})
+
 test('throws an error if there are more than 20 ', t => {
 	const toManyAddress = Array.from({length: 21}, () => '0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a');
 	const arrAddress = toManyAddress.map(a =>  new Address(a))

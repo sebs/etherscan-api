@@ -16,6 +16,11 @@ test('can be instantiated', t => {
 	t.pass()
 })
 
+test('static properties are correct', t => {
+	t.is(ClientAccountTxlistinternalTxhash.module, 'account')
+	t.is(ClientAccountTxlistinternalTxhash.action, 'txlistinternal')
+})
+
 test('creates correct json', t => {
 	const c = new ClientAccountTxlistinternalTxhash(txhash, startblock, endblock)
 	const j = c.toJson()

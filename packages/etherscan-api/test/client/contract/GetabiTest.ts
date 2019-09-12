@@ -12,6 +12,12 @@ test('can be instantiated', t => {
 	new ClientContractGetabi(address)
 	t.pass()
 })
+
+test('static properties are correct', t => {
+	t.is(ClientContractGetabi.module, 'contract')
+	t.is(ClientContractGetabi.action, 'getabi')
+})
+
 test('creates the correct json', t => {
 	const c = new ClientContractGetabi(address)
 	const j = c.toJson()

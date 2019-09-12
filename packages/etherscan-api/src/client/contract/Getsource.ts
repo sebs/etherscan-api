@@ -5,7 +5,7 @@ import { ClientBase } from '../ClientBase'
 /**
  * Client for the account balance
  */
-export class ClientContractGetabi extends ClientBase implements IClientContractGetabiRequest {
+export class ClientContractGetsource extends ClientBase implements IClientContractGetabiRequest {
 
     /**
      * module to call
@@ -14,7 +14,7 @@ export class ClientContractGetabi extends ClientBase implements IClientContractG
     /**
      * Action
      */
-    static action: string = 'getabi'
+    static action: string = 'getsource'
 
     /**
      * Address on the ethereum network
@@ -31,9 +31,9 @@ export class ClientContractGetabi extends ClientBase implements IClientContractG
      */
     toJson(): any {
         return  {
-            action: ClientContractGetabi.action,
+            action: ClientContractGetsource.action,
             address: this.address.toString(),
-            module: ClientContractGetabi.module,
+            module: ClientContractGetsource.module,
         }
     }
 }

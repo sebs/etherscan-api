@@ -15,6 +15,11 @@ test('can be instantiated', t => {
 	t.pass()
 })
 
+test('static properties are correct', t => {
+	t.is(ClientAccountGetminedblocks.module, 'account')
+	t.is(ClientAccountGetminedblocks.action, 'getminedblocks')
+})
+
 test('genertates the right json', t => {
 	const c = new ClientAccountGetminedblocks(address, tag)
 	const j = c.toJson()

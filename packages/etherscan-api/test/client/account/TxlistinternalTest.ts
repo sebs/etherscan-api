@@ -19,6 +19,11 @@ test('can be instantiated', t => {
  t.pass()
 })
 
+test('static properties are correct', t => {
+	t.is(ClientAccountTxlistinternal.module, 'account')
+	t.is(ClientAccountTxlistinternal.action, 'txlistinternal')
+})
+
 test('generates the right json', t => {
 	const oAddress = new Address(address)
 	const c = new ClientAccountTxlistinternal(oAddress, startblock, endblock)

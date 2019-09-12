@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script src="./etherscan-api.js">
+</script>
+<script>
+const validApiKey = 'TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W'
+const client = new EtherscanClient.Client(validApiKey);
+			const promise = client.contract('getabi')('0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413')
+			promise.then(res => {
+				console.log(res)
+			}).catch(err => {
+				throw new Error(err)
+			})
+</script>
+</body>
+</html>

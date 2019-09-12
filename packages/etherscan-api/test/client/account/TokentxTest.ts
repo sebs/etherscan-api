@@ -20,6 +20,10 @@ test('can be instantiated', t => {
  t.pass()
 })
 
+test('static properties are correct', t => {
+	t.is(ClientAccountTokentx.module, 'account')
+	t.is(ClientAccountTokentx.action, 'tokentx')
+})
 
 test('generates the right json', t => {
 	const oAddress = new Address(address)
