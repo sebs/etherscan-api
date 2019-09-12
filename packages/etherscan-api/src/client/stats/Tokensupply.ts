@@ -1,11 +1,11 @@
 import { Address } from '../../entities/Address'
-import { IClientStatsTokesupplyRequest } from '../../interfaces/Stats'
+import { IClientStatsTokensupplyRequest } from '../../interfaces/Stats'
 import { ClientBase } from '../ClientBase'
 
 /**
  * Client for the account balance
  */
-export class ClientStatsTokenupply extends ClientBase implements IClientStatsTokesupplyRequest {
+export class ClientStatsTokenupply extends ClientBase implements IClientStatsTokensupplyRequest {
   /**
    * module of the etherscan api to request
    */

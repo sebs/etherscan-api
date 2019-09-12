@@ -1,11 +1,36 @@
-import { Address } from '../entities/Address'
+import { Clienttype } from '../entities/Clienttype'
+import { Syncmode } from '../entities/Syncmode'
+import { UsDate } from '../entities/UsDate'
 
 /**
- * Interface to the Account/Balance api
+ * Interface to the Stats/Tokensupply api
  */
-export interface IClientStatsTokesupplyRequest  {
+export interface IClientStatsTokensupplyRequest  {
   /**
-   * Blocknumber
+   * Contract address
    */
   contractaddress: string
+}
+
+export interface IClientStatsChainsizeRequest {
+
+  /**
+   * Chain startdate
+   */
+  startdate: UsDate
+
+  /**
+   * Chain enddate
+   */
+  enddate: UsDate
+
+  /**
+   * Type of client producing the stats
+   */
+  clienttype: Clienttype
+
+  /**
+   * Syncmode
+   */
+  syncmode: Syncmode
 }
