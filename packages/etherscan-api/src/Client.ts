@@ -1,5 +1,6 @@
 import { account } from './actions/account'
 import { contract } from './actions/contract'
+import { transaction } from './actions/transaction'
 import { ClientAccountBalance } from './client/account/Balance'
 import { ClientAccountBalancemulti } from './client/account/Balancemulti'
 import { ClientAccountGetminedblocks } from './client/account/Getminedblocks'
@@ -9,6 +10,8 @@ import { ClientAccountTxlistinternal } from './client/account/Txlistinternal'
 import { ClientAccountTxlistinternalTxhash } from './client/account/TxlistinternalTxhash'
 import { ClientContractGetabi } from './client/contract/Getabi'
 import { ClientContractGetsource } from './client/contract/Getsource'
+import { ClientTransactionGetstatus } from './client/transaction/Getstatus'
+import { ClientTransactionGettxreceiptstatus } from './client/transaction/Gettxreceiptstatus'
 import { Address } from './entities/Address'
 import { ApiKey } from './entities/Apikey'
 import { Network } from './entities/Network'
@@ -39,6 +42,44 @@ export class Client {
     this.network = network ? new Network(network) : new Network()
     this.network.validate()
   }
+
+  /**
+   * Transaction api
+   * @param action
+   */
+  transaction(action: string): any {
+    const apiKey = this.apiKey
+    const network = this.network
+    if (!transaction.get(action)) {
+      throw new Error('unknown action' + action)
+    }
+    const actions: { [key: string]: any } = {
+      getstatus(txhash: string) {
+        const client = new ClientTransactionGetstatus(txhash)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientContractGetabi.module,
+          ClientContractGetabi.action,
+          json,
+        ).then((response) => response.json())
+      },
+      gettxreceiptstatus(txhash: string) {
+        const client = new ClientTransactionGettxreceiptstatus(txhash)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientContractGetabi.module,
+          ClientContractGetabi.action,
+          json,
+        ).then((response) => response.json())
+      },
+    }
+    return actions[action]
+  }
+
   /**
    * methods to access ethereum contract data
    * @param action
