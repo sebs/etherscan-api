@@ -1,9 +1,9 @@
 import test from 'ava'
-import { ClientAccountGetminedblocks } from '../../../src/client/account/Getminedblocks'
-import { Address } from '../../../src/entities/Address'
-import { Network } from '../../../src/entities/Network'
-import { performRequest } from '../../../src/util/performRequest'
-import { requestUrlBuilder } from '../../../src/requestUrlBuilder'
+import { ClientAccountGetminedblocks } from '../../../../src/client/account/Getminedblocks'
+import { Address } from '../../../../src/entities/Address'
+import { Network } from '../../../../src/entities/Network'
+import { performRequest } from '../../../../src/util/performRequest'
+import { requestUrlBuilder } from '../../../../src/requestUrlBuilder'
 
 const resultFixture = require('etherscan-api-test-fixtures/account/getminedblocks/address-blocktype.json')
 

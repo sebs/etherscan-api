@@ -1,10 +1,10 @@
 import test from 'ava'
-import { ClientAccountTxlist } from '../../../src/client/account/Txlist'
-import { Address } from '../../../src/entities/Address'
-import { Network } from '../../../src/entities/Network'
-import { Sort } from '../../../src/entities/Sort'
-import { performRequest } from '../../../src/util/performRequest'
-import { requestUrlBuilder } from '../../../src/requestUrlBuilder'
+import { ClientAccountTxlist } from '../../../../src/client/account/Txlist'
+import { Address } from '../../../../src/entities/Address'
+import { Network } from '../../../../src/entities/Network'
+import { Sort } from '../../../../src/entities/Sort'
+import { performRequest } from '../../../../src/util/performRequest'
+import { requestUrlBuilder } from '../../../../src/requestUrlBuilder'
 
 const resultFixture = require('etherscan-api-test-fixtures/account/tokentx/address-startblock-endblock.json')
 

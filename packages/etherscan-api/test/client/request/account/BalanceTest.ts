@@ -1,9 +1,9 @@
 import test from 'ava'
-import { ClientAccountBalance } from '../../../src/client/account/Balance'
-import { Address } from '../../../src/entities/Address'
-import { Network } from '../../../src/entities/Network'
-import { performRequest } from '../../../src/util/performRequest'
-import { requestUrlBuilder } from '../../../src/requestUrlBuilder'
+import { ClientAccountBalance } from '../../../../src/client/account/Balance'
+import { Address } from '../../../../src/entities/Address'
+import { Network } from '../../../../src/entities/Network'
+import { performRequest } from '../../../../src/util/performRequest'
+import { requestUrlBuilder } from '../../../../src/requestUrlBuilder'
 
 const resultFixture = require('etherscan-api-test-fixtures/account/balance/address-latest.json')
 
