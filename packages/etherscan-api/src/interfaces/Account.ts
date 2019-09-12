@@ -18,6 +18,21 @@ export interface IClientAccountBalanceRequest  {
 }
 
 /**
+ * Interface to the Account/Balance api
+ */
+export interface IClientAccountTokenbalanceRequest  {
+  /**
+   * Ethereum address
+   */
+  address: Address
+
+  /**
+   * Ethereum contract address
+   */
+  contractaddress: Address
+}
+
+/**
  * Interface to Account/Balancemulti
  */
 export interface IClientAccountBalanceMultiRequest {

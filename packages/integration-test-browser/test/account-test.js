@@ -24,6 +24,22 @@ describe('document', function () {
 			})
 		})
 
+		it('account/tokenbalance', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const promise = client.account('tokenbalance')(
+					'0xe04f27eb70e025b78871a2ad7eabe85e61212761', 
+					'0x57d90b64a1a57749b0f932f1a3395792e12e7055'
+				)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.status)
+				assert.equal(res.status, 1)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
 
 		it('account/balancemulti', function (done) {
 			this.retries(3)

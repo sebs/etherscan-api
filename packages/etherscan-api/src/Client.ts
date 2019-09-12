@@ -5,6 +5,7 @@ import { transaction } from './actions/transaction'
 import { ClientAccountBalance } from './client/account/Balance'
 import { ClientAccountBalancemulti } from './client/account/Balancemulti'
 import { ClientAccountGetminedblocks } from './client/account/Getminedblocks'
+import { ClientAccountTokenbalance } from './client/account/Tokenbalance'
 import { ClientAccountTokentx } from './client/account/Tokentx'
 import { ClientAccountTxlist } from './client/account/Txlist'
 import { ClientAccountTxlistinternal } from './client/account/Txlistinternal'
@@ -196,6 +197,20 @@ export class Client {
           network,
           ClientAccountGetminedblocks.module,
           ClientAccountGetminedblocks.action,
+          json,
+        ).then((response) => response.json())
+      },
+      tokenbalance(address: string, contractaddress: string): Promise<any> {
+        const client = new ClientAccountTokenbalance(
+          new Address(address),
+          new Address(contractaddress),
+        )
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientAccountTokenbalance.module,
+          ClientAccountTokenbalance.action,
           json,
         ).then((response) => response.json())
       },

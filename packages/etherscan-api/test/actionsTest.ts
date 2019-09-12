@@ -9,7 +9,7 @@ import { transaction } from '../src/actions/transaction'
 
 
 test('account has the right amount of modules', t => {
-  t.is(account.size, 6)
+  t.is(account.size, 7)
 })
 
 test('block has the right amount of modules', t => {

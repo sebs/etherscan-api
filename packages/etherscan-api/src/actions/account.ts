@@ -5,6 +5,7 @@ const actionNames = [
     'txlist',
     'txlistinternal',
     'tokentx',
+    'tokenbalance',
     'getminedblocks',
 ]
 export const account = mapFromArray(actionNames)
