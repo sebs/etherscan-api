@@ -1,4 +1,5 @@
 import { account } from './actions/account'
+import { block } from './actions/block'
 import { contract } from './actions/contract'
 import { transaction } from './actions/transaction'
 import { ClientAccountBalance } from './client/account/Balance'
@@ -8,6 +9,7 @@ import { ClientAccountTokentx } from './client/account/Tokentx'
 import { ClientAccountTxlist } from './client/account/Txlist'
 import { ClientAccountTxlistinternal } from './client/account/Txlistinternal'
 import { ClientAccountTxlistinternalTxhash } from './client/account/TxlistinternalTxhash'
+import { ClientBlockGetblockreward } from './client/block/Getblockreward'
 import { ClientContractGetabi } from './client/contract/Getabi'
 import { ClientContractGetsource } from './client/contract/Getsource'
 import { ClientTransactionGetstatus } from './client/transaction/Getstatus'
@@ -15,6 +17,7 @@ import { ClientTransactionGettxreceiptstatus } from './client/transaction/Gettxr
 import { Address } from './entities/Address'
 import { ApiKey } from './entities/Apikey'
 import { Network } from './entities/Network'
+import { PositiveNumber } from './entities/PositiveNumber'
 import { Sort } from './entities/Sort'
 import { performRequest } from './util/performRequest'
 import { VERSION } from './version'
@@ -42,7 +45,32 @@ export class Client {
     this.network = network ? new Network(network) : new Network()
     this.network.validate()
   }
-
+  /**
+   * Block api
+   * @param action
+   */
+  block(action: string): any {
+    const apiKey = this.apiKey
+    const network = this.network
+    if (!block.get(action)) {
+      throw new Error('unknown action' + action)
+    }
+    const actions: { [key: string]: any } = {
+      getblockreward(blockno: string) {
+        const blocknoNumber = new PositiveNumber(blockno)
+        const client = new ClientBlockGetblockreward(blocknoNumber)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientBlockGetblockreward.module,
+          ClientBlockGetblockreward.action,
+          json,
+        ).then((response) => response.json())
+      },
+    }
+    return actions[action]
+  }
   /**
    * Transaction api
    * @param action
