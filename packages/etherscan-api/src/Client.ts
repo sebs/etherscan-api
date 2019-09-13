@@ -14,14 +14,18 @@ import { ClientAccountTxlistinternalTxhash } from './client/account/Txlistintern
 import { ClientBlockGetblockreward } from './client/block/Getblockreward'
 import { ClientContractGetabi } from './client/contract/Getabi'
 import { ClientContractGetsource } from './client/contract/Getsource'
+import { ClientStatsChainsize } from './client/stats/Chainsize'
 import { ClientStatsTokenupply } from './client/stats/Tokensupply'
 import { ClientTransactionGetstatus } from './client/transaction/Getstatus'
 import { ClientTransactionGettxreceiptstatus } from './client/transaction/Gettxreceiptstatus'
 import { Address } from './entities/Address'
 import { ApiKey } from './entities/Apikey'
+import { Clienttype } from './entities/Clienttype'
 import { Network } from './entities/Network'
 import { PositiveNumber } from './entities/PositiveNumber'
 import { Sort } from './entities/Sort'
+import { Syncmode } from './entities/Syncmode'
+import { UsDate } from './entities/UsDate'
 import { performRequest } from './util/performRequest'
 import { VERSION } from './version'
 
@@ -59,6 +63,21 @@ export class Client {
       throw new Error('unknown action' + action)
     }
     const actions: { [key: string]: any } = {
+      chainsize(startdate: string, enddate: string, clienttype: string, syncmode: string) {
+        const oStartdate = new UsDate(startdate)
+        const oEnddate = new UsDate(enddate)
+        const oClienttype = new Clienttype(clienttype)
+        const oSyncmode = new Syncmode(syncmode)
+        const client = new ClientStatsChainsize(oStartdate, oEnddate, oClienttype, oSyncmode)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientStatsTokenupply.module,
+          ClientStatsTokenupply.action,
+          json,
+        ).then((response) => response.json())
+      },
       tokensupply(contractaddress: string) {
         const client = new ClientStatsTokenupply(contractaddress)
         const json = client.toJson()

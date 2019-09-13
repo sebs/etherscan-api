@@ -138,4 +138,23 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+
+		it('stats/chainsize', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const promise = client.stats('chainsize')(
+				'2019-02-01',
+				'2019-02-28',
+				'geth',
+				'default'
+			)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.status)
+				assert.equal(res.status, 1)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
 })
