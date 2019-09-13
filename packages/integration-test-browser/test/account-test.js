@@ -157,4 +157,30 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+		it('stats/ethprice', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const promise = client.stats('ethprice')()
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.status)
+				assert.equal(res.status, 1)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+		it('stats/ethsupply', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const promise = client.stats('ethsupply')()
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.status)
+				assert.equal(res.status, 1)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
 })

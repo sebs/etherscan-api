@@ -15,6 +15,8 @@ import { ClientBlockGetblockreward } from './client/block/Getblockreward'
 import { ClientContractGetabi } from './client/contract/Getabi'
 import { ClientContractGetsource } from './client/contract/Getsource'
 import { ClientStatsChainsize } from './client/stats/Chainsize'
+import { ClientStatsEthprice } from './client/stats/Ethprice'
+import { ClientStatsEthsupply } from './client/stats/Ethsupply'
 import { ClientStatsTokenupply } from './client/stats/Tokensupply'
 import { ClientTransactionGetstatus } from './client/transaction/Getstatus'
 import { ClientTransactionGettxreceiptstatus } from './client/transaction/Gettxreceiptstatus'
@@ -63,6 +65,28 @@ export class Client {
       throw new Error('unknown action' + action)
     }
     const actions: { [key: string]: any } = {
+      ethprice() {
+        const client = new ClientStatsEthprice()
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientStatsTokenupply.module,
+          ClientStatsTokenupply.action,
+          json,
+        ).then((response) => response.json())
+      },
+      ethsupply() {
+        const client = new ClientStatsEthsupply()
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientStatsTokenupply.module,
+          ClientStatsTokenupply.action,
+          json,
+        ).then((response) => response.json())
+      },
       chainsize(startdate: string, enddate: string, clienttype: string, syncmode: string) {
         const oStartdate = new UsDate(startdate)
         const oEnddate = new UsDate(enddate)
