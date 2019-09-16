@@ -2,7 +2,7 @@ import test from 'ava'
 import { sort } from '../src/parameters/sort'
 import { operand } from '../src/parameters/operand'
 import { blocktypes } from '../src/parameters/blocktypes'
-
+import { booleans } from '../src/parameters/booleans'
 test('sort asc exists', t => {
 	t.truthy(sort.asc)
 })
@@ -25,4 +25,12 @@ test('blocktypes blocks', t => {
 
 test('blocktypes uncles', t => {
 	t.is(blocktypes.uncles, 'uncles')
+})
+
+test('booleans true', t => {
+	t.is(booleans.true, 'true')
+})
+
+test('booleans true', t => {
+	t.is(booleans.false, 'false')
 })

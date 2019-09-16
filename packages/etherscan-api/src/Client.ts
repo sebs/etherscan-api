@@ -1,6 +1,7 @@
 import { account } from './actions/account'
 import { block } from './actions/block'
 import { contract } from './actions/contract'
+import { logs } from './actions/logs'
 import { stats } from './actions/stats'
 import { transaction } from './actions/transaction'
 import { ClientAccountBalance } from './client/account/Balance'
@@ -53,6 +54,35 @@ export class Client {
 
     this.network = network ? new Network(network) : new Network()
     this.network.validate()
+  }
+  /**
+   * Access log Information
+   * @param action
+   */
+  log(action: string): any {
+    const apiKey = this.apiKey
+    const network = this.network
+    if (!logs.get(action)) {
+      throw new Error('unknown action' + action)
+    }
+    const actions: { [key: string]: any } = {
+      getLogs(
+        fromBlock: string,
+        toBlock: string,
+        address: string,
+        topics: string[],
+        topic01opr?: string,
+        topic12opr?: string,
+        topic23opr?: string,
+        topic02opr?: string,
+        topic03opr?: string,
+        topic13opr?: string,
+      ) {
+        const oFromBlock = new PositiveNumber(fromBlock)
+        const oToBlock = new PositiveNumber(toBlock)
+        // const oToBlock = !!fromBlock ? new PositiveNumber(fromBlock) : undefined
+      },
+    }
   }
   /**
    * Statistics methods
