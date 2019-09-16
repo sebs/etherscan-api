@@ -1,9 +1,10 @@
 import { Address } from '../../entities/Address'
 import { ClientBase } from '../ClientBase'
+
 /**
  * Client for the stats chainsize
  */
-export class ClientProxyEthGetTransactionCount extends ClientBase  {
+export class ClientProxyEthGetStorageAt extends ClientBase  {
     /**
      * Module to call
      */
@@ -11,24 +12,30 @@ export class ClientProxyEthGetTransactionCount extends ClientBase  {
     /**
      * Action to call
      */
-    static action: string = 'eth_getTransactionCount'
+    static action: string = 'eth_getStorageAt'
     /**
-     * Address of the transaction
+     * Address to request
      */
     address: Address
+    /**
+     * Tag to show
+     */
+    tag: string
 
-    constructor(address: Address) {
+    constructor(address: Address, tag: string) {
         super()
         this.address = address
+        this.tag = tag
     }
     /**
-     * Generates json representation
+     * Generates a json representation
      */
     toJson(): any {
         return {
-            action: ClientProxyEthGetTransactionCount.action,
+            action: ClientProxyEthGetStorageAt.action,
             address: this.address.toString(),
-            module: ClientProxyEthGetTransactionCount.module,
+            module: ClientProxyEthGetStorageAt.module,
+            tag: this.tag,
         }
     }
 }

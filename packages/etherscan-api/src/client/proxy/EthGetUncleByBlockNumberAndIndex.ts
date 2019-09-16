@@ -11,4 +11,32 @@ export class ClientProxyEthGetUncleByBlockNumberAndIndex extends ClientBase  {
      * Action to call
      */
     static action: string = 'eth_getUncleByBlockNumberAndIndex'
+
+    /**
+     * Tag to lookup
+     */
+    tag: string
+
+    /**
+     * Index
+     */
+    index: string
+
+    constructor(index: string, tag: string) {
+        super()
+        this.tag = tag
+        this.index = index
+    }
+
+    /**
+     * Generates Json representation
+     */
+    toJson(): any {
+        return {
+            action: ClientProxyEthGetUncleByBlockNumberAndIndex.action,
+            index: this.index,
+            module: ClientProxyEthGetUncleByBlockNumberAndIndex.module,
+            tag: this.tag,
+        }
+    }
 }
