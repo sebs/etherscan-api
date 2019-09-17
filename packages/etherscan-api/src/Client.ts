@@ -20,6 +20,7 @@ import { ClientProxyEthBlocknumber } from './client/proxy/EthBlocknumber'
 import { ClientProxyEthCall } from './client/proxy/EthCall'
 import { ClientProxyEthEstimateGas } from './client/proxy/EthEstimateGas'
 import { ClientProxyEthGasPrice } from './client/proxy/EthGasPrice'
+import { ClientProxyEthGetblockByNumber } from './client/proxy/EthGetblockByNumber'
 import { ClientProxyEthGetBlockTransactionCountByNumber} from './client/proxy/EthGetBlockTransactionCountByNumber'
 import { ClientProxyEthGetCode } from './client/proxy/EthGetCode'
 import { ClientProxyEthGetStorageAt } from './client/proxy/EthGetStorageAt'
@@ -128,8 +129,8 @@ export class Client {
         json.apiKey = apiKey.toString()
         return performRequest(
           network,
-          ClientProxyEthGasPrice.module,
-          ClientProxyEthGasPrice.action,
+          ClientProxyEthGetBlockTransactionCountByNumber.module,
+          ClientProxyEthGetBlockTransactionCountByNumber.action,
           json,
         ).then((response) => response.json())
       },
@@ -139,8 +140,8 @@ export class Client {
         json.apiKey = apiKey.toString()
         return performRequest(
           network,
-          ClientProxyEthGasPrice.module,
-          ClientProxyEthGasPrice.action,
+          ClientProxyEthGetCode.module,
+          ClientProxyEthGetCode.action,
           json,
         ).then((response) => response.json())
       },
@@ -150,8 +151,8 @@ export class Client {
         json.apiKey = apiKey.toString()
         return performRequest(
           network,
-          ClientProxyEthGasPrice.module,
-          ClientProxyEthGasPrice.action,
+          ClientProxyEthGetStorageAt.module,
+          ClientProxyEthGetStorageAt.action,
           json,
         ).then((response) => response.json())
       },
@@ -161,8 +162,8 @@ export class Client {
         json.apiKey = apiKey.toString()
         return performRequest(
           network,
-          ClientProxyEthGasPrice.module,
-          ClientProxyEthGasPrice.action,
+          ClientProxyEthGetTransactionByBlockNumberAndIndex.module,
+          ClientProxyEthGetTransactionByBlockNumberAndIndex.action,
           json,
         ).then((response) => response.json())
       },
@@ -172,8 +173,8 @@ export class Client {
         json.apiKey = apiKey.toString()
         return performRequest(
           network,
-          ClientProxyEthGasPrice.module,
-          ClientProxyEthGasPrice.action,
+          ClientProxyEthGetTransactionCount.module,
+          ClientProxyEthGetTransactionCount.action,
           json,
         ).then((response) => response.json())
       },
@@ -183,8 +184,8 @@ export class Client {
         json.apiKey = apiKey.toString()
         return performRequest(
           network,
-          ClientProxyEthGasPrice.module,
-          ClientProxyEthGasPrice.action,
+          ClientProxyEthGetTransactionByHash.module,
+          ClientProxyEthGetTransactionByHash.action,
           json,
         ).then((response) => response.json())
       },
@@ -194,10 +195,13 @@ export class Client {
         json.apiKey = apiKey.toString()
         return performRequest(
           network,
-          ClientProxyEthGasPrice.module,
-          ClientProxyEthGasPrice.action,
+          ClientProxyEthGetUncleByBlockNumberAndIndex.module,
+          ClientProxyEthGetUncleByBlockNumberAndIndex.action,
           json,
         ).then((response) => response.json())
+      },
+      eth_getBlockByNumber(tag: string, bool: boolean) {
+        const client = new ClientProxyEthGetblockByNumber(tag, bool)
       },
     }
     return actions[action]
