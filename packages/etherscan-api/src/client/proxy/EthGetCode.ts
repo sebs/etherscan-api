@@ -20,9 +20,15 @@ export class ClientProxyEthGetCode extends ClientBase  {
      */
     address: Address
 
-    constructor(address: Address) {
+    /**
+     * tag
+     */
+    tag: string
+
+    constructor(address: Address, tag: string) {
         super()
         this.address = address
+        this.tag = tag
     }
 
     /**
@@ -33,6 +39,7 @@ export class ClientProxyEthGetCode extends ClientBase  {
             action: ClientProxyEthGetCode.action,
             address: this.address.toString(),
             module: ClientProxyEthGetCode.module,
+            tag: this.tag,
         }
     }
 }

@@ -22,10 +22,16 @@ export class ClientProxyEthEstimateGas extends ClientBase  {
      */
     value: string
 
-    constructor(to: string, value: string) {
+    /**
+     * gasPrice
+     */
+    gasPrice: string
+
+    constructor(to: string, value: string, gasPrice: string) {
         super()
         this.value = value
         this.to = to
+        this.gasPrice = gasPrice
     }
     /**
      * Generates json
@@ -33,6 +39,7 @@ export class ClientProxyEthEstimateGas extends ClientBase  {
     toJson(): any {
         return {
             action: ClientProxyEthEstimateGas.action,
+            gasPrice: this.gasPrice,
             module: ClientProxyEthEstimateGas.module,
             to: this.to,
             value: this.value,

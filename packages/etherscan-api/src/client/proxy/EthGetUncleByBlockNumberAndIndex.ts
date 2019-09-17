@@ -24,8 +24,8 @@ export class ClientProxyEthGetUncleByBlockNumberAndIndex extends ClientBase  {
 
     constructor(index: string, tag: string) {
         super()
-        this.tag = tag
         this.index = index
+        this.tag = tag
     }
 
     /**

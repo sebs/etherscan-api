@@ -35,7 +35,7 @@ export class ClientProxyEthCall extends ClientBase  {
     /**
      * Generates Json output
      */
-    toJson() {
+    toJson(): any {
         return {
             action: ClientProxyEthCall.action,
             data: this.data,

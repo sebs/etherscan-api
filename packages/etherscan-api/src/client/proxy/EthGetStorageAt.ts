@@ -22,9 +22,15 @@ export class ClientProxyEthGetStorageAt extends ClientBase  {
      */
     tag: string
 
-    constructor(address: Address, tag: string) {
+    /**
+     * position
+     */
+    position: string
+
+    constructor(address: Address, position: string, tag: string) {
         super()
         this.address = address
+        this.position = position
         this.tag = tag
     }
     /**
@@ -35,6 +41,7 @@ export class ClientProxyEthGetStorageAt extends ClientBase  {
             action: ClientProxyEthGetStorageAt.action,
             address: this.address.toString(),
             module: ClientProxyEthGetStorageAt.module,
+            postion: this.position,
             tag: this.tag,
         }
     }

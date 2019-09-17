@@ -3,6 +3,7 @@ import { ClientProxyEthEstimateGas } from '../../../src/client/proxy/EthEstimate
 
 const to = '0xf0160428a8552ac9bb7e050d90eeade4ddd52843'
 const value = '0xff22'
+const gasPrice = '0x051da038cc'
 
 
 test('exists', t => {
@@ -10,7 +11,7 @@ test('exists', t => {
 })
 
 test('can be instantiated', t => {
-	new ClientProxyEthEstimateGas(to, value)
+	new ClientProxyEthEstimateGas(to, value, gasPrice)
 	t.pass()
 })
 
@@ -20,7 +21,7 @@ test('static properties are correct', t => {
 })
 
 test('simple case generates the right json', t => {
-	const c = new ClientProxyEthEstimateGas(to, value)
+	const c = new ClientProxyEthEstimateGas(to, value, gasPrice)
 	const j = c.toJson()
 	t.is(j.action, ClientProxyEthEstimateGas.action)
 	t.is(j.module, ClientProxyEthEstimateGas.module)

@@ -21,7 +21,7 @@ test('contract has the right amount of modules', t => {
 })
 
 test('proxy has the right amount of modules', t => {
-  t.is(proxy.size, 14)
+  t.is(proxy.size, 15)
 })
 
 test('stats has the right amount of modules', t => {

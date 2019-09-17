@@ -2,6 +2,7 @@ import { account } from './actions/account'
 import { block } from './actions/block'
 import { contract } from './actions/contract'
 import { logs } from './actions/logs'
+import { proxy } from './actions/proxy'
 import { stats } from './actions/stats'
 import { transaction } from './actions/transaction'
 import { ClientAccountBalance } from './client/account/Balance'
@@ -15,6 +16,17 @@ import { ClientAccountTxlistinternalTxhash } from './client/account/Txlistintern
 import { ClientBlockGetblockreward } from './client/block/Getblockreward'
 import { ClientContractGetabi } from './client/contract/Getabi'
 import { ClientContractGetsource } from './client/contract/Getsource'
+import { ClientProxyEthBlocknumber } from './client/proxy/EthBlocknumber'
+import { ClientProxyEthCall } from './client/proxy/EthCall'
+import { ClientProxyEthEstimateGas } from './client/proxy/EthEstimateGas'
+import { ClientProxyEthGasPrice } from './client/proxy/EthGasPrice'
+import { ClientProxyEthGetBlockTransactionCountByNumber} from './client/proxy/EthGetBlockTransactionCountByNumber'
+import { ClientProxyEthGetCode } from './client/proxy/EthGetCode'
+import { ClientProxyEthGetStorageAt } from './client/proxy/EthGetStorageAt'
+import { ClientProxyEthGetTransactionByBlockNumberAndIndex } from './client/proxy/EthGetTransactionByBlockNumberAndIndex'
+import { ClientProxyEthGetTransactionCount } from './client/proxy/EthGetTransactionCount'
+import { ClientProxyEthGetTransactionByHash } from './client/proxy/EthGetTxByHash'
+import { ClientProxyEthGetUncleByBlockNumberAndIndex } from './client/proxy/EthGetUncleByBlockNumberAndIndex'
 import { ClientStatsChainsize } from './client/stats/Chainsize'
 import { ClientStatsEthprice } from './client/stats/Ethprice'
 import { ClientStatsEthsupply } from './client/stats/Ethsupply'
@@ -54,6 +66,141 @@ export class Client {
 
     this.network = network ? new Network(network) : new Network()
     this.network.validate()
+  }
+  /**
+   * Proxy to web3
+   * @param action
+   */
+  proxy(action: string) {
+    const apiKey = this.apiKey
+    const network = this.network
+    if (!proxy.get(action)) {
+      throw new Error('unknown action' + action)
+    }
+    const actions: { [key: string]: any } = {
+      eth_call(to: string, data: string, tag: string) {
+        const client = new ClientProxyEthCall(to, data, tag)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientProxyEthCall.module,
+          ClientProxyEthCall.action,
+          json,
+        ).then((response) => response.json())
+      },
+      eth_Blocknumber() {
+        const client = new ClientProxyEthBlocknumber()
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientProxyEthBlocknumber.module,
+          ClientProxyEthBlocknumber.action,
+          json,
+        ).then((response) => response.json())
+      },
+      eth_estimateGas(value: string, to: string, gasPrice: string) {
+        const client = new ClientProxyEthEstimateGas(to, value, gasPrice)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientProxyEthEstimateGas.module,
+          ClientProxyEthEstimateGas.action,
+          json,
+        ).then((response) => response.json())
+      },
+      eth_gasPrice() {
+        const client = new ClientProxyEthGasPrice()
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientProxyEthGasPrice.module,
+          ClientProxyEthGasPrice.action,
+          json,
+        ).then((response) => response.json())
+      },
+      eth_getBlockTransactionCountByNumber(tag: string) {
+        const client = new ClientProxyEthGetBlockTransactionCountByNumber(tag)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientProxyEthGasPrice.module,
+          ClientProxyEthGasPrice.action,
+          json,
+        ).then((response) => response.json())
+      },
+      eth_getCode(address: string, tag: string) {
+        const client = new ClientProxyEthGetCode(new Address(address), tag)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientProxyEthGasPrice.module,
+          ClientProxyEthGasPrice.action,
+          json,
+        ).then((response) => response.json())
+      },
+      eth_getStorageAt(address: string, position: string, tag: string) {
+        const client = new ClientProxyEthGetStorageAt(new Address(address), position, tag)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientProxyEthGasPrice.module,
+          ClientProxyEthGasPrice.action,
+          json,
+        ).then((response) => response.json())
+      },
+      eth_getTransactionByBlockNumberAndIndex(index: string, tag: string) {
+        const client = new ClientProxyEthGetTransactionByBlockNumberAndIndex(index, tag)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientProxyEthGasPrice.module,
+          ClientProxyEthGasPrice.action,
+          json,
+        ).then((response) => response.json())
+      },
+      eth_getTransactionCount(address: string, tag: string) {
+        const client = new ClientProxyEthGetTransactionCount(new Address(address), tag)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientProxyEthGasPrice.module,
+          ClientProxyEthGasPrice.action,
+          json,
+        ).then((response) => response.json())
+      },
+      eth_getTransactionByHash(txhash: string) {
+        const client = new ClientProxyEthGetTransactionByHash(txhash)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientProxyEthGasPrice.module,
+          ClientProxyEthGasPrice.action,
+          json,
+        ).then((response) => response.json())
+      },
+      eth_getUncleByBlockNumberAndIndex(index: string, tag: string) {
+        const client = new ClientProxyEthGetUncleByBlockNumberAndIndex(index, tag)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientProxyEthGasPrice.module,
+          ClientProxyEthGasPrice.action,
+          json,
+        ).then((response) => response.json())
+      },
+    }
+    return actions[action]
   }
   /**
    * Access log Information

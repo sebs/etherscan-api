@@ -16,10 +16,15 @@ export class ClientProxyEthGetTransactionCount extends ClientBase  {
      * Address of the transaction
      */
     address: Address
+    /**
+     * tag
+     */
+    tag: string
 
-    constructor(address: Address) {
+    constructor(address: Address, tag: string) {
         super()
         this.address = address
+        this.tag = tag
     }
     /**
      * Generates json representation
@@ -29,6 +34,7 @@ export class ClientProxyEthGetTransactionCount extends ClientBase  {
             action: ClientProxyEthGetTransactionCount.action,
             address: this.address.toString(),
             module: ClientProxyEthGetTransactionCount.module,
+            tag: this.tag,
         }
     }
 }

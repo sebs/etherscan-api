@@ -1,11 +1,12 @@
 import { mapFromArray } from '../util/mapFromArray'
 const actionNames = [
-    'eth_blockNumber',
+    'eth_Blocknumber',
     'eth_getBlockByNumber',
     'eth_getBlockByNumberAndIndex',
     'eth_getBlockTransactionCountByNumber',
     'eth_getTransactionByHash',
     'eth_getTransactionByBlockNumberAndIndex',
+    'eth_getUncleByBlockNumberAndIndex',
     'eth_getTransactionCount',
     'eth_sendRawTransaction',
     'eth_getTransactionReceipt',

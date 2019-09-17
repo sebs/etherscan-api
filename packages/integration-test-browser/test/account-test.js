@@ -183,4 +183,184 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+
+		it('proxy/eth_Blocknumber', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const promise = client.proxy('eth_Blocknumber')()
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.jsonrpc)
+				assert.ok(res.result)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+
+		it('proxy/eth_call', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+
+			const to = '0xAEEF46DB4855E25702F8237E8f403FddcaF931C0'
+			const data = '0x70a08231000000000000000000000000e16359506c028e51f16be38986ec5746251e9724'
+			const tag = 'latest'
+
+			const promise = client.proxy('eth_call')(to, data, tag)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.jsonrpc)
+				assert.ok(res.result)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+
+		it('proxy/eth_estimateGas', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+
+			const to = '0xf0160428a8552ac9bb7e050d90eeade4ddd52843'
+			const value = '0xff22'
+			const gasPrice = '0x051da038cc'
+
+			const promise = client.proxy('eth_estimateGas')(to, value, gasPrice)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.jsonrpc)
+				// this call triggers an error in docs
+				assert.ok(res.error)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+
+		it('proxy/eth_gasPrice', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+
+			const promise = client.proxy('eth_gasPrice')()
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.jsonrpc)
+				assert.ok(res.result)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+
+		it('proxy/eth_getBlockTransactionCountByNumber', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const tag = '0x10FB78'
+			const promise = client.proxy('eth_getBlockTransactionCountByNumber')(tag)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.jsonrpc)
+				assert.ok(res.result)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+
+		it('proxy/eth_getCode', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const address = '0xf75e354c5edc8efed9b59ee9f67a80845ade7d0c'
+			const tag = 'latest'
+			const promise = client.proxy('eth_getCode')(address, tag)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.jsonrpc)
+				assert.ok(res.result)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+
+		it('proxy/eth_getStorageAt', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const address = '0x6e03d9cce9d60f3e9f2597e13cd4c54c55330cfd'
+			const position = '0x0'
+			const tag = 'latest'
+			const promise = client.proxy('eth_getStorageAt')(address, position, tag)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.jsonrpc)
+				assert.ok(res.result)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+
+		it('proxy/eth_getTransactionByBlockNumberAndIndex', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const index = '0x0'
+			const tag = '0x10d4f'
+			const promise = client.proxy('eth_getTransactionByBlockNumberAndIndex')(index, tag)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.jsonrpc)
+				assert.ok(res.result)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+
+		it('proxy/eth_getTransactionByHash', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const txhash = '0x1e2910a262b1008d0616a0beb24c1a491d78771baa54a33e66065e03b1f46bc1'
+			const promise = client.proxy('eth_getTransactionByHash')(txhash)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.jsonrpc)
+				assert.ok(res.result)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+
+		it('proxy/eth_getTransactionCount', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const address = '0x2910543af39aba0cd09dbb2d50200b3e800a63d2'
+			const tag = 'latest'
+			const promise = client.proxy('eth_getTransactionCount')(address, tag)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.jsonrpc)
+				assert.ok(res.result)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+
+
+		it('proxy/eth_getUncleByBlockNumberAndIndex', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const index = '0x0'
+			const tag = '0x210A9B'
+			const promise = client.proxy('eth_getUncleByBlockNumberAndIndex')(index, tag)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.jsonrpc)
+				assert.ok(res.result)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
 })
