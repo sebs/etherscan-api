@@ -1,5 +1,5 @@
 import test from 'ava'
-import { ClientProxyEthGetTransactionByHash } from '../../../src/client/proxy/EthGetTransactionByHash'
+import { ClientProxyEthGetTransactionByHash } from '../../../src/client/proxy/EthGetTxByHash'
 
 const txhash = '0x1e2910a262b1008d0616a0beb24c1a491d78771baa54a33e66065e03b1f46bc1'
 test('exists', t => {
