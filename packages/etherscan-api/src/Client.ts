@@ -206,8 +206,8 @@ export class Client {
         json.apiKey = apiKey.toString()
         return performRequest(
           network,
-          ClientProxyEthGetUncleByBlockNumberAndIndex.module,
-          ClientProxyEthGetUncleByBlockNumberAndIndex.action,
+          ClientProxyEthGetblockByNumber.module,
+          ClientProxyEthGetblockByNumber.action,
           json,
         ).then((response) => response.json())
       },
