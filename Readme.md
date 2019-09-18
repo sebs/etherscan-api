@@ -8,6 +8,9 @@
 
 A way to access the [etherscan.io api](https://etherscan.io/apis) using promises. Fetch a diverse set of information about the blockchain.
 
+See latest [changelog](./CHANGELOG.md)
+
+
 Mainnet
 
 
