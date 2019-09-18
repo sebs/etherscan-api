@@ -4,6 +4,7 @@
   "description": "next generation etherscan-api",
   "main": "index.js",
   "scripts": {
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "test": "lerna run test "
   },
   "repository": {
