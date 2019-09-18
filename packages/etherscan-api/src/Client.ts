@@ -202,6 +202,14 @@ export class Client {
       },
       eth_getBlockByNumber(tag: string, bool: boolean) {
         const client = new ClientProxyEthGetblockByNumber(tag, bool)
+        const json = client.toJson()
+        json.apiKey = apiKey.toString()
+        return performRequest(
+          network,
+          ClientProxyEthGetUncleByBlockNumberAndIndex.module,
+          ClientProxyEthGetUncleByBlockNumberAndIndex.action,
+          json,
+        ).then((response) => response.json())
       },
     }
     return actions[action]

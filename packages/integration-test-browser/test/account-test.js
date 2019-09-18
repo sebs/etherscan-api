@@ -57,7 +57,6 @@ describe('document', function () {
 			})
 		})
 
-
 		it('contract/getabi', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
@@ -99,6 +98,7 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+
 		it('transaction/gettxreceiptstatus', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
@@ -112,6 +112,7 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+
 		it('block/getblockreward', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
@@ -125,6 +126,7 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+
 		it('stats/tokensupply', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
@@ -157,6 +159,7 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+
 		it('stats/ethprice', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
@@ -170,6 +173,7 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+
 		it('stats/ethsupply', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
@@ -347,13 +351,26 @@ describe('document', function () {
 			})
 		})
 
-
 		it('proxy/eth_getUncleByBlockNumberAndIndex', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const index = '0x0'
 			const tag = '0x210A9B'
 			const promise = client.proxy('eth_getUncleByBlockNumberAndIndex')(index, tag)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.jsonrpc)
+				assert.ok(res.result)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})
+		it('proxy/eth_getBlockByNumber', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const tag = '0x10d4f'
+			const promise = client.proxy('eth_getBlockByNumber')(tag, true)
 			promise.then(res => {
 				assert.ok(res)
 				assert.ok(res.jsonrpc)
