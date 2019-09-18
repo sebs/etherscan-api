@@ -1,16 +1,16 @@
 'use strict'
 const validApiKey = 'TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W'
 const assert = this.chai ? this.chai.assert : require('assert')
-describe('document', function () {
-		it('EtherscanClient global exists', function () {
-			assert.ok(window.EtherscanClient)
-		})
+describe('client', function () {
+	it('EtherscanClient global exists', function () {
+		assert.ok(window.EtherscanClient)
+	})
+	it('can be instantated', function () {
+		const client = new EtherscanClient.Client(validApiKey);
+	})
 
-		it('can be instantated', function () {
-			const client = new EtherscanClient.Client(validApiKey);
-		})
-
-		it('account/balance', function (done) {
+	describe('account', ()=> {
+		it('balance', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.account('balance')('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 'latest')
@@ -24,13 +24,10 @@ describe('document', function () {
 			})
 		})
 
-		it('account/tokenbalance', function (done) {
+		it('balance', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
-			const promise = client.account('tokenbalance')(
-					'0xe04f27eb70e025b78871a2ad7eabe85e61212761', 
-					'0x57d90b64a1a57749b0f932f1a3395792e12e7055'
-				)
+			const promise = client.account('balance')('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 'latest')
 			promise.then(res => {
 				assert.ok(res)
 				assert.ok(res.status)
@@ -40,8 +37,7 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
-
-		it('account/balancemulti', function (done) {
+		it('balancemulti', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.account('balancemulti')([
@@ -56,8 +52,10 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+	})
 
-		it('contract/getabi', function (done) {
+	describe('contract', ()=> {
+		it('getabi', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.contract('getabi')('0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413')
@@ -70,8 +68,7 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
-
-		it('contract/getsourcecode', function (done) {
+		it('getsourcecode', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.contract('getsourcecode')('0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413')
@@ -84,8 +81,9 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
-
-		it('transaction/getstatus', function (done) {
+	})
+	describe('transaction', ()=> {
+		it('getstatus', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.transaction('getstatus')('0x513c1ba0bebf66436b5fed86ab668452b7805593c05073eb2d51d3a52f480a76')
@@ -98,8 +96,7 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
-
-		it('transaction/gettxreceiptstatus', function (done) {
+		it('gettxreceiptstatus', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.transaction('gettxreceiptstatus')('0x513c1ba0bebf66436b5fed86ab668452b7805593c05073eb2d51d3a52f480a76')
@@ -112,8 +109,10 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+	})
 
-		it('block/getblockreward', function (done) {
+	describe('block', ()=> {
+		it('getblockreward', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.block('getblockreward')('2165403')
@@ -126,8 +125,11 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+	})
 
-		it('stats/tokensupply', function (done) {
+
+	describe('stats', ()=> {
+		it('tokensupply', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.stats('tokensupply')('0x57d90b64a1a57749b0f932f1a3395792e12e7055')
@@ -140,8 +142,7 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
-
-		it('stats/chainsize', function (done) {
+		it('chainsize', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.stats('chainsize')(
@@ -160,7 +161,7 @@ describe('document', function () {
 			})
 		})
 
-		it('stats/ethprice', function (done) {
+		it('ethprice', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.stats('ethprice')()
@@ -174,7 +175,7 @@ describe('document', function () {
 			})
 		})
 
-		it('stats/ethsupply', function (done) {
+		it('ethsupply', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.stats('ethsupply')()
@@ -187,8 +188,10 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+	})
 
-		it('proxy/eth_Blocknumber', function (done) {
+	describe('proxy', () => {
+		it('eth_Blocknumber', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.proxy('eth_Blocknumber')()
@@ -202,7 +205,7 @@ describe('document', function () {
 			})
 		})
 
-		it('proxy/eth_call', function (done) {
+		it('eth_call', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 
@@ -221,7 +224,7 @@ describe('document', function () {
 			})
 		})
 
-		it('proxy/eth_estimateGas', function (done) {
+		it('eth_estimateGas', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 
@@ -241,7 +244,7 @@ describe('document', function () {
 			})
 		})
 
-		it('proxy/eth_gasPrice', function (done) {
+		it('eth_gasPrice', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 
@@ -256,7 +259,7 @@ describe('document', function () {
 			})
 		})
 
-		it('proxy/eth_getBlockTransactionCountByNumber', function (done) {
+		it('eth_getBlockTransactionCountByNumber', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const tag = '0x10FB78'
@@ -271,7 +274,7 @@ describe('document', function () {
 			})
 		})
 
-		it('proxy/eth_getCode', function (done) {
+		it('eth_getCode', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const address = '0xf75e354c5edc8efed9b59ee9f67a80845ade7d0c'
@@ -287,7 +290,7 @@ describe('document', function () {
 			})
 		})
 
-		it('proxy/eth_getStorageAt', function (done) {
+		it('eth_getStorageAt', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const address = '0x6e03d9cce9d60f3e9f2597e13cd4c54c55330cfd'
@@ -320,7 +323,7 @@ describe('document', function () {
 			})
 		})
 
-		it('proxy/eth_getTransactionByHash', function (done) {
+		it('eth_getTransactionByHash', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const txhash = '0x1e2910a262b1008d0616a0beb24c1a491d78771baa54a33e66065e03b1f46bc1'
@@ -335,7 +338,7 @@ describe('document', function () {
 			})
 		})
 
-		it('proxy/eth_getTransactionCount', function (done) {
+		it('eth_getTransactionCount', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const address = '0x2910543af39aba0cd09dbb2d50200b3e800a63d2'
@@ -351,7 +354,7 @@ describe('document', function () {
 			})
 		})
 
-		it('proxy/eth_getUncleByBlockNumberAndIndex', function (done) {
+		it('eth_getUncleByBlockNumberAndIndex', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const index = '0x0'
@@ -366,7 +369,8 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
-		it('proxy/eth_getBlockByNumber', function (done) {
+
+		it('eth_getBlockByNumber', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
 			const tag = '0x10d4f'
@@ -380,4 +384,5 @@ describe('document', function () {
 				throw new Error(err)
 			})
 		})
+	})
 })
