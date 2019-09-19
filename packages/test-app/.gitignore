@@ -1,7 +1,0 @@
-node_modules
-package-lock.json
-/build
-/coverage
-.DS_Store
-/lerna-debug.log
-/gh-pages
