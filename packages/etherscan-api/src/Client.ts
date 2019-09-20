@@ -38,6 +38,7 @@ import { Address } from './entities/Address'
 import { ApiKey } from './entities/Apikey'
 import { Clienttype } from './entities/Clienttype'
 import { Network } from './entities/Network'
+import { Paging } from './entities/Paging'
 import { PositiveNumber } from './entities/PositiveNumber'
 import { Sort } from './entities/Sort'
 import { Syncmode } from './entities/Syncmode'
@@ -487,10 +488,17 @@ export class Client {
           json,
         ).then((response) => response.json())
       },
-      txlist(address: string, startblock: string, endblock: string, sort?: string): Promise<any> {
+      txlist(
+          address: string,
+          startblock: string,
+          endblock: string,
+          sort?: string,
+          page?: string,
+          offset?: string): Promise<any> {
         const oAddress = new Address(address)
         const oSort = !!sort ? new Sort(sort) : undefined
-        const client = new ClientAccountTxlist(oAddress, startblock, endblock, oSort)
+        const paging = !!page && !!offset ? new Paging(new PositiveNumber(page), new PositiveNumber(offset)) : undefined
+        const client = new ClientAccountTxlist(oAddress, startblock, endblock, oSort, paging)
         const json = client.toJson()
         json.apiKey = apiKey.toString()
         return performRequest(

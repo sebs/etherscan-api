@@ -23,20 +23,6 @@ describe('client', function () {
 				throw new Error(err)
 			})
 		})
-
-		it('balance', function (done) {
-			this.retries(3)
-			const client = new EtherscanClient.Client(validApiKey);
-			const promise = client.account('balance')('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 'latest')
-			promise.then(res => {
-				assert.ok(res)
-				assert.ok(res.status)
-				assert.equal(res.status, 1)
-				done()
-			}).catch(err => {
-				throw new Error(err)
-			})
-		})
 		it('balancemulti', function (done) {
 			this.retries(3)
 			const client = new EtherscanClient.Client(validApiKey);
@@ -52,6 +38,40 @@ describe('client', function () {
 				throw new Error(err)
 			})
 		})
+		it('txlist', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const address = '0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae'
+			const startblock = 0
+			const endblock = 99999999
+			const sort = 'asc'
+			const promise = client.account('txlist')(address, startblock, endblock, sort)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.status)
+				assert.equal(res.status, 1)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})	
+		it('txlist paged', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const address = '0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae'
+			const startblock = 0
+			const endblock = 99999999
+			const sort = 'asc'
+			const promise = client.account('txlist')(address, startblock, endblock, sort, 1, 100)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.status)
+				assert.equal(res.status, 1)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})	
 	})
 
 	describe('contract', ()=> {
