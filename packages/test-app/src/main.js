@@ -3,13 +3,11 @@ import App from './App.vue'
 import router from './router'
 import './registerServiceWorker'
 
-import { MdButton, MdContent, MdTabs } from 'vue-material/dist/components'
+import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 
-Vue.use(MdButton)
-Vue.use(MdContent)
-Vue.use(MdTabs)
+Vue.use(VueMaterial)
 
 Vue.config.productionTip = false
 
