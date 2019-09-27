@@ -11,9 +11,14 @@
   },
   "dependencies": {
     "core-js": "^2.6.5",
+    "etherscan-api": "100.0.0",
+    "prismjs": "^1.17.1",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
+    "vue-async-computed": "^3.7.0",
+    "vue-json-pretty": "^1.6.2",
     "vue-material": "^1.0.0-beta-11",
+    "vue-prism-editor": "^0.3.0",
     "vue-router": "^3.0.3"
   },
   "devDependencies": {
