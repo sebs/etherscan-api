@@ -1,5 +1,5 @@
 <template>
-  <div class="example1">
+  <div class="example2">
     <prism-editor :code="code" language="js"></prism-editor>
     <h2>Result</h2>
     <md-tabs>

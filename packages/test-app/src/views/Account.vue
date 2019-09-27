@@ -12,8 +12,7 @@
       </md-step>
 
       <md-step id="third" md-label="Get a list of 'Normal' Transactions By Address">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <Example3></Example3>
       </md-step>
 
       <md-step id="fourth" md-label="Get a list of 'Internal' Transactions by Address">
@@ -30,12 +29,14 @@
 </template>
 <script>
 // @ is an alias to /src
-import Example1 from '@/components/Example1.vue'
-import Example2 from '@/components/Example2.vue'
+import Example1 from '@/components/account/Example1.vue'
+import Example2 from '@/components/account/Example2.vue'
+import Example3 from '@/components/account/Example3.vue'
+
 export default {
   name: 'Acccount',
   components: {
-    Example1, Example2
+    Example1, Example2, Example3
   }
 }
 </script>
