@@ -5,8 +5,12 @@
     <md-tabs>
       <md-tab id="tab-pages" md-label="Data">
         <md-field>
-          <label>Balance</label>
-            <md-input :value="result.result"></md-input>
+          <label>Balance for 0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a</label>
+            <md-input :value="result.result[0].balance"></md-input>
+        </md-field><br/>
+        <md-field>
+          <label>Balance for 0x198ef1ec325a96cc354c7266a038be8b5c558f67</label>
+            <md-input :value="result.result[1].balance"></md-input>
         </md-field>
       </md-tab>
       <md-tab id="tab-home" md-label="JSON" exact>
@@ -25,11 +29,12 @@ export default {
   components: {
     VueJsonPretty
   },
-  name: 'Example1',
+  name: 'Example2',
   data () {
     return {
       code: `const client = new EtherscanClient.Client(validApiKey);
-const res = await client.account('balance')('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 'latest')`
+const res = await client.account('balancemulti')(['0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae'
+], 'latest')`
     }
   },
   props: {
@@ -39,12 +44,21 @@ const res = await client.account('balance')('0xde0b295669a9fd93d5f28d9ec85e40f4c
     result: {
       get () {
         const client = new Client(validApiKey)
-        const address = '0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae'
+        const address = [
+          '0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a',
+          '0x198ef1ec325a96cc354c7266a038be8b5c558f67' ]
         const tag = 'latest'
-        return client.account('balance')(address, tag)
+        return client.account('balancemulti')(address, tag)
       },
       default: {
-        result: 'pending'
+        result: [
+          {
+            balance: 'pending'
+          },
+          {
+            balance: 'pending'
+          }
+        ]
       }
     }
   }

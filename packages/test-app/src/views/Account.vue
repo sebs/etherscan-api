@@ -8,10 +8,7 @@
       </md-step>
 
       <md-step id="second" md-label="Get Ether Balance for multiple Addresses in a single call">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <Example2></Example2>
       </md-step>
 
       <md-step id="third" md-label="Get a list of 'Normal' Transactions By Address">
@@ -34,11 +31,11 @@
 <script>
 // @ is an alias to /src
 import Example1 from '@/components/Example1.vue'
-
+import Example2 from '@/components/Example2.vue'
 export default {
   name: 'Acccount',
   components: {
-    Example1
+    Example1, Example2
   }
 }
 </script>
