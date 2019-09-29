@@ -88,6 +88,24 @@ describe('client', function () {
 			}).catch(err => {
 				throw new Error(err)
 			})
+
+			it('txlistinternaltxhash', function (done) {
+				this.retries(3)
+				const client = new EtherscanClient.Client(validApiKey);
+				const txhash = '0x40eb908387324f2b575b4879cd9d7188f69c8fc9d87c901b9e2daaea4b442170'
+				const startblock = 0
+				const endblock = 999999
+				const sort = 'asc'
+				const promise = client.account('txlistinternaltxhash')(txhash, startblock, endblock, sort)
+				promise.then(res => {
+					assert.ok(res)
+					assert.ok(res.status)
+					assert.equal(res.status, 1)
+					done()
+				}).catch(err => {
+					throw new Error(err)
+				})
+			})
 		})	
 	})
 
