@@ -72,6 +72,23 @@ describe('client', function () {
 				throw new Error(err)
 			})
 		})	
+		it('txlistinternal', function (done) {
+			this.retries(3)
+			const client = new EtherscanClient.Client(validApiKey);
+			const address = '0x2c1ba59d6f58433fb1eaee7d20b26ed83bda51a3'
+			const startblock = 0
+			const endblock = 2702578
+			const sort = 'asc'
+			const promise = client.account('txlistinternal')(address, startblock, endblock, sort, 1, 100)
+			promise.then(res => {
+				assert.ok(res)
+				assert.ok(res.status)
+				assert.equal(res.status, 1)
+				done()
+			}).catch(err => {
+				throw new Error(err)
+			})
+		})	
 	})
 
 	describe('contract', ()=> {
