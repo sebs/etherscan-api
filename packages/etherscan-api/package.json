@@ -4,7 +4,7 @@
   "description": "Next generation etherscan-api ",
   "scripts": {
     "postinstall": "rm -rf ./bundle && npm run bundle && npm run bundlejs",
-    "bundle": "tsc --project tsconfig.bundle.json",
+    "bundle": "./node_modules/typescript/bin/tsc --project tsconfig.bundle.json",
     "bundlejs": "browserify -p esmify ./bundle/src/Client.js -o ./bundle/etherscan-api.js -s EtherscanClient",
     "exportpkgversion": "node ./scripts/export-version.js",
     "pretest": "npm run exportpkgversion",
@@ -14,7 +14,7 @@
     "posttest": "npm run lint",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "docs": "typedoc --module etherscan-api --out docs ./src --tsBuildInfoFile ./tsconfig.json",
-    "prepublish": "tsc"
+    "prepublish": "./node_modules/typescript/bin/tsc"
   },
   "repository": {
     "type": "git",
