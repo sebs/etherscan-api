@@ -16,13 +16,11 @@
       </md-step>
 
       <md-step id="fourth" md-label="Get a list of 'Internal' Transactions by Address">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <Example4></Example4>
       </md-step>
 
       <md-step id="fifth" md-label="Get 'Internal Transactions' by Transaction Hash">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <Example5></Example5>
       </md-step>
     </md-steppers>
   </div>
@@ -32,11 +30,13 @@
 import Example1 from '@/components/account/Example1.vue'
 import Example2 from '@/components/account/Example2.vue'
 import Example3 from '@/components/account/Example3.vue'
+import Example4 from '@/components/account/Example4.vue'
+import Example5 from '@/components/account/Example5.vue'
 
 export default {
   name: 'Acccount',
   components: {
-    Example1, Example2, Example3
+    Example1, Example2, Example3, Example4, Example5
   }
 }
 </script>

@@ -28,12 +28,12 @@ export default new Router({
     },
     {
       path: '/transaction',
-      name: 'contract',
+      name: 'transaction',
       component: () => import(/* webpackChunkName: "foo" */ './views/Transaction.vue')
     },
     {
       path: '/block',
-      name: 'contract',
+      name: 'block',
       component: () => import(/* webpackChunkName: "foo" */ './views/Block.vue')
     },
     {
