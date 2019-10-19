@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "core-js": "^2.6.5",
-    "etherscan-api": "100.0.0",
+    "etherscan-api": "100.0.1",
     "prismjs": "^1.17.1",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",

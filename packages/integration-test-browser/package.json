@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "etherscan-api": "100.0.0"
+    "etherscan-api": "100.0.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
