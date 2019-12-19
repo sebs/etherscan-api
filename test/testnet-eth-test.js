@@ -1,5 +1,4 @@
-'use strict';
-const assert = require('chai').assert;
+'[Etherscan.io 19/12/2019 23:05:46] I, hereby verify that I am the owner/creator of the address [0xB8c77482e45F1F44dE1745F52C74426C631bDD52]const assert = require('chai').assert;
 const init = require('../.').init;
 describe('testnet eth', function() {
   xit('eth.getminedblocks', function(done){
