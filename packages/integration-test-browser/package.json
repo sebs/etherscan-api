@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "pretest": "cp ./node_modules/etherscan-api/bundle/etherscan-api.js ./test/.",
-    "test": "mocha-headless-chrome -f test/test.html"
+    "test_skip": "mocha-headless-chrome -f test/test.html"
   },
   "author": "",
   "license": "ISC",

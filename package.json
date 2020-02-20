@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "test": "lerna run test "
+    "test": "lerna run test --stream --no-prefix"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "@commitlint/config-conventional": "^8.2.0",
     "cz-conventional-changelog": "^3.0.2",
     "husky": "^3.0.5",
-    "lerna": "^3.16.4",
+    "lerna": "^3.20.2",
     "standard-version": "^7.0.0"
   },
   "config": {

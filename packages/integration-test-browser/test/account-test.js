@@ -1,5 +1,5 @@
 'use strict'
-const validApiKey = 'TRU5Z5MNWIEYP4F6DPH2T53IJWZIZ5GT1W'
+const validApiKey = 'X1FAIRJUIYRJR93UJMB3YBB9QBY27Z2HUV'
 const assert = this.chai ? this.chai.assert : require('assert')
 describe('client', function () {
 	it('EtherscanClient global exists', function () {
@@ -15,6 +15,7 @@ describe('client', function () {
 			const client = new EtherscanClient.Client(validApiKey);
 			const promise = client.account('balance')('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 'latest')
 			promise.then(res => {
+				console.log(res)
 				assert.ok(res)
 				assert.ok(res.status)
 				assert.equal(res.status, 1)
