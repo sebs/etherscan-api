@@ -44,8 +44,5 @@
     "watch": "^1.0.2"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "gh-pages": "^2.1.1",
-    "querystring": "^0.2.0"
   }
 }
