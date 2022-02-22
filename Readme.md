@@ -32,6 +32,13 @@ Supported:
 * ropsten
 * rinkeby
 
+## For rollups network usage
+
+L2 Supported:
+
+* arbitrum
+* arbitrum_rinkeby
+
 Latest
 
 ```javascript
