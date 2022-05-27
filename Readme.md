@@ -24,13 +24,15 @@ balance.then(function(balanceData){
 
 * [Polymer3 based example](https://github.com/hiherto-elements/test-app)
 
-## For testnet usage
+## For testnet and L2s usage
 
 Supported:
 
 * morden
 * ropsten
 * rinkeby
+* arbitrum
+* arbitrum_rinkeby
 
 Latest
 
