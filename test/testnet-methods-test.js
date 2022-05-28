@@ -7,7 +7,7 @@ describe('testnet methods', function () {
     var api;
 
     beforeEach(function () {
-      api = init('YourApiKeyToken', 'ropsten');
+      api = init(process.env.API_KEY, 'ropsten');
     });
 
     xit('getminedblocks', function (done) {
@@ -112,7 +112,7 @@ describe('testnet methods', function () {
     var api;
 
     beforeEach(function () {
-      api = init('YourApiKeyToken', 'ropsten');
+      api = init(process.env.API_KEY, 'ropsten');
     });
 
     it('ethsupply', function (done) {
@@ -153,7 +153,7 @@ describe('testnet methods', function () {
 
 
   it('block.getblockreward', function (done) {
-    var api = init('YourApiKeyToken', 'ropsten');
+    var api = init(process.env.API_KEY, 'ropsten');
 
     var blockreward = api.block.getblockreward();
     blockreward.then(function (res) {
@@ -163,7 +163,7 @@ describe('testnet methods', function () {
   });
 
   it('transaction.getstatus', function (done) {
-    var api = init('YourApiKeyToken', 'ropsten');
+    var api = init(process.env.API_KEY, 'ropsten');
     var status = api.transaction.getstatus('0x15f8e5ea1079d9a0bb04a4c58ae5fe7654b5b2b4463375ff7ffb490aa0032f3a');
     status.then(function (res) {
       assert.ok(res);
@@ -172,7 +172,7 @@ describe('testnet methods', function () {
   });
 
   xit('contract.getabi', function (done) {
-    var api = init('YourApiKeyToken', 'ropsten');
+    var api = init(process.env.API_KEY, 'ropsten');
     // Has no contract with this address
     //  var abi = api.contract.getabi('0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413');
     var abi = api.contract.getabi('0xCe9bb652DD190454B91CEe1f7D5fE6Bac3Ca85Fc');
@@ -187,7 +187,7 @@ describe('testnet methods', function () {
     var api;
 
     beforeEach(function () {
-      api = init('YourApiKeyToken', 'ropsten');
+      api = init(process.env.API_KEY, 'ropsten');
     });
 
     it('proxy.eth_blockNumber', function (done) {

@@ -3,7 +3,7 @@ const assert = require('chai').assert;
 const init = require('../.').init;
 describe('testnet eth', function() {
   xit('eth.getminedblocks', function(done){
-    var api = init('YourApiKeyToken','morden');
+    var api = init(process.env.API_KEY,'morden');
     //In testnet there are no mined blocks by this account
     //reference - https://testnet.etherscan.io/api?module=account&action=getminedblocks&address=0x9dd134d14d1e65f84b706d6f205cd5b1cd03a46b&blocktype=blocks&apikey=YourApiKeyToken
     //  var txlist = api.account.getminedblocks('0x9dd134d14d1e65f84b706d6f205cd5b1cd03a46b');

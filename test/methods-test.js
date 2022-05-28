@@ -5,7 +5,7 @@ describe('api', function() {
 
   describe('account', function() {
     it('getminedblocks', function(done){
-      var api = init();
+      var api = init(process.env.API_KEY);
       var txlist = api.account.getminedblocks('0x9dd134d14d1e65f84b706d6f205cd5b1cd03a46b');
       txlist.then(function(res){
         assert.ok(res);
