@@ -1,6 +1,11 @@
 2022-05-28
 ==========
 
+  * refactor: remove direct dependencies and use npx for some of the lesser
+    used commands
+  * changelog
+  * remove traviremove traviss
+  * update deps
   * refactor: make tests executable with a external api key
 
 2022-05-27
@@ -266,25 +271,3 @@
   * Merge pull request [#35](https://github.com/sebs/etherscan-api/issues/35) from noriega3/master
     Change testnet urls to use https
   * bundle
-  * change testnet urls to use https
-
-2018-08-16
-==========
-
-  * Merge pull request [#33](https://github.com/sebs/etherscan-api/issues/33) from dibrovadev/patch-1
-    Fixed  error message from getRequest function
-
-2018-08-15
-==========
-
-  * Fixed  error message from getRequest function
-
-2018-06-13
-==========
-
-  * Linking demo
-
-2018-06-12
-==========
-
-  * 8.1.2
