@@ -1,6 +1,4 @@
-Need to install the following packages:
-  changelog
-Ok to proceed? (y) 2022-05-28
+2022-05-28
 ==========
 
   * refactor: make tests executable with a external api key
