@@ -1,10 +1,12 @@
 2022-05-28
 ==========
 
+  * refactor: do pusblish even less stuff
+  * 10.0.8
+  * changelog
   * refactor: make package smaller
   * chore: removed idea files
   * 10.0.7
-  * changelog
   * bundle
   * 10.0.6
   * refactor: remove direct dependencies and use npx for some of the lesser
@@ -257,10 +259,3 @@
   * In order to reduce the chance for test fails, I am reducing this to ONE build,
     However, in long term I need to collect responses to actual calls and do testing with mocks/stubs.
     This will come with the move to 100% es6
-
-2018-09-24
-==========
-
-  * remove lock
-  * Badges
-  * 8.1.4
