@@ -1,3 +1,127 @@
+Need to install the following packages:
+  changelog
+Ok to proceed? (y) 2022-05-28
+==========
+
+  * refactor: make tests executable with a external api key
+
+2022-05-27
+==========
+
+  * Merge pull request [#85](https://github.com/sebs/etherscan-api/issues/85) from Catzilla/fix-84
+    Fixed [#84](https://github.com/sebs/etherscan-api/issues/84)
+  * Merge pull request [#95](https://github.com/sebs/etherscan-api/issues/95) from mochimisu/master
+    support for etherscan's tokennfttx api for ERC721 tokens
+  * Merge pull request [#102](https://github.com/sebs/etherscan-api/issues/102) from Jason-Wanxt/master
+    Add Arbitrum support
+  * Merge pull request [#106](https://github.com/sebs/etherscan-api/issues/106) from sebs/dependabot/npm_and_yarn/async-2.6.4
+    Bump async from 2.6.3 to 2.6.4
+
+2022-04-27
+==========
+
+  * Bump async from 2.6.3 to 2.6.4
+    Bumps [async](https://github.com/caolan/async) from 2.6.3 to 2.6.4.
+    - [Release notes](https://github.com/caolan/async/releases)
+    - [Changelog](https://github.com/caolan/async/blob/v2.6.4/CHANGELOG.md)
+    - [Commits](https://github.com/caolan/async/compare/v2.6.3...v2.6.4)
+    ---
+    updated-dependencies:
+    - dependency-name: async
+    dependency-type: indirect
+    ...
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+2022-02-22
+==========
+
+  * edit the urls of arbiscan
+  * Add arbitrum support
+  * Update Readme.md
+  * Add arbscan support
+
+2021-06-25
+==========
+
+  * quick test for tokennfttx
+
+2021-06-24
+==========
+
+  * add tokennfttx to accounts
+
+2021-02-16
+==========
+
+  * Fixed [#84](https://github.com/sebs/etherscan-api/issues/84)
+
+2020-12-20
+==========
+
+  * Merge pull request [#66](https://github.com/sebs/etherscan-api/issues/66) from sebs/dependabot/npm_and_yarn/acorn-5.7.4
+    Bump acorn from 5.7.3 to 5.7.4
+  * Merge pull request [#71](https://github.com/sebs/etherscan-api/issues/71) from sebs/dependabot/npm_and_yarn/websocket-extensions-0.1.4
+    Bump websocket-extensions from 0.1.3 to 0.1.4
+  * Merge pull request [#72](https://github.com/sebs/etherscan-api/issues/72) from sebs/dependabot/npm_and_yarn/elliptic-6.5.3
+    Bump elliptic from 6.5.0 to 6.5.3
+  * Merge pull request [#74](https://github.com/sebs/etherscan-api/issues/74) from sebs/dependabot/npm_and_yarn/highlight.js-9.18.5
+    Bump highlight.js from 9.15.9 to 9.18.5
+  * Merge pull request [#75](https://github.com/sebs/etherscan-api/issues/75) from sebs/dependabot/npm_and_yarn/ini-1.3.7
+    Bump ini from 1.3.5 to 1.3.7
+
+2020-12-11
+==========
+
+  * Bump ini from 1.3.5 to 1.3.7
+    Bumps [ini](https://github.com/isaacs/ini) from 1.3.5 to 1.3.7.
+    - [Release notes](https://github.com/isaacs/ini/releases)
+    - [Commits](https://github.com/isaacs/ini/compare/v1.3.5...v1.3.7)
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+2020-11-25
+==========
+
+  * Bump highlight.js from 9.15.9 to 9.18.5
+    Bumps [highlight.js](https://github.com/highlightjs/highlight.js) from 9.15.9 to 9.18.5.
+    - [Release notes](https://github.com/highlightjs/highlight.js/releases)
+    - [Changelog](https://github.com/highlightjs/highlight.js/blob/9.18.5/CHANGES.md)
+    - [Commits](https://github.com/highlightjs/highlight.js/compare/9.15.9...9.18.5)
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+2020-07-29
+==========
+
+  * Bump elliptic from 6.5.0 to 6.5.3
+    Bumps [elliptic](https://github.com/indutny/elliptic) from 6.5.0 to 6.5.3.
+    - [Release notes](https://github.com/indutny/elliptic/releases)
+    - [Commits](https://github.com/indutny/elliptic/compare/v6.5.0...v6.5.3)
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+2020-06-06
+==========
+
+  * Bump websocket-extensions from 0.1.3 to 0.1.4
+    Bumps [websocket-extensions](https://github.com/faye/websocket-extensions-node) from 0.1.3 to 0.1.4.
+    - [Release notes](https://github.com/faye/websocket-extensions-node/releases)
+    - [Changelog](https://github.com/faye/websocket-extensions-node/blob/master/CHANGELOG.md)
+    - [Commits](https://github.com/faye/websocket-extensions-node/compare/0.1.3...0.1.4)
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+2020-03-13
+==========
+
+  * Bump acorn from 5.7.3 to 5.7.4
+    Bumps [acorn](https://github.com/acornjs/acorn) from 5.7.3 to 5.7.4.
+    - [Release notes](https://github.com/acornjs/acorn/releases)
+    - [Commits](https://github.com/acornjs/acorn/compare/5.7.3...5.7.4)
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+2019-09-10
+==========
+
+  * 10.0.5
+  * changelog
+
 2019-09-06
 ==========
 
@@ -166,58 +290,3 @@
 ==========
 
   * 8.1.2
-  * changelog
-  * Add gh pages
-  * bundle
-
-2018-06-08
-==========
-
-  * 8.1.1
-  * changelog
-  * Fix dependencies
-
-2018-06-06
-==========
-
-  * 8.1.0
-  * changelog
-  * Merge pull request [#29](https://github.com/sebs/etherscan-api/issues/29) from mazikwyry/feature/add-tokentx-action
-    Add tokentx action support to account module which allows getting a list of ERC20 tokes transfer events
-  * Add tokentx action support to account module which allows getting a list of ERC20 tokes transfer events
-
-2018-06-05
-==========
-
-  * bundle
-
-2018-06-01
-==========
-
-  * 8.0.5
-  * changelog
-  * Added node 10 to test targets
-
-2018-03-11
-==========
-
-  * Updated#
-  * 8.0.4
-  * changelog
-  * 10 sec default timeout and added node 9 to travis
-
-2018-03-04
-==========
-
-  * 8.0.3
-  * changelog
-  * Typo
-
-2018-03-02
-==========
-
-  * Docs
-  * 8.0.2
-  * changelog
-  * Missing docs and one parameter in getLogs
-  * 8.0.1
