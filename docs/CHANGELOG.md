@@ -1,9 +1,11 @@
 2022-05-28
 ==========
 
+  * bundle
+  * 10.0.6
+  * changelog
   * refactor: remove direct dependencies and use npx for some of the lesser
     used commands
-  * changelog
   * remove traviremove traviss
   * update deps
   * refactor: make tests executable with a external api key
@@ -267,7 +269,3 @@
 ==========
 
   * 8.1.3
-  * changelog
-  * Merge pull request [#35](https://github.com/sebs/etherscan-api/issues/35) from noriega3/master
-    Change testnet urls to use https
-  * bundle
