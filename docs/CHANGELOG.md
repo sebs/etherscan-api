@@ -1,9 +1,12 @@
 2022-05-28
 ==========
 
+  * refactor: make package smaller
+  * chore: removed idea files
+  * 10.0.7
+  * changelog
   * bundle
   * 10.0.6
-  * changelog
   * refactor: remove direct dependencies and use npx for some of the lesser
     used commands
   * remove traviremove traviss
@@ -261,11 +264,3 @@
   * remove lock
   * Badges
   * 8.1.4
-  * changelog
-  * Move to node 9 and 10 only, update deps
-  * remove autodeploy
-
-2018-08-28
-==========
-
-  * 8.1.3
