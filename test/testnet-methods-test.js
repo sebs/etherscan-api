@@ -10,7 +10,7 @@ describe('testnet methods', function () {
       api = init(process.env.API_KEY, 'ropsten');
     });
 
-    xit('getminedblocks', function (done) {
+    it('getminedblocks', function (done) {
       var txlist = api.account.getminedblocks('0x3D6F8823Ad21CD299814B62D198d9001E67E20B3');
       txlist
         .then(function (res) {
@@ -63,7 +63,7 @@ describe('testnet methods', function () {
       }).catch(done);
     });
 
-    xit('txlist', function (done) {
+    it('txlist', function (done) {
       /**
        * No transaction found in testnet
        * var txlist = api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
@@ -75,16 +75,18 @@ describe('testnet methods', function () {
       }).catch(done);
     });
 
-    xit('txlistinternal by hash', function (done) {
+    it('txlistinternal by hash', function (done) {
       var txlist = api.account.txlistinternal('0xf2aa030a0b889706206d262377cd45489faa2ff7dedbccda3693bf6c5370ed0c');
       txlist.then(function (res) {
         assert.ok(res);
         done();
       }).catch(done);
     });
-    xit('txlistinternal by address', function (done) {
 
-      var txlist = api.account.txlistinternal(null, '0x3FAcfa472e86E3EDaEaa837f6BA038ac01F7F539');
+    // address does not exist in ropsten
+    it.skip('txlistinternal by address', function (done) {
+
+      var txlist = api.account.txlistinternal(null, '0x2c1ba59d6f58433fb1eaee7d20b26ed83bda51a3', 0, 2702578);
       txlist.then(function (res) {
         assert.ok(res);
         done();
@@ -171,7 +173,7 @@ describe('testnet methods', function () {
     }).catch(done);
   });
 
-  xit('contract.getabi', function (done) {
+  it('contract.getabi', function (done) {
     var api = init(process.env.API_KEY, 'ropsten');
     // Has no contract with this address
     //  var abi = api.contract.getabi('0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413');
@@ -210,7 +212,7 @@ describe('testnet methods', function () {
     });
 
 
-    it.skip('proxy.eth_getUncleByBlockNumberAndIndex', function (done) {
+    it('proxy.eth_getUncleByBlockNumberAndIndex', function (done) {
 
       var res = api.proxy.eth_getUncleByBlockNumberAndIndex('0x210A9B', '0x0');
       res.then(function (res) {
@@ -238,7 +240,7 @@ describe('testnet methods', function () {
     });
 
 
-    it.skip('proxy.eth_getTransactionByBlockNumberAndIndex', function (done) {
+    it('proxy.eth_getTransactionByBlockNumberAndIndex', function (done) {
 
       var res = api.proxy.eth_getTransactionByBlockNumberAndIndex('0x10d4f', '0x0');
       res.then(function (res) {
@@ -255,8 +257,9 @@ describe('testnet methods', function () {
         done();
       });
     });
-
-    xit('proxy.eth_sendRawTransaction', function (done) {
+    
+    // I can not test this. Example required
+    it.skip('proxy.eth_sendRawTransaction', function (done) {
 
       var res = api.proxy.eth_sendRawTransaction('0xf904808000831cfde080');
       res.then(function (res) {
