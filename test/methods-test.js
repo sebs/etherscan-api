@@ -169,6 +169,17 @@ describe('api', function() {
     });
   });
 
+  it('contract.getsourcecode', function(done){
+    var api = init(process.env.API_KEY);
+    var abi = api.contract.getsourcecode('0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413');
+    abi.then(function(){
+      assert.ok(true);
+      done();
+    }).catch(err=> {
+      assert.equal(err, 'Contract source code not verified');
+      done();
+    });
+  }).timeout(100000);
 
 
   describe('proxy', function() {
