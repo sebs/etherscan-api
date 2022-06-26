@@ -1,9 +1,20 @@
+2022-06-26
+==========
+
+  * feature: add getsourcecode method
+  * fix: make tests work better
+    * skip what needs skipping with a comment
+    * replace xit with .skip
+  * refactor: explicitly generate the query
+  * fix: use the passed api key  for tests so we dont hit limits
+
 2022-05-28
 ==========
 
+  * 10.0.9
+  * changelog
   * refactor: do pusblish even less stuff
   * 10.0.8
-  * changelog
   * refactor: make package smaller
   * chore: removed idea files
   * 10.0.7
@@ -240,22 +251,3 @@
   * refactor(changelog): Be a bit more specific with paths
   * refactor(release): changelog generation
   * docs(account): Added a better example to account for deprecated method
-
-2018-10-08
-==========
-
-  * 9.0.0
-  * changelog
-  * fix(account): Update error message when asking for a contract that is not verified by etherscan
-    * BC break, major release
-    * error is not 'NOTOK' anymore, ubt a conrete error message
-    * still ways to improve
-
-2018-09-29
-==========
-
-  * 8.1.5
-  * changelog
-  * In order to reduce the chance for test fails, I am reducing this to ONE build,
-    However, in long term I need to collect responses to actual calls and do testing with mocks/stubs.
-    This will come with the move to 100% es6
