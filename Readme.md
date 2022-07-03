@@ -24,6 +24,26 @@ balance.then(function(balanceData){
 
 * [Polymer3 based example](https://github.com/hiherto-elements/test-app)
 
+
+## use a own instance of axios
+
+```js
+const axios = require('axios');
+const {
+  init,
+  pickChainUrl
+} = require('..');
+
+
+const chain = pickChainUrl(null);
+const client = axios.create({
+  baseURL: chain,
+  timeout: 10000
+});
+
+var api = init('apikey', null, 10000, client);
+```
+
 ## For testnet and L2s usage
 
 Supported:
@@ -40,7 +60,6 @@ Latest
 // apikey, network, timeout
 var api = require('etherscan-api').init('YourApiKey','rinkeby'. '3000');
 ```
-
 
 ## Install
 
