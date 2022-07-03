@@ -1,6 +1,16 @@
+2022-07-03
+==========
+
+  * feature: make it possible to pass a vlient to the init function
+    * add a test
+    * make pickChainUrl method availabale to the consumer
+    * move some code around a bit to simplify adding a client
+
 2022-06-26
 ==========
 
+  * 10.1.0
+  * changelog
   * feature: add getsourcecode method
   * fix: make tests work better
     * skip what needs skipping with a comment
@@ -249,5 +259,3 @@
   * Fuck off, who ever made package-lock.json mandatory. Really FU!
   * docs(package): Add new keyword
   * refactor(changelog): Be a bit more specific with paths
-  * refactor(release): changelog generation
-  * docs(account): Added a better example to account for deprecated method
