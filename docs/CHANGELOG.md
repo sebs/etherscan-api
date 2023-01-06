@@ -1,6 +1,38 @@
+Need to install the following packages:
+  changelog@1.4.2
+Ok to proceed? (y) 2023-01-06
+==========
+
+  * ichore: update deps
+
+2022-09-20
+==========
+
+  * Merge pull request [#113](https://github.com/sebs/etherscan-api/issues/113) from carletex/patch-1
+    Add Goerli and Sepolia to the API URL list
+  * Merge pull request [#116](https://github.com/sebs/etherscan-api/issues/116) from peterferguson/add-avalanche
+    Add Avalanche fixes [#115](https://github.com/sebs/etherscan-api/issues/115)
+
+2022-09-19
+==========
+
+  * Add Avalanche fixes [#115](https://github.com/sebs/etherscan-api/issues/115)
+    Add urls for avalanche mainnet and fuji testnet
+
+2022-08-26
+==========
+
+  * Add Goerli and Sepolia to the API list
+    Hey @sebs 
+    Thanks a lot for this amazing library.
+    I created this PR to include the Sepolia and Goerli API endpoints. Currently I'm creating the client (with `axios.create`) to support those two, but I'd be cool if I have directly included on the library.
+    Thanks!
+
 2022-07-03
 ==========
 
+  * 10.2.0
+  * changelog
   * feature: make it possible to pass a vlient to the init function
     * add a test
     * make pickChainUrl method availabale to the consumer
@@ -256,6 +288,3 @@
   * changelog
   * Package-lock .. its a thing
   * 9.0.2
-  * Fuck off, who ever made package-lock.json mandatory. Really FU!
-  * docs(package): Add new keyword
-  * refactor(changelog): Be a bit more specific with paths
