@@ -35,13 +35,13 @@
   "homepage": "https://github.com/sebs/etherscan-api#readme",
   "devDependencies": {
     "browserify": "17.0.0",
-    "chai": "4.3.6",
-    "jshint": "2.13.4",
-    "mocha": "10.0.0",
-    "watch": "0.13.0"
+    "chai": "4.3.7",
+    "jshint": "2.13.6",
+    "mocha": "10.2.0",
+    "watch": "1.0.2"
   },
   "dependencies": {
-    "axios": "0.27.2",
+    "axios": "1.2.2",
     "gh-pages": "4.0.0",
     "querystring": "0.2.1"
   }
