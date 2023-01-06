@@ -1,6 +1,6 @@
 {
   "name": "etherscan-api",
-  "version": "10.2.0",
+  "version": "10.2.1",
   "description": "API to etherscan with a simple interface",
   "main": "index.js",
   "scripts": {
