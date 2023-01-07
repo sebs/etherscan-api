@@ -1,6 +1,11 @@
 2023-01-07
 ==========
 
+  * fix: refactoring errors and linting
+  * refactor: remove bundle step
+  * refactor: replace querystring with URLSearchParams
+  * 10.2.2
+  * changelog
   * docs: remove travis build status
   * docs: Document Chain Explrers and api urls
 
@@ -280,14 +285,3 @@
 
   * 10.0.0
   * changelog
-  * deps
-  * Merge pull request [#39](https://github.com/sebs/etherscan-api/issues/39) from nnqq/page-offset-parameters-txlist-method
-    Page and Offset parameters to account.txlist method
-  * typo fixed
-  * Add Page and Offset parameters to account.txlist method
-    src: https://etherscan.io/apis#accounts
-
-2018-11-15
-==========
-
-  * 9.0.3
