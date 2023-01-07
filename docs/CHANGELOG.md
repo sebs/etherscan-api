@@ -1,8 +1,14 @@
-Need to install the following packages:
-  changelog@1.4.2
-Ok to proceed? (y) 2023-01-06
+2023-01-07
 ==========
 
+  * docs: remove travis build status
+  * docs: Document Chain Explrers and api urls
+
+2023-01-06
+==========
+
+  * 10.2.1
+  * changelog
   * ichore: update deps
 
 2022-09-20
@@ -285,6 +291,3 @@ Ok to proceed? (y) 2023-01-06
 ==========
 
   * 9.0.3
-  * changelog
-  * Package-lock .. its a thing
-  * 9.0.2
