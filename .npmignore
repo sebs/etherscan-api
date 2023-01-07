@@ -6,3 +6,5 @@ test
 scripts
 docs
 dist
+jsdoc.json
+test-do.md
