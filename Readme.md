@@ -19,6 +19,7 @@ balance.then(function(balanceData){
   console.log(balanceData);
 });
 ```
+
 ## Example in the wild
 
 * [Polymer3 based example](https://github.com/hiherto-elements/test-app)

@@ -8,13 +8,13 @@
     "posttest": "npm run lint",
     "lint": "jshint lib test",
     "docs": "npx documentation build ./lib/init.js -f html -o out",
-    "bundle": "browserify index.js -s etherscanApi -o dist/bundle.js && git commit ./dist -m bundle && git push",
     "preversion": "npm run lint && npm run changelog",
     "postversion": "git push && git push --tags",
     "changelog": "rm ./docs/CHANGELOG.md && npx changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add ./docs/CHANGELOG.md && git commit ./docs/CHANGELOG.md -m changelog",
     "build": "npm run test && npm run docs"
   },
   "keywords": [
+    "arbiscan",
     "ethereum",
     "EtherScan.io",
     "etherscan",
@@ -34,7 +34,6 @@
   },
   "homepage": "https://github.com/sebs/etherscan-api#readme",
   "devDependencies": {
-    "browserify": "17.0.0",
     "chai": "4.3.7",
     "jshint": "2.13.6",
     "mocha": "10.2.0",

@@ -5,3 +5,4 @@ test
 .jshintrc
 scripts
 docs
+dist
