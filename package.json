@@ -40,7 +40,6 @@
   "devDependencies": {
     "gh-pages": "6.3.0",
     "jshint": "2.13.6",
-    "nock": "13.5.6",
     "watch": "1.0.2"
   }
 }

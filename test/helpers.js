@@ -1,26 +1,38 @@
 'use strict';
-const { before, afterEach, after } = require('node:test');
-const nock = require('nock');
+const { mock } = require('node:test');
+const { init } = require('..');
 
-// Shared nock lifecycle for the unit suite. Call installNock() at the top of
-// each test file. Guarantees the suite never reaches the network: any un-mocked
-// request fails loudly instead of silently hitting the live Etherscan API. The
-// opt-in live suite (ETHERSCAN_LIVE=1) needs real connectivity, so we only lock
-// down when that flag is absent.
-function installNock() {
-  before(function () {
-    if (!process.env.ETHERSCAN_LIVE) {
-      nock.disableNetConnect();
-    }
-  });
+// Unit tests mock at the transport seam (the 4th arg to init) using node:test's
+// built-in mock.fn() — no HTTP interception, no third-party mocking library, and
+// nothing ever touches the network. The real node:https transport is exercised
+// separately in http-get.test.js against a local server.
 
-  afterEach(function () {
-    nock.cleanAll();
-  });
+/**
+ * Build an api whose HTTP transport is a node:test mock.
+ *
+ * @param {object|function} response - The body the transport resolves with, or
+ *   a custom transport implementation `(url, opts) => Promise`.
+ * @param {object} [opts] - { apiKey, chain, timeout }
+ * @returns {{ api: object, transport: import('node:test').Mock }}
+ */
+function mockApi(response, opts) {
+  opts = opts || {};
+  const impl = typeof response === 'function'
+    ? response
+    : function () { return Promise.resolve(response); };
 
-  after(function () {
-    nock.enableNetConnect();
-  });
+  const transport = mock.fn(impl);
+  const api = init(opts.apiKey || 'KEY', opts.chain, opts.timeout || 10000, transport);
+  return { api, transport };
 }
 
-module.exports = { installNock };
+/**
+ * The URLSearchParams of the transport's Nth call (default: first).
+ * Use `.get('name')` to read a param (returns null when absent).
+ */
+function queryOf(transport, callIndex) {
+  const call = transport.mock.calls[callIndex || 0];
+  return new URL(call.arguments[0]).searchParams;
+}
+
+module.exports = { mockApi, queryOf };

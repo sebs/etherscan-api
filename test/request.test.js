@@ -1,106 +1,90 @@
 'use strict';
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
-const nock = require('nock');
 const { init } = require('..');
 const { EtherscanError } = require('../lib/errors');
-const { installNock } = require('./helpers');
-
-installNock();
-
-const HOST = 'https://api.etherscan.io';
+const { mockApi, queryOf } = require('./helpers');
 
 describe('request layer (get-request)', function () {
 
-  it('injects apikey (lowercase) and chainid into every request', function () {
-    const scope = nock(HOST)
-      .get('/v2/api')
-      .query(q =>
-        q.apikey === 'MYKEY' &&        // regression guard: lowercase, not "apiKey"
-        q.chainid === '1' &&
-        q.module === 'stats' &&
-        q.action === 'ethsupply')
-      .reply(200, { status: '1', message: 'OK', result: '42' });
+  it('injects apikey (lowercase) and chainid into every request', async function () {
+    const { api, transport } = mockApi({ status: '1', message: 'OK', result: '42' }, { apiKey: 'MYKEY' });
 
-    const api = init('MYKEY');
-    return api.stats.ethsupply().then(res => {
-      assert.equal(res.result, '42');
-      scope.done();
-    });
+    const res = await api.stats.ethsupply();
+    assert.equal(res.result, '42');
+
+    const q = queryOf(transport);
+    assert.equal(q.get('apikey'), 'MYKEY');   // regression guard: lowercase, not "apiKey"
+    assert.equal(q.get('chainid'), '1');
+    assert.equal(q.get('module'), 'stats');
+    assert.equal(q.get('action'), 'ethsupply');
   });
 
-  it('uses the resolved chainid for the selected chain', function () {
-    const scope = nock(HOST)
-      .get('/v2/api')
-      .query(q => q.chainid === '11155111' && q.apikey === 'K')
-      .reply(200, { status: '1', result: 'ok' });
+  it('uses the resolved chainid for the selected chain', async function () {
+    const { api, transport } = mockApi({ status: '1', result: 'ok' }, { chain: 'sepolia' });
 
-    const api = init('K', 'sepolia');
-    return api.stats.ethsupply().then(() => scope.done());
+    await api.stats.ethsupply();
+    assert.equal(queryOf(transport).get('chainid'), '11155111');
   });
 
-  it('resolves the response body on success (status "1")', function () {
-    nock(HOST).get('/v2/api').query(true)
-      .reply(200, { status: '1', message: 'OK', result: '123' });
+  it('targets the V2 endpoint on the etherscan host', async function () {
+    const { api, transport } = mockApi({ status: '1', result: 'ok' });
 
-    const api = init('K');
-    return api.account.balance('0xabc').then(res => {
-      assert.equal(res.status, '1');
-      assert.equal(res.result, '123');
-    });
+    await api.stats.ethsupply();
+    const url = transport.mock.calls[0].arguments[0];
+    assert.ok(url.startsWith('https://api.etherscan.io/v2/api?'));
   });
 
-  it('rejects with EtherscanError when status is "0"', function () {
-    nock(HOST).get('/v2/api').query(true)
-      .reply(200, { status: '0', message: 'NOTOK', result: 'Invalid address format' });
+  it('resolves the response body on success (status "1")', async function () {
+    const { api } = mockApi({ status: '1', message: 'OK', result: '123' });
 
-    const api = init('K');
-    return api.account.balance('bad').then(
-      () => assert.fail('should have rejected'),
+    const res = await api.account.balance('0xabc');
+    assert.equal(res.status, '1');
+    assert.equal(res.result, '123');
+  });
+
+  it('rejects with EtherscanError when status is "0"', async function () {
+    const { api } = mockApi({ status: '0', message: 'NOTOK', result: 'Invalid address format' });
+
+    await assert.rejects(
+      () => api.account.balance('bad'),
       err => {
         assert.ok(err instanceof EtherscanError);
         assert.ok(err instanceof Error);
         assert.equal(err.message, 'Invalid address format');
         assert.equal(err.status, '0');
+        return true;
       }
     );
   });
 
-  it('rejects with EtherscanError for a JSON-RPC proxy error object', function () {
-    nock(HOST).get('/v2/api').query(true)
-      .reply(200, { jsonrpc: '2.0', id: 1, error: { code: -32602, message: 'invalid argument' } });
+  it('rejects with EtherscanError for a JSON-RPC proxy error object', async function () {
+    const { api } = mockApi({ jsonrpc: '2.0', id: 1, error: { code: -32602, message: 'invalid argument' } });
 
-    const api = init('K');
-    return api.proxy.eth_getBlockByNumber('0xbad').then(
-      () => assert.fail('should have rejected'),
+    await assert.rejects(
+      () => api.proxy.eth_getBlockByNumber('0xbad'),
       err => {
         assert.ok(err instanceof EtherscanError);
         assert.equal(err.message, 'invalid argument');
+        return true;
       }
     );
   });
 
-  it('passes JSON-RPC proxy success through (no status field)', function () {
-    nock(HOST).get('/v2/api').query(true)
-      .reply(200, { jsonrpc: '2.0', id: 1, result: '0x10d4f' });
+  it('passes JSON-RPC proxy success through (no status field)', async function () {
+    const { api } = mockApi({ jsonrpc: '2.0', id: 1, result: '0x10d4f' });
 
-    const api = init('K');
-    return api.proxy.eth_blockNumber().then(res => {
-      assert.equal(res.result, '0x10d4f');
-    });
+    const res = await api.proxy.eth_blockNumber();
+    assert.equal(res.result, '0x10d4f');
   });
 
-  it('rejects with an Error on network/HTTP failure', function () {
-    nock(HOST).get('/v2/api').query(true).reply(500, 'boom');
+  it('propagates a transport error (e.g. non-2xx / network failure)', async function () {
+    const { api } = mockApi(() => Promise.reject(new Error('Request failed with status code 500')));
 
-    const api = init('K');
-    return api.stats.ethsupply().then(
-      () => assert.fail('should have rejected'),
-      err => assert.ok(err instanceof Error)
-    );
+    await assert.rejects(() => api.stats.ethsupply(), /status code 500/);
   });
 
-  it('honours a caller-supplied request function (custom transport)', function () {
+  it('honours a caller-supplied transport function', async function () {
     let calledUrl;
     const request = function (url) {
       calledUrl = url;
@@ -108,12 +92,9 @@ describe('request layer (get-request)', function () {
     };
 
     const api = init('K', null, 5000, request);
-    return api.stats.ethsupply().then(res => {
-      assert.equal(res.result, 'ok');
-      assert.ok(calledUrl.startsWith('https://api.etherscan.io/v2/api?'));
-      assert.ok(calledUrl.includes('apikey=K'));
-      assert.ok(calledUrl.includes('chainid=1'));
-      assert.ok(calledUrl.includes('action=ethsupply'));
-    });
+    const res = await api.stats.ethsupply();
+    assert.equal(res.result, 'ok');
+    assert.ok(calledUrl.includes('apikey=K'));
+    assert.ok(calledUrl.includes('chainid=1'));
   });
 });

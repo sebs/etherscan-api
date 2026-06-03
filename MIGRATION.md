@@ -71,9 +71,10 @@ If you previously did `.catch(msg => …)` expecting a string, switch to
 - **Zero runtime dependencies.** `axios` was dropped in favour of Node's
   built-in `https`; `querystring` (unused) was removed and `gh-pages` moved to
   `devDependencies`. Nothing ships to consumers but the library itself.
-- Test suite now uses the **Node.js built-in test runner** (`node:test`) and
-  built-in assertions (`node:assert`) — no `mocha`/`chai` dependencies. It is
-  fully mocked with `nock`, so `npm test` needs no API key and never hits the
-  network. An opt-in live smoke suite runs via `ETHERSCAN_LIVE=1 npm run test:live`.
-  Requires Node.js >= 20.
+- Test suite uses **only Node.js built-ins**: the test runner (`node:test`),
+  assertions (`node:assert`), and `node:test`'s `mock.fn()` to stub the HTTP
+  transport (the real `node:https` path is covered separately against a local
+  `node:http` server). No `mocha`/`chai`/`nock` — the project has **no test
+  dependencies of that kind**. `npm test` needs no API key and never touches the
+  network. Requires Node.js >= 20.
 - License metadata corrected to **MIT**.
