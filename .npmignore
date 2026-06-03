@@ -24,6 +24,7 @@ out/
 
 # Project docs not needed by package consumers
 docs/
+examples.md
 
 # Editor / OS cruft
 .idea/

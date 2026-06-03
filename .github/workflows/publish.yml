@@ -60,5 +60,10 @@ jobs:
 
       # No NPM_TOKEN: OIDC provides the short-lived credential, and provenance
       # is generated from this workflow run.
+      #
+      # `--tag latest` is explicit because an anomalous `100.0.0` (published 2019,
+      # under the `next` tag) is the highest version on the registry. npm refuses
+      # to move `latest` implicitly when a higher version exists, so we set it
+      # explicitly — our release is always the intended `latest`.
       - name: Publish to npm
-        run: npm publish --provenance --access public
+        run: npm publish --provenance --access public --tag latest
