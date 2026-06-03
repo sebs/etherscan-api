@@ -8,7 +8,7 @@
     "test:live": "ETHERSCAN_LIVE=1 node --test test/live/*.test.js",
     "posttest": "npm run lint",
     "lint": "jshint lib",
-    "docs": "npx documentation build ./lib/init.js -f html -o out",
+    "docs": "documentation build ./lib/init.js -f html -o out",
     "preversion": "npm run lint && npm run changelog",
     "postversion": "git push && git push --tags",
     "changelog": "rm ./docs/CHANGELOG.md && npx changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add ./docs/CHANGELOG.md && git commit ./docs/CHANGELOG.md -m changelog",
@@ -38,6 +38,7 @@
   },
   "homepage": "https://github.com/sebs/etherscan-api#readme",
   "devDependencies": {
+    "documentation": "14.0.3",
     "gh-pages": "6.3.0",
     "jshint": "2.13.6",
     "watch": "1.0.2"
