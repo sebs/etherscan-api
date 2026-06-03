@@ -1,0 +1,64 @@
+name: Publish
+
+# Manually publish a previously released version to the npm registry.
+# Authentication uses npm Trusted Publishing (OIDC): GitHub mints a short-lived
+# token for this run and npm verifies it against the trusted publisher
+# configured for the package — no long-lived NPM_TOKEN is stored.
+#
+# One-time setup on npmjs.com: package `etherscan-api` -> Settings -> Trusted
+# Publisher -> GitHub Actions, repo `sebs/etherscan-api`, workflow `publish.yml`.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Released version to publish to npm, e.g. 11.0.0'
+        required: true
+        type: string
+
+# OIDC trusted publishing needs an id-token; provenance is attached automatically.
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: publish-${{ inputs.version }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Publish exactly the tagged source for the requested version.
+      - uses: actions/checkout@v4
+        with:
+          ref: v${{ inputs.version }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          registry-url: 'https://registry.npmjs.org'
+
+      # Trusted publishing requires npm >= 11.5.1 (newer than the bundled npm).
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Verify package.json matches the requested version
+        run: |
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "$pkg" != "${{ inputs.version }}" ]; then
+            echo "::error::package.json version ('$pkg') does not match requested version ('${{ inputs.version }}')."
+            exit 1
+          fi
+
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      # No NPM_TOKEN: OIDC provides the short-lived credential, and provenance
+      # is generated from this workflow run.
+      - name: Publish to npm
+        run: npm publish --provenance --access public
