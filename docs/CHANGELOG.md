@@ -1,9 +1,10 @@
-Need to install the following packages:
-changelog@1.4.2
-Ok to proceed? (y) 
 2026-06-03
 ==========
 
+  * fix: a lot of small fixes around the 100.0.0 version
+  * chore: added npmignore
+  * 12.0.0
+  * changelog
   * feature: free api widely covered
   * feature: more v2 features added
   * docs: cleanup
@@ -251,21 +252,3 @@ Ok to proceed? (y)
   * Add package description for personal use of superern
   * change variable name to tokentx
   * add page, offset to tokentx
-
-2019-08-22
-==========
-
-  * Merge pull request [#58](https://github.com/sebs/etherscan-api/issues/58) from kaizvn/master
-    Improve issue [#42](https://github.com/sebs/etherscan-api/issues/42): showing meaning message instead of 'NOTOK'
-
-2019-08-19
-==========
-
-  * chore : remove spacing line format.
-  * Showing message if available
-    - Currently if getting empty array result of transaction, will throw an error with message 'NOTOK!' only and it is really hard to debug. Base on my investigate of response format I think we can use `message = resp.data.message` as error message.
-
-2019-08-12
-==========
-
-  * 10.0.2
