@@ -42,8 +42,5 @@
     "jshint": "2.13.6",
     "nock": "13.5.6",
     "watch": "1.0.2"
-  },
-  "dependencies": {
-    "axios": "1.17.0"
   }
 }

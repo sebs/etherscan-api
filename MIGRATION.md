@@ -15,8 +15,10 @@ The library now calls `https://api.etherscan.io/v2/api?chainid=…` instead of t
 old per-chain hosts. A single Etherscan API key works across all chains — no
 more per-explorer keys.
 
-> If you pass your own axios client, set its `baseURL` to the host
-> `https://api.etherscan.io` (the library appends `/v2/api`).
+> The library now has **no runtime dependencies** and uses Node's built-in
+> `https`. The optional 4th `init` argument changed from a custom **axios
+> client** to a custom **transport function** `(url, { timeout }) => Promise<object>`
+> that resolves the parsed JSON body. See the README for an example.
 
 ### 2. `chain` now means a chainid
 `init(apiKey, chain)` still takes a second `chain` argument, but it now resolves
@@ -66,10 +68,9 @@ If you previously did `.catch(msg => …)` expecting a string, switch to
 `.catch(err => err.message)`.
 
 ## Non-breaking housekeeping in this release
-- `axios` upgraded to a current, advisory-free release; **0 production
-  vulnerabilities**.
-- Removed the unused `querystring` dependency; `gh-pages` moved to
-  `devDependencies`.
+- **Zero runtime dependencies.** `axios` was dropped in favour of Node's
+  built-in `https`; `querystring` (unused) was removed and `gh-pages` moved to
+  `devDependencies`. Nothing ships to consumers but the library itself.
 - Test suite now uses the **Node.js built-in test runner** (`node:test`) and
   built-in assertions (`node:assert`) — no `mocha`/`chai` dependencies. It is
   fully mocked with `nock`, so `npm test` needs no API key and never hits the

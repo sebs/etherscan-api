@@ -23,19 +23,23 @@ balance.then(function(balanceData){
 * [Polymer3 based example](https://github.com/hiherto-elements/test-app)
 
 
-## use a own instance of axios
+## Zero dependencies / custom HTTP transport
+
+This library has **no runtime dependencies** — requests use Node's built-in
+`https` module. If you need custom networking (a proxy, retries, a different
+agent), pass your own transport as the 4th argument to `init`. It receives the
+fully-qualified URL and must resolve with the parsed JSON body:
 
 ```js
-const axios = require('axios');
 const { init } = require('etherscan-api');
 
-// The library appends `/v2/api` to the host, so point baseURL at the host.
-const client = axios.create({
-  baseURL: 'https://api.etherscan.io',
-  timeout: 10000
-});
+// (url, { timeout }) => Promise<object>
+async function request(url, { timeout }) {
+  const res = await fetch(url, { signal: AbortSignal.timeout(timeout) });
+  return res.json();
+}
 
-var api = init('apikey', null, 10000, client);
+var api = init('apikey', null, 10000, request);
 ```
 
 ## Selecting a chain (Etherscan V2 / multichain)

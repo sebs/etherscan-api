@@ -1,6 +1,7 @@
 .idea
 out
 node_modules
+.github
 test
 .jshintrc
 scripts

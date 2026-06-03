@@ -2,7 +2,6 @@
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const nock = require('nock');
-const axios = require('axios');
 const { init } = require('..');
 const { EtherscanError } = require('../lib/errors');
 const { installNock } = require('./helpers');
@@ -101,14 +100,20 @@ describe('request layer (get-request)', function () {
     );
   });
 
-  it('honours a caller-supplied axios client', function () {
-    const scope = nock(HOST)
-      .get('/v2/api')
-      .query(q => q.apikey === 'K' && q.chainid === '1')
-      .reply(200, { status: '1', result: 'ok' });
+  it('honours a caller-supplied request function (custom transport)', function () {
+    let calledUrl;
+    const request = function (url) {
+      calledUrl = url;
+      return Promise.resolve({ status: '1', result: 'ok' });
+    };
 
-    const client = axios.create({ baseURL: HOST, timeout: 5000 });
-    const api = init('K', null, 5000, client);
-    return api.stats.ethsupply().then(() => scope.done());
+    const api = init('K', null, 5000, request);
+    return api.stats.ethsupply().then(res => {
+      assert.equal(res.result, 'ok');
+      assert.ok(calledUrl.startsWith('https://api.etherscan.io/v2/api?'));
+      assert.ok(calledUrl.includes('apikey=K'));
+      assert.ok(calledUrl.includes('chainid=1'));
+      assert.ok(calledUrl.includes('action=ethsupply'));
+    });
   });
 });
