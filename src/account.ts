@@ -1,5 +1,14 @@
 import type { GetRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
+import type {
+  MultiBalanceItem,
+  NormalTransaction,
+  InternalTransaction,
+  Erc20Transfer,
+  Erc721Transfer,
+  Erc1155Transfer,
+  MinedBlock,
+} from './results.js';
 
 export function account(getRequest: GetRequest) {
   return {
@@ -15,7 +24,7 @@ export function account(getRequest: GetRequest) {
      *   '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a'
      * );
      */
-    tokenbalance(address?: string, tokenname?: string, contractaddress?: string): Promise<EtherscanResponse> {
+    tokenbalance(address?: string, tokenname?: string, contractaddress?: string): Promise<EtherscanResponse<string>> {
       const params: QueryParams = { module: 'account', action: 'tokenbalance', tag: 'latest' };
       if (contractaddress) {
         params.contractaddress = contractaddress;
@@ -26,7 +35,7 @@ export function account(getRequest: GetRequest) {
       if (address) {
         params.address = address;
       }
-      return getRequest(params);
+      return getRequest<string>(params);
     },
 
     /**
@@ -36,7 +45,7 @@ export function account(getRequest: GetRequest) {
      * @example
      * api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
      */
-    balance(address: string | string[]): Promise<EtherscanResponse> {
+    balance(address: string | string[]): Promise<EtherscanResponse<string | MultiBalanceItem[]>> {
       let action = 'balance';
       let addr: string;
       if (Array.isArray(address)) {
@@ -45,7 +54,7 @@ export function account(getRequest: GetRequest) {
       } else {
         addr = address;
       }
-      return getRequest({ module: 'account', action, tag: 'latest', address: addr });
+      return getRequest<string | MultiBalanceItem[]>({ module: 'account', action, tag: 'latest', address: addr });
     },
 
     /**
@@ -64,7 +73,7 @@ export function account(getRequest: GetRequest) {
       startblock?: string | number,
       endblock?: string | number,
       sort?: string,
-    ): Promise<EtherscanResponse> {
+    ): Promise<EtherscanResponse<InternalTransaction[]>> {
       const params: QueryParams = { module: 'account', action: 'txlistinternal' };
       params.sort = sort || 'asc';
 
@@ -75,7 +84,7 @@ export function account(getRequest: GetRequest) {
         params.startblock = startblock ?? 0;
         params.endblock = endblock ?? 'latest';
       }
-      return getRequest(params);
+      return getRequest<InternalTransaction[]>(params);
     },
 
     /**
@@ -96,8 +105,8 @@ export function account(getRequest: GetRequest) {
       page?: number,
       offset?: number,
       sort?: string,
-    ): Promise<EtherscanResponse> {
-      return getRequest({
+    ): Promise<EtherscanResponse<NormalTransaction[]>> {
+      return getRequest<NormalTransaction[]>({
         module: 'account',
         action: 'txlist',
         startblock: startblock ?? 0,
@@ -115,8 +124,8 @@ export function account(getRequest: GetRequest) {
      * @example
      * api.account.getminedblocks('0x9dd134d14d1e65f84b706d6f205cd5b1cd03a46b');
      */
-    getminedblocks(address: string): Promise<EtherscanResponse> {
-      return getRequest({ module: 'account', action: 'getminedblocks', address });
+    getminedblocks(address: string): Promise<EtherscanResponse<MinedBlock[]>> {
+      return getRequest<MinedBlock[]>({ module: 'account', action: 'getminedblocks', address });
     },
 
     /**
@@ -137,7 +146,7 @@ export function account(getRequest: GetRequest) {
       page?: number,
       offset?: number,
       sort?: string,
-    ): Promise<EtherscanResponse> {
+    ): Promise<EtherscanResponse<Erc20Transfer[]>> {
       const params: QueryParams = {
         module: 'account',
         action: 'tokentx',
@@ -151,7 +160,7 @@ export function account(getRequest: GetRequest) {
       if (contractaddress) {
         params.contractaddress = contractaddress;
       }
-      return getRequest(params);
+      return getRequest<Erc20Transfer[]>(params);
     },
 
     /**
@@ -172,7 +181,7 @@ export function account(getRequest: GetRequest) {
       page?: number,
       offset?: number,
       sort?: string,
-    ): Promise<EtherscanResponse> {
+    ): Promise<EtherscanResponse<Erc721Transfer[]>> {
       const params: QueryParams = {
         module: 'account',
         action: 'tokennfttx',
@@ -186,7 +195,7 @@ export function account(getRequest: GetRequest) {
       if (contractaddress) {
         params.contractaddress = contractaddress;
       }
-      return getRequest(params);
+      return getRequest<Erc721Transfer[]>(params);
     },
 
     /**
@@ -207,7 +216,7 @@ export function account(getRequest: GetRequest) {
       page?: number,
       offset?: number,
       sort?: string,
-    ): Promise<EtherscanResponse> {
+    ): Promise<EtherscanResponse<Erc1155Transfer[]>> {
       const params: QueryParams = {
         module: 'account',
         action: 'token1155tx',
@@ -221,7 +230,102 @@ export function account(getRequest: GetRequest) {
       if (contractaddress) {
         params.contractaddress = contractaddress;
       }
-      return getRequest(params);
+      return getRequest<Erc1155Transfer[]>(params);
+    },
+
+    /**
+     * Get the beacon chain withdrawals made to an address.
+     * @param address - Account address
+     * @param startblock - Start block
+     * @param endblock - End block
+     * @param page - Page number
+     * @param offset - Max records to return
+     * @param sort - Sort asc/desc
+     */
+    txsBeaconWithdrawal(
+      address: string,
+      startblock?: string | number,
+      endblock?: string | number,
+      page?: number,
+      offset?: number,
+      sort?: string,
+    ): Promise<EtherscanResponse> {
+      return getRequest({
+        module: 'account',
+        action: 'txsBeaconWithdrawal',
+        startblock: startblock ?? 0,
+        endblock: endblock ?? 'latest',
+        page: page ?? 1,
+        offset: offset ?? 100,
+        sort: sort || 'asc',
+        address,
+      });
+    },
+
+    /**
+     * Get the list of L2 deposit transactions for an address.
+     * @param address - Account address
+     * @param startblock - Start block
+     * @param endblock - End block
+     * @param page - Page number
+     * @param offset - Max records to return
+     * @param sort - Sort asc/desc
+     */
+    getdeposittxs(
+      address: string,
+      startblock?: string | number,
+      endblock?: string | number,
+      page?: number,
+      offset?: number,
+      sort?: string,
+    ): Promise<EtherscanResponse> {
+      return getRequest({
+        module: 'account',
+        action: 'getdeposittxs',
+        startblock: startblock ?? 0,
+        endblock: endblock ?? 'latest',
+        page: page ?? 1,
+        offset: offset ?? 100,
+        sort: sort || 'asc',
+        address,
+      });
+    },
+
+    /**
+     * Get the list of L2 withdrawal transactions for an address.
+     * @param address - Account address
+     * @param startblock - Start block
+     * @param endblock - End block
+     * @param page - Page number
+     * @param offset - Max records to return
+     * @param sort - Sort asc/desc
+     */
+    getwithdrawaltxs(
+      address: string,
+      startblock?: string | number,
+      endblock?: string | number,
+      page?: number,
+      offset?: number,
+      sort?: string,
+    ): Promise<EtherscanResponse> {
+      return getRequest({
+        module: 'account',
+        action: 'getwithdrawaltxs',
+        startblock: startblock ?? 0,
+        endblock: endblock ?? 'latest',
+        page: page ?? 1,
+        offset: offset ?? 100,
+        sort: sort || 'asc',
+        address,
+      });
+    },
+
+    /**
+     * Returns the address that first funded a given address.
+     * @param address - Account address
+     */
+    fundedby(address: string): Promise<EtherscanResponse> {
+      return getRequest({ module: 'account', action: 'fundedby', address });
     },
   };
 }

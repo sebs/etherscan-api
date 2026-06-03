@@ -1,12 +1,15 @@
 /**
- * A raw Etherscan API response body. REST endpoints return
- * `{ status, message, result }`; JSON-RPC proxy endpoints return
- * `{ jsonrpc, id, result }` or `{ ..., error }`.
+ * A raw Etherscan API response body, generic over the shape of `result`.
+ * REST endpoints return `{ status, message, result }`; JSON-RPC proxy endpoints
+ * return `{ jsonrpc, id, result }` or `{ ..., error }`. `result` is `T | undefined`
+ * because it is absent on some error responses.
+ *
+ * @typeParam T - The shape of the `result` field for a given endpoint (default `unknown`).
  */
-export interface EtherscanResponse {
+export interface EtherscanResponse<T = unknown> {
   status?: string;
   message?: string;
-  result?: unknown;
+  result?: T;
   error?: unknown;
   jsonrpc?: string;
   id?: number;

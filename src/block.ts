@@ -1,5 +1,6 @@
 import type { GetRequest } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
+import type { BlockReward, BlockCountdown } from './results.js';
 
 export function block(getRequest: GetRequest) {
   return {
@@ -8,16 +9,16 @@ export function block(getRequest: GetRequest) {
      * @param address - Miner address
      * @param blockno - Block number (defaults to 0)
      */
-    getblockreward(address: string, blockno?: string | number): Promise<EtherscanResponse> {
-      return getRequest({ module: 'block', action: 'getblockreward', address, blockno: blockno ?? 0 });
+    getblockreward(address: string, blockno?: string | number): Promise<EtherscanResponse<BlockReward>> {
+      return getRequest<BlockReward>({ module: 'block', action: 'getblockreward', address, blockno: blockno ?? 0 });
     },
 
     /**
      * Returns the estimated time remaining, in seconds, until a certain block is mined.
      * @param blockno - Target block number
      */
-    getblockcountdown(blockno: string | number): Promise<EtherscanResponse> {
-      return getRequest({ module: 'block', action: 'getblockcountdown', blockno });
+    getblockcountdown(blockno: string | number): Promise<EtherscanResponse<BlockCountdown>> {
+      return getRequest<BlockCountdown>({ module: 'block', action: 'getblockcountdown', blockno });
     },
 
     /**
@@ -28,8 +29,8 @@ export function block(getRequest: GetRequest) {
     getblocknobytime(
       timestamp: string | number,
       closest: 'before' | 'after' = 'before',
-    ): Promise<EtherscanResponse> {
-      return getRequest({ module: 'block', action: 'getblocknobytime', timestamp, closest });
+    ): Promise<EtherscanResponse<string>> {
+      return getRequest<string>({ module: 'block', action: 'getblocknobytime', timestamp, closest });
     },
   };
 }

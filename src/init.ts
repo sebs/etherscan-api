@@ -9,7 +9,7 @@ import { transaction } from './transaction.js';
 import { gastracker } from './gastracker.js';
 import { usage } from './usage.js';
 import { resolveChainId } from './chains.js';
-import { createGetRequest, createPostRequest } from './get-request.js';
+import { createGetRequest, createPostRequest, createRawGet } from './get-request.js';
 import type { Transport } from './types.js';
 
 // Etherscan V2: one host for every chain; the network is chosen with `chainid`.
@@ -52,6 +52,7 @@ export function init(
   const config = { baseUrl: HOST, timeout: t };
   const getRequest = createGetRequest(doRequest, defaults, config);
   const postRequest = createPostRequest(doRequest, defaults, config);
+  const rawGet = createRawGet(doRequest, config);
 
   return {
     log: log(getRequest),
@@ -62,6 +63,6 @@ export function init(
     contract: contract(getRequest, postRequest),
     account: account(getRequest),
     gastracker: gastracker(getRequest),
-    usage: usage(getRequest),
+    usage: usage(getRequest, rawGet),
   };
 }

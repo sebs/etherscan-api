@@ -269,4 +269,41 @@ describe('account namespace', function () {
       assert.equal(q.get('contractaddress'), null);
     });
   });
+
+  describe('beacon / L2 transfers', function () {
+    for (const action of ['txsBeaconWithdrawal', 'getdeposittxs', 'getwithdrawaltxs']) {
+      it(`${action} applies the range defaults`, async function () {
+        const { api, transport } = mockApi({ status: '1', result: 'ok' });
+
+        const res = await api.account[action]('0xabc');
+        assert.equal(res.result, 'ok');
+
+        const q = queryOf(transport);
+        assert.equal(q.get('module'), 'account');
+        assert.equal(q.get('action'), action);
+        assert.equal(q.get('address'), '0xabc');
+        assert.equal(q.get('startblock'), '0');
+        assert.equal(q.get('endblock'), 'latest');
+        assert.equal(q.get('page'), '1');
+        assert.equal(q.get('offset'), '100');
+        assert.equal(q.get('sort'), 'asc');
+        assert.equal(q.get('apikey'), 'KEY');
+      });
+    }
+  });
+
+  describe('fundedby', function () {
+    it('sends only the address', async function () {
+      const { api, transport } = mockApi({ status: '1', result: 'ok' });
+
+      const res = await api.account.fundedby('0xabc');
+      assert.equal(res.result, 'ok');
+
+      const q = queryOf(transport);
+      assert.equal(q.get('module'), 'account');
+      assert.equal(q.get('action'), 'fundedby');
+      assert.equal(q.get('address'), '0xabc');
+      assert.equal(q.get('startblock'), null);
+    });
+  });
 });

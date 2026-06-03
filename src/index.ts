@@ -21,6 +21,26 @@ export { init, resolveChainId };
 export { EtherscanError } from './errors.js';
 export type { EtherscanErrorDetails } from './errors.js';
 export type { EtherscanApi } from './init.js';
-export type { VerifySourceCodeParams } from './contract.js';
+export type { VerifyParams, VerifySourceCodeParams } from './contract.js';
 export type { Transport, TransportOptions, EtherscanResponse } from './types.js';
+export type {
+  MultiBalanceItem,
+  NormalTransaction,
+  InternalTransaction,
+  Erc20Transfer,
+  Erc721Transfer,
+  Erc1155Transfer,
+  MinedBlock,
+  UncleReward,
+  BlockReward,
+  BlockCountdown,
+  EventLog,
+  ContractSource,
+  ContractCreation,
+  ExecutionStatus,
+  ReceiptStatus,
+  EthPrice,
+  GasOracle,
+  ChainListItem,
+} from './results.js';
 export { CHAINS, RETIRED_CHAINS } from './chains.js';

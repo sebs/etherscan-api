@@ -291,6 +291,29 @@ describe('contract namespace', function () {
     assert.equal(q.get('action'), 'checkproxyverification');
     assert.equal(q.get('guid'), 'myguid');
   });
+
+  for (const method of ['verifyvyper', 'verifystylus', 'verifyzksyncsourcecode']) {
+    it(`${method} POSTs the verification fields`, async function () {
+      const { api, transport } = mockApi({ status: '1', result: 'g' });
+
+      await api.contract[method]({
+        contractaddress: '0xabc',
+        sourceCode: 'src',
+        contractname: 'C',
+        runs: undefined,
+      });
+
+      assert.equal(optionsOf(transport).method, 'POST');
+      const b = bodyOf(transport);
+      assert.equal(b.get('module'), 'contract');
+      assert.equal(b.get('action'), method);
+      assert.equal(b.get('contractaddress'), '0xabc');
+      assert.equal(b.get('sourceCode'), 'src');
+      assert.equal(b.get('contractname'), 'C');
+      assert.equal(b.get('apikey'), 'KEY');
+      assert.equal(b.get('runs'), null); // undefined dropped
+    });
+  }
 });
 
 describe('usage namespace', function () {
@@ -305,6 +328,19 @@ describe('usage namespace', function () {
     assert.equal(q.get('module'), 'getapilimit');
     assert.equal(q.get('action'), 'getapilimit');
     assert.equal(q.get('apikey'), 'KEY');
+  });
+
+  it('chainlist hits the dedicated /v2/chainlist path (GET, no api params)', async function () {
+    const { api, transport } = mockApi({ result: [{ chainid: '1', chainname: 'Ethereum Mainnet' }] });
+
+    const res = await api.usage.chainlist();
+    assert.ok(Array.isArray(res.result));
+
+    const url = transport.mock.calls[0].arguments[0];
+    assert.ok(url.endsWith('/v2/chainlist'), `unexpected url: ${url}`);
+    assert.ok(!url.includes('/v2/api'));
+    assert.ok(!url.includes('apikey'));
+    assert.notEqual(optionsOf(transport).method, 'POST');
   });
 });
 

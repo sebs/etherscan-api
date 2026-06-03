@@ -5,10 +5,19 @@ import type { EtherscanResponse, Transport } from './types.js';
 export type QueryParams = Record<string, string | number | boolean>;
 
 /** The shared GET request function handed to every namespace. */
-export type GetRequest = (params: QueryParams) => Promise<EtherscanResponse>;
+export interface GetRequest {
+  <T = unknown>(params: QueryParams): Promise<EtherscanResponse<T>>;
+}
 
 /** A POST request function (used by the contract-verification endpoints). */
-export type PostRequest = (params: QueryParams) => Promise<EtherscanResponse>;
+export interface PostRequest {
+  <T = unknown>(params: QueryParams): Promise<EtherscanResponse<T>>;
+}
+
+/** A GET against an arbitrary path under the base URL (e.g. `/v2/chainlist`). */
+export interface RawGet {
+  <T = unknown>(path: string): Promise<EtherscanResponse<T>>;
+}
 
 export interface RequestConfig {
   baseUrl: string;
@@ -69,9 +78,11 @@ export function createGetRequest(
   defaults: Record<string, string | number>,
   config: RequestConfig,
 ): GetRequest {
-  return function getRequest(params: QueryParams): Promise<EtherscanResponse> {
+  return function getRequest<T = unknown>(params: QueryParams): Promise<EtherscanResponse<T>> {
     const url = config.baseUrl + '/v2/api?' + serialize(params, defaults);
-    return Promise.resolve(request(url, { timeout: config.timeout })).then(normalize);
+    return Promise.resolve(request(url, { timeout: config.timeout })).then(normalize) as Promise<
+      EtherscanResponse<T>
+    >;
   };
 }
 
@@ -84,11 +95,23 @@ export function createPostRequest(
   defaults: Record<string, string | number>,
   config: RequestConfig,
 ): PostRequest {
-  return function postRequest(params: QueryParams): Promise<EtherscanResponse> {
+  return function postRequest<T = unknown>(params: QueryParams): Promise<EtherscanResponse<T>> {
     const url = config.baseUrl + '/v2/api';
     const body = serialize(params, defaults);
     return Promise.resolve(
       request(url, { timeout: config.timeout, method: 'POST', body }),
-    ).then(normalize);
+    ).then(normalize) as Promise<EtherscanResponse<T>>;
+  };
+}
+
+/**
+ * Builds a raw GET function for endpoints that live outside `/v2/api` and take
+ * no apikey/chainid — currently just `/v2/chainlist`.
+ */
+export function createRawGet(request: Transport, config: RequestConfig): RawGet {
+  return function rawGet<T = unknown>(path: string): Promise<EtherscanResponse<T>> {
+    return Promise.resolve(request(config.baseUrl + path, { timeout: config.timeout })).then(
+      normalize,
+    ) as Promise<EtherscanResponse<T>>;
   };
 }

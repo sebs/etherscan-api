@@ -1,5 +1,6 @@
 import type { GetRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
+import type { EventLog } from './results.js';
 
 export function log(getRequest: GetRequest) {
   return {
@@ -35,7 +36,7 @@ export function log(getRequest: GetRequest) {
       topic0_2_opr?: string,
       page?: number,
       offset?: number,
-    ): Promise<EtherscanResponse> {
+    ): Promise<EtherscanResponse<EventLog[]>> {
       const params: QueryParams = { module: 'logs', action: 'getLogs' };
 
       if (address) {
@@ -77,7 +78,7 @@ export function log(getRequest: GetRequest) {
       if (offset) {
         params.offset = offset;
       }
-      return getRequest(params);
+      return getRequest<EventLog[]>(params);
     },
   };
 }
