@@ -1,0 +1,9 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/index.ts"],
+  "out": "out",
+  "name": "etherscan-api",
+  "readme": "Readme.md",
+  "excludePrivate": true,
+  "excludeInternal": true
+}

@@ -1,13 +1,8 @@
-'use strict';
-const { describe, it } = require('node:test');
-const assert = require('node:assert/strict');
-const pkg = require('..');
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import * as pkg from '../lib/index.js';
 
 describe('index exports', function () {
-
-  it('can be required', function () {
-    require('..');
-  });
 
   it('exposes init', function () {
     assert.equal(typeof pkg.init, 'function');
@@ -16,6 +11,10 @@ describe('index exports', function () {
   it('exposes resolveChainId', function () {
     assert.equal(typeof pkg.resolveChainId, 'function');
     assert.equal(pkg.resolveChainId('mainnet'), 1);
+  });
+
+  it('exposes the EtherscanError class', function () {
+    assert.equal(typeof pkg.EtherscanError, 'function');
   });
 
   it('init returns the expected namespaces', function () {

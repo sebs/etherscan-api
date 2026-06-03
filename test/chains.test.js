@@ -1,7 +1,6 @@
-'use strict';
-const { describe, it } = require('node:test');
-const assert = require('node:assert/strict');
-const { resolveChainId, CHAINS } = require('../lib/chains');
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { resolveChainId, CHAINS } from '../lib/chains.js';
 
 describe('chains.resolveChainId', function () {
 

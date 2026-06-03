@@ -1,7 +1,6 @@
-'use strict';
-const { describe, it } = require('node:test');
-const assert = require('node:assert/strict');
-const { mockApi, queryOf } = require('./helpers');
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { mockApi, queryOf } from './helpers.js';
 
 // Every proxy endpoint is JSON-RPC shaped: success replies carry no `status`
 // field, just `{ jsonrpc, id, result }`, and the method resolves with the body.

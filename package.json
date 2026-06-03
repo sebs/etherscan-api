@@ -2,17 +2,32 @@
   "name": "etherscan-api",
   "version": "11.0.0",
   "description": "API to etherscan with a simple interface (Etherscan V2, multichain)",
-  "main": "index.js",
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    }
+  },
+  "files": [
+    "lib",
+    "MIGRATION.md"
+  ],
   "scripts": {
+    "prebuild": "rm -rf lib",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "prepare": "npm run build",
+    "pretest": "npm run build",
     "test": "node --test test/*.test.js",
     "test:live": "ETHERSCAN_LIVE=1 node --test test/live/*.test.js",
-    "posttest": "npm run lint",
-    "lint": "jshint lib",
-    "docs": "documentation build ./lib/init.js -f html -o out",
-    "preversion": "npm run lint && npm run changelog",
+    "docs": "typedoc",
+    "clean": "rm -rf lib out",
+    "preversion": "npm run typecheck && npm run changelog",
     "postversion": "git push && git push --tags",
-    "changelog": "rm ./docs/CHANGELOG.md && npx changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add ./docs/CHANGELOG.md && git commit ./docs/CHANGELOG.md -m changelog",
-    "build": "npm run test && npm run docs"
+    "changelog": "rm ./docs/CHANGELOG.md && npx changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add ./docs/CHANGELOG.md && git commit ./docs/CHANGELOG.md -m changelog"
   },
   "keywords": [
     "arbiscan",
@@ -38,9 +53,8 @@
   },
   "homepage": "https://github.com/sebs/etherscan-api#readme",
   "devDependencies": {
-    "documentation": "14.0.3",
-    "gh-pages": "6.3.0",
-    "jshint": "2.13.6",
-    "watch": "1.0.2"
+    "@types/node": "22.10.5",
+    "typedoc": "0.28.19",
+    "typescript": "6.0.3"
   }
 }

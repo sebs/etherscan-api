@@ -7,15 +7,17 @@
 
 A way to access the [etherscan.io api](https://etherscan.io/apis) using promises. Fetch a diverse set of information about the blockchain.
 
+Written in TypeScript, shipped as an **ES module** with bundled type declarations. Requires Node.js >= 20.
+
 Mainnet
 
 
 ```javascript
-var api = require('etherscan-api').init('YourApiKey');
-var balance = api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
-balance.then(function(balanceData){
-  console.log(balanceData);
-});
+import { init } from 'etherscan-api';
+
+const api = init('YourApiKey');
+const balance = await api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+console.log(balance);
 ```
 
 ## Example in the wild
@@ -31,7 +33,7 @@ agent), pass your own transport as the 4th argument to `init`. It receives the
 fully-qualified URL and must resolve with the parsed JSON body:
 
 ```js
-const { init } = require('etherscan-api');
+import { init } from 'etherscan-api';
 
 // (url, { timeout }) => Promise<object>
 async function request(url, { timeout }) {
@@ -39,7 +41,7 @@ async function request(url, { timeout }) {
   return res.json();
 }
 
-var api = init('apikey', null, 10000, request);
+const api = init('apikey', null, 10000, request);
 ```
 
 ## Selecting a chain (Etherscan V2 / multichain)
@@ -51,8 +53,10 @@ with a `chainid` query parameter. **One API key works across all chains.**
 Pass a chain name (or a numeric chainid) as the second argument to `init`:
 
 ```javascript
+import { init } from 'etherscan-api';
+
 // apikey, chain, timeout
-var api = require('etherscan-api').init('YourApiKey', 'sepolia', 3000);
+const api = init('YourApiKey', 'sepolia', 3000);
 ```
 
 Supported chain names:
@@ -90,14 +94,12 @@ error with a helpful message — use `sepolia` or `holesky` instead.
 
 ## Development workflow
 
-* npm test  - runs the (fully mocked) test suite, no API key required
-  * npm run posttest - starts the linter
-* npm run test:live - runs the tests against the real Etherscan API
-* npm run lint - preconfigured linter
-* npm run docs - generates the apidocs
-* npm run preversion - Steps before we create a new Tag
-  * lint
-  * changelog
-* npm run pages - pushes generated apidocs to the server
-* postversion - after generating a new version, push the tag to the server
-* npm run changelog - generates a changelog and pushes it
+Source lives in `./src` (TypeScript) and compiles to `./lib` (ES modules + `.d.ts`).
+
+* `npm run build` - compiles `src` → `lib` with `tsc`
+* `npm run typecheck` - type-checks without emitting (replaces the old linter)
+* `npm test` - builds, then runs the fully mocked test suite (no API key required)
+* `npm run test:live` - runs the tests against the real Etherscan API
+* `npm run docs` - generates the API docs with TypeDoc
+* `npm run preversion` - type-check + changelog before tagging a release
+* `npm run changelog` - generates a changelog and pushes it

@@ -1,8 +1,7 @@
-'use strict';
-const { describe, it, before, after } = require('node:test');
-const assert = require('node:assert/strict');
-const http = require('node:http');
-const httpGet = require('../lib/http-get');
+import { describe, it, before, after } from 'node:test';
+import assert from 'node:assert/strict';
+import http from 'node:http';
+import httpGet from '../lib/http-get.js';
 
 // Exercises the real built-in node:https/node:http transport against a local
 // server — no third-party HTTP mocking, no external network.

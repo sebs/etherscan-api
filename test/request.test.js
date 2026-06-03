@@ -1,9 +1,8 @@
-'use strict';
-const { describe, it } = require('node:test');
-const assert = require('node:assert/strict');
-const { init } = require('..');
-const { EtherscanError } = require('../lib/errors');
-const { mockApi, queryOf } = require('./helpers');
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { init } from '../lib/index.js';
+import { EtherscanError } from '../lib/errors.js';
+import { mockApi, queryOf } from './helpers.js';
 
 describe('request layer (get-request)', function () {
 

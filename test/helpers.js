@@ -1,6 +1,5 @@
-'use strict';
-const { mock } = require('node:test');
-const { init } = require('..');
+import { mock } from 'node:test';
+import { init } from '../lib/index.js';
 
 // Unit tests mock at the transport seam (the 4th arg to init) using node:test's
 // built-in mock.fn() — no HTTP interception, no third-party mocking library, and
@@ -9,13 +8,12 @@ const { init } = require('..');
 
 /**
  * Build an api whose HTTP transport is a node:test mock.
- *
  * @param {object|function} response - The body the transport resolves with, or
  *   a custom transport implementation `(url, opts) => Promise`.
  * @param {object} [opts] - { apiKey, chain, timeout }
  * @returns {{ api: object, transport: import('node:test').Mock }}
  */
-function mockApi(response, opts) {
+export function mockApi(response, opts) {
   opts = opts || {};
   const impl = typeof response === 'function'
     ? response
@@ -30,9 +28,7 @@ function mockApi(response, opts) {
  * The URLSearchParams of the transport's Nth call (default: first).
  * Use `.get('name')` to read a param (returns null when absent).
  */
-function queryOf(transport, callIndex) {
+export function queryOf(transport, callIndex) {
   const call = transport.mock.calls[callIndex || 0];
   return new URL(call.arguments[0]).searchParams;
 }
-
-module.exports = { mockApi, queryOf };

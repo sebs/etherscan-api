@@ -5,10 +5,25 @@ targets the unified **V2** endpoint: a single base URL with a `chainid`
 parameter, and one API key that works across every supported chain.
 
 The public method surface is unchanged — `api.<namespace>.<method>()` calls work
-exactly as before. The breaking changes are in configuration, chain selection,
-and error handling.
+exactly as before. The breaking changes are in packaging, configuration, chain
+selection, and error handling.
 
 ## Breaking changes
+
+### 0. ESM-only, TypeScript-typed (packaging)
+The package is now an **ES module** (`"type": "module"`) written in TypeScript and
+shipped with bundled `.d.ts` declarations. Import it instead of `require`-ing it:
+
+```js
+// before (v10)
+const { init } = require('etherscan-api');
+// now (v11)
+import { init } from 'etherscan-api';
+```
+
+Modern Node can still `require()` an ES module (Node >= 20.19 / 22.12), but `import`
+is the supported path. **Requires Node.js >= 20.** Source lives in `./src`; the
+published package contains the compiled `./lib` plus type declarations.
 
 ### 1. Endpoint & API key
 The library now calls `https://api.etherscan.io/v2/api?chainid=…` instead of the
