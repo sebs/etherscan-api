@@ -11,10 +11,6 @@
       "import": "./lib/index.js"
     }
   },
-  "files": [
-    "lib",
-    "MIGRATION.md"
-  ],
   "scripts": {
     "prebuild": "rm -rf lib",
     "build": "tsc",

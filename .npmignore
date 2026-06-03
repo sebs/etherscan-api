@@ -1,0 +1,36 @@
+# The published package ships only the compiled output in lib/ (plus README,
+# LICENSE, MIGRATION and package.json, which npm always includes). Everything
+# below is development-only.
+#
+# Note: because this .npmignore exists, npm ignores .gitignore — so the built
+# lib/ (which is git-ignored) is still published.
+
+# TypeScript sources — consumers use the compiled lib/ + bundled .d.ts
+src/
+tsconfig.json
+
+# Tests
+test/
+
+# Tooling, CI and config
+.github/
+typedoc.json
+jsdoc.json
+.gitignore
+.editorconfig
+
+# Generated TypeDoc site (deployed to GitHub Pages, not npm)
+out/
+
+# Project docs not needed by package consumers
+docs/
+
+# Editor / OS cruft
+.idea/
+.vscode/
+.DS_Store
+
+# Local artifacts
+*.tgz
+*.log
+coverage/
