@@ -1,7 +1,5 @@
 # Etherscan API
 
-## Development of a NEXTGEN Version has started - please stand by
-
 [![npm](https://img.shields.io/npm/dt/etherscan-api.svg)](https://www.npmjs.com/package/etherscan-api)
 [![license](https://img.shields.io/github/license/sebs/etherscan-api.svg)](https://github.com/sebs/etherscan-api/blob/master/LICENSE.md)
 [![GitHub tag](https://img.shields.io/github/tag/sebs/etherscan-api.svg)](https://github.com/sebs/etherscan-api)
@@ -29,45 +27,50 @@ balance.then(function(balanceData){
 
 ```js
 const axios = require('axios');
-const {
-  init,
-  pickChainUrl
-} = require('..');
+const { init } = require('etherscan-api');
 
-
-const chain = pickChainUrl(null);
+// The library appends `/v2/api` to the host, so point baseURL at the host.
 const client = axios.create({
-  baseURL: chain,
+  baseURL: 'https://api.etherscan.io',
   timeout: 10000
 });
 
 var api = init('apikey', null, 10000, client);
 ```
 
-## For testnet and L2s usage
+## Selecting a chain (Etherscan V2 / multichain)
 
-Supported Chain Explorers
+Etherscan deprecated the V1 API on 2025-08-15. This library now talks to a
+single base URL — `https://api.etherscan.io/v2/api` — and selects the network
+with a `chainid` query parameter. **One API key works across all chains.**
 
-* [Etherscan](https://etherscan.io)
-  * ropsten: 'https://api-ropsten.etherscan.io'
-  * kovan: 'https://api-kovan.etherscan.io'
-  * rinkeby: 'https://api-rinkeby.etherscan.io'
-  * goerli: 'https://api-goerli.etherscan.io'
-  * sepolia: 'https://api-sepolia.etherscan.io'
-  * homestead: 'https://api.etherscan.io'
-* [Arbiscan](https://arbiscan.io) (Experimental)
-  * arbitrum: 'https://api.arbiscan.io'
-  * arbitrum_rinkeby: 'https://api-testnet.arbiscan.io'
-* [Snowtrace](https://snowtrace.io) (Experimental)
-  * avalanche:'https://api.snowtrace.io',
-  * avalanche_fuji: 'https://api-testnet.snowtrace.io'
-
-Latest
+Pass a chain name (or a numeric chainid) as the second argument to `init`:
 
 ```javascript
-// apikey, network, timeout
-var api = require('etherscan-api').init('YourApiKey','rinkeby'. '3000');
+// apikey, chain, timeout
+var api = require('etherscan-api').init('YourApiKey', 'sepolia', 3000);
 ```
+
+Supported chain names:
+
+| Name                                | chainid    |
+| ----------------------------------- | ---------- |
+| `mainnet` / `homestead` / `ethereum`| 1          |
+| `sepolia`                           | 11155111   |
+| `holesky`                           | 17000      |
+| `arbitrum`                          | 42161      |
+| `optimism`                          | 10         |
+| `base`                              | 8453       |
+| `polygon`                           | 137        |
+| `bsc`                               | 56         |
+| `avalanche`                         | 43114      |
+
+Any other chain is reachable by passing its numeric chainid directly, e.g.
+`init('YourApiKey', 59144)` for Linea.
+
+Retired testnets (`ropsten`, `rinkeby`, `kovan`, `goerli`, `morden`,
+`arbitrum_rinkeby`, `avalanche_fuji`) have been removed and now **throw** an
+error with a helpful message — use `sepolia` or `holesky` instead.
 
 ## Install
 
@@ -83,11 +86,11 @@ var api = require('etherscan-api').init('YourApiKey','rinkeby'. '3000');
 
 ## Development workflow
 
-* npm test  - runs tests
+* npm test  - runs the (fully mocked) test suite, no API key required
   * npm run posttest - starts the linter
+* npm run test:live - runs the tests against the real Etherscan API
 * npm run lint - preconfigured linter
 * npm run docs - generates the apidocs
-* npm run bundle - builds a new bundle
 * npm run preversion - Steps before we create a new Tag
   * lint
   * changelog

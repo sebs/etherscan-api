@@ -3,8 +3,11 @@ out
 node_modules
 test
 .jshintrc
+.mocharc.json
 scripts
 docs
 dist
 jsdoc.json
 test-do.md
+review.md
+migrate-to-v2.md

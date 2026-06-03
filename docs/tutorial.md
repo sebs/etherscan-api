@@ -1,18 +1,45 @@
 # Tutorial
 
-You can use a simple include, containing all code required to use the api.
-Just use the cdn.
+This is a Node.js / CommonJS library for the [Etherscan API](https://etherscan.io/apis).
 
-## Use from CDN
+## Install
 
-Latest
-
-```html
-<script src="ttps://cdn.jsdelivr.net/gh/sebs/etherscan-api/dist/bundle.js"></script>
+```bash
+npm install etherscan-api
 ```
 
-A specific version
+## Usage
 
-```html
-<script src="https://cdn.jsdelivr.net/gh/sebs/etherscan-api@v1.3.0/dist/bundle.js"></script>
+Require the library and create an API instance with your API key. With no chain
+argument it defaults to Ethereum mainnet:
+
+```js
+const { init } = require('etherscan-api');
+
+const api = init('YourApiKey');
+```
+
+To target another network, pass a chain name (or a numeric chainid) as the
+second argument. One API key works across all chains:
+
+```js
+const { init } = require('etherscan-api');
+
+const api = init('YourApiKey', 'sepolia');
+```
+
+## Fetching a balance
+
+Every call returns a promise:
+
+```js
+const { init } = require('etherscan-api');
+
+const api = init('YourApiKey');
+
+api.account
+  .balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae')
+  .then((data) => {
+    console.log(data.result);
+  });
 ```
