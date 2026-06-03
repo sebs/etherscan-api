@@ -17,6 +17,8 @@ export function log(getRequest: GetRequest) {
      * @param topic2_3_opr - and|or operator between topic2 \& topic3
      * @param topic3 - Topic 3 (32 bytes)
      * @param topic0_2_opr - and|or operator between topic0 \& topic2
+     * @param page - Page number
+     * @param offset - Max records to return
      * @see https://docs.etherscan.io/api-endpoints/logs
      */
     getLogs(
@@ -31,6 +33,8 @@ export function log(getRequest: GetRequest) {
       topic2_3_opr?: string,
       topic3?: string,
       topic0_2_opr?: string,
+      page?: number,
+      offset?: number,
     ): Promise<EtherscanResponse> {
       const params: QueryParams = { module: 'logs', action: 'getLogs' };
 
@@ -66,6 +70,12 @@ export function log(getRequest: GetRequest) {
       }
       if (topic3) {
         params.topic3 = topic3;
+      }
+      if (page) {
+        params.page = page;
+      }
+      if (offset) {
+        params.offset = offset;
       }
       return getRequest(params);
     },

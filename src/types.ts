@@ -16,11 +16,17 @@ export interface EtherscanResponse {
 export interface TransportOptions {
   /** Request timeout in milliseconds. */
   timeout?: number;
+  /** HTTP method (default `'GET'`). `'POST'` is used by the verification endpoints. */
+  method?: 'GET' | 'POST';
+  /** Form-encoded request body, set for `POST` requests. */
+  body?: string;
 }
 
 /**
- * HTTP transport contract. Receives a fully-qualified URL and resolves with the
- * parsed JSON body. The default implementation uses Node's built-in `https`;
- * callers can supply their own as the 4th argument to {@link init}.
+ * HTTP transport contract. Receives a fully-qualified URL plus options and
+ * resolves with the parsed JSON body. The default implementation uses Node's
+ * built-in `https`/`http`; callers can supply their own as the 4th argument to
+ * {@link init}. A custom transport only needs to honour `options.method` and
+ * `options.body` if it will be used for the contract-verification endpoints.
  */
 export type Transport = (url: string, options?: TransportOptions) => Promise<EtherscanResponse>;

@@ -188,5 +188,40 @@ export function account(getRequest: GetRequest) {
       }
       return getRequest(params);
     },
+
+    /**
+     * Get a list of "ERC1155 - Token Transfer Events" by address.
+     * @param address - Account address
+     * @param contractaddress - ERC1155 token contract address (omit for all tokens)
+     * @param startblock - Start block
+     * @param endblock - End block
+     * @param page - Page number
+     * @param offset - Max records to return
+     * @param sort - Sort asc/desc
+     */
+    token1155tx(
+      address: string,
+      contractaddress?: string,
+      startblock?: string | number,
+      endblock?: string | number,
+      page?: number,
+      offset?: number,
+      sort?: string,
+    ): Promise<EtherscanResponse> {
+      const params: QueryParams = {
+        module: 'account',
+        action: 'token1155tx',
+        startblock: startblock ?? 0,
+        endblock: endblock ?? 'latest',
+        page: page ?? 1,
+        offset: offset ?? 100,
+        sort: sort || 'asc',
+        address,
+      };
+      if (contractaddress) {
+        params.contractaddress = contractaddress;
+      }
+      return getRequest(params);
+    },
   };
 }

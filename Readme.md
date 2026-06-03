@@ -35,9 +35,16 @@ fully-qualified URL and must resolve with the parsed JSON body:
 ```js
 import { init } from 'etherscan-api';
 
-// (url, { timeout }) => Promise<object>
-async function request(url, { timeout }) {
-  const res = await fetch(url, { signal: AbortSignal.timeout(timeout) });
+// (url, { timeout, method, body }) => Promise<object>
+// `method`/`body` are only set for the POST contract-verification endpoints;
+// for read-only use you can ignore them.
+async function request(url, { timeout, method = 'GET', body }) {
+  const res = await fetch(url, {
+    method,
+    body,
+    headers: body ? { 'Content-Type': 'application/x-www-form-urlencoded' } : undefined,
+    signal: AbortSignal.timeout(timeout),
+  });
   return res.json();
 }
 

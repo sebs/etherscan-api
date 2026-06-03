@@ -234,4 +234,39 @@ describe('account namespace', function () {
       assert.equal(q.get('sort'), 'asc');
     });
   });
+
+  describe('token1155tx', function () {
+    it('builds the request with a contractaddress and defaults', async function () {
+      const { api, transport } = mockApi({ status: '1', result: 'ok' });
+
+      const res = await api.account.token1155tx(
+        '0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae',
+        '0x76be3b62873462d2142405439777e971754e8e77'
+      );
+      assert.equal(res.result, 'ok');
+
+      const q = queryOf(transport);
+      assert.equal(q.get('apikey'), 'KEY');
+      assert.equal(q.get('module'), 'account');
+      assert.equal(q.get('action'), 'token1155tx');
+      assert.equal(q.get('address'), '0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+      assert.equal(q.get('contractaddress'), '0x76be3b62873462d2142405439777e971754e8e77');
+      assert.equal(q.get('startblock'), '0');
+      assert.equal(q.get('endblock'), 'latest');
+      assert.equal(q.get('page'), '1');
+      assert.equal(q.get('offset'), '100');
+      assert.equal(q.get('sort'), 'asc');
+    });
+
+    it('omits contractaddress when not supplied', async function () {
+      const { api, transport } = mockApi({ status: '1', result: 'ok' });
+
+      const res = await api.account.token1155tx('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+      assert.equal(res.result, 'ok');
+
+      const q = queryOf(transport);
+      assert.equal(q.get('action'), 'token1155tx');
+      assert.equal(q.get('contractaddress'), null);
+    });
+  });
 });

@@ -32,3 +32,17 @@ export function queryOf(transport, callIndex) {
   const call = transport.mock.calls[callIndex || 0];
   return new URL(call.arguments[0]).searchParams;
 }
+
+/** The transport options ({ timeout, method, body }) of the Nth call. */
+export function optionsOf(transport, callIndex) {
+  const call = transport.mock.calls[callIndex || 0];
+  return call.arguments[1] || {};
+}
+
+/**
+ * The form-encoded POST body of the transport's Nth call, parsed as
+ * URLSearchParams. Use `.get('name')` to read a field.
+ */
+export function bodyOf(transport, callIndex) {
+  return new URLSearchParams(optionsOf(transport, callIndex).body || '');
+}

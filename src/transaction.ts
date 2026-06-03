@@ -10,5 +10,13 @@ export function transaction(getRequest: GetRequest) {
     getstatus(txhash: string): Promise<EtherscanResponse> {
       return getRequest({ module: 'transaction', action: 'getstatus', txhash });
     },
+
+    /**
+     * Returns the receipt status of a transaction (only for post-Byzantium blocks).
+     * @param txhash - Transaction hash
+     */
+    gettxreceiptstatus(txhash: string): Promise<EtherscanResponse> {
+      return getRequest({ module: 'transaction', action: 'gettxreceiptstatus', txhash });
+    },
   };
 }

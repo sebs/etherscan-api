@@ -19,7 +19,7 @@ describe('index exports', function () {
 
   it('init returns the expected namespaces', function () {
     const api = pkg.init('KEY');
-    ['log', 'proxy', 'stats', 'block', 'transaction', 'contract', 'account']
+    ['log', 'proxy', 'stats', 'block', 'transaction', 'contract', 'account', 'gastracker', 'usage']
       .forEach(ns => assert.ok(ns in api));
   });
 

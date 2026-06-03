@@ -26,6 +26,16 @@ export function stats(getRequest: GetRequest) {
       return getRequest({ module: 'stats', action: 'ethsupply' });
     },
 
+    /** Returns the total supply of ether including Eth2 staking and burnt fees. */
+    ethsupply2(): Promise<EtherscanResponse> {
+      return getRequest({ module: 'stats', action: 'ethsupply2' });
+    },
+
+    /** Returns the total number of discoverable nodes on the network. */
+    nodecount(): Promise<EtherscanResponse> {
+      return getRequest({ module: 'stats', action: 'nodecount' });
+    },
+
     /** Returns the current ether price. */
     ethprice(): Promise<EtherscanResponse> {
       return getRequest({ module: 'stats', action: 'ethprice' });

@@ -57,6 +57,21 @@ describe('request layer (get-request)', function () {
     );
   });
 
+  it('resolves (not rejects) an empty result reported as status "0" with an array', async function () {
+    const { api } = mockApi({ status: '0', message: 'No transactions found', result: [] });
+
+    const res = await api.account.txlist('0xabc');
+    assert.equal(res.status, '0');
+    assert.deepEqual(res.result, []);
+  });
+
+  it('resolves an empty result identified by the "No records found" message', async function () {
+    const { api } = mockApi({ status: '0', message: 'No records found', result: '' });
+
+    const res = await api.account.tokentx('0xabc');
+    assert.equal(res.message, 'No records found');
+  });
+
   it('rejects with EtherscanError for a JSON-RPC proxy error object', async function () {
     const { api } = mockApi({ jsonrpc: '2.0', id: 1, error: { code: -32602, message: 'invalid argument' } });
 
