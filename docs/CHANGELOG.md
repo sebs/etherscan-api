@@ -1,11 +1,45 @@
+Need to install the following packages:
+changelog@1.4.2
+Ok to proceed? (y) 
+2026-06-03
+==========
+
+  * feature: free api widely covered
+  * feature: more v2 features added
+  * docs: cleanup
+  * refactor: docs on tag
+  * refactor: documentation
+  * chore: inlined doc tools
+  * refactor: get rid of nock
+  * refactor: remove axios
+  * feature: pipeline
+  * refactor: node internal test runner and asserts used
+  * feature: support v2 api from etherscan
+  * docs: prepare phase 2
+
+2023-01-24
+==========
+
+  * Merge pull request [#120](https://github.com/sebs/etherscan-api/issues/120) from sebs/snyk-fix-a2fe87df9f3e02c8599d49bcb7f6adcb
+    [Snyk] Security upgrade gh-pages from 4.0.0 to 5.0.0
+
+2023-01-23
+==========
+
+  * fix: package.json & package-lock.json to reduce vulnerabilities
+    The following vulnerabilities are fixed with an upgrade:
+    - https://snyk.io/vuln/SNYK-JS-GHPAGES-3042993
+
 2023-01-07
 ==========
 
+  * chore: do not publish jsdoc config and extra md file
+  * 10.3.0
+  * changelog
   * fix: refactoring errors and linting
   * refactor: remove bundle step
   * refactor: replace querystring with URLSearchParams
   * 10.2.2
-  * changelog
   * docs: remove travis build status
   * docs: Document Chain Explrers and api urls
 
@@ -235,53 +269,3 @@
 ==========
 
   * 10.0.2
-  * changelog
-  * bundle
-  * 10.0.1
-  * remove useless service
-  * Updated dependencies to fix vulns
-
-2019-08-04
-==========
-
-  * Update Readme.md
-
-2019-06-18
-==========
-
-  * Update get-request.js
-    Without this fix library returns "NOTOK" on "No transactions found" error, while requesting txlist or tokentx
-
-2019-04-07
-==========
-
-  * txlistinternal now respects passed in parameters
-
-2019-01-04
-==========
-
-  * remove jsdoc
-  * Add documentation
-
-2019-01-03
-==========
-
-  * Improved tests
-
-2018-12-18
-==========
-
-  * Update tutorial.md
-  * Merge pull request [#40](https://github.com/sebs/etherscan-api/issues/40) from jsdelivrbot/master
-    RawGit is shutting down, replace it with jsDelivr
-
-2018-12-08
-==========
-
-  * Replace RawGit with jsDelivr
-
-2018-11-27
-==========
-
-  * 10.0.0
-  * changelog
