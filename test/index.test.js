@@ -1,5 +1,6 @@
 'use strict';
-const assert = require('chai').assert;
+const { describe, it } = require('node:test');
+const assert = require('node:assert/strict');
 const pkg = require('..');
 
 describe('index exports', function () {
@@ -9,18 +10,18 @@ describe('index exports', function () {
   });
 
   it('exposes init', function () {
-    assert.isFunction(pkg.init);
+    assert.equal(typeof pkg.init, 'function');
   });
 
   it('exposes resolveChainId', function () {
-    assert.isFunction(pkg.resolveChainId);
+    assert.equal(typeof pkg.resolveChainId, 'function');
     assert.equal(pkg.resolveChainId('mainnet'), 1);
   });
 
   it('init returns the expected namespaces', function () {
     const api = pkg.init('KEY');
     ['log', 'proxy', 'stats', 'block', 'transaction', 'contract', 'account']
-      .forEach(ns => assert.property(api, ns));
+      .forEach(ns => assert.ok(ns in api));
   });
 
   it('init works with no arguments (defaults)', function () {

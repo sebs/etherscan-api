@@ -1,9 +1,13 @@
 'use strict';
-const assert = require('chai').assert;
+const { describe, it } = require('node:test');
+const assert = require('node:assert/strict');
 const nock = require('nock');
 const axios = require('axios');
 const { init } = require('..');
 const { EtherscanError } = require('../lib/errors');
+const { installNock } = require('./helpers');
+
+installNock();
 
 const HOST = 'https://api.etherscan.io';
 
@@ -55,8 +59,8 @@ describe('request layer (get-request)', function () {
     return api.account.balance('bad').then(
       () => assert.fail('should have rejected'),
       err => {
-        assert.instanceOf(err, EtherscanError);
-        assert.instanceOf(err, Error);
+        assert.ok(err instanceof EtherscanError);
+        assert.ok(err instanceof Error);
         assert.equal(err.message, 'Invalid address format');
         assert.equal(err.status, '0');
       }
@@ -71,7 +75,7 @@ describe('request layer (get-request)', function () {
     return api.proxy.eth_getBlockByNumber('0xbad').then(
       () => assert.fail('should have rejected'),
       err => {
-        assert.instanceOf(err, EtherscanError);
+        assert.ok(err instanceof EtherscanError);
         assert.equal(err.message, 'invalid argument');
       }
     );
@@ -93,7 +97,7 @@ describe('request layer (get-request)', function () {
     const api = init('K');
     return api.stats.ethsupply().then(
       () => assert.fail('should have rejected'),
-      err => assert.instanceOf(err, Error)
+      err => assert.ok(err instanceof Error)
     );
   });
 

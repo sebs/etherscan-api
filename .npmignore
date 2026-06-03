@@ -3,7 +3,6 @@ out
 node_modules
 test
 .jshintrc
-.mocharc.json
 scripts
 docs
 dist

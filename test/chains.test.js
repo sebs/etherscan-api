@@ -1,5 +1,6 @@
 'use strict';
-const assert = require('chai').assert;
+const { describe, it } = require('node:test');
+const assert = require('node:assert/strict');
 const { resolveChainId, CHAINS } = require('../lib/chains');
 
 describe('chains.resolveChainId', function () {

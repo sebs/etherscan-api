@@ -70,7 +70,9 @@ If you previously did `.catch(msg => …)` expecting a string, switch to
   vulnerabilities**.
 - Removed the unused `querystring` dependency; `gh-pages` moved to
   `devDependencies`.
-- Test suite is now fully mocked with `nock` — `npm test` needs no API key and
-  never hits the network. An opt-in live smoke suite runs via
-  `ETHERSCAN_LIVE=1 npm run test:live`.
+- Test suite now uses the **Node.js built-in test runner** (`node:test`) and
+  built-in assertions (`node:assert`) — no `mocha`/`chai` dependencies. It is
+  fully mocked with `nock`, so `npm test` needs no API key and never hits the
+  network. An opt-in live smoke suite runs via `ETHERSCAN_LIVE=1 npm run test:live`.
+  Requires Node.js >= 20.
 - License metadata corrected to **MIT**.

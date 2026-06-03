@@ -12,7 +12,6 @@
     "unused": true,
     "undef": true,
     "node": true,
-    "mocha": true,
     "esversion": 6,
     "predef": [
         "console"

@@ -4,8 +4,8 @@
   "description": "API to etherscan with a simple interface (Etherscan V2, multichain)",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
-    "test:live": "ETHERSCAN_LIVE=1 mocha -t 20000 \"test/live/**/*.test.js\"",
+    "test": "node --test test/*.test.js",
+    "test:live": "ETHERSCAN_LIVE=1 node --test test/live/*.test.js",
     "posttest": "npm run lint",
     "lint": "jshint lib",
     "docs": "npx documentation build ./lib/init.js -f html -o out",
@@ -31,17 +31,15 @@
   "author": "Sebastian Schürmann",
   "license": "MIT",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "bugs": {
     "url": "https://github.com/sebs/etherscan-api/issues"
   },
   "homepage": "https://github.com/sebs/etherscan-api#readme",
   "devDependencies": {
-    "chai": "4.3.7",
     "gh-pages": "6.3.0",
     "jshint": "2.13.6",
-    "mocha": "10.2.0",
     "nock": "13.5.6",
     "watch": "1.0.2"
   },

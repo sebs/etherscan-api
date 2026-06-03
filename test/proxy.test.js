@@ -1,7 +1,11 @@
 'use strict';
-const assert = require('chai').assert;
+const { describe, it } = require('node:test');
+const assert = require('node:assert/strict');
 const nock = require('nock');
 const { init } = require('..');
+const { installNock } = require('./helpers');
+
+installNock();
 
 const HOST = 'https://api.etherscan.io';
 const KEY = 'KEY';
