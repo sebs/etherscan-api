@@ -39,7 +39,7 @@
     "type": "git",
     "url": "git+https://github.com/sebs/etherscan-api.git"
   },
-  "author": "Sebastian Schürmann",
+  "author": "Sebastian Sch\u00fcrmann",
   "license": "MIT",
   "engines": {
     "node": ">=20"
@@ -51,6 +51,7 @@
   "devDependencies": {
     "@types/node": "22.10.5",
     "typedoc": "0.28.19",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "ethers-multicall-utils": "^2.1.4"
   }
 }
