@@ -1,10 +1,37 @@
+2026-06-28
+==========
+
+  * security: harden default transport and param serialization
+    Address the actionable findings from the security review (sec-review.md):
+    - F-2: cap the default transport's response body (50MB default,
+    configurable via maxResponseBytes) and abort + reject on exceed,
+    guarding against memory-exhaustion from an oversized response.
+    - F-3: refuse cleartext http:// by default; opt in with allowInsecure.
+    Scheme is detected via new URL().protocol so the check is robust to
+    case/whitespace, and the refusal error omits the URL to avoid leaking
+    the apikey.
+    - F-5: filter __proto__/constructor/prototype keys in serialize() and
+    verifyBody() as defense-in-depth against prototype pollution on the
+    arbitrary [key: string] verification-param passthrough.
+    - F-1: document in the README that the apikey travels in the request
+    URL and warn against logging full request URLs.
+    Transport now settles exactly once with a res 'error' handler, fixing a
+    process crash (uncaughtException) and a truncated-resolve on single-chunk
+    over-cap responses. F-4 (linear regex) and F-6 (verbatim forwarding) need
+    no action per the review.
+    Tests: +6 covering the body cap (single- and multi-chunk), cleartext
+    refusal (incl. case-insensitivity and no key leak), and key filtering.
+    102/102 pass; typecheck clean.
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
 2026-06-03
 ==========
 
+  * 12.0.1
+  * changelog
   * fix: a lot of small fixes around the 100.0.0 version
   * chore: added npmignore
   * 12.0.0
-  * changelog
   * feature: free api widely covered
   * feature: more v2 features added
   * docs: cleanup
@@ -249,6 +276,3 @@
     Add Page, Offset for tokentx
   * additional updates
   * Fix page, offset as parameters of tokentx
-  * Add package description for personal use of superern
-  * change variable name to tokentx
-  * add page, offset to tokentx
