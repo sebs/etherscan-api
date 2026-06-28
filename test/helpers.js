@@ -4,7 +4,7 @@ import { init } from '../lib/index.js';
 // Unit tests mock at the transport seam (the 4th arg to init) using node:test's
 // built-in mock.fn() — no HTTP interception, no third-party mocking library, and
 // nothing ever touches the network. The real node:https transport is exercised
-// separately in http-get.test.js against a local server.
+// separately in transport.test.js against a local server.
 
 /**
  * Build an api whose HTTP transport is a node:test mock.

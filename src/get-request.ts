@@ -24,10 +24,23 @@ export interface RequestConfig {
   timeout: number;
 }
 
+/**
+ * Keys that must never be copied from caller-supplied params. Defense-in-depth
+ * against prototype pollution when forwarding arbitrary passthrough keys (e.g.
+ * the `[key: string]` index on verification params).
+ */
+const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
+/** True for keys that could pollute a prototype if copied via bracket assignment. */
+export function isUnsafeKey(key: string): boolean {
+  return UNSAFE_KEYS.has(key);
+}
+
 /** Merge endpoint params with the universal defaults and form-encode them. */
 function serialize(params: QueryParams, defaults: Record<string, string | number>): string {
   const merged: Record<string, string> = {};
   for (const [key, value] of Object.entries({ ...params, ...defaults })) {
+    if (isUnsafeKey(key)) continue;
     merged[key] = String(value);
   }
   return new URLSearchParams(merged).toString();

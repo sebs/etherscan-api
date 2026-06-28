@@ -23,6 +23,18 @@ export interface TransportOptions {
   method?: 'GET' | 'POST';
   /** Form-encoded request body, set for `POST` requests. */
   body?: string;
+  /**
+   * Maximum response body size in bytes. The default transport aborts and
+   * rejects once the accumulated body exceeds this, guarding against
+   * memory-exhaustion from an oversized response. Defaults to 50 MB.
+   */
+  maxResponseBytes?: number;
+  /**
+   * Permit cleartext `http://` URLs. The default transport refuses non-HTTPS
+   * URLs unless this is set, so a misconfigured base URL cannot silently send
+   * the API key over the wire unencrypted. Defaults to `false`.
+   */
+  allowInsecure?: boolean;
 }
 
 /**

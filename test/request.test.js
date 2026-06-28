@@ -2,7 +2,7 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { init } from '../lib/index.js';
 import { EtherscanError } from '../lib/errors.js';
-import { mockApi, queryOf } from './helpers.js';
+import { mockApi, queryOf, bodyOf } from './helpers.js';
 
 describe('request layer (get-request)', function () {
 
@@ -96,6 +96,29 @@ describe('request layer (get-request)', function () {
     const { api } = mockApi(() => Promise.reject(new Error('Request failed with status code 500')));
 
     await assert.rejects(() => api.stats.ethsupply(), /status code 500/);
+  });
+
+  it('strips prototype-polluting keys from forwarded params', async function () {
+    const { api, transport } = mockApi({ status: '1', message: 'OK', result: 'guid' });
+
+    // JSON.parse yields a genuine own `__proto__` key (object-literal `__proto__`
+    // would set the prototype instead of creating an enumerable property).
+    const params = JSON.parse(
+      '{"contractaddress":"0xabc","sourceCode":"x","contractname":"C",' +
+        '"__proto__":"polluted","constructor":"polluted","prototype":"polluted"}',
+    );
+
+    await api.contract.verifyvyper(params);
+
+    const body = bodyOf(transport);
+    // These are the load-bearing assertions: the dangerous keys must not reach
+    // the forwarded request body.
+    assert.equal(body.get('__proto__'), null);
+    assert.equal(body.get('constructor'), null);
+    assert.equal(body.get('prototype'), null);
+    // Legitimate fields still pass through.
+    assert.equal(body.get('contractaddress'), '0xabc');
+    assert.equal(body.get('contractname'), 'C');
   });
 
   it('honours a caller-supplied transport function', async function () {

@@ -51,6 +51,24 @@ async function request(url, { timeout, method = 'GET', body }) {
 const api = init('apikey', null, 10000, request);
 ```
 
+## Security notes
+
+* **The API key travels in the request URL.** Etherscan requires `apikey` as a
+  query parameter, so it is part of every request URL (and of POST request
+  URLs). Treat full request URLs as secrets: **do not log them**, and be careful
+  with proxies, APM tools, and access logs that capture URLs. A custom transport
+  receives the URL containing the key — never write it to logs verbatim. (The
+  library itself never puts the URL or key into thrown errors.)
+* **The default transport refuses cleartext `http://`.** Requests go to
+  `https://api.etherscan.io` over TLS with certificate validation on. If a
+  request somehow targets an `http://` URL, the default transport rejects rather
+  than sending the key unencrypted; pass `{ allowInsecure: true }` in the
+  transport options only if you deliberately need cleartext (e.g. a local test
+  server).
+* **The default transport caps the response body at 50 MB** to guard against a
+  memory-exhaustion response. Override with `maxResponseBytes` in the transport
+  options if you expect larger payloads.
+
 ## Selecting a chain (Etherscan V2 / multichain)
 
 Etherscan deprecated the V1 API on 2025-08-15. This library now talks to a

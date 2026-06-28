@@ -1,3 +1,4 @@
+import { isUnsafeKey } from './get-request.js';
 import type { GetRequest, PostRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { ContractCreation, ContractSource } from './results.js';
@@ -32,7 +33,7 @@ export interface VerifySourceCodeParams extends VerifyParams {
 function verifyBody(action: string, params: VerifyParams): QueryParams {
   const body: QueryParams = { module: 'contract', action };
   for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined) {
+    if (value !== undefined && !isUnsafeKey(key)) {
       body[key] = value;
     }
   }
