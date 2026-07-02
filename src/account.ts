@@ -87,6 +87,23 @@ export function account(getRequest: GetRequest) {
     return getRequest<T>(params);
   }
 
+  // Shared body for the address-scoped paged list endpoints (beacon withdrawals
+  // and the L2 deposit/withdrawal lists), which differ only by action string.
+  const pagedByAddress =
+    (action: string) =>
+    (
+      address: string,
+      startblock?: string | number,
+      endblock?: string | number,
+      page?: number,
+      offset?: number,
+      sort?: string,
+    ): Promise<EtherscanResponse> => {
+      const params: QueryParams = { module: 'account', action, address };
+      listRange(params, startblock, endblock, page, offset, sort);
+      return getRequest(params);
+    };
+
   return {
     /**
      * Returns the amount of Tokens a specific account owns.
@@ -289,18 +306,7 @@ export function account(getRequest: GetRequest) {
      * @param offset - Max records to return
      * @param sort - Sort asc/desc
      */
-    txsBeaconWithdrawal(
-      address: string,
-      startblock?: string | number,
-      endblock?: string | number,
-      page?: number,
-      offset?: number,
-      sort?: string,
-    ): Promise<EtherscanResponse> {
-      const params: QueryParams = { module: 'account', action: 'txsBeaconWithdrawal', address };
-      listRange(params, startblock, endblock, page, offset, sort);
-      return getRequest(params);
-    },
+    txsBeaconWithdrawal: pagedByAddress('txsBeaconWithdrawal'),
 
     /**
      * Get the list of L2 deposit transactions for an address.
@@ -311,18 +317,7 @@ export function account(getRequest: GetRequest) {
      * @param offset - Max records to return
      * @param sort - Sort asc/desc
      */
-    getdeposittxs(
-      address: string,
-      startblock?: string | number,
-      endblock?: string | number,
-      page?: number,
-      offset?: number,
-      sort?: string,
-    ): Promise<EtherscanResponse> {
-      const params: QueryParams = { module: 'account', action: 'getdeposittxs', address };
-      listRange(params, startblock, endblock, page, offset, sort);
-      return getRequest(params);
-    },
+    getdeposittxs: pagedByAddress('getdeposittxs'),
 
     /**
      * Get the list of L2 withdrawal transactions for an address.
@@ -333,18 +328,7 @@ export function account(getRequest: GetRequest) {
      * @param offset - Max records to return
      * @param sort - Sort asc/desc
      */
-    getwithdrawaltxs(
-      address: string,
-      startblock?: string | number,
-      endblock?: string | number,
-      page?: number,
-      offset?: number,
-      sort?: string,
-    ): Promise<EtherscanResponse> {
-      const params: QueryParams = { module: 'account', action: 'getwithdrawaltxs', address };
-      listRange(params, startblock, endblock, page, offset, sort);
-      return getRequest(params);
-    },
+    getwithdrawaltxs: pagedByAddress('getwithdrawaltxs'),
 
     /**
      * Returns the address that first funded a given address.
