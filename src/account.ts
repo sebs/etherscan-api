@@ -40,6 +40,26 @@ function applyFilter(params: QueryParams, filter?: AdvancedFilter): void {
   }
 }
 
+/**
+ * Apply the shared start/end block, paging and sort defaults to a params object
+ * (the block repeated by the paged list endpoints). `sort` uses `||` so an empty
+ * string coerces to `'asc'` rather than being sent as a bare `sort=`.
+ */
+function listRange(
+  params: QueryParams,
+  startblock?: string | number,
+  endblock?: string | number,
+  page?: number,
+  offset?: number,
+  sort?: string,
+): void {
+  params.startblock = startblock ?? 0;
+  params.endblock = endblock ?? 'latest';
+  params.page = page ?? 1;
+  params.offset = offset ?? 100;
+  params.sort = sort || 'asc';
+}
+
 export function account(getRequest: GetRequest) {
   return {
     /**
@@ -143,15 +163,8 @@ export function account(getRequest: GetRequest) {
       sort?: string,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<NormalTransaction[]>> {
-      const params: QueryParams = {
-        module: 'account',
-        action: 'txlist',
-        startblock: startblock ?? 0,
-        endblock: endblock ?? 'latest',
-        page: page ?? 1,
-        offset: offset ?? 100,
-        sort: sort || 'asc',
-      };
+      const params: QueryParams = { module: 'account', action: 'txlist' };
+      listRange(params, startblock, endblock, page, offset, sort);
       if (address) {
         params.address = address;
       }
@@ -190,15 +203,8 @@ export function account(getRequest: GetRequest) {
       sort?: string,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<Erc20Transfer[]>> {
-      const params: QueryParams = {
-        module: 'account',
-        action: 'tokentx',
-        startblock: startblock ?? 0,
-        endblock: endblock ?? 'latest',
-        page: page ?? 1,
-        offset: offset ?? 100,
-        sort: sort || 'asc',
-      };
+      const params: QueryParams = { module: 'account', action: 'tokentx' };
+      listRange(params, startblock, endblock, page, offset, sort);
       if (address) {
         params.address = address;
       }
@@ -230,15 +236,8 @@ export function account(getRequest: GetRequest) {
       sort?: string,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<Erc721Transfer[]>> {
-      const params: QueryParams = {
-        module: 'account',
-        action: 'tokennfttx',
-        startblock: startblock ?? 0,
-        endblock: endblock ?? 'latest',
-        page: page ?? 1,
-        offset: offset ?? 100,
-        sort: sort || 'asc',
-      };
+      const params: QueryParams = { module: 'account', action: 'tokennfttx' };
+      listRange(params, startblock, endblock, page, offset, sort);
       if (address) {
         params.address = address;
       }
@@ -270,15 +269,8 @@ export function account(getRequest: GetRequest) {
       sort?: string,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<Erc1155Transfer[]>> {
-      const params: QueryParams = {
-        module: 'account',
-        action: 'token1155tx',
-        startblock: startblock ?? 0,
-        endblock: endblock ?? 'latest',
-        page: page ?? 1,
-        offset: offset ?? 100,
-        sort: sort || 'asc',
-      };
+      const params: QueryParams = { module: 'account', action: 'token1155tx' };
+      listRange(params, startblock, endblock, page, offset, sort);
       if (address) {
         params.address = address;
       }
@@ -306,16 +298,9 @@ export function account(getRequest: GetRequest) {
       offset?: number,
       sort?: string,
     ): Promise<EtherscanResponse> {
-      return getRequest({
-        module: 'account',
-        action: 'txsBeaconWithdrawal',
-        startblock: startblock ?? 0,
-        endblock: endblock ?? 'latest',
-        page: page ?? 1,
-        offset: offset ?? 100,
-        sort: sort || 'asc',
-        address,
-      });
+      const params: QueryParams = { module: 'account', action: 'txsBeaconWithdrawal', address };
+      listRange(params, startblock, endblock, page, offset, sort);
+      return getRequest(params);
     },
 
     /**
@@ -335,16 +320,9 @@ export function account(getRequest: GetRequest) {
       offset?: number,
       sort?: string,
     ): Promise<EtherscanResponse> {
-      return getRequest({
-        module: 'account',
-        action: 'getdeposittxs',
-        startblock: startblock ?? 0,
-        endblock: endblock ?? 'latest',
-        page: page ?? 1,
-        offset: offset ?? 100,
-        sort: sort || 'asc',
-        address,
-      });
+      const params: QueryParams = { module: 'account', action: 'getdeposittxs', address };
+      listRange(params, startblock, endblock, page, offset, sort);
+      return getRequest(params);
     },
 
     /**
@@ -364,16 +342,9 @@ export function account(getRequest: GetRequest) {
       offset?: number,
       sort?: string,
     ): Promise<EtherscanResponse> {
-      return getRequest({
-        module: 'account',
-        action: 'getwithdrawaltxs',
-        startblock: startblock ?? 0,
-        endblock: endblock ?? 'latest',
-        page: page ?? 1,
-        offset: offset ?? 100,
-        sort: sort || 'asc',
-        address,
-      });
+      const params: QueryParams = { module: 'account', action: 'getwithdrawaltxs', address };
+      listRange(params, startblock, endblock, page, offset, sort);
+      return getRequest(params);
     },
 
     /**
