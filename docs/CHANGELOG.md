@@ -1,6 +1,82 @@
+2026-07-02
+==========
+
+  * refactor(account,proxy): bind module via a local call helper
+    Each namespace restated its module string on every request. Add a local
+    `call<T>(action, params)` closure that binds module ('account' / 'proxy') once,
+    so methods name only their action and params. Public method signatures, JSDoc
+    and result generics are unchanged; behaviour is identical (call spreads into the
+    same getRequest, so the prototype-pollution guard in serialize() still applies).
+    module:'account' and module:'proxy' now each appear exactly once.
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+  * refactor(account): collapse beacon/L2 trio into a shared factory
+    txsBeaconWithdrawal/getdeposittxs/getwithdrawaltxs were identical apart from the
+    action string (same signature, same untyped EtherscanResponse return). Generate
+    them from a pagedByAddress(action) factory in the account() closure; each keeps
+    its JSDoc via the property. No public-API or behaviour change.
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+  * refactor(account): collapse token-transfer trio into a shared worker
+    tokentx/tokennfttx/token1155tx were byte-identical apart from the action string
+    and result type. Introduce a private generic tokenTransfers<T>(action, ...)
+    worker in the account() closure; the three public methods keep their full
+    signatures, JSDoc and distinct Erc20/721/1155 return generics and delegate in
+    one line. No public-API or behaviour change.
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+  * refactor(account): extract listRange helper for shared paging defaults
+    The startblock/endblock/page/offset/sort default block was restated verbatim
+    at 7 sites (txlist, tokentx, tokennfttx, token1155tx, txsBeaconWithdrawal,
+    getdeposittxs, getwithdrawaltxs). Extract a module-scoped listRange() mutator
+    (mirroring the existing applyFilter helper) and apply it everywhere. sort keeps
+    `|| 'asc'` (empty string coerces to 'asc'); txlistinternal and txnbridge have a
+    different shape and are left untouched. Behaviour-preserving: same params/values,
+    and requests are asserted via URLSearchParams.get() so key order is irrelevant.
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+  * test: refactor to one-assert-per-test, split per endpoint
+    Reorganises the test suite around the conventions:
+    - one assertion per `it()`, with shared setup moved into `beforeEach`
+    - one endpoint per file; namespaces with multiple endpoints get a folder
+    (test/account, test/stats, test/block, test/transaction, test/contract,
+    test/usage, test/proxy, test/gastracker); single-endpoint namespaces stay
+    flat (test/log.test.js, test/chains.test.js, ...)
+    - descriptive test names stating exactly what each assertion checks
+    The old flat files (account/misc/proxy/gastracker) are split accordingly;
+    chains/index/request/transport are refactored in place. Coverage is preserved
+    one-for-one (every original param/result/rejection assertion reappears as its
+    own test). Test runner glob updated to recurse: `node --test 'test/**/*.test.js'`.
+    539 tests pass; no src/lib changes.
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+  * chore: removed doc
+  * feat(account): support advanced-filter params on transaction lists
+    Adds optional `from`/`to`/`fromto_opr` advanced-filter fields (Beta) to
+    txlist, txlistinternal, tokentx, tokennfttx and token1155tx via a trailing
+    `AdvancedFilter` argument, letting callers filter by sender/recipient instead
+    of a single address. `address` is now optional on these methods and is only
+    sent when provided, so filter-only queries work. Exposes and re-exports the
+    `AdvancedFilter` type and adds unit tests.
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+  * feat(account): add txnbridge endpoint
+    Adds the free-tier `account.txnbridge` action, returning Plasma bridge
+    deposit transactions received by an address (Polygon, Gnosis, BitTorrent
+    Chain). Takes address/page/offset only — no block range or sort. Includes a
+    unit test.
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+  * feat(stats): add chainsize endpoint
+    Adds the free-tier `stats.chainsize` action, returning the blockchain size
+    in bytes sampled daily over a date range, with clienttype/syncmode/sort
+    options. Includes the `ChainSize` result type (re-exported) and unit tests.
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+  * feat(block): add getblocktxnscount endpoint
+    Adds the free-tier `block.getblocktxnscount` action, returning per-type
+    transaction counts (normal / internal / ERC-20 / ERC-721 / ERC-1155) for a
+    block. Includes the `BlockTransactionCount` result type (re-exported) and a
+    unit test.
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
 2026-06-28
 ==========
 
+  * 12.0.2
+  * changelog
   * security: harden default transport and param serialization
     Address the actionable findings from the security review (sec-review.md):
     - F-2: cap the default transport's response body (50MB default,
@@ -242,37 +318,3 @@
     - [Changelog](https://github.com/faye/websocket-extensions-node/blob/master/CHANGELOG.md)
     - [Commits](https://github.com/faye/websocket-extensions-node/compare/0.1.3...0.1.4)
     Signed-off-by: dependabot[bot] <support@github.com>
-
-2020-03-13
-==========
-
-  * Bump acorn from 5.7.3 to 5.7.4
-    Bumps [acorn](https://github.com/acornjs/acorn) from 5.7.3 to 5.7.4.
-    - [Release notes](https://github.com/acornjs/acorn/releases)
-    - [Commits](https://github.com/acornjs/acorn/compare/5.7.3...5.7.4)
-    Signed-off-by: dependabot[bot] <support@github.com>
-
-2019-09-10
-==========
-
-  * 10.0.5
-  * changelog
-
-2019-09-06
-==========
-
-  * 10.0.4
-  * changelog
-  * Merge pull request [#54](https://github.com/sebs/etherscan-api/issues/54) from DmitryPogodaev/patch-1
-    Update get-request.js
-  * 10.0.3
-  * Merge pull request [#47](https://github.com/sebs/etherscan-api/issues/47) from tipsysquid/patch/txlistinternal
-    txlistinternal now utilizes user specified parameters
-
-2019-09-05
-==========
-
-  * Merge pull request [#59](https://github.com/sebs/etherscan-api/issues/59) from superern/master
-    Add Page, Offset for tokentx
-  * additional updates
-  * Fix page, offset as parameters of tokentx
