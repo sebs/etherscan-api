@@ -61,6 +61,32 @@ function listRange(
 }
 
 export function account(getRequest: GetRequest) {
+  // Shared body for the ERC-20/721/1155 token-transfer endpoints, which differ
+  // only by action string and result type. Kept private; the public methods
+  // below preserve their own signatures, JSDoc and result generics.
+  function tokenTransfers<T>(
+    action: string,
+    address?: string,
+    contractaddress?: string,
+    startblock?: string | number,
+    endblock?: string | number,
+    page?: number,
+    offset?: number,
+    sort?: string,
+    filter?: AdvancedFilter,
+  ): Promise<EtherscanResponse<T>> {
+    const params: QueryParams = { module: 'account', action };
+    listRange(params, startblock, endblock, page, offset, sort);
+    if (address) {
+      params.address = address;
+    }
+    if (contractaddress) {
+      params.contractaddress = contractaddress;
+    }
+    applyFilter(params, filter);
+    return getRequest<T>(params);
+  }
+
   return {
     /**
      * Returns the amount of Tokens a specific account owns.
@@ -203,16 +229,7 @@ export function account(getRequest: GetRequest) {
       sort?: string,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<Erc20Transfer[]>> {
-      const params: QueryParams = { module: 'account', action: 'tokentx' };
-      listRange(params, startblock, endblock, page, offset, sort);
-      if (address) {
-        params.address = address;
-      }
-      if (contractaddress) {
-        params.contractaddress = contractaddress;
-      }
-      applyFilter(params, filter);
-      return getRequest<Erc20Transfer[]>(params);
+      return tokenTransfers<Erc20Transfer[]>('tokentx', address, contractaddress, startblock, endblock, page, offset, sort, filter);
     },
 
     /**
@@ -236,16 +253,7 @@ export function account(getRequest: GetRequest) {
       sort?: string,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<Erc721Transfer[]>> {
-      const params: QueryParams = { module: 'account', action: 'tokennfttx' };
-      listRange(params, startblock, endblock, page, offset, sort);
-      if (address) {
-        params.address = address;
-      }
-      if (contractaddress) {
-        params.contractaddress = contractaddress;
-      }
-      applyFilter(params, filter);
-      return getRequest<Erc721Transfer[]>(params);
+      return tokenTransfers<Erc721Transfer[]>('tokennfttx', address, contractaddress, startblock, endblock, page, offset, sort, filter);
     },
 
     /**
@@ -269,16 +277,7 @@ export function account(getRequest: GetRequest) {
       sort?: string,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<Erc1155Transfer[]>> {
-      const params: QueryParams = { module: 'account', action: 'token1155tx' };
-      listRange(params, startblock, endblock, page, offset, sort);
-      if (address) {
-        params.address = address;
-      }
-      if (contractaddress) {
-        params.contractaddress = contractaddress;
-      }
-      applyFilter(params, filter);
-      return getRequest<Erc1155Transfer[]>(params);
+      return tokenTransfers<Erc1155Transfer[]>('token1155tx', address, contractaddress, startblock, endblock, page, offset, sort, filter);
     },
 
     /**
