@@ -1,11 +1,15 @@
-import type { GetRequest } from './get-request.js';
+import type { GetRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 
 export function proxy(getRequest: GetRequest) {
+  // Bind module:'proxy' once; every method names only its action and params.
+  const call = <T = unknown>(action: string, params: QueryParams = {}) =>
+    getRequest<T>({ module: 'proxy', action, ...params });
+
   return {
     /** Returns the number of the most recent block (hex). */
     eth_blockNumber(): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'proxy', action: 'eth_blockNumber' });
+      return call<string>('eth_blockNumber');
     },
 
     /**
@@ -14,7 +18,7 @@ export function proxy(getRequest: GetRequest) {
      * @param fullTransactions - When true (default) returns full transaction objects, otherwise only hashes
      */
     eth_getBlockByNumber(tag: string, fullTransactions = true): Promise<EtherscanResponse> {
-      return getRequest({ module: 'proxy', action: 'eth_getBlockByNumber', tag, boolean: fullTransactions });
+      return call('eth_getBlockByNumber', { tag, boolean: fullTransactions });
     },
 
     /**
@@ -23,7 +27,7 @@ export function proxy(getRequest: GetRequest) {
      * @param index - Uncle index position
      */
     eth_getUncleByBlockNumberAndIndex(tag: string, index: string): Promise<EtherscanResponse> {
-      return getRequest({ module: 'proxy', action: 'eth_getUncleByBlockNumberAndIndex', tag, index });
+      return call('eth_getUncleByBlockNumberAndIndex', { tag, index });
     },
 
     /**
@@ -31,7 +35,7 @@ export function proxy(getRequest: GetRequest) {
      * @param tag - Block number tag
      */
     eth_getBlockTransactionCountByNumber(tag: string): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'proxy', action: 'eth_getBlockTransactionCountByNumber', tag });
+      return call<string>('eth_getBlockTransactionCountByNumber', { tag });
     },
 
     /**
@@ -39,7 +43,7 @@ export function proxy(getRequest: GetRequest) {
      * @param txhash - Transaction hash
      */
     eth_getTransactionByHash(txhash: string): Promise<EtherscanResponse> {
-      return getRequest({ module: 'proxy', action: 'eth_getTransactionByHash', txhash });
+      return call('eth_getTransactionByHash', { txhash });
     },
 
     /**
@@ -48,7 +52,7 @@ export function proxy(getRequest: GetRequest) {
      * @param index - Transaction index position
      */
     eth_getTransactionByBlockNumberAndIndex(tag: string, index: string): Promise<EtherscanResponse> {
-      return getRequest({ module: 'proxy', action: 'eth_getTransactionByBlockNumberAndIndex', tag, index });
+      return call('eth_getTransactionByBlockNumberAndIndex', { tag, index });
     },
 
     /**
@@ -56,7 +60,7 @@ export function proxy(getRequest: GetRequest) {
      * @param address - Account address
      */
     eth_getTransactionCount(address: string): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'proxy', action: 'eth_getTransactionCount', address });
+      return call<string>('eth_getTransactionCount', { address });
     },
 
     /**
@@ -64,7 +68,7 @@ export function proxy(getRequest: GetRequest) {
      * @param hex - Serialized signed message
      */
     eth_sendRawTransaction(hex: string): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'proxy', action: 'eth_sendRawTransaction', hex });
+      return call<string>('eth_sendRawTransaction', { hex });
     },
 
     /**
@@ -72,7 +76,7 @@ export function proxy(getRequest: GetRequest) {
      * @param txhash - Transaction hash
      */
     eth_getTransactionReceipt(txhash: string): Promise<EtherscanResponse> {
-      return getRequest({ module: 'proxy', action: 'eth_getTransactionReceipt', txhash });
+      return call('eth_getTransactionReceipt', { txhash });
     },
 
     /**
@@ -82,7 +86,7 @@ export function proxy(getRequest: GetRequest) {
      * @param tag - Block number tag
      */
     eth_call(to: string, data: string, tag: string): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'proxy', action: 'eth_call', to, data, tag });
+      return call<string>('eth_call', { to, data, tag });
     },
 
     /**
@@ -91,7 +95,7 @@ export function proxy(getRequest: GetRequest) {
      * @param tag - Block number tag
      */
     eth_getCode(address: string, tag: string): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'proxy', action: 'eth_getCode', address, tag });
+      return call<string>('eth_getCode', { address, tag });
     },
 
     /**
@@ -101,12 +105,12 @@ export function proxy(getRequest: GetRequest) {
      * @param tag - Block number tag
      */
     eth_getStorageAt(address: string, position: string, tag: string): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'proxy', action: 'eth_getStorageAt', address, position, tag });
+      return call<string>('eth_getStorageAt', { address, position, tag });
     },
 
     /** Returns the current price per gas in wei (hex). */
     eth_gasPrice(): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'proxy', action: 'eth_gasPrice' });
+      return call<string>('eth_gasPrice');
     },
 
     /**
@@ -117,7 +121,7 @@ export function proxy(getRequest: GetRequest) {
      * @param gas - Gas provided
      */
     eth_estimateGas(to: string, value: string, gasPrice: string, gas: string): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'proxy', action: 'eth_estimateGas', to, value, gasPrice, gas });
+      return call<string>('eth_estimateGas', { to, value, gasPrice, gas });
     },
   };
 }

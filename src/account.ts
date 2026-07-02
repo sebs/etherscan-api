@@ -61,6 +61,10 @@ function listRange(
 }
 
 export function account(getRequest: GetRequest) {
+  // Bind module:'account' once; every method names only its action and params.
+  const call = <T = unknown>(action: string, params: QueryParams = {}) =>
+    getRequest<T>({ module: 'account', action, ...params });
+
   // Shared body for the ERC-20/721/1155 token-transfer endpoints, which differ
   // only by action string and result type. Kept private; the public methods
   // below preserve their own signatures, JSDoc and result generics.
@@ -75,7 +79,7 @@ export function account(getRequest: GetRequest) {
     sort?: string,
     filter?: AdvancedFilter,
   ): Promise<EtherscanResponse<T>> {
-    const params: QueryParams = { module: 'account', action };
+    const params: QueryParams = {};
     listRange(params, startblock, endblock, page, offset, sort);
     if (address) {
       params.address = address;
@@ -84,7 +88,7 @@ export function account(getRequest: GetRequest) {
       params.contractaddress = contractaddress;
     }
     applyFilter(params, filter);
-    return getRequest<T>(params);
+    return call<T>(action, params);
   }
 
   // Shared body for the address-scoped paged list endpoints (beacon withdrawals
@@ -99,9 +103,9 @@ export function account(getRequest: GetRequest) {
       offset?: number,
       sort?: string,
     ): Promise<EtherscanResponse> => {
-      const params: QueryParams = { module: 'account', action, address };
+      const params: QueryParams = { address };
       listRange(params, startblock, endblock, page, offset, sort);
-      return getRequest(params);
+      return call(action, params);
     };
 
   return {
@@ -118,7 +122,7 @@ export function account(getRequest: GetRequest) {
      * );
      */
     tokenbalance(address?: string, tokenname?: string, contractaddress?: string): Promise<EtherscanResponse<string>> {
-      const params: QueryParams = { module: 'account', action: 'tokenbalance', tag: 'latest' };
+      const params: QueryParams = { tag: 'latest' };
       if (contractaddress) {
         params.contractaddress = contractaddress;
       }
@@ -128,7 +132,7 @@ export function account(getRequest: GetRequest) {
       if (address) {
         params.address = address;
       }
-      return getRequest<string>(params);
+      return call<string>('tokenbalance', params);
     },
 
     /**
@@ -147,7 +151,7 @@ export function account(getRequest: GetRequest) {
       } else {
         addr = address;
       }
-      return getRequest<string | MultiBalanceItem[]>({ module: 'account', action, tag: 'latest', address: addr });
+      return call<string | MultiBalanceItem[]>(action, { tag: 'latest', address: addr });
     },
 
     /**
@@ -169,7 +173,7 @@ export function account(getRequest: GetRequest) {
       sort?: string,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<InternalTransaction[]>> {
-      const params: QueryParams = { module: 'account', action: 'txlistinternal' };
+      const params: QueryParams = {};
       params.sort = sort || 'asc';
 
       if (txhash) {
@@ -182,7 +186,7 @@ export function account(getRequest: GetRequest) {
         params.endblock = endblock ?? 'latest';
       }
       applyFilter(params, filter);
-      return getRequest<InternalTransaction[]>(params);
+      return call<InternalTransaction[]>('txlistinternal', params);
     },
 
     /**
@@ -206,13 +210,13 @@ export function account(getRequest: GetRequest) {
       sort?: string,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<NormalTransaction[]>> {
-      const params: QueryParams = { module: 'account', action: 'txlist' };
+      const params: QueryParams = {};
       listRange(params, startblock, endblock, page, offset, sort);
       if (address) {
         params.address = address;
       }
       applyFilter(params, filter);
-      return getRequest<NormalTransaction[]>(params);
+      return call<NormalTransaction[]>('txlist', params);
     },
 
     /**
@@ -222,7 +226,7 @@ export function account(getRequest: GetRequest) {
      * api.account.getminedblocks('0x9dd134d14d1e65f84b706d6f205cd5b1cd03a46b');
      */
     getminedblocks(address: string): Promise<EtherscanResponse<MinedBlock[]>> {
-      return getRequest<MinedBlock[]>({ module: 'account', action: 'getminedblocks', address });
+      return call<MinedBlock[]>('getminedblocks', { address });
     },
 
     /**
@@ -335,7 +339,7 @@ export function account(getRequest: GetRequest) {
      * @param address - Account address
      */
     fundedby(address: string): Promise<EtherscanResponse> {
-      return getRequest({ module: 'account', action: 'fundedby', address });
+      return call('fundedby', { address });
     },
 
     /**
@@ -346,13 +350,7 @@ export function account(getRequest: GetRequest) {
      * @param offset - Max records to return
      */
     txnbridge(address: string, page?: number, offset?: number): Promise<EtherscanResponse> {
-      return getRequest({
-        module: 'account',
-        action: 'txnbridge',
-        address,
-        page: page ?? 1,
-        offset: offset ?? 100,
-      });
+      return call('txnbridge', { address, page: page ?? 1, offset: offset ?? 100 });
     },
   };
 }
