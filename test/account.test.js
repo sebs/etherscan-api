@@ -307,6 +307,88 @@ describe('account namespace', function () {
     });
   });
 
+  describe('advanced filter (from/to/fromto_opr)', function () {
+    it('txlist sends from/to/fromto_opr and omits address when not given', async function () {
+      const { api, transport } = mockApi({ status: '1', result: [] });
+
+      await api.account.txlist(undefined, 0, 'latest', 1, 10, 'desc', {
+        from: '0x73605779985A11B8Fe32E6eD5ae5F249FFD0D7f0',
+        to: '0x71c7656ec7ab88b098defb751b7401b5f6d8976f',
+        fromto_opr: 'or',
+      });
+
+      const q = queryOf(transport);
+      assert.equal(q.get('module'), 'account');
+      assert.equal(q.get('action'), 'txlist');
+      assert.equal(q.get('address'), null);
+      assert.equal(q.get('from'), '0x73605779985A11B8Fe32E6eD5ae5F249FFD0D7f0');
+      assert.equal(q.get('to'), '0x71c7656ec7ab88b098defb751b7401b5f6d8976f');
+      assert.equal(q.get('fromto_opr'), 'or');
+      assert.equal(q.get('sort'), 'desc');
+    });
+
+    it('txlist still includes address alongside a filter when both are given', async function () {
+      const { api, transport } = mockApi({ status: '1', result: [] });
+
+      await api.account.txlist('0xabc', 0, 'latest', 1, 10, 'asc', { from: '0xfff' });
+
+      const q = queryOf(transport);
+      assert.equal(q.get('address'), '0xabc');
+      assert.equal(q.get('from'), '0xfff');
+      assert.equal(q.get('to'), null);
+      assert.equal(q.get('fromto_opr'), null);
+    });
+
+    it('a filter with no defined fields adds nothing', async function () {
+      const { api, transport } = mockApi({ status: '1', result: [] });
+
+      await api.account.txlist('0xabc', undefined, undefined, undefined, undefined, undefined, {});
+
+      const q = queryOf(transport);
+      assert.equal(q.get('from'), null);
+      assert.equal(q.get('to'), null);
+      assert.equal(q.get('fromto_opr'), null);
+    });
+
+    it('txlistinternal accepts a filter and omits an empty address', async function () {
+      const { api, transport } = mockApi({ status: '1', result: [] });
+
+      await api.account.txlistinternal(undefined, undefined, 0, 'latest', 'desc', {
+        to: '0x71c7656ec7ab88b098defb751b7401b5f6d8976f',
+      });
+
+      const q = queryOf(transport);
+      assert.equal(q.get('action'), 'txlistinternal');
+      assert.equal(q.get('txhash'), null);
+      assert.equal(q.get('address'), null);
+      // block range must still be sent in filter-only mode (address omitted)
+      assert.equal(q.get('startblock'), '0');
+      assert.equal(q.get('endblock'), 'latest');
+      assert.equal(q.get('to'), '0x71c7656ec7ab88b098defb751b7401b5f6d8976f');
+      assert.equal(q.get('sort'), 'desc');
+    });
+
+    for (const method of ['tokentx', 'tokennfttx', 'token1155tx']) {
+      it(`${method} threads from/to/fromto_opr and contractaddress`, async function () {
+        const { api, transport } = mockApi({ status: '1', result: [] });
+
+        await api.account[method](undefined, '0xcontract', 0, 'latest', 1, 10, 'desc', {
+          from: '0xaaa',
+          to: '0xbbb',
+          fromto_opr: 'and',
+        });
+
+        const q = queryOf(transport);
+        assert.equal(q.get('action'), method);
+        assert.equal(q.get('address'), null);
+        assert.equal(q.get('contractaddress'), '0xcontract');
+        assert.equal(q.get('from'), '0xaaa');
+        assert.equal(q.get('to'), '0xbbb');
+        assert.equal(q.get('fromto_opr'), 'and');
+      });
+    }
+  });
+
   describe('txnbridge', function () {
     it('applies page/offset defaults and sends no block range', async function () {
       const { api, transport } = mockApi({ status: '1', result: [] });

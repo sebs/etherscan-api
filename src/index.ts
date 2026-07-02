@@ -21,6 +21,7 @@ export { init, resolveChainId };
 export { EtherscanError } from './errors.js';
 export type { EtherscanErrorDetails } from './errors.js';
 export type { EtherscanApi } from './init.js';
+export type { AdvancedFilter } from './account.js';
 export type { VerifyParams, VerifySourceCodeParams } from './contract.js';
 export type { Transport, TransportOptions, EtherscanResponse } from './types.js';
 export type {
