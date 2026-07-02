@@ -4,39 +4,58 @@ import { resolveChainId, CHAINS } from '../lib/chains.js';
 
 describe('chains.resolveChainId', function () {
 
-  it('defaults to mainnet (1) for null/undefined/empty', function () {
-    assert.equal(resolveChainId(null), 1);
-    assert.equal(resolveChainId(undefined), 1);
-    assert.equal(resolveChainId(''), 1);
-  });
+  const DEFAULTS = [null, undefined, ''];
+  for (const input of DEFAULTS) {
+    it('defaults to mainnet (1) for ' + JSON.stringify(input), function () {
+      assert.equal(resolveChainId(input), 1);
+    });
+  }
 
-  it('maps known names to chainids', function () {
-    assert.equal(resolveChainId('mainnet'), 1);
-    assert.equal(resolveChainId('sepolia'), 11155111);
-    assert.equal(resolveChainId('arbitrum'), 42161);
-    assert.equal(resolveChainId('base'), 8453);
-  });
+  const KNOWN_NAMES = [
+    ['mainnet', 1],
+    ['sepolia', 11155111],
+    ['arbitrum', 42161],
+    ['base', 8453],
+  ];
+  for (const [input, expected] of KNOWN_NAMES) {
+    it('maps ' + input + ' to ' + expected, function () {
+      assert.equal(resolveChainId(input), expected);
+    });
+  }
 
-  it('is case-insensitive', function () {
-    assert.equal(resolveChainId('Sepolia'), 11155111);
-    assert.equal(resolveChainId('BSC'), 56);
-  });
+  const CASE_INSENSITIVE = [
+    ['Sepolia', 11155111],
+    ['BSC', 56],
+  ];
+  for (const [input, expected] of CASE_INSENSITIVE) {
+    it('is case-insensitive for ' + input, function () {
+      assert.equal(resolveChainId(input), expected);
+    });
+  }
 
-  it('passes through a numeric chainid', function () {
-    assert.equal(resolveChainId(42161), 42161);
-    assert.equal(resolveChainId(999999), 999999);
-  });
+  const NUMERIC = [
+    [42161, 42161],
+    [999999, 999999],
+  ];
+  for (const [input, expected] of NUMERIC) {
+    it('passes through numeric chainid ' + input, function () {
+      assert.equal(resolveChainId(input), expected);
+    });
+  }
 
   it('passes through an all-digit string', function () {
     assert.equal(resolveChainId('137'), 137);
   });
 
-  it('throws a helpful error for retired chains', function () {
-    assert.throws(() => resolveChainId('goerli'), /no longer supported/);
+  const RETIRED = ['goerli', 'ropsten', 'rinkeby', 'kovan'];
+  for (const input of RETIRED) {
+    it('throws "no longer supported" for retired chain ' + input, function () {
+      assert.throws(() => resolveChainId(input), /no longer supported/);
+    });
+  }
+
+  it('suggests Sepolia or Holesky for goerli', function () {
     assert.throws(() => resolveChainId('goerli'), /Sepolia or Holesky/);
-    assert.throws(() => resolveChainId('ropsten'), /no longer supported/);
-    assert.throws(() => resolveChainId('rinkeby'), /no longer supported/);
-    assert.throws(() => resolveChainId('kovan'), /no longer supported/);
   });
 
   it('throws for unknown chains', function () {

@@ -1,4 +1,4 @@
-import { describe, it, before, after } from 'node:test';
+import { describe, it, before, after, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
 import httpTransport from '../lib/transport.js';
@@ -48,20 +48,40 @@ describe('http transport', function () {
   });
 
   // The local test server speaks plain http, so every call opts into cleartext.
-  it('resolves the parsed JSON body on 2xx (GET)', async function () {
-    const data = await httpTransport(base + '/ok', { allowInsecure: true });
-    assert.equal(data.status, '1');
-    assert.equal(data.result, '42');
+  describe('resolves the parsed JSON body on 2xx (GET)', function () {
+    let data;
+
+    beforeEach(async function () {
+      data = await httpTransport(base + '/ok', { allowInsecure: true });
+    });
+
+    it('resolves with status 1', function () {
+      assert.equal(data.status, '1');
+    });
+
+    it('resolves with the parsed result', function () {
+      assert.equal(data.result, '42');
+    });
   });
 
-  it('sends a POST with a form-encoded body', async function () {
-    const data = await httpTransport(base + '/echo', {
-      method: 'POST',
-      body: 'module=contract&action=verifysourcecode',
-      allowInsecure: true,
+  describe('sends a POST with a form-encoded body', function () {
+    let data;
+
+    beforeEach(async function () {
+      data = await httpTransport(base + '/echo', {
+        method: 'POST',
+        body: 'module=contract&action=verifysourcecode',
+        allowInsecure: true,
+      });
     });
-    assert.equal(data.method, 'POST');
-    assert.equal(data.result, 'module=contract&action=verifysourcecode');
+
+    it('uses the POST method', function () {
+      assert.equal(data.method, 'POST');
+    });
+
+    it('sends the form-encoded body', function () {
+      assert.equal(data.result, 'module=contract&action=verifysourcecode');
+    });
   });
 
   it('rejects on a non-2xx status', async function () {
@@ -85,16 +105,24 @@ describe('http transport', function () {
     await assert.rejects(() => httpTransport(upper + '/ok'), /cleartext/i);
   });
 
-  it('does not leak the URL/api key in the cleartext-refusal error', async function () {
-    await assert.rejects(
-      () => httpTransport(base + '/v2/api?apikey=SECRETKEY'),
-      (err) => {
-        assert.match(err.message, /cleartext/i); // pin the intended rejection
-        assert.ok(!err.message.includes('SECRETKEY'));
-        assert.ok(!err.message.includes(base));
-        return true;
-      },
-    );
+  describe('does not leak the URL/api key in the cleartext-refusal error', function () {
+    let error;
+
+    beforeEach(async function () {
+      error = await httpTransport(base + '/v2/api?apikey=SECRETKEY').then(() => null, function (e) { return e; });
+    });
+
+    it('rejects with the cleartext refusal', function () {
+      assert.match(error.message, /cleartext/i);
+    });
+
+    it('does not include the api key in the message', function () {
+      assert.ok(!error.message.includes('SECRETKEY'));
+    });
+
+    it('does not include the base URL in the message', function () {
+      assert.ok(!error.message.includes(base));
+    });
   });
 
   it('rejects a streamed (multi-chunk) body that exceeds maxResponseBytes', async function () {

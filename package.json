@@ -17,7 +17,7 @@
     "typecheck": "tsc --noEmit",
     "prepare": "npm run build",
     "pretest": "npm run build",
-    "test": "node --test test/*.test.js",
+    "test": "node --test 'test/**/*.test.js'",
     "test:live": "ETHERSCAN_LIVE=1 node --test test/live/*.test.js",
     "docs": "typedoc",
     "clean": "rm -rf lib out",
