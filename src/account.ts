@@ -327,5 +327,22 @@ export function account(getRequest: GetRequest) {
     fundedby(address: string): Promise<EtherscanResponse> {
       return getRequest({ module: 'account', action: 'fundedby', address });
     },
+
+    /**
+     * Get the list of Plasma bridge deposit transactions received by an address
+     * (Polygon, Gnosis and BitTorrent Chain).
+     * @param address - Account address
+     * @param page - Page number
+     * @param offset - Max records to return
+     */
+    txnbridge(address: string, page?: number, offset?: number): Promise<EtherscanResponse> {
+      return getRequest({
+        module: 'account',
+        action: 'txnbridge',
+        address,
+        page: page ?? 1,
+        offset: offset ?? 100,
+      });
+    },
   };
 }

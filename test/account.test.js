@@ -306,4 +306,34 @@ describe('account namespace', function () {
       assert.equal(q.get('startblock'), null);
     });
   });
+
+  describe('txnbridge', function () {
+    it('applies page/offset defaults and sends no block range', async function () {
+      const { api, transport } = mockApi({ status: '1', result: [] });
+
+      const res = await api.account.txnbridge('0x4880bd4695a8e59dc527d124085749744b6c988e');
+      assert.ok(Array.isArray(res.result));
+
+      const q = queryOf(transport);
+      assert.equal(q.get('module'), 'account');
+      assert.equal(q.get('action'), 'txnbridge');
+      assert.equal(q.get('address'), '0x4880bd4695a8e59dc527d124085749744b6c988e');
+      assert.equal(q.get('page'), '1');
+      assert.equal(q.get('offset'), '100');
+      assert.equal(q.get('startblock'), null);
+      assert.equal(q.get('endblock'), null);
+      assert.equal(q.get('sort'), null);
+      assert.equal(q.get('apikey'), 'KEY');
+    });
+
+    it('passes through explicit page/offset', async function () {
+      const { api, transport } = mockApi({ status: '1', result: [] });
+
+      await api.account.txnbridge('0xabc', 3, 25);
+
+      const q = queryOf(transport);
+      assert.equal(q.get('page'), '3');
+      assert.equal(q.get('offset'), '25');
+    });
+  });
 });
