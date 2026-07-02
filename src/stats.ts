@@ -1,6 +1,6 @@
 import type { GetRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
-import type { EthPrice } from './results.js';
+import type { EthPrice, ChainSize } from './results.js';
 
 export function stats(getRequest: GetRequest) {
   return {
@@ -40,6 +40,34 @@ export function stats(getRequest: GetRequest) {
     /** Returns the current ether price. */
     ethprice(): Promise<EtherscanResponse<EthPrice>> {
       return getRequest<EthPrice>({ module: 'stats', action: 'ethprice' });
+    },
+
+    /**
+     * Returns the size of the blockchain, in bytes, sampled daily over a date range.
+     * @param startdate - Start date, `yyyy-MM-dd`
+     * @param enddate - End date, `yyyy-MM-dd`
+     * @param clienttype - Node client to measure: `'geth'` (default) or `'parity'`
+     * @param syncmode - Sync mode: `'default'` (default) or `'archive'`
+     * @param sort - Sort asc/desc (default `'asc'`)
+     * @example
+     * api.stats.chainsize('2019-02-01', '2019-02-28');
+     */
+    chainsize(
+      startdate: string,
+      enddate: string,
+      clienttype: 'geth' | 'parity' = 'geth',
+      syncmode: 'default' | 'archive' = 'default',
+      sort: 'asc' | 'desc' = 'asc',
+    ): Promise<EtherscanResponse<ChainSize[]>> {
+      return getRequest<ChainSize[]>({
+        module: 'stats',
+        action: 'chainsize',
+        startdate,
+        enddate,
+        clienttype,
+        syncmode,
+        sort,
+      });
     },
   };
 }

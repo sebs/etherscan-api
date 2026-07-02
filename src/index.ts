@@ -42,6 +42,7 @@ export type {
   ReceiptStatus,
   EthPrice,
   GasOracle,
+  ChainSize,
   ChainListItem,
 } from './results.js';
 export { CHAINS, RETIRED_CHAINS } from './chains.js';

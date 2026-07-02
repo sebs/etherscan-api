@@ -82,6 +82,34 @@ describe('stats namespace', function () {
     assert.equal(q.get('action'), 'nodecount');
     assert.equal(q.get('apikey'), 'KEY');
   });
+
+  it('chainsize applies clienttype/syncmode/sort defaults', async function () {
+    const { api, transport } = mockApi({ status: '1', result: [] });
+
+    const res = await api.stats.chainsize('2019-02-01', '2019-02-28');
+    assert.ok(Array.isArray(res.result));
+
+    const q = queryOf(transport);
+    assert.equal(q.get('module'), 'stats');
+    assert.equal(q.get('action'), 'chainsize');
+    assert.equal(q.get('startdate'), '2019-02-01');
+    assert.equal(q.get('enddate'), '2019-02-28');
+    assert.equal(q.get('clienttype'), 'geth');
+    assert.equal(q.get('syncmode'), 'default');
+    assert.equal(q.get('sort'), 'asc');
+    assert.equal(q.get('apikey'), 'KEY');
+  });
+
+  it('chainsize passes through explicit clienttype/syncmode/sort', async function () {
+    const { api, transport } = mockApi({ status: '1', result: [] });
+
+    await api.stats.chainsize('2019-02-01', '2019-02-28', 'parity', 'archive', 'desc');
+
+    const q = queryOf(transport);
+    assert.equal(q.get('clienttype'), 'parity');
+    assert.equal(q.get('syncmode'), 'archive');
+    assert.equal(q.get('sort'), 'desc');
+  });
 });
 
 describe('block namespace', function () {

@@ -237,6 +237,15 @@ export interface GasOracle {
   gasUsedRatio: string;
 }
 
+/** One day's blockchain-size sample (`stats.chainsize`). */
+export interface ChainSize {
+  blockNumber: string;
+  chainTimeStamp: string;
+  chainSize: string;
+  clientType: string;
+  syncMode: string;
+}
+
 /** One supported chain (`usage.chainlist`). */
 export interface ChainListItem {
   chainname: string;
