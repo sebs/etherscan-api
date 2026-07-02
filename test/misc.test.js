@@ -145,6 +145,22 @@ describe('block namespace', function () {
     await api.block.getblocknobytime('1578638524', 'after');
     assert.equal(queryOf(transport).get('closest'), 'after');
   });
+
+  it('getblocktxnscount sends the block number', async function () {
+    const { api, transport } = mockApi({
+      status: '1',
+      result: { block: 24884529, txsCount: 87, internalTxsCount: 55, erc20TxsCount: 103, erc721TxsCount: 1, erc1155TxsCount: 0 },
+    });
+
+    const res = await api.block.getblocktxnscount('24884529');
+    assert.equal(res.result.txsCount, 87);
+
+    const q = queryOf(transport);
+    assert.equal(q.get('module'), 'block');
+    assert.equal(q.get('action'), 'getblocktxnscount');
+    assert.equal(q.get('blockno'), '24884529');
+    assert.equal(q.get('apikey'), 'KEY');
+  });
 });
 
 describe('transaction namespace', function () {

@@ -155,6 +155,20 @@ export interface BlockCountdown {
   EstimateTimeInSec: string;
 }
 
+/**
+ * Per-type transaction counts within a block (`block.getblocktxnscount`).
+ * Unlike most endpoints, this one returns the counts as JSON numbers rather
+ * than strings.
+ */
+export interface BlockTransactionCount {
+  block: number;
+  txsCount: number;
+  internalTxsCount: number;
+  erc20TxsCount: number;
+  erc721TxsCount: number;
+  erc1155TxsCount: number;
+}
+
 /** An event log (`log.getLogs`). */
 export interface EventLog {
   address: string;

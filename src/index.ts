@@ -34,6 +34,7 @@ export type {
   UncleReward,
   BlockReward,
   BlockCountdown,
+  BlockTransactionCount,
   EventLog,
   ContractSource,
   ContractCreation,

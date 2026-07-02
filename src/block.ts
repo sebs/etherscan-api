@@ -1,6 +1,6 @@
 import type { GetRequest } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
-import type { BlockReward, BlockCountdown } from './results.js';
+import type { BlockReward, BlockCountdown, BlockTransactionCount } from './results.js';
 
 export function block(getRequest: GetRequest) {
   return {
@@ -31,6 +31,15 @@ export function block(getRequest: GetRequest) {
       closest: 'before' | 'after' = 'before',
     ): Promise<EtherscanResponse<string>> {
       return getRequest<string>({ module: 'block', action: 'getblocknobytime', timestamp, closest });
+    },
+
+    /**
+     * Returns the number of transactions in a block, broken down by type
+     * (normal, internal, ERC-20, ERC-721 and ERC-1155).
+     * @param blockno - Block number
+     */
+    getblocktxnscount(blockno: string | number): Promise<EtherscanResponse<BlockTransactionCount>> {
+      return getRequest<BlockTransactionCount>({ module: 'block', action: 'getblocktxnscount', blockno });
     },
   };
 }
