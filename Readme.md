@@ -128,3 +128,13 @@ Source lives in `./src` (TypeScript) and compiles to `./lib` (ES modules + `.d.t
 * `npm run docs` - generates the API docs with TypeDoc
 * `npm run preversion` - type-check + changelog before tagging a release
 * `npm run changelog` - generates a changelog and pushes it
+
+## Sponsors
+
+This library is maintained in my spare time. If your company relies on it,
+consider sponsoring — it directly funds maintenance and new features.
+Sponsors at $50/month or more get their logo placed here.
+
+<!-- sponsors -->
+_No sponsors yet — [be the first](https://github.com/sponsors/sebs)_
+<!-- /sponsors -->
