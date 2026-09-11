@@ -1,6 +1,13 @@
+2026-09-11
+==========
+
+  * chore: add sponsor info
+
 2026-07-02
 ==========
 
+  * 12.0.3
+  * changelog
   * refactor(account,proxy): bind module via a local call helper
     Each namespace restated its module string on every request. Add a local
     `call<T>(action, params)` closure that binds module ('account' / 'proxy') once,
@@ -288,33 +295,4 @@
     Bumps [ini](https://github.com/isaacs/ini) from 1.3.5 to 1.3.7.
     - [Release notes](https://github.com/isaacs/ini/releases)
     - [Commits](https://github.com/isaacs/ini/compare/v1.3.5...v1.3.7)
-    Signed-off-by: dependabot[bot] <support@github.com>
-
-2020-11-25
-==========
-
-  * Bump highlight.js from 9.15.9 to 9.18.5
-    Bumps [highlight.js](https://github.com/highlightjs/highlight.js) from 9.15.9 to 9.18.5.
-    - [Release notes](https://github.com/highlightjs/highlight.js/releases)
-    - [Changelog](https://github.com/highlightjs/highlight.js/blob/9.18.5/CHANGES.md)
-    - [Commits](https://github.com/highlightjs/highlight.js/compare/9.15.9...9.18.5)
-    Signed-off-by: dependabot[bot] <support@github.com>
-
-2020-07-29
-==========
-
-  * Bump elliptic from 6.5.0 to 6.5.3
-    Bumps [elliptic](https://github.com/indutny/elliptic) from 6.5.0 to 6.5.3.
-    - [Release notes](https://github.com/indutny/elliptic/releases)
-    - [Commits](https://github.com/indutny/elliptic/compare/v6.5.0...v6.5.3)
-    Signed-off-by: dependabot[bot] <support@github.com>
-
-2020-06-06
-==========
-
-  * Bump websocket-extensions from 0.1.3 to 0.1.4
-    Bumps [websocket-extensions](https://github.com/faye/websocket-extensions-node) from 0.1.3 to 0.1.4.
-    - [Release notes](https://github.com/faye/websocket-extensions-node/releases)
-    - [Changelog](https://github.com/faye/websocket-extensions-node/blob/master/CHANGELOG.md)
-    - [Commits](https://github.com/faye/websocket-extensions-node/compare/0.1.3...0.1.4)
     Signed-off-by: dependabot[bot] <support@github.com>
