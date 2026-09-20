@@ -54,9 +54,15 @@ function normalize(data: EtherscanResponse): EtherscanResponse {
     // A legitimately empty result also comes back as status "0", e.g.
     // `{ status: "0", message: "No transactions found", result: [] }`.
     // Treat that as success (resolve the empty list) rather than an error.
+    //
+    // The message alone is not enough: a real failure can carry a message that
+    // matches ("No records found" alongside `result: "Error! Invalid address
+    // format"`), so the message heuristic only applies when `result` carries no
+    // payload. Otherwise the error string would be handed back as data.
+    const hasNoPayload = data.result === undefined || data.result === null || data.result === '';
     const isEmptyResult =
       Array.isArray(data.result) ||
-      (typeof data.message === 'string' && /\bno\b.*\bfound\b/i.test(data.message));
+      (hasNoPayload && typeof data.message === 'string' && /\bno\b.*\bfound\b/i.test(data.message));
 
     if (!isEmptyResult) {
       let message = 'NOTOK';

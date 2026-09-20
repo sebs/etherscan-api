@@ -138,6 +138,31 @@ describe('request layer (get-request)', function () {
     });
   });
 
+  describe('does not let the "no ... found" message swallow a real error payload', function () {
+    let error;
+
+    beforeEach(async function () {
+      const mocked = mockApi({
+        status: '0',
+        message: 'No records found',
+        result: 'Error! Invalid address format',
+      });
+      try {
+        await mocked.api.account.tokentx('not-an-address');
+      } catch (err) {
+        error = err;
+      }
+    });
+
+    it('rejects with an EtherscanError', function () {
+      assert.ok(error instanceof EtherscanError, 'expected a rejection, got ' + JSON.stringify(error));
+    });
+
+    it('surfaces the error string from result as the message', function () {
+      assert.equal(error.message, 'Error! Invalid address format');
+    });
+  });
+
   describe('rejects with EtherscanError for a JSON-RPC proxy error object', function () {
     let error;
 
