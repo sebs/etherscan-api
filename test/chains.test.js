@@ -47,6 +47,30 @@ describe('chains.resolveChainId', function () {
     assert.equal(resolveChainId('137'), 137);
   });
 
+  const INVALID_NUMERIC = [NaN, Infinity, -Infinity, -1, 0, 1.5, 1e21];
+  for (const input of INVALID_NUMERIC) {
+    it('rejects the invalid chainid ' + String(input), function () {
+      assert.throws(() => resolveChainId(input), /Invalid chainid/);
+    });
+  }
+
+  const INVALID_NUMERIC_STRINGS = ['0', '-1'];
+  for (const input of INVALID_NUMERIC_STRINGS) {
+    it('rejects the invalid numeric string ' + JSON.stringify(input), function () {
+      assert.throws(() => resolveChainId(input), /Invalid chainid|Unknown chain/);
+    });
+  }
+
+  const NON_STRING = [true, {}, []];
+  for (const input of NON_STRING) {
+    it('throws a clear error, not a TypeError, for ' + JSON.stringify(input), function () {
+      assert.throws(
+        () => resolveChainId(input),
+        (err) => err instanceof Error && !/toLowerCase/.test(err.message),
+      );
+    });
+  }
+
   const RETIRED = ['goerli', 'ropsten', 'rinkeby', 'kovan'];
   for (const input of RETIRED) {
     it('throws "no longer supported" for retired chain ' + input, function () {

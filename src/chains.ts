@@ -34,15 +34,31 @@ export const RETIRED_CHAINS: Record<string, string> = {
 };
 
 /**
+ * Validate a numeric chainid. Chain ids are positive integers, so anything else
+ * — NaN, Infinity, a negative, a fraction, or a value past the safe-integer
+ * range — is a mistake that would otherwise travel into the query string as
+ * `chainid=NaN` and fail server-side with nothing pointing back at the cause.
+ */
+function checkChainId(id: number, original: string | number): number {
+  if (!Number.isSafeInteger(id) || id <= 0) {
+    throw new Error(
+      `Invalid chainid ${JSON.stringify(original)}: expected a positive integer.`,
+    );
+  }
+  return id;
+}
+
+/**
  * Resolve a chain name or numeric chainid to a numeric chainid.
  *
  * - `null` / `undefined` / `''` defaults to Ethereum mainnet (1).
- * - A number, or an all-digit string, is passed through unchanged.
+ * - A number, or an all-digit string, is passed through once validated as a
+ *   positive integer.
  * - A known name is mapped to its chainid.
  * - A retired or unknown name throws — silently switching networks on a
  *   blockchain client is dangerous (wrong-chain reads look successful).
  *
- * @throws {Error} If the chain is retired or unknown.
+ * @throws {Error} If the chain is invalid, retired or unknown.
  */
 export function resolveChainId(chain?: string | number | null): number {
   if (chain === null || chain === undefined || chain === '') {
@@ -50,11 +66,20 @@ export function resolveChainId(chain?: string | number | null): number {
   }
 
   if (typeof chain === 'number') {
-    return chain;
+    return checkChainId(chain, chain);
+  }
+
+  if (typeof chain !== 'string') {
+    // Reachable from plain JS, where the string|number type is not enforced.
+    // Without this the name lookup below fails with an opaque
+    // "chain.toLowerCase is not a function".
+    throw new Error(
+      `Invalid chain ${JSON.stringify(chain)}: expected a chain name or a numeric chainid.`,
+    );
   }
 
   if (/^\d+$/.test(chain)) {
-    return Number(chain);
+    return checkChainId(Number(chain), chain);
   }
 
   const key = chain.toLowerCase();
