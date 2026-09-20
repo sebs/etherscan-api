@@ -12,6 +12,25 @@ const DEFAULT_MAX_RESPONSE_BYTES = 50 * 1024 * 1024;
  * HTTP client. Callers can supply their own transport with the same signature as
  * the 4th argument to {@link init}.
  */
+/**
+ * The Etherscan error message carried by a non-2xx body, formatted for
+ * appending to the status-code error. Returns '' unless the body parses as a
+ * JSON object with a non-empty `result` or `message` string.
+ */
+function errorDetail(body: string): string {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(body);
+  } catch {
+    return '';
+  }
+  if (parsed === null || typeof parsed !== 'object') return '';
+  const { result, message } = parsed as { result?: unknown; message?: unknown };
+  const detail =
+    (typeof result === 'string' && result) || (typeof message === 'string' && message) || '';
+  return detail ? ': ' + detail : '';
+}
+
 const httpTransport: Transport = function httpTransport(url, options) {
   const timeout = (options && options.timeout) || 10000;
   const method = (options && options.method) || 'GET';
@@ -89,7 +108,12 @@ const httpTransport: Transport = function httpTransport(url, options) {
       res.on('end', () => {
         if (settled) return;
         if (status < 200 || status >= 300) {
-          fail(new Error('Request failed with status code ' + status));
+          // Etherscan can answer non-2xx with its normal error body (a 403
+          // carrying "Max rate limit reached", say). Surface that message
+          // instead of discarding it. Only a parsed JSON object's own `result`
+          // or `message` string is appended, so an HTML error page cannot echo
+          // the request URL — and with it the API key — into the error.
+          fail(new Error('Request failed with status code ' + status + errorDetail(data)));
           return;
         }
         try {

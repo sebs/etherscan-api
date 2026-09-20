@@ -17,6 +17,10 @@ describe('http transport', function () {
       } else if (req.url.startsWith('/bad-json')) {
         res.writeHead(200, { 'content-type': 'application/json' });
         res.end('not json');
+      } else if (req.url.startsWith('/403-json')) {
+        // Etherscan can answer non-2xx with a normal error body.
+        res.writeHead(403, { 'content-type': 'application/json' });
+        res.end(JSON.stringify({ status: '0', message: 'NOTOK', result: 'Max rate limit reached' }));
       } else if (req.url.startsWith('/500')) {
         res.writeHead(500);
         res.end('boom');
@@ -149,6 +153,33 @@ describe('http transport', function () {
       httpTransport(base + '/big', { ...options, allowInsecure: true, maxResponseBytes: 1024 }));
 
     await assert.rejects(() => api.stats.ethsupply(), /exceeded maximum size of 1024 bytes/);
+  });
+
+  describe('a non-2xx response carrying an Etherscan error body', function () {
+    let error;
+
+    beforeEach(async function () {
+      try {
+        await httpTransport(base + '/403-json', { allowInsecure: true });
+      } catch (err) {
+        error = err;
+      }
+    });
+
+    it('still reports the status code', function () {
+      assert.match(error.message, /403/);
+    });
+
+    it('surfaces the Etherscan message instead of discarding it', function () {
+      assert.match(error.message, /Max rate limit reached/);
+    });
+  });
+
+  it('keeps the bare status message when the error body is not JSON', async function () {
+    await assert.rejects(
+      () => httpTransport(base + '/500', { allowInsecure: true }),
+      (err) => err.message === 'Request failed with status code 500',
+    );
   });
 
   it('resolves a body that stays under maxResponseBytes', async function () {
