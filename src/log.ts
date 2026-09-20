@@ -2,6 +2,20 @@ import type { GetRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { EventLog } from './results.js';
 
+/**
+ * Copy a value onto the params object unless it was omitted. Unlike a truthy
+ * check this keeps `0`, which is a meaningful block number (genesis) and a
+ * meaningful page/offset.
+ */
+function setIfPresent(
+  params: QueryParams,
+  key: string,
+  value: string | number | undefined | null,
+): void {
+  if (value === undefined || value === null || value === '') return;
+  params[key] = value;
+}
+
 export function log(getRequest: GetRequest) {
   return {
     /**
@@ -42,12 +56,8 @@ export function log(getRequest: GetRequest) {
       if (address) {
         params.address = address;
       }
-      if (fromBlock) {
-        params.fromBlock = fromBlock;
-      }
-      if (toBlock) {
-        params.toBlock = toBlock;
-      }
+      setIfPresent(params, 'fromBlock', fromBlock);
+      setIfPresent(params, 'toBlock', toBlock);
       if (topic0) {
         params.topic0 = topic0;
       }
@@ -72,12 +82,8 @@ export function log(getRequest: GetRequest) {
       if (topic3) {
         params.topic3 = topic3;
       }
-      if (page) {
-        params.page = page;
-      }
-      if (offset) {
-        params.offset = offset;
-      }
+      setIfPresent(params, 'page', page);
+      setIfPresent(params, 'offset', offset);
       return getRequest<EventLog[]>(params);
     },
   };

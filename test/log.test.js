@@ -103,4 +103,45 @@ describe('log.getLogs', function () {
       assert.equal(queryOf(transport).get('offset'), '50');
     });
   });
+
+  describe('when a zero block range is supplied', function () {
+    let transport;
+
+    beforeEach(async function () {
+      const mocked = mockApi({ status: '1', result: 'ok' });
+      transport = mocked.transport;
+      await mocked.api.log.getLogs(ADDRESS, 0, 0);
+    });
+
+    it('sends fromBlock 0 rather than omitting it', function () {
+      assert.equal(queryOf(transport).get('fromBlock'), '0');
+    });
+
+    it('sends toBlock 0 rather than omitting it', function () {
+      assert.equal(queryOf(transport).get('toBlock'), '0');
+    });
+  });
+
+  describe('when page and offset are zero', function () {
+    let transport;
+
+    beforeEach(async function () {
+      const mocked = mockApi({ status: '1', result: 'ok' });
+      transport = mocked.transport;
+      await mocked.api.log.getLogs(
+        ADDRESS,
+        FROM_BLOCK, TO_BLOCK,
+        undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+        0, 0
+      );
+    });
+
+    it('forwards page 0', function () {
+      assert.equal(queryOf(transport).get('page'), '0');
+    });
+
+    it('forwards offset 0', function () {
+      assert.equal(queryOf(transport).get('offset'), '0');
+    });
+  });
 });
