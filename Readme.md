@@ -69,6 +69,19 @@ const api = init('apikey', null, 10000, request);
   memory-exhaustion response. Override with `maxResponseBytes` in the transport
   options if you expect larger payloads.
 
+### Overriding the transport options
+
+`init` only ever passes `timeout` to the transport, so `allowInsecure` and
+`maxResponseBytes` are set by wrapping the default transport, which is exported
+as `httpTransport`:
+
+```js
+import { init, httpTransport } from 'etherscan-api';
+
+const api = init('apikey', 'mainnet', 10000, (url, options) =>
+  httpTransport(url, { ...options, maxResponseBytes: 200 * 1024 * 1024 }));
+```
+
 ## Selecting a chain (Etherscan V2 / multichain)
 
 Etherscan deprecated the V1 API on 2025-08-15. This library now talks to a

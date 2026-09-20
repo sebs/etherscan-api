@@ -18,6 +18,7 @@ export function pickChainUrl(): never {
 }
 
 export { init, resolveChainId };
+export { default as httpTransport } from './transport.js';
 export { EtherscanError } from './errors.js';
 export type { EtherscanErrorDetails } from './errors.js';
 export type { EtherscanApi } from './init.js';

@@ -1,7 +1,7 @@
 import { describe, it, before, after, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
-import httpTransport from '../lib/transport.js';
+import { init, httpTransport } from '../lib/index.js';
 
 // Exercises the real built-in node:https/node:http transport against a local
 // server — no third-party HTTP mocking, no external network.
@@ -139,6 +139,16 @@ describe('http transport', function () {
       () => httpTransport(base + '/ok', { allowInsecure: true, maxResponseBytes: 5 }),
       /exceeded maximum size/,
     );
+  });
+
+  // The library only ever passes `timeout` to the transport, so maxResponseBytes
+  // and allowInsecure are reachable from init() only by wrapping the exported
+  // default transport. This pins that path end to end.
+  it('lets an init() caller reach maxResponseBytes by wrapping the exported transport', async function () {
+    const api = init('KEY', 'mainnet', 1000, (url, options) =>
+      httpTransport(base + '/big', { ...options, allowInsecure: true, maxResponseBytes: 1024 }));
+
+    await assert.rejects(() => api.stats.ethsupply(), /exceeded maximum size of 1024 bytes/);
   });
 
   it('resolves a body that stays under maxResponseBytes', async function () {
