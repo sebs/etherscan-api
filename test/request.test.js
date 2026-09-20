@@ -163,6 +163,38 @@ describe('request layer (get-request)', function () {
     });
   });
 
+  describe('rejects a response body that is not an object', function () {
+    const CASES = [
+      ['null', null],
+      ['undefined', undefined],
+      ['a number', 42],
+      ['a string', 'not json'],
+    ];
+
+    for (const [label, body] of CASES) {
+      describe('when the body is ' + label, function () {
+        let error;
+
+        beforeEach(async function () {
+          const mocked = mockApi(body);
+          try {
+            await mocked.api.stats.ethsupply();
+          } catch (err) {
+            error = err;
+          }
+        });
+
+        it('rejects with an EtherscanError, not a TypeError', function () {
+          assert.ok(error instanceof EtherscanError, 'got ' + (error && error.name) + ': ' + (error && error.message));
+        });
+
+        it('keeps the offending body on the error', function () {
+          assert.deepEqual(error.result, body);
+        });
+      });
+    }
+  });
+
   describe('rejects with EtherscanError for a JSON-RPC proxy error object', function () {
     let error;
 

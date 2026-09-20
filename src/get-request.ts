@@ -48,6 +48,17 @@ function serialize(params: QueryParams, defaults: Record<string, string | number
 
 /** Normalise an Etherscan response into a resolved body or a thrown error. */
 function normalize(data: EtherscanResponse): EtherscanResponse {
+  // A body that is not an object has no status/result/error to inspect. This
+  // happens when something other than Etherscan answers (a proxy or WAF can
+  // return a bare `null`, which is valid JSON) or when a custom transport
+  // resolves with nothing. Reject with the library's own error type rather than
+  // letting the property reads below throw an opaque TypeError.
+  if (data === null || typeof data !== 'object') {
+    throw new EtherscanError('Unexpected response body from Etherscan (not a JSON object)', {
+      result: data,
+    });
+  }
+
   // Standard REST endpoints report failure with status "0".
   // (JSON-RPC proxy endpoints have no `status` field — skip them here.)
   if (data.status !== undefined && String(data.status) !== '1') {
