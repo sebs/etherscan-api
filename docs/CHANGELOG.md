@@ -1,6 +1,12 @@
 2026-09-11
 ==========
 
+  * docs: add sponspors section
+  * fix: corret location for funding
+  * chore: audit fix deps
+  * chore: add funding.yml
+  * 12.0.4
+  * changelog
   * chore: add sponsor info
 
 2026-07-02
@@ -273,26 +279,3 @@
 ==========
 
   * Fixed [#84](https://github.com/sebs/etherscan-api/issues/84)
-
-2020-12-20
-==========
-
-  * Merge pull request [#66](https://github.com/sebs/etherscan-api/issues/66) from sebs/dependabot/npm_and_yarn/acorn-5.7.4
-    Bump acorn from 5.7.3 to 5.7.4
-  * Merge pull request [#71](https://github.com/sebs/etherscan-api/issues/71) from sebs/dependabot/npm_and_yarn/websocket-extensions-0.1.4
-    Bump websocket-extensions from 0.1.3 to 0.1.4
-  * Merge pull request [#72](https://github.com/sebs/etherscan-api/issues/72) from sebs/dependabot/npm_and_yarn/elliptic-6.5.3
-    Bump elliptic from 6.5.0 to 6.5.3
-  * Merge pull request [#74](https://github.com/sebs/etherscan-api/issues/74) from sebs/dependabot/npm_and_yarn/highlight.js-9.18.5
-    Bump highlight.js from 9.15.9 to 9.18.5
-  * Merge pull request [#75](https://github.com/sebs/etherscan-api/issues/75) from sebs/dependabot/npm_and_yarn/ini-1.3.7
-    Bump ini from 1.3.5 to 1.3.7
-
-2020-12-11
-==========
-
-  * Bump ini from 1.3.5 to 1.3.7
-    Bumps [ini](https://github.com/isaacs/ini) from 1.3.5 to 1.3.7.
-    - [Release notes](https://github.com/isaacs/ini/releases)
-    - [Commits](https://github.com/isaacs/ini/compare/v1.3.5...v1.3.7)
-    Signed-off-by: dependabot[bot] <support@github.com>
