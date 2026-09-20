@@ -42,6 +42,13 @@ describe('contract.verifysourcecode', function () {
       assert.equal(bodyOf(transport).get('apikey'), 'KEY');
     });
 
+    it('keeps the apikey out of the POST url', function () {
+      assert.ok(
+        !transport.mock.calls[0].arguments[0].includes('apikey'),
+        'POST url must not carry the key: ' + transport.mock.calls[0].arguments[0],
+      );
+    });
+
     it('sends the chain id', function () {
       assert.equal(bodyOf(transport).get('chainid'), '1');
     });

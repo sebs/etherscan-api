@@ -53,12 +53,14 @@ const api = init('apikey', null, 10000, request);
 
 ## Security notes
 
-* **The API key travels in the request URL.** Etherscan requires `apikey` as a
-  query parameter, so it is part of every request URL (and of POST request
-  URLs). Treat full request URLs as secrets: **do not log them**, and be careful
-  with proxies, APM tools, and access logs that capture URLs. A custom transport
+* **The API key travels in the request URL on GET requests.** Etherscan requires
+  `apikey` as a query parameter, so it is part of every GET request URL. Treat
+  full request URLs as secrets: **do not log them**, and be careful with
+  proxies, APM tools, and access logs that capture URLs. A custom transport
   receives the URL containing the key — never write it to logs verbatim. (The
   library itself never puts the URL or key into thrown errors.)
+  The POST contract-verification endpoints are the exception: there the key is
+  sent in the form body and the URL is a bare `/v2/api`.
 * **The default transport refuses cleartext `http://`.** Requests go to
   `https://api.etherscan.io` over TLS with certificate validation on. If a
   request somehow targets an `http://` URL, the default transport rejects rather
