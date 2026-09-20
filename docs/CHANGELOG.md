@@ -1,3 +1,113 @@
+2026-09-20
+==========
+
+  * fix: make npm test run on node 20
+    The test script passed a quoted glob, 'test/**/*.test.js'. node --test
+    only learned to expand globs after node 20, so on node 20 it looked for a
+    file with that literal name and exited 1:
+    Could not find '.../test/**/*.test.js'
+    package.json declares engines >=20 and CI has 20.x in its matrix, so
+    `npm test` had never worked there. It went unnoticed because CI ran its
+    own unquoted `node --test test/*.test.js`, which bash expanded first —
+    the same line that skipped every namespace directory.
+    Use bare `node --test` and let node discover the files: identical results
+    on 20, 22, 24 and 26 (579 tests). It also picks up test/helpers.js, which
+    defines no tests but is now checked to import cleanly.
+    Drop fs.globSync from the package guard for the same reason (node 22+),
+    and resolve a script's literal path prefix so a reintroduced test:live
+    pointing at a missing directory still fails.
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+  * chore: untrack the generated lib/ build output
+    .gitignore lists lib/ and prepare builds it, but 11 compiled .js files
+    were still tracked from before that rule — an incomplete, stale snapshot
+    (no index.js, no .d.ts) that nothing consumes: npm publish takes lib/ from
+    disk via .npmignore, git-url installs run prepare, and every workflow runs
+    npm test, whose pretest rebuilds it.
+    Editing src/ therefore dirtied tracked build artifacts on every change.
+    Untrack them so the ignore rule takes effect.
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+  * fix: run the whole test suite in CI
+    The CI workflow ran `node --test test/*.test.js`, which matches only the
+    six top-level test files and skipped every namespace directory —
+    test/account, test/block, test/contract, test/proxy, test/stats,
+    test/transaction, test/gastracker and test/usage. CI was green over 128
+    of 573 tests.
+    Call `npm test` so CI and local runs share one glob, and extend the
+    package guard to fail when a workflow runs a narrower one.
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+  * docs: correct the claim that POST urls carry the api key
+    The security note said the key is part of "POST request URLs". It is not:
+    createPostRequest form-encodes apikey into the body and leaves the URL as
+    a bare /v2/api. The note overstated the exposure it asks readers to guard
+    against.
+    Say where the key actually travels, and pin the behaviour with a test so
+    the note cannot drift back out of date.
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+  * fix: validate numeric chainids instead of passing them through
+    Numbers went into the query string untouched, so init('KEY', NaN) sent
+    chainid=NaN, and -1, 1.5, Infinity and values past the safe-integer range
+    went the same way — a server-side failure with nothing pointing back at
+    the cause. String input was already strict ('0x1' and '1e3' both throw),
+    so the two paths disagreed.
+    Require a positive safe integer, and reject a non-string/non-number chain
+    with a clear message rather than the "chain.toLowerCase is not a
+    function" TypeError plain-JS callers used to get.
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+  * fix: keep the Etherscan error message on a non-2xx response
+    A non-2xx response was rejected with a bare "Request failed with status
+    code 403", throwing away a body that often explains the failure — for
+    rate limiting, "Max rate limit reached".
+    Append the parsed body's result/message. Only a JSON object's own string
+    fields are used, so an HTML error page cannot echo the request URL, and
+    with it the API key, into the error message. A non-JSON body keeps the
+    bare status-code message as before.
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+  * fix: drop the test:live script that ran no tests
+    test/live/ does not exist, so `npm run test:live` globbed nothing,
+    reported "tests 0" and exited 0 — a green run that tested nothing, which
+    in CI reads as a passing live suite.
+    Remove the script and its README line, and add a guard that fails if any
+    `node --test` script in package.json points at a glob matching no files.
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+  * fix: export httpTransport so its documented options are reachable
+    The README documents maxResponseBytes and allowInsecure as transport
+    options a caller can override, but nothing in the library ever passes
+    them: createGetRequest, createPostRequest and createRawGet all send
+    { timeout } only. The default transport was not exported either — the
+    package exports map exposes "." alone, so
+    `import('etherscan-api/lib/transport.js')` failed with
+    ERR_PACKAGE_PATH_NOT_EXPORTED and it could not even be wrapped.
+    Export it as httpTransport and document the wrapping pattern.
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+  * fix: reject a non-object response body with EtherscanError
+    A body of null (valid JSON, and what some proxies and WAFs return) or a
+    custom transport resolving with undefined reached the property reads in
+    normalize and threw
+    TypeError: Cannot read properties of null (reading 'status')
+    Callers catching EtherscanError missed it and the message said nothing
+    about the request. Guard the shape up front and throw the library's own
+    error, carrying the offending body as result. Arrays still pass through.
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+  * fix: stop the "no ... found" heuristic swallowing real errors
+    A status "0" response was treated as an empty (successful) result whenever
+    its message matched /no ... found/, regardless of what result held. So
+    { status: "0", message: "No records found",
+    result: "Error! Invalid address format" }
+    resolved, handing the caller the error string as if it were data.
+    Apply the message heuristic only when result carries no payload. The
+    Array.isArray branch, which covers the common empty-list case, is unchanged.
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+  * fix: keep block 0 and page/offset 0 in log.getLogs
+    getLogs used truthy checks to decide which optional params to send, so a
+    fromBlock/toBlock of 0 (the genesis block) was silently dropped and the
+    query ran unbounded over the whole chain instead of the requested range.
+    page/offset of 0 were dropped the same way.
+    Drop only omitted values (undefined/null/''), matching how account.ts
+    listRange already handles the same parameters with ??.
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+  * 12.0.5
+  * changelog
+
 2026-09-11
 ==========
 
@@ -235,47 +345,3 @@
 
   * Merge pull request [#85](https://github.com/sebs/etherscan-api/issues/85) from Catzilla/fix-84
     Fixed [#84](https://github.com/sebs/etherscan-api/issues/84)
-  * Merge pull request [#95](https://github.com/sebs/etherscan-api/issues/95) from mochimisu/master
-    support for etherscan's tokennfttx api for ERC721 tokens
-  * Merge pull request [#102](https://github.com/sebs/etherscan-api/issues/102) from Jason-Wanxt/master
-    Add Arbitrum support
-  * Merge pull request [#106](https://github.com/sebs/etherscan-api/issues/106) from sebs/dependabot/npm_and_yarn/async-2.6.4
-    Bump async from 2.6.3 to 2.6.4
-
-2022-04-27
-==========
-
-  * Bump async from 2.6.3 to 2.6.4
-    Bumps [async](https://github.com/caolan/async) from 2.6.3 to 2.6.4.
-    - [Release notes](https://github.com/caolan/async/releases)
-    - [Changelog](https://github.com/caolan/async/blob/v2.6.4/CHANGELOG.md)
-    - [Commits](https://github.com/caolan/async/compare/v2.6.3...v2.6.4)
-    ---
-    updated-dependencies:
-    - dependency-name: async
-    dependency-type: indirect
-    ...
-    Signed-off-by: dependabot[bot] <support@github.com>
-
-2022-02-22
-==========
-
-  * edit the urls of arbiscan
-  * Add arbitrum support
-  * Update Readme.md
-  * Add arbscan support
-
-2021-06-25
-==========
-
-  * quick test for tokennfttx
-
-2021-06-24
-==========
-
-  * add tokennfttx to accounts
-
-2021-02-16
-==========
-
-  * Fixed [#84](https://github.com/sebs/etherscan-api/issues/84)
