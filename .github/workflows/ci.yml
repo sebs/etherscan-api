@@ -30,4 +30,4 @@ jobs:
       run: npm run build
 
     - name: Test
-      run: node --test test/*.test.js
+      run: npm test
