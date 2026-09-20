@@ -137,7 +137,6 @@ Source lives in `./src` (TypeScript) and compiles to `./lib` (ES modules + `.d.t
 * `npm run build` - compiles `src` → `lib` with `tsc`
 * `npm run typecheck` - type-checks without emitting (replaces the old linter)
 * `npm test` - builds, then runs the fully mocked test suite (no API key required)
-* `npm run test:live` - runs the tests against the real Etherscan API
 * `npm run docs` - generates the API docs with TypeDoc
 * `npm run preversion` - type-check + changelog before tagging a release
 * `npm run changelog` - generates a changelog and pushes it
