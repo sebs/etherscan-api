@@ -223,6 +223,22 @@ describe('http transport', function () {
     );
   });
 
+  it('honours maxResponseBytes: 0 instead of falling back to the default', async function () {
+    await assert.rejects(
+      () => httpTransport(base + '/ok', { allowInsecure: true, maxResponseBytes: 0 }),
+      /exceeded maximum size of 0 bytes/,
+    );
+  });
+
+  for (const maxResponseBytes of [-1, NaN]) {
+    it('rejects the invalid maxResponseBytes ' + String(maxResponseBytes), async function () {
+      await assert.rejects(
+        () => httpTransport(base + '/ok', { allowInsecure: true, maxResponseBytes }),
+        /Invalid maxResponseBytes/,
+      );
+    });
+  }
+
   it('resolves a body that stays under maxResponseBytes', async function () {
     const data = await httpTransport(base + '/ok', { allowInsecure: true, maxResponseBytes: 1024 });
     assert.equal(data.result, '42');

@@ -63,7 +63,13 @@ const httpTransport: Transport = function httpTransport(url, options) {
   }
   const method = (options && options.method) || 'GET';
   const body = options && options.body;
-  const maxResponseBytes = (options && options.maxResponseBytes) || DEFAULT_MAX_RESPONSE_BYTES;
+  // `??`, not `||`: an explicit 0 ("reject any body") must not become 50 MB.
+  const maxResponseBytes = (options && options.maxResponseBytes) ?? DEFAULT_MAX_RESPONSE_BYTES;
+  if (typeof maxResponseBytes !== 'number' || Number.isNaN(maxResponseBytes) || maxResponseBytes < 0) {
+    return Promise.reject(
+      new Error(`Invalid maxResponseBytes ${String(maxResponseBytes)}: expected a non-negative number of bytes.`),
+    );
+  }
   const allowInsecure = !!(options && options.allowInsecure);
 
   return new Promise((resolve, reject) => {
