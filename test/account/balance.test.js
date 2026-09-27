@@ -93,4 +93,10 @@ describe('account.balance', function () {
       assert.equal(mocked.transport.mock.callCount(), 1);
     });
   });
+
+  it('rejects a comma-joined string without calling the API', async function () {
+    const mocked = mockApi({ status: '1', result: '0' });
+    await assert.rejects(() => mocked.api.account.balance(ADDRESS + ',' + ADDRESS), /pass an array/);
+    assert.equal(mocked.transport.mock.callCount(), 0);
+  });
 });

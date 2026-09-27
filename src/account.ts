@@ -143,6 +143,13 @@ export function account(getRequest: GetRequest) {
       addr = address.join(',');
       action = 'balancemulti';
     } else {
+      // A comma-joined string would go to the single-address action (and the
+      // string-typed overload), skipping the balancemulti limit; require an array.
+      if (address.includes(',')) {
+        return Promise.reject(
+          new Error('balance() takes one address per string; pass an array for several addresses'),
+        );
+      }
       addr = address;
     }
     return call<string | MultiBalanceItem[]>(action, { tag: 'latest', address: addr });

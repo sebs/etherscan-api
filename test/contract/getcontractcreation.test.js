@@ -63,4 +63,19 @@ describe('contract.getcontractcreation', function () {
       assert.equal(mocked.transport.mock.callCount(), 1);
     });
   });
+
+  it('counts the entries of a comma-joined string against the limit', async function () {
+    const mocked = mockApi({ status: '1', result: [] });
+    await assert.rejects(
+      () => mocked.api.contract.getcontractcreation(Array(6).fill(ADDRESS).join(',')),
+      /takes 1 to 5 addresses, got 6/,
+    );
+    assert.equal(mocked.transport.mock.callCount(), 0);
+  });
+
+  it('still accepts a comma-joined string within the limit', async function () {
+    const mocked = mockApi({ status: '1', result: [] });
+    await mocked.api.contract.getcontractcreation(ADDRESS + ',' + ADDRESS);
+    assert.equal(queryOf(mocked.transport).get('contractaddresses'), ADDRESS + ',' + ADDRESS);
+  });
 });
