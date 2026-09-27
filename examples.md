@@ -131,6 +131,7 @@ const submit = await api.contract.verifysourcecode({
 });
 
 const guid = submit.result; // string GUID
+if (!guid) throw new Error('Etherscan returned no verification GUID');
 
 // Etherscan reports every state except "Pass - Verified" with status "0", so
 // "Pending in queue" and "Fail - …" reject with an EtherscanError whose
