@@ -1,6 +1,8 @@
 # Tutorial
 
-This is a Node.js / CommonJS library for the [Etherscan API](https://etherscan.io/apis).
+This is a Node.js library for the [Etherscan API](https://etherscan.io/apis),
+shipped as an ES module (Node.js >= 20). Load it with `import`; it has no
+CommonJS `require()` entry point.
 
 ## Install
 
@@ -10,11 +12,11 @@ npm install etherscan-api
 
 ## Usage
 
-Require the library and create an API instance with your API key. With no chain
+Import the library and create an API instance with your API key. With no chain
 argument it defaults to Ethereum mainnet:
 
 ```js
-const { init } = require('etherscan-api');
+import { init } from 'etherscan-api';
 
 const api = init('YourApiKey');
 ```
@@ -23,9 +25,19 @@ To target another network, pass a chain name (or a numeric chainid) as the
 second argument. One API key works across all chains:
 
 ```js
-const { init } = require('etherscan-api');
+import { init } from 'etherscan-api';
 
 const api = init('YourApiKey', 'sepolia');
+```
+
+From a CommonJS file, use a dynamic import (CommonJS has no top-level
+`await`, so use `.then` or an async function):
+
+```js
+import('etherscan-api').then(({ init }) => {
+  const api = init('YourApiKey');
+  // ...
+});
 ```
 
 ## Fetching a balance
@@ -33,7 +45,7 @@ const api = init('YourApiKey', 'sepolia');
 Every call returns a promise:
 
 ```js
-const { init } = require('etherscan-api');
+import { init } from 'etherscan-api';
 
 const api = init('YourApiKey');
 
