@@ -106,6 +106,10 @@ describe('request layer (get-request)', function () {
     it('exposes the status on the error', function () {
       assert.equal(error.status, '0');
     });
+
+    it('keeps Etherscan\'s own message field as responseMessage', function () {
+      assert.equal(error.responseMessage, 'NOTOK');
+    });
   });
 
   describe('resolves (not rejects) an empty result reported as status "0" with an array', function () {

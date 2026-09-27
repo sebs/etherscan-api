@@ -91,7 +91,11 @@ function normalize(data: EtherscanResponse): EtherscanResponse {
       } else if (typeof data.message === 'string' && data.message) {
         message = data.message;
       }
-      throw new EtherscanError(message, { result: data.result, status: data.status });
+      throw new EtherscanError(message, {
+        result: data.result,
+        status: data.status,
+        responseMessage: data.message,
+      });
     }
   }
 

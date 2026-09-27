@@ -1,6 +1,7 @@
 export interface EtherscanErrorDetails {
   result?: unknown;
   status?: unknown;
+  responseMessage?: unknown;
 }
 
 /**
@@ -14,12 +15,18 @@ export class EtherscanError extends Error {
   readonly result?: unknown;
   /** The raw `status` field from the response, if any. */
   readonly status?: unknown;
+  /**
+   * The response's own `message` field (e.g. `"NOTOK"`), if any. Kept apart
+   * from `message`, which usually carries the more specific `result` text.
+   */
+  readonly responseMessage?: unknown;
 
   constructor(message: string, details: EtherscanErrorDetails = {}) {
     super(message);
     this.name = 'EtherscanError';
     this.result = details.result;
     this.status = details.status;
+    this.responseMessage = details.responseMessage;
   }
 }
 
