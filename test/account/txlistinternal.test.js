@@ -102,4 +102,40 @@ describe('account.txlistinternal', function () {
       assert.equal(queryOf(transport).get('txhash'), null);
     });
   });
+
+  describe('with page and offset', function () {
+    let transport;
+
+    beforeEach(async function () {
+      const mocked = mockApi({ status: '1', result: [] });
+      transport = mocked.transport;
+      await mocked.api.account.txlistinternal(undefined, ADDRESS, 0, 'latest', 'asc', undefined, 2, 50);
+    });
+
+    it('sends the page', function () {
+      assert.equal(queryOf(transport).get('page'), '2');
+    });
+
+    it('sends the offset', function () {
+      assert.equal(queryOf(transport).get('offset'), '50');
+    });
+  });
+
+  describe('without page and offset', function () {
+    let transport;
+
+    beforeEach(async function () {
+      const mocked = mockApi({ status: '1', result: [] });
+      transport = mocked.transport;
+      await mocked.api.account.txlistinternal(undefined, ADDRESS);
+    });
+
+    it('omits the page', function () {
+      assert.equal(queryOf(transport).get('page'), null);
+    });
+
+    it('omits the offset', function () {
+      assert.equal(queryOf(transport).get('offset'), null);
+    });
+  });
 });

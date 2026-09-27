@@ -162,6 +162,8 @@ export function account(getRequest: GetRequest) {
      * @param endblock - End block
      * @param sort - Sort asc/desc
      * @param filter - Optional advanced filter (Beta): filter by `from`/`to` instead of `address`
+     * @param page - Page number (sent only when given)
+     * @param offset - Max records to return (sent only when given)
      * @example
      * api.account.txlistinternal('0x40eb908387324f2b575b4879cd9d7188f69c8fc9d87c901b9e2daaea4b442170');
      */
@@ -172,6 +174,8 @@ export function account(getRequest: GetRequest) {
       endblock?: string | number,
       sort?: string,
       filter?: AdvancedFilter,
+      page?: number,
+      offset?: number,
     ): Promise<EtherscanResponse<InternalTransaction[]>> {
       const params: QueryParams = {};
       params.sort = sort || 'asc';
@@ -184,6 +188,14 @@ export function account(getRequest: GetRequest) {
         }
         params.startblock = startblock ?? 0;
         params.endblock = endblock ?? 'latest';
+      }
+      // No paging defaults here, unlike listRange: callers who never paged
+      // keep getting Etherscan's full (unpaged) result.
+      if (page !== undefined) {
+        params.page = page;
+      }
+      if (offset !== undefined) {
+        params.offset = offset;
       }
       applyFilter(params, filter);
       return call<InternalTransaction[]>('txlistinternal', params);
