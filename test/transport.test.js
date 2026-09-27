@@ -1,7 +1,7 @@
 import { describe, it, before, after, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
-import { init, httpTransport, EtherscanHttpError } from '../lib/index.js';
+import { init, httpTransport, EtherscanError, EtherscanHttpError } from '../lib/index.js';
 
 // Exercises the real built-in node:https/node:http transport against a local
 // server — no third-party HTTP mocking, no external network.
@@ -205,6 +205,16 @@ describe('http transport', function () {
 
     it('rejects with an EtherscanHttpError', function () {
       assert.ok(error instanceof EtherscanHttpError);
+    });
+
+    // A rate limit can also arrive as a 200 with status "0" (an EtherscanError);
+    // one instanceof check must catch both forms.
+    it('is also an EtherscanError', function () {
+      assert.ok(error instanceof EtherscanError);
+    });
+
+    it('keeps its own name', function () {
+      assert.equal(error.name, 'EtherscanHttpError');
     });
 
     it('exposes the status code', function () {
