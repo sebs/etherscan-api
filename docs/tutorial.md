@@ -1,7 +1,7 @@
 # Tutorial
 
 This is a Node.js library for the [Etherscan API](https://etherscan.io/apis),
-shipped as an ES module (Node.js >= 20). Load it with `import`; it has no
+shipped as an ES module (Node.js >= 22). Load it with `import`; it has no
 CommonJS `require()` entry point.
 
 ## Install

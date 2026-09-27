@@ -7,7 +7,7 @@
 
 A way to access the [etherscan.io api](https://etherscan.io/apis) using promises. Fetch a diverse set of information about the blockchain.
 
-Written in TypeScript, shipped as an **ES module** with bundled type declarations. Requires Node.js >= 20.
+Written in TypeScript, shipped as an **ES module** with bundled type declarations. Requires Node.js >= 22.
 
 Mainnet
 

@@ -4,9 +4,6 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
-// Note: no fs.globSync here — it landed in Node 22 and package.json declares
-// engines >=20, so this file has to run on Node 20 too.
-
 const root = fileURLToPath(new URL('..', import.meta.url));
 const pkg = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'));
 
