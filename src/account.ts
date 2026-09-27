@@ -41,10 +41,47 @@ function applyFilter(params: QueryParams, filter?: AdvancedFilter): void {
   }
 }
 
+/** Sort order accepted by the list endpoints. */
+export type SortOrder = 'asc' | 'desc';
+
+/** Etherscan serves at most this many records per query: `page × offset` must not exceed it. */
+const MAX_RESULT_WINDOW = 10000;
+
+/**
+ * Validate a sort order. An empty/omitted sort means `'asc'` (`||` rather than
+ * `??`, so `''` is not sent as a bare `sort=`).
+ * @throws {Error} For anything other than `'asc'` or `'desc'`.
+ */
+function checkSort(sort?: string): SortOrder {
+  const order = sort || 'asc';
+  if (order !== 'asc' && order !== 'desc') {
+    throw new Error(`Invalid sort ${JSON.stringify(sort)}: expected 'asc' or 'desc'`);
+  }
+  return order;
+}
+
+/**
+ * Validate paging against Etherscan's rules: `page` and `offset` are positive
+ * integers and `page × offset` stays within the 10 000-record result window.
+ * @throws {Error} If the combination would be rejected by Etherscan.
+ */
+function checkPaging(page: number, offset: number): void {
+  for (const [name, value] of [['page', page], ['offset', offset]] as const) {
+    if (!Number.isSafeInteger(value) || value < 1) {
+      throw new Error(`Invalid ${name} ${String(value)}: expected a positive integer`);
+    }
+  }
+  if (page * offset > MAX_RESULT_WINDOW) {
+    throw new Error(
+      `page × offset (${page} × ${offset}) exceeds Etherscan's ${MAX_RESULT_WINDOW}-record result window`,
+    );
+  }
+}
+
 /**
  * Apply the shared start/end block, paging and sort defaults to a params object
- * (the block repeated by the paged list endpoints). `sort` uses `||` so an empty
- * string coerces to `'asc'` rather than being sent as a bare `sort=`.
+ * (the block repeated by the paged list endpoints), validating paging and sort.
+ * @throws {Error} For an invalid sort or paging combination.
  */
 function listRange(
   params: QueryParams,
@@ -52,13 +89,14 @@ function listRange(
   endblock?: string | number,
   page?: number,
   offset?: number,
-  sort?: string,
+  sort?: SortOrder,
 ): void {
   params.startblock = startblock ?? 0;
   params.endblock = endblock ?? 'latest';
   params.page = page ?? 1;
   params.offset = offset ?? 100;
-  params.sort = sort || 'asc';
+  checkPaging(params.page, params.offset);
+  params.sort = checkSort(sort);
 }
 
 /** Etherscan's `balancemulti` accepts at most 20 addresses per call. */
@@ -72,7 +110,8 @@ export function account(getRequest: GetRequest) {
   // Shared body for the ERC-20/721/1155 token-transfer endpoints, which differ
   // only by action string and result type. Kept private; the public methods
   // below preserve their own signatures, JSDoc and result generics.
-  function tokenTransfers<T>(
+  // async: a validation error from listRange becomes a rejection, not a throw.
+  async function tokenTransfers<T>(
     action: string,
     address?: string,
     contractaddress?: string,
@@ -80,7 +119,7 @@ export function account(getRequest: GetRequest) {
     endblock?: string | number,
     page?: number,
     offset?: number,
-    sort?: string,
+    sort?: SortOrder,
     filter?: AdvancedFilter,
   ): Promise<EtherscanResponse<T>> {
     const params: QueryParams = {};
@@ -99,13 +138,13 @@ export function account(getRequest: GetRequest) {
   // and the L2 deposit/withdrawal lists), which differ only by action string.
   const pagedByAddress =
     (action: string) =>
-    (
+    async (
       address: string,
       startblock?: string | number,
       endblock?: string | number,
       page?: number,
       offset?: number,
-      sort?: string,
+      sort?: SortOrder,
     ): Promise<EtherscanResponse> => {
       const params: QueryParams = { address };
       listRange(params, startblock, endblock, page, offset, sort);
@@ -197,18 +236,18 @@ export function account(getRequest: GetRequest) {
      * @example
      * api.account.txlistinternal('0x40eb908387324f2b575b4879cd9d7188f69c8fc9d87c901b9e2daaea4b442170');
      */
-    txlistinternal(
+    async txlistinternal(
       txhash?: string,
       address?: string,
       startblock?: string | number,
       endblock?: string | number,
-      sort?: string,
+      sort?: SortOrder,
       filter?: AdvancedFilter,
       page?: number,
       offset?: number,
     ): Promise<EtherscanResponse<InternalTransaction[]>> {
       const params: QueryParams = {};
-      params.sort = sort || 'asc';
+      params.sort = checkSort(sort);
 
       if (txhash) {
         params.txhash = txhash;
@@ -220,7 +259,11 @@ export function account(getRequest: GetRequest) {
         params.endblock = endblock ?? 'latest';
       }
       // No paging defaults here, unlike listRange: callers who never paged
-      // keep getting Etherscan's full (unpaged) result.
+      // keep getting Etherscan's full (unpaged) result. What is given is
+      // still validated.
+      if (page !== undefined || offset !== undefined) {
+        checkPaging(page ?? 1, offset ?? 1);
+      }
       if (page !== undefined) {
         params.page = page;
       }
@@ -243,13 +286,13 @@ export function account(getRequest: GetRequest) {
      * @example
      * api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 1, 'latest', 1, 100, 'asc');
      */
-    txlist(
+    async txlist(
       address?: string,
       startblock?: string | number,
       endblock?: string | number,
       page?: number,
       offset?: number,
-      sort?: string,
+      sort?: SortOrder,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<NormalTransaction[]>> {
       const params: QueryParams = {};
@@ -307,7 +350,7 @@ export function account(getRequest: GetRequest) {
       endblock?: string | number,
       page?: number,
       offset?: number,
-      sort?: string,
+      sort?: SortOrder,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<Erc20Transfer[]>> {
       return tokenTransfers<Erc20Transfer[]>('tokentx', address, contractaddress, startblock, endblock, page, offset, sort, filter);
@@ -331,7 +374,7 @@ export function account(getRequest: GetRequest) {
       endblock?: string | number,
       page?: number,
       offset?: number,
-      sort?: string,
+      sort?: SortOrder,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<Erc721Transfer[]>> {
       return tokenTransfers<Erc721Transfer[]>('tokennfttx', address, contractaddress, startblock, endblock, page, offset, sort, filter);
@@ -355,7 +398,7 @@ export function account(getRequest: GetRequest) {
       endblock?: string | number,
       page?: number,
       offset?: number,
-      sort?: string,
+      sort?: SortOrder,
       filter?: AdvancedFilter,
     ): Promise<EtherscanResponse<Erc1155Transfer[]>> {
       return tokenTransfers<Erc1155Transfer[]>('token1155tx', address, contractaddress, startblock, endblock, page, offset, sort, filter);
