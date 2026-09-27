@@ -82,15 +82,16 @@ export function resolveChainId(chain?: string | number | null): number {
     return checkChainId(Number(chain), chain);
   }
 
+  // Own-property checks only: a plain lookup would resolve inherited names such
+  // as 'constructor' or '__proto__' to Object's prototype members.
   const key = chain.toLowerCase();
-  const known = CHAINS[key];
-  if (known !== undefined) {
-    return known;
+  if (Object.hasOwn(CHAINS, key)) {
+    return CHAINS[key] as number;
   }
 
   const names = Object.keys(CHAINS).join(', ');
-  const retired = RETIRED_CHAINS[key];
-  if (retired !== undefined) {
+  if (Object.hasOwn(RETIRED_CHAINS, key)) {
+    const retired = RETIRED_CHAINS[key];
     throw new Error(
       `Chain "${chain}" is no longer supported: ${retired}. ` +
         `Supported names: ${names} (or pass a numeric chainid).`,

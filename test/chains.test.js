@@ -86,6 +86,13 @@ describe('chains.resolveChainId', function () {
     assert.throws(() => resolveChainId('notachain'), /Unknown chain/);
   });
 
+  const INHERITED = ['constructor', '__proto__', 'hasOwnProperty', 'toString'];
+  for (const input of INHERITED) {
+    it('treats the inherited property name ' + input + ' as an unknown chain', function () {
+      assert.throws(() => resolveChainId(input), /Unknown chain/);
+    });
+  }
+
   it('exposes the curated map', function () {
     assert.equal(CHAINS.mainnet, 1);
   });
