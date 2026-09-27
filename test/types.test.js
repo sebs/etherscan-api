@@ -71,6 +71,14 @@ export async function identifyingArguments(): Promise<void> {
   await api.stats.tokensupply();
 }
 
+export async function chainlist(): Promise<void> {
+  const res = await api.usage.chainlist();
+  const total: number | undefined = res.totalcount;
+  const legend: string | undefined = res.comments;
+  const comment: string | undefined = res.result?.[0]?.comment;
+  void total; void legend; void comment;
+}
+
 export async function tokenbalance(): Promise<void> {
   await api.account.tokenbalance('0xa', '', '0xc');
 

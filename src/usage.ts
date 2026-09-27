@@ -1,6 +1,6 @@
 import type { GetRequest, RawGet } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
-import type { ChainListItem } from './results.js';
+import type { ChainListResponse } from './results.js';
 
 export function usage(getRequest: GetRequest, rawGet: RawGet) {
   return {
@@ -17,8 +17,8 @@ export function usage(getRequest: GetRequest, rawGet: RawGet) {
      * chain ids. Hits the dedicated `/v2/chainlist` endpoint. Etherscan needs no
      * key for it, so none is sent, but `init()` still requires one to create the client.
      */
-    chainlist(): Promise<EtherscanResponse<ChainListItem[]>> {
-      return rawGet<ChainListItem[]>('/v2/chainlist');
+    chainlist(): Promise<ChainListResponse> {
+      return rawGet('/v2/chainlist') as Promise<ChainListResponse>;
     },
   };
 }

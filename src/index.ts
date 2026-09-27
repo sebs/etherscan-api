@@ -47,5 +47,6 @@ export type {
   GasOracle,
   ChainSize,
   ChainListItem,
+  ChainListResponse,
 } from './results.js';
 export { CHAINS, RETIRED_CHAINS } from './chains.js';

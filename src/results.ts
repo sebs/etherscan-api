@@ -252,5 +252,18 @@ export interface ChainListItem {
   chainid: string;
   blockexplorer: string;
   apiurl: string;
+  /** 0 = offline, 1 = OK, 2 = degraded (see the response's `comments`). */
   status: number;
+  comment: string;
+}
+
+/**
+ * The `/v2/chainlist` response. Unlike `/v2/api` it has no `status`/`message`;
+ * it carries a legend in `comments` and the number of chains in `totalcount`.
+ */
+export interface ChainListResponse {
+  comments?: string;
+  totalcount?: number;
+  result?: ChainListItem[];
+  [key: string]: unknown;
 }
