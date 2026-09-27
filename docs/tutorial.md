@@ -1,3 +1,7 @@
+---
+title: Tutorial
+---
+
 # Tutorial
 
 This is a Node.js library for the [Etherscan API](https://etherscan.io/apis),

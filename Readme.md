@@ -132,7 +132,9 @@ error with a helpful message — use `sepolia` or `hoodi` instead.
 
 ## API Documentation
 
-[Full Api Docs](https://sebs.github.io/etherscan-api/)
+[Full Api Docs](https://sebs.github.io/etherscan-api/), including a short
+[tutorial](docs/tutorial.md) (also covering use from CommonJS) and
+[examples](examples.md).
 
 
 ## Development workflow

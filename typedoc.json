@@ -4,7 +4,7 @@
   "out": "out",
   "name": "etherscan-api",
   "readme": "Readme.md",
-  "projectDocuments": ["examples.md"],
+  "projectDocuments": ["docs/tutorial.md", "examples.md"],
   "excludePrivate": true,
   "excludeInternal": true
 }
