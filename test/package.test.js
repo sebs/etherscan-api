@@ -98,3 +98,24 @@ describe('package.json publishes an allowlist', function () {
     assert.ok(!existsSync(path.join(root, '.npmignore')));
   });
 });
+
+describe('package.json portability', function () {
+  it('exports ./package.json for tools that read the installed version', function () {
+    assert.equal(pkg.exports['./package.json'], './package.json');
+  });
+
+  // The build and clean steps must work in Windows shells too, where rm is absent.
+  for (const name of ['prebuild', 'clean']) {
+    it('the "' + name + '" script does not shell out to rm', function () {
+      assert.ok(!/\brm\s/.test(pkg.scripts[name]), pkg.scripts[name]);
+    });
+  }
+});
+
+// Push-only CI never tests pull requests from forks before review.
+describe('CI triggers', function () {
+  it('ci.yml runs on pull_request', function () {
+    const body = readFileSync(path.join(root, '.github', 'workflows', 'ci.yml'), 'utf8');
+    assert.match(body, /^\s+pull_request:/m);
+  });
+});

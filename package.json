@@ -12,17 +12,18 @@
     ".": {
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
-    "prebuild": "rm -rf lib",
+    "prebuild": "node -e \"fs.rmSync('lib', { recursive: true, force: true })\"",
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "prepare": "npm run build",
     "pretest": "npm run build",
     "test": "node --test",
     "docs": "typedoc",
-    "clean": "rm -rf lib out",
+    "clean": "node -e \"for (const d of ['lib', 'out']) fs.rmSync(d, { recursive: true, force: true })\"",
     "preversion": "npm run typecheck && npm run changelog",
     "postversion": "git push && git push --tags",
     "changelog": "rm ./docs/CHANGELOG.md && npx changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add ./docs/CHANGELOG.md && git commit ./docs/CHANGELOG.md -m changelog"
