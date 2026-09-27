@@ -102,7 +102,10 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
     },
 
     /**
-     * Checks the status of a source-code verification request.
+     * Checks the status of a source-code verification request. Resolves only for
+     * `"Pass - Verified"`. Etherscan reports the other states (`"Pending in
+     * queue"`, `"Fail - …"`) with status `"0"`, so they reject with an
+     * {@link EtherscanError} whose `result` carries the status text.
      * @param guid - The GUID returned by `verifysourcecode`
      */
     checkverifystatus(guid: string): Promise<EtherscanResponse<string>> {
@@ -124,7 +127,9 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
     },
 
     /**
-     * Checks the status of a proxy-contract verification request.
+     * Checks the status of a proxy-contract verification request. As with
+     * `checkverifystatus`, a pending or failed verification rejects with an
+     * {@link EtherscanError} whose `result` carries the status text.
      * @param guid - The GUID returned by `verifyproxycontract`
      */
     checkproxyverification(guid: string): Promise<EtherscanResponse<string>> {

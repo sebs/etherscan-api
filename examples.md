@@ -118,6 +118,8 @@ const creation = await api.contract.getcontractcreation(
 ### Verifying a contract (POST + poll)
 
 ```ts
+import { EtherscanError } from 'etherscan-api';
+
 const submit = await api.contract.verifysourcecode({
   contractaddress: '0xabc...',
   sourceCode: '// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24; contract C {}',
@@ -130,13 +132,27 @@ const submit = await api.contract.verifysourcecode({
 
 const guid = submit.result; // string GUID
 
-// Poll until done
-let status = await api.contract.checkverifystatus(guid);
-while (status.result === 'Pending in queue') {
-  await new Promise((r) => setTimeout(r, 5000));
-  status = await api.contract.checkverifystatus(guid);
+// Etherscan reports every state except "Pass - Verified" with status "0", so
+// "Pending in queue" and "Fail - …" reject with an EtherscanError whose
+// `result` holds the status text. Read it from there.
+async function verificationStatus(guid: string): Promise<string> {
+  try {
+    return (await api.contract.checkverifystatus(guid)).result ?? '';
+  } catch (err) {
+    if (err instanceof EtherscanError && typeof err.result === 'string') {
+      return err.result;
+    }
+    throw err;
+  }
 }
-console.log(status.result); // 'Pass - Verified' | 'Fail - Unable to verify'
+
+// Poll until done
+let status = await verificationStatus(guid);
+while (status === 'Pending in queue') {
+  await new Promise((r) => setTimeout(r, 5000));
+  status = await verificationStatus(guid);
+}
+console.log(status); // 'Pass - Verified' | 'Fail - Unable to verify' | …
 ```
 
 ## Error handling

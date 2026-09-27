@@ -1,6 +1,7 @@
 import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { mockApi, queryOf, optionsOf } from '../helpers.js';
+import { EtherscanError } from '../../lib/errors.js';
 
 describe('contract.checkverifystatus', function () {
   let transport;
@@ -21,5 +22,23 @@ describe('contract.checkverifystatus', function () {
 
   it('sends the guid', function () {
     assert.equal(queryOf(transport).get('guid'), 'myguid');
+  });
+});
+
+// The polling example in examples.md reads the pending state from err.result.
+describe('contract.checkverifystatus while verification is pending', function () {
+  let error;
+
+  beforeEach(async function () {
+    const mocked = mockApi({ status: '0', message: 'NOTOK', result: 'Pending in queue' });
+    error = await mocked.api.contract.checkverifystatus('myguid').then(() => null, (e) => e);
+  });
+
+  it('rejects with an EtherscanError', function () {
+    assert.ok(error instanceof EtherscanError);
+  });
+
+  it('carries the status text on err.result', function () {
+    assert.equal(error.result, 'Pending in queue');
   });
 });
