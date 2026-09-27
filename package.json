@@ -24,9 +24,8 @@
     "test": "node --test",
     "docs": "typedoc",
     "clean": "node -e \"for (const d of ['lib', 'out']) fs.rmSync(d, { recursive: true, force: true })\"",
-    "preversion": "npm run typecheck && npm run changelog",
-    "postversion": "git push && git push --tags",
-    "changelog": "rm ./docs/CHANGELOG.md && npx changelog https://github.com/sebs/etherscan-api all > ./docs/CHANGELOG.md && git add ./docs/CHANGELOG.md && git commit ./docs/CHANGELOG.md -m changelog"
+    "preversion": "npm run typecheck",
+    "postversion": "git push && git push --tags"
   },
   "keywords": [
     "arbiscan",

@@ -143,8 +143,10 @@ Source lives in `./src` (TypeScript) and compiles to `./lib` (ES modules + `.d.t
 * `npm run typecheck` - type-checks without emitting (replaces the old linter)
 * `npm test` - builds, then runs the fully mocked test suite (no API key required)
 * `npm run docs` - generates the API docs with TypeDoc
-* `npm run preversion` - type-check + changelog before tagging a release
-* `npm run changelog` - generates a changelog and pushes it
+* `npm run preversion` - type-check before tagging a release
+
+Release notes are generated when a `v*` tag is pushed: the release workflow
+lists the commits since the previous tag as the body of the GitHub release.
 
 ## Sponsors
 
