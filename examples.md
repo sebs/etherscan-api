@@ -208,7 +208,8 @@ const api = init('YourApiKey', 'mainnet', 10_000, request);
 ## Utilities
 
 ```ts
-// Live list of supported chains and their chainids (no API key needed)
+// Live list of supported chains and their chainids (the request carries no
+// API key, though init() still needs one to create the client)
 const chains = await api.usage.chainlist();
 
 // Your API key's usage and daily limit

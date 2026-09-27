@@ -14,7 +14,8 @@ export function usage(getRequest: GetRequest, rawGet: RawGet) {
 
     /**
      * Returns the list of chains supported by the Etherscan V2 API and their
-     * chain ids. Hits the dedicated `/v2/chainlist` endpoint (no API key needed).
+     * chain ids. Hits the dedicated `/v2/chainlist` endpoint. Etherscan needs no
+     * key for it, so none is sent, but `init()` still requires one to create the client.
      */
     chainlist(): Promise<EtherscanResponse<ChainListItem[]>> {
       return rawGet<ChainListItem[]>('/v2/chainlist');
