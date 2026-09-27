@@ -58,9 +58,15 @@ export function proxy(getRequest: GetRequest) {
     /**
      * Returns the number of transactions sent from an address (hex).
      * @param address - Account address
+     * @param tag - Block parameter: `'latest'`, `'pending'` (the next nonce to use) or `'earliest'`;
+     *   Etherscan defaults to `'latest'` when omitted
      */
-    eth_getTransactionCount(address: string): Promise<EtherscanResponse<string>> {
-      return call<string>('eth_getTransactionCount', { address });
+    eth_getTransactionCount(address: string, tag?: string): Promise<EtherscanResponse<string>> {
+      const params: QueryParams = { address };
+      if (tag) {
+        params.tag = tag;
+      }
+      return call<string>('eth_getTransactionCount', params);
     },
 
     /**

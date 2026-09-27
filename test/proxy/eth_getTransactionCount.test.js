@@ -35,4 +35,14 @@ describe('proxy.eth_getTransactionCount', function () {
   it('sends the api key', function () {
     assert.equal(queryOf(transport).get('apikey'), 'KEY');
   });
+
+  it('omits the tag when not given', function () {
+    assert.equal(queryOf(transport).get('tag'), null);
+  });
+
+  it('sends the tag when given (e.g. pending for the next nonce)', async function () {
+    const mocked = mockApi(RPC_OK);
+    await mocked.api.proxy.eth_getTransactionCount(ADDRESS, 'pending');
+    assert.equal(queryOf(mocked.transport).get('tag'), 'pending');
+  });
 });
