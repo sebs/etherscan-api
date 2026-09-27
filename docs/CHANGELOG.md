@@ -1,6 +1,256 @@
+2026-09-27
+==========
+
+  * chore: add findings.md to gitignore
+  * test: inline the type-test fixture and drop the test-d folder
+    The consumer fixture sat in a top-level test-d/ folder because node
+    --test runs .ts files it finds under test/. Keep everything under test/
+    instead: types.test.js now holds the consumer source, writes it and a
+    tsconfig to a temp dir, and compiles it there with tsc.
+    Compiling outside the repo also keeps this repo's @types/node out of
+    reach, so the declarations must stand alone for consumers.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * build: test pull requests in CI, drop rm from scripts, export package.json
+    - ci.yml triggered only on push, so pull requests from forks never ran
+    the test matrix before review. Add pull_request.
+    - prebuild and clean used rm -rf, so npm run build (and npm test through
+    pretest) failed in Windows shells. Use fs.rmSync via node -e.
+    - exports did not expose ./package.json, so
+    import('etherscan-api/package.json') failed with
+    ERR_PACKAGE_PATH_NOT_EXPORTED for tools reading the installed version.
+    Tests in package.test.js pin all three.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * docs: correct the transport options claim and check res.ok in fetch examples
+    The Readme said init only ever passes timeout to the transport, but the
+    POST verification endpoints also pass method and body, which the fetch
+    example right above depends on.
+    Both fetch-based transport examples (Readme and examples.md) returned
+    res.json() without checking res.ok, so copied as-is a 5xx HTML page
+    became a JSON parse error and the HTTP status was lost. They now throw
+    on a non-2xx status.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(account,contract): reject out-of-range address lists before calling the API
+    balance([]) sent action=balancemulti&address= to Etherscan, and lists
+    longer than Etherscan's limits (20 for balancemulti, 5 for
+    getcontractcreation, which the JSDoc already states) went out as-is and
+    failed remotely, costing a rate-limited call.
+    Both now reject (without a request) when given an empty list or more
+    addresses than the endpoint accepts.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(types): catch misspelt verification fields and a missing tokenbalance address
+    VerifyParams ended in [key: string]: string | number | undefined, so any
+    field name type-checked. verifysourcecode({ ..., optimisationUsed: 1 })
+    compiled, and the field was sent under a name Etherscan ignores, so the
+    optimiser was treated as off. tokenbalance(address?, ...) made the
+    address optional, so tokenbalance() compiled.
+    VerifyParams now lists its fields explicitly (codeformat,
+    compilerversion, evmversion, compilermode and zksolcVersion move into the
+    shared interface) plus template-literal keys for libraryname<N> and
+    libraryaddress<N>. Runtime forwarding is unchanged. tokenbalance's
+    address is required. Both are pinned in test-d/consumer.ts.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(account): type balance() per argument with overloads
+    balance() always returned EtherscanResponse<string | MultiBalanceItem[]>,
+    so a strict TypeScript caller could not assign a single balance to a
+    string or read .balance from a multi result without a cast, although
+    examples.md presents both as typed per call.
+    Overloads now return string for a single address, MultiBalanceItem[]
+    for an array, and the union for a string | string[] argument.
+    A new type test (test/types.test.js) compiles test-d/consumer.ts
+    against lib/*.d.ts with tsc to pin this. The fixture lives outside
+    test/ because node --test runs .ts files found there.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(transport): honour maxResponseBytes: 0 and reject invalid values
+    options.maxResponseBytes || DEFAULT turned an explicit 0 into 50 MB,
+    silently discarding the caller's value. A negative value made every
+    response fail with a confusing size error, and NaN disabled the cap
+    (no comparison with NaN is true).
+    Use ?? so 0 means 'reject any non-empty body', and reject negative or
+    NaN values up front.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(init,transport): validate the timeout instead of patching over it
+    init(key, chain, 0) silently became a 10 s timeout, because || discards
+    0. init(key, chain, -5) or Infinity passed straight through, and the
+    default transport then rejected with Node's raw RangeError
+    ERR_OUT_OF_RANGE. Values above 2^31-1 ms would fire after 1 ms under
+    the new deadline timer.
+    A shared resolveTimeout() now treats undefined/null as the 10 s default
+    and rejects anything that is not a positive finite number within Node's
+    timer range. init() throws at construction; the transport rejects with
+    the same message.
+    BREAKING CHANGE: init() throws for a timeout of 0, which used to mean
+    the default. Omit the argument or pass null instead.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(chains): trim chain names and accept 0x hex chain ids
+    Names were lower-cased but not trimmed, so ' sepolia ' or 'base\n' (a
+    value read from an env or config file) was an unknown chain. And '0x1',
+    the EIP-155 hex form that eth_chainId returns, was an unknown chain
+    rather than a chain id.
+    Trim before matching, and parse 0x-prefixed hex strings as chain ids
+    with the same positive-integer validation. A whitespace-only string is
+    still an error, and leading zeros ('007') are still accepted.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(chains): report a BigInt chainid clearly instead of crashing
+    The invalid-chain branch exists for non-string, non-number input from
+    plain JS, but it built its message with JSON.stringify, which throws on
+    BigInt. resolveChainId(1n) (a common shape in viem/ethers code) failed
+    with 'Do not know how to serialize a BigInt' instead of the intended
+    message. Circular objects failed the same way.
+    Fall back to String() when JSON.stringify throws or returns undefined.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(chains): name NaN and Infinity correctly in the invalid-chainid error
+    The message was built with JSON.stringify, which renders NaN and
+    Infinity as null, so resolveChainId(NaN) reported 'Invalid chainid
+    null', pointing at a null the caller never passed. Format numbers with
+    String().
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(request): reject a JSON array response body
+    The not-an-object guard used typeof data !== 'object', which arrays
+    pass, so a proxy or custom transport answering [1,2] resolved as a
+    successful response with no result. Reject arrays with the same
+    'Unexpected response body' EtherscanError as other non-object bodies.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(request): narrow which status "0" responses count as empty results
+    A status "0" response resolved as an empty success if result was any
+    array (so { message: 'NOTOK', result: [] } resolved), or if the message
+    matched /no.*found/ anywhere with a null or empty result.
+    Both conditions are now required: the message must start with
+    "No ... found" and the result must be empty (undefined, null, '' or []).
+    Etherscan's real empty answers ("No transactions found", "No records
+    found") still resolve.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(chains): freeze the exported CHAINS and RETIRED_CHAINS maps
+    Both maps were exported as plain mutable objects, so any code in the
+    process could run CHAINS.mainnet = 5 and every client's 'mainnet' would
+    resolve to another network. Wrong-chain reads look like successes.
+    Freeze both and type them Readonly.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * build: publish with a files allowlist instead of .npmignore
+    Because .npmignore existed, npm ignored .gitignore and published every
+    root file the denylist did not name. A local .env holding an Etherscan
+    key would ship on npm publish; npm pack --dry-run on a copy listed it.
+    The .npmignore header also referred to a MIGRATION file that does not
+    exist.
+    Replace it with "files": ["lib"]. npm still adds the README, LICENSE and
+    package.json. A test pins the allowlist.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * docs(tutorial): use ES module imports instead of require()
+    The tutorial called this a CommonJS library and used require()
+    throughout, but the package's exports map only defines an import
+    condition, so require('etherscan-api') fails with
+    ERR_PACKAGE_PATH_NOT_EXPORTED. Show import, and a dynamic import for
+    CommonJS callers.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * feat(log): add the topic0_3 and topic1_3 operators to getLogs
+    Etherscan supports six topic operators, but getLogs exposed only four,
+    so a filter combining topic1 with topic3, or topic0 with topic3, could
+    not state its and/or operator.
+    Add topic0_3_opr and topic1_3_opr as trailing arguments, after page and
+    offset, so existing positional calls are unchanged.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * feat(proxy): accept call data in eth_estimateGas
+    Etherscan's eth_estimateGas takes a data parameter, but the wrapper had
+    no way to send it, so only plain ETH transfers could be estimated, not
+    contract calls. Add an optional trailing data argument.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * feat(proxy): accept a block tag in eth_getTransactionCount
+    No tag was sent, so the pending nonce (tag=pending), which is the one
+    needed to build the next transaction, could not be read. Add an optional
+    tag argument, sent only when given.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * feat(account): add blocktype, page and offset to getminedblocks
+    Only the address was sent, so uncles could not be requested and results
+    could not be paged, although Etherscan's endpoint accepts
+    blocktype=blocks|uncles, page and offset.
+    Add all three as optional trailing arguments, sent only when given.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * feat(account): add page and offset to txlistinternal
+    txlistinternal was the only list endpoint without paging, so internal
+    transactions past Etherscan's unpaged cap could not be fetched.
+    Add optional page and offset after filter, which keeps existing
+    positional calls unchanged. Unlike txlist they have no defaults and are
+    sent only when given, so callers who never paged still get the full
+    unpaged result.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * feat(transport): expose status code and headers on HTTP errors
+    A non-2xx response rejected with a bare Error, so callers had to regex
+    the message to tell a 429 from a 500 and could not read Retry-After.
+    The default transport now rejects with EtherscanHttpError (exported),
+    which carries statusCode and the response headers. The message is
+    unchanged, and it still extends Error.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(init)!: require an API key instead of substituting a placeholder
+    init(process.env.ETHERSCAN_KEY) with the variable unset silently used
+    'YourApiKeyToken'. Etherscan V2 rejects that key, so the misconfiguration
+    surfaced only later, per request, as an auth or rate-limit error that
+    pointed nowhere near the missing variable.
+    init() now throws when the key is missing or empty.
+    BREAKING CHANGE: init() without an API key throws. Pass a real key, even
+    if you only call usage.chainlist().
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(request): reject instead of throwing when a transport throws synchronously
+    Promise.resolve(request(url, ...)) calls the transport before a promise
+    exists, so a custom transport that threw made api.stats.ethsupply() throw
+    synchronously. .then().catch() handlers never ran.
+    Call the transport inside a promise executor (shared by the GET, POST and
+    raw GET paths) so the throw becomes a rejection.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(transport): make the timeout a deadline for the whole request
+    The default transport's timeout was a socket inactivity timeout, so a
+    server writing one byte every 300 ms kept a request with timeout 1000
+    open for 15.6 s. The option is documented as the request timeout.
+    Replace it with a wall-clock timer that rejects and destroys the request
+    once the timeout elapses, whether or not bytes are still arriving.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(request): drop undefined and null params instead of sending them as text
+    serialize() ran String() over every value, so a missing argument from
+    plain JS went out as the literal "undefined" (getminedblocks() sent
+    address=undefined; eth_call(to, data) sent tag=undefined), and null as
+    "null". Skip both so Etherscan reports the missing parameter instead
+    of receiving a bogus value.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(chains): support avalanche_fuji instead of rejecting it as retired
+    avalanche_fuji threw "Snowtrace moved off the Etherscan API", yet
+    Etherscan's V2 chainlist serves Avalanche Fuji (43113) alongside the
+    C-Chain (43114), which the library already maps. Map the name to 43113.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(chains): retire holesky and add hoodi
+    Etherscan's V2 chainlist no longer includes Holesky (17000), but the
+    library still mapped the name and recommended it in the goerli and
+    morden retirement messages. Hoodi (560048), which Etherscan does list,
+    was an unknown chain.
+    holesky now throws the retired-chain error pointing at Hoodi or Sepolia,
+    hoodi maps to 560048, and the Readme and examples follow.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * docs(contract): make the verification polling example work
+    Etherscan answers checkverifystatus with status "0" for "Pending in
+    queue" and "Fail - ...", so the call rejects with an EtherscanError.
+    The example's while (status.result === 'Pending in queue') loop was
+    never reached: the first poll threw.
+    The example now reads the status text from err.result, the JSDoc on
+    checkverifystatus and checkproxyverification says so, and a test pins
+    the pending-state rejection the example relies on.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(block): take the block number as getblockreward's first argument
+    Etherscan's getblockreward takes only blockno, but the wrapper required
+    an address first and defaulted blockno to 0. getblockreward(2165403)
+    therefore sent address=2165403&blockno=0 and resolved with the genesis
+    block's reward, with no error.
+    getblockreward(blockno) is now the signature. The old (address, blockno)
+    form still works through a deprecated overload; the address is dropped.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+  * fix(chains): ignore inherited property names in chain lookup
+    resolveChainId('constructor') returned Object and '__proto__' returned
+    Object.prototype, because the name was looked up with a plain bracket
+    access. Both were then sent as the chainid. Look names up with
+    Object.hasOwn so they fall through to the unknown-chain error.
+    Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+
 2026-09-20
 ==========
 
+  * 12.1.0
+  * changelog
   * fix: make npm test run on node 20
     The test script passed a quoted glob, 'test/**/*.test.js'. node --test
     only learned to expand globs after node 20, so on node 20 it looked for a
@@ -106,7 +356,6 @@
     listRange already handles the same parameters with ??.
     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
   * 12.0.5
-  * changelog
 
 2026-09-11
 ==========
@@ -274,74 +523,3 @@
 ==========
 
   * 10.2.1
-  * changelog
-  * ichore: update deps
-
-2022-09-20
-==========
-
-  * Merge pull request [#113](https://github.com/sebs/etherscan-api/issues/113) from carletex/patch-1
-    Add Goerli and Sepolia to the API URL list
-  * Merge pull request [#116](https://github.com/sebs/etherscan-api/issues/116) from peterferguson/add-avalanche
-    Add Avalanche fixes [#115](https://github.com/sebs/etherscan-api/issues/115)
-
-2022-09-19
-==========
-
-  * Add Avalanche fixes [#115](https://github.com/sebs/etherscan-api/issues/115)
-    Add urls for avalanche mainnet and fuji testnet
-
-2022-08-26
-==========
-
-  * Add Goerli and Sepolia to the API list
-    Hey @sebs 
-    Thanks a lot for this amazing library.
-    I created this PR to include the Sepolia and Goerli API endpoints. Currently I'm creating the client (with `axios.create`) to support those two, but I'd be cool if I have directly included on the library.
-    Thanks!
-
-2022-07-03
-==========
-
-  * 10.2.0
-  * changelog
-  * feature: make it possible to pass a vlient to the init function
-    * add a test
-    * make pickChainUrl method availabale to the consumer
-    * move some code around a bit to simplify adding a client
-
-2022-06-26
-==========
-
-  * 10.1.0
-  * changelog
-  * feature: add getsourcecode method
-  * fix: make tests work better
-    * skip what needs skipping with a comment
-    * replace xit with .skip
-  * refactor: explicitly generate the query
-  * fix: use the passed api key  for tests so we dont hit limits
-
-2022-05-28
-==========
-
-  * 10.0.9
-  * changelog
-  * refactor: do pusblish even less stuff
-  * 10.0.8
-  * refactor: make package smaller
-  * chore: removed idea files
-  * 10.0.7
-  * bundle
-  * 10.0.6
-  * refactor: remove direct dependencies and use npx for some of the lesser
-    used commands
-  * remove traviremove traviss
-  * update deps
-  * refactor: make tests executable with a external api key
-
-2022-05-27
-==========
-
-  * Merge pull request [#85](https://github.com/sebs/etherscan-api/issues/85) from Catzilla/fix-84
-    Fixed [#84](https://github.com/sebs/etherscan-api/issues/84)
