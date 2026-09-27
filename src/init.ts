@@ -45,11 +45,13 @@ export function init(
   request?: Transport,
 ): EtherscanApi {
   // Fail here rather than per request: a placeholder key only turns an unset
-  // environment variable into confusing auth errors later.
-  if (typeof apiKey !== 'string' || apiKey === '') {
+  // environment variable into confusing auth errors later. Surrounding
+  // whitespace (a key read from a file keeps its trailing newline) is dropped,
+  // as it is for chain names.
+  const key = typeof apiKey === 'string' ? apiKey.trim() : '';
+  if (key === '') {
     throw new Error('An Etherscan API key is required: init(apiKey, chain?, timeout?, request?)');
   }
-  const key = apiKey;
   const t = resolveTimeout(timeout);
   const chainid = resolveChainId(chain);
   const doRequest: Transport = request || httpTransport;

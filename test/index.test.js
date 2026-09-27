@@ -49,7 +49,14 @@ describe('index exports', function () {
     assert.ok(pkg.init('KEY'));
   });
 
-  for (const key of [undefined, null, '']) {
+  it('init trims whitespace around the API key (e.g. a trailing newline from a file)', async function () {
+    let url;
+    const api = pkg.init('  KEY\n', null, null, async (u) => { url = u; return { status: '1', result: 'x' }; });
+    await api.stats.ethsupply();
+    assert.equal(new URL(url).searchParams.get('apikey'), 'KEY');
+  });
+
+  for (const key of [undefined, null, '', '   ', '\n']) {
     it('init throws for a missing API key (' + JSON.stringify(key) + ')', function () {
       assert.throws(function () { return pkg.init(key); }, /API key is required/);
     });
