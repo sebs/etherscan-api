@@ -111,6 +111,11 @@ describe('package.json portability', function () {
 
 // Push-only CI never tests pull requests from forks before review.
 describe('CI triggers', function () {
+  it('ci.yml runs push only for master, so a PR branch is not tested twice', function () {
+    const body = readFileSync(path.join(root, '.github', 'workflows', 'ci.yml'), 'utf8');
+    assert.match(body, /^\s+push:\n\s+branches: \[master\]/m);
+  });
+
   it('ci.yml runs on pull_request', function () {
     const body = readFileSync(path.join(root, '.github', 'workflows', 'ci.yml'), 'utf8');
     assert.match(body, /^\s+pull_request:/m);

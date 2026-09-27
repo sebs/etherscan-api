@@ -1,7 +1,10 @@
 name: CI
 
+# Pull requests are tested through pull_request; push only covers master, so
+# a PR from a branch in this repo does not run the matrix twice.
 on:
   push:
+    branches: [master]
   pull_request:
 
 # Read-only token: CI only checks out and tests.
