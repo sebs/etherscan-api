@@ -163,6 +163,22 @@ describe('request layer (get-request)', function () {
     });
   });
 
+  describe('does not treat every status "0" array or "no … found" message as empty', function () {
+    const CASES = [
+      ['NOTOK with an empty array', { status: '0', message: 'NOTOK', result: [] }],
+      ['NOTOK with a non-empty array', { status: '0', message: 'NOTOK', result: [1] }],
+      ['"No transactions found" with a non-empty array', { status: '0', message: 'No transactions found', result: [1] }],
+      ['a message with "no … found" mid-sentence', { status: '0', message: 'Error: no signer found', result: null }],
+    ];
+
+    for (const [label, body] of CASES) {
+      it('rejects ' + label, async function () {
+        const mocked = mockApi(body);
+        await assert.rejects(() => mocked.api.account.txlist('0xabc'), EtherscanError);
+      });
+    }
+  });
+
   describe('rejects a response body that is not an object', function () {
     const CASES = [
       ['null', null],
