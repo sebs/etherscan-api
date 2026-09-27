@@ -32,7 +32,7 @@ Retired testnets throw immediately rather than silently hitting mainnet:
 ```ts
 init('YourApiKey', 'goerli');
 // Error: Chain "goerli" is no longer supported: Goerli was deprecated;
-//        use Sepolia or Holesky. ...
+//        use Sepolia or Hoodi. ...
 ```
 
 ## Accounts

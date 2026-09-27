@@ -105,7 +105,7 @@ Supported chain names:
 | ----------------------------------- | ---------- |
 | `mainnet` / `homestead` / `ethereum`| 1          |
 | `sepolia`                           | 11155111   |
-| `holesky`                           | 17000      |
+| `hoodi`                             | 560048     |
 | `arbitrum`                          | 42161      |
 | `optimism`                          | 10         |
 | `base`                              | 8453       |
@@ -116,9 +116,9 @@ Supported chain names:
 Any other chain is reachable by passing its numeric chainid directly, e.g.
 `init('YourApiKey', 59144)` for Linea.
 
-Retired testnets (`ropsten`, `rinkeby`, `kovan`, `goerli`, `morden`,
+Retired testnets (`ropsten`, `rinkeby`, `kovan`, `goerli`, `holesky`, `morden`,
 `arbitrum_rinkeby`, `avalanche_fuji`) have been removed and now **throw** an
-error with a helpful message — use `sepolia` or `holesky` instead.
+error with a helpful message — use `sepolia` or `hoodi` instead.
 
 ## Install
 

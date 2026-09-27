@@ -16,6 +16,7 @@ describe('chains.resolveChainId', function () {
     ['sepolia', 11155111],
     ['arbitrum', 42161],
     ['base', 8453],
+    ['hoodi', 560048],
   ];
   for (const [input, expected] of KNOWN_NAMES) {
     it('maps ' + input + ' to ' + expected, function () {
@@ -71,15 +72,19 @@ describe('chains.resolveChainId', function () {
     });
   }
 
-  const RETIRED = ['goerli', 'ropsten', 'rinkeby', 'kovan'];
+  const RETIRED = ['goerli', 'ropsten', 'rinkeby', 'kovan', 'holesky'];
   for (const input of RETIRED) {
     it('throws "no longer supported" for retired chain ' + input, function () {
       assert.throws(() => resolveChainId(input), /no longer supported/);
     });
   }
 
-  it('suggests Sepolia or Holesky for goerli', function () {
-    assert.throws(() => resolveChainId('goerli'), /Sepolia or Holesky/);
+  it('suggests Sepolia or Hoodi for goerli', function () {
+    assert.throws(() => resolveChainId('goerli'), /Sepolia or Hoodi/);
+  });
+
+  it('points holesky users at Hoodi', function () {
+    assert.throws(() => resolveChainId('holesky'), /use Hoodi/);
   });
 
   it('throws for unknown chains', function () {
