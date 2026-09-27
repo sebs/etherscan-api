@@ -276,6 +276,23 @@ describe('request layer (get-request)', function () {
     });
   });
 
+  describe('turns a synchronously throwing transport into a rejection', function () {
+    const boom = function () { throw new Error('boom'); };
+
+    for (const [label, call] of [
+      ['a GET', (api) => api.stats.ethsupply()],
+      ['a POST', (api) => api.contract.verifyproxycontract('0xabc')],
+      ['a raw GET', (api) => api.usage.chainlist()],
+    ]) {
+      it('for ' + label, async function () {
+        const api = init('K', null, 5000, boom);
+        let promise;
+        assert.doesNotThrow(function () { promise = call(api); });
+        await assert.rejects(promise, /boom/);
+      });
+    }
+  });
+
   describe('drops missing arguments instead of sending "undefined"', function () {
     let query;
 

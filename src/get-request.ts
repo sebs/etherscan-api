@@ -1,5 +1,5 @@
 import { EtherscanError } from './errors.js';
-import type { EtherscanResponse, Transport } from './types.js';
+import type { EtherscanResponse, Transport, TransportOptions } from './types.js';
 
 /** Endpoint-specific query parameters supplied by a namespace method. */
 export type QueryParams = Record<string, string | number | boolean>;
@@ -104,6 +104,15 @@ function normalize(data: EtherscanResponse): EtherscanResponse {
 }
 
 /**
+ * Call the transport and normalise its answer. The call runs inside the promise
+ * executor so a transport that throws synchronously still yields a rejection,
+ * rather than an exception escaping from the API method.
+ */
+function send(request: Transport, url: string, options: TransportOptions): Promise<EtherscanResponse> {
+  return new Promise<EtherscanResponse>((resolve) => resolve(request(url, options))).then(normalize);
+}
+
+/**
  * Builds the shared GET request function. Every namespace passes a plain params
  * object; this injects the universal `apikey` and `chainid`, serialises the
  * query, performs the GET via the supplied transport, and normalises the result.
@@ -115,9 +124,7 @@ export function createGetRequest(
 ): GetRequest {
   return function getRequest<T = unknown>(params: QueryParams): Promise<EtherscanResponse<T>> {
     const url = config.baseUrl + '/v2/api?' + serialize(params, defaults);
-    return Promise.resolve(request(url, { timeout: config.timeout })).then(normalize) as Promise<
-      EtherscanResponse<T>
-    >;
+    return send(request, url, { timeout: config.timeout }) as Promise<EtherscanResponse<T>>;
   };
 }
 
@@ -133,9 +140,9 @@ export function createPostRequest(
   return function postRequest<T = unknown>(params: QueryParams): Promise<EtherscanResponse<T>> {
     const url = config.baseUrl + '/v2/api';
     const body = serialize(params, defaults);
-    return Promise.resolve(
-      request(url, { timeout: config.timeout, method: 'POST', body }),
-    ).then(normalize) as Promise<EtherscanResponse<T>>;
+    return send(request, url, { timeout: config.timeout, method: 'POST', body }) as Promise<
+      EtherscanResponse<T>
+    >;
   };
 }
 
@@ -145,8 +152,8 @@ export function createPostRequest(
  */
 export function createRawGet(request: Transport, config: RequestConfig): RawGet {
   return function rawGet<T = unknown>(path: string): Promise<EtherscanResponse<T>> {
-    return Promise.resolve(request(config.baseUrl + path, { timeout: config.timeout })).then(
-      normalize,
-    ) as Promise<EtherscanResponse<T>>;
+    return send(request, config.baseUrl + path, { timeout: config.timeout }) as Promise<
+      EtherscanResponse<T>
+    >;
   };
 }
