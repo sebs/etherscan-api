@@ -56,10 +56,16 @@ jobs:
       # The release notes are the changelog: one line per commit since the
       # previous v* tag. GitHub's generated notes are built from merged pull
       # requests, which this repo does not use, so they would come out empty.
-      # Version-bump commits (subject "12.2.0") are left out.
+      # Version-bump commits (subject "12.2.0") are left out. A stable release
+      # is compared with the previous stable tag, skipping prereleases
+      # (v13.0.0-beta.1), so it lists everything since the last stable release.
       - name: Write release notes
         run: |
-          prev="$(git describe --tags --abbrev=0 --match 'v*' "${GITHUB_REF_NAME}^" 2>/dev/null || true)"
+          case "$GITHUB_REF_NAME" in
+            *-*) skip=() ;;
+            *) skip=(--exclude 'v*-*') ;;
+          esac
+          prev="$(git describe --tags --abbrev=0 --match 'v*' "${skip[@]}" "${GITHUB_REF_NAME}^" 2>/dev/null || true)"
           range="${prev:+$prev..}${GITHUB_REF_NAME}"
           {
             echo "## Changes"
