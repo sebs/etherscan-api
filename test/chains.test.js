@@ -79,6 +79,16 @@ describe('chains.resolveChainId', function () {
     });
   }
 
+  it('explains a BigInt chainid instead of failing to serialize it', function () {
+    assert.throws(() => resolveChainId(1n), /^Error: Invalid chain 1n: expected a chain name or a numeric chainid/);
+  });
+
+  it('explains a circular object instead of failing to serialize it', function () {
+    const circular = {};
+    circular.self = circular;
+    assert.throws(() => resolveChainId(circular), /^Error: Invalid chain \[object Object\]/);
+  });
+
   const RETIRED = ['goerli', 'ropsten', 'rinkeby', 'kovan', 'holesky'];
   for (const input of RETIRED) {
     it('throws "no longer supported" for retired chain ' + input, function () {

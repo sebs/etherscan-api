@@ -39,10 +39,20 @@ export const RETIRED_CHAINS: Readonly<Record<string, string>> = Object.freeze({
 
 /**
  * Render a rejected chain value for an error message. Numbers go through
- * String(): JSON.stringify turns NaN and Infinity into "null".
+ * String(): JSON.stringify turns NaN and Infinity into "null". JSON.stringify
+ * also throws (BigInt, circular objects) or returns undefined (symbols,
+ * functions), so those fall back to String() rather than masking the real error.
  */
 function describeValue(value: unknown): string {
-  return typeof value === 'number' ? String(value) : JSON.stringify(value);
+  if (typeof value === 'number') return String(value);
+  if (typeof value === 'bigint') return value + 'n';
+  try {
+    const json = JSON.stringify(value);
+    if (json !== undefined) return json;
+  } catch {
+    // fall through
+  }
+  return String(value);
 }
 
 /**
