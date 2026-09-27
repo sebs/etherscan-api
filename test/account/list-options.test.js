@@ -68,4 +68,17 @@ describe('account list options', function () {
       await assert.rejects(() => call(mocked.api), /Invalid page 0/);
     });
   }
+
+  // Etherscan answers these with 'Result window is too large' (checked live),
+  // so the library rejects them before spending a request.
+  for (const [name, call] of [
+    ['getLogs', (api) => api.log.getLogs({ address: ADDRESS, page: 10001, offset: 1 })],
+    ['txnbridge', (api) => api.account.txnbridge(ADDRESS, 10001, 1)],
+  ]) {
+    it(name + ' rejects page × offset past the 10 000-record window without calling the API', async function () {
+      const mocked = mockApi({ status: '1', result: [] });
+      await assert.rejects(() => call(mocked.api), /exceeds Etherscan's 10000-record result window/);
+      assert.equal(mocked.transport.mock.callCount(), 0);
+    });
+  }
 });

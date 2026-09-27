@@ -82,7 +82,7 @@ export function log(ctx: RequestContext) {
       } as LogQuery;
     }
     const { page, offset, ...filters } = query;
-    return list<EventLog[]>('getLogs', { ...compact({ ...filters }), ...pagingParams(page, offset, { window: false }) });
+    return list<EventLog[]>('getLogs', { ...compact({ ...filters }), ...pagingParams(page, offset) });
   }
 
   return {

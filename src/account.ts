@@ -257,6 +257,8 @@ export function account(ctx: RequestContext) {
     ): Promise<EtherscanResponse<MinedBlock[]>> {
       return list<MinedBlock[]>('getminedblocks', {
         ...compact({ address, blocktype }),
+        // Past the window Etherscan answered 'No transactions found' rather
+        // than its window error, so the window is not enforced here.
         ...pagingParams(page, offset, { window: false }),
       });
     },
@@ -321,7 +323,7 @@ export function account(ctx: RequestContext) {
      * @param offset - Max records to return (default 100)
      */
     async txnbridge(address: string, page?: number, offset?: number): Promise<EtherscanResponse<PlasmaDeposit[]>> {
-      return list<PlasmaDeposit[]>('txnbridge', { address, ...pagingParams(page, offset, { defaults: true, window: false }) });
+      return list<PlasmaDeposit[]>('txnbridge', { address, ...pagingParams(page, offset, { defaults: true }) });
     },
   };
 }

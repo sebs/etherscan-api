@@ -122,8 +122,9 @@ const MAX_RESULT_WINDOW = 10000;
 
 /**
  * Validate paging against Etherscan's rules: `page` and `offset` are positive
- * integers and, with `window` (the account list endpoints), `page × offset`
- * stays within the 10 000-record result window.
+ * integers and, with `window`, `page × offset` stays within the 10 000-record
+ * result window, which Etherscan enforces on the list endpoints (checked live
+ * for txlist, getLogs and txnbridge).
  * @throws {EtherscanArgumentError} If the combination would be rejected by Etherscan.
  */
 export function checkPaging(page: number, offset: number, window = true): void {
