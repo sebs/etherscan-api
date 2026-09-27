@@ -18,7 +18,7 @@ on:
 
 # Least-privilege token; only the deploy job gets the Pages/OIDC scopes.
 permissions:
-  contents: read
+  contents: read # check out the repository
 
 # Allow one in-flight Pages deployment at a time; don't cancel a running one.
 concurrency:
@@ -27,6 +27,7 @@ concurrency:
 
 jobs:
   build:
+    name: Build docs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -52,11 +53,12 @@ jobs:
           path: ./out
 
   deploy:
+    name: Deploy to GitHub Pages
     needs: build
     runs-on: ubuntu-latest
     permissions:
-      pages: write
-      id-token: write
+      pages: write # publish the site to GitHub Pages
+      id-token: write # OIDC token that deploy-pages uses to authenticate
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

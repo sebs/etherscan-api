@@ -15,10 +15,8 @@ on:
         required: true
         type: string
 
-# OIDC trusted publishing needs an id-token; provenance is attached automatically.
-permissions:
-  contents: read
-  id-token: write
+# No workflow-wide token; the publish job asks for exactly what it needs.
+permissions: {}
 
 concurrency:
   group: publish-${{ inputs.version }}
@@ -26,7 +24,12 @@ concurrency:
 
 jobs:
   publish:
+    name: Publish to npm
     runs-on: ubuntu-latest
+    # OIDC trusted publishing needs an id-token; provenance is attached automatically.
+    permissions:
+      contents: read # check out the tagged source
+      id-token: write # OIDC token for npm trusted publishing and provenance
 
     steps:
       # Publish exactly the tagged source for the requested version.

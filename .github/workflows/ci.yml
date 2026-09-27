@@ -9,10 +9,17 @@ on:
 
 # Read-only token: CI only checks out and tests.
 permissions:
-  contents: read
+  contents: read # check out the repository
+
+# One run per branch/PR: a newer push to a pull request cancels the older run;
+# runs on master are never cancelled.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
+    name: Test (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
 
     strategy:

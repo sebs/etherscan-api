@@ -7,13 +7,20 @@ on:
     tags:
       - 'v*'
 
-# Needed for `gh release create` to create the GitHub release.
-permissions:
-  contents: write
+# No workflow-wide token; the release job asks for exactly what it needs.
+permissions: {}
+
+# One release run per tag; a second push of the same tag waits, never cancels.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   release:
+    name: Create GitHub release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # gh release create: create the release and upload the tarball
 
     steps:
       # Full history and tags, so the release notes can find the previous tag.
