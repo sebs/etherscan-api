@@ -1,4 +1,4 @@
-import { emptyAsList } from './get-request.js';
+import { emptyAsList, forModule } from './get-request.js';
 import { compact } from './params.js';
 import type { GetRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
@@ -96,9 +96,7 @@ function listRange(
 const MAX_BALANCEMULTI = 20;
 
 export function account(getRequest: GetRequest) {
-  // Bind module:'account' once; every method names only its action and params.
-  const call = <T = unknown>(action: string, params: QueryParams = {}) =>
-    getRequest<T>({ module: 'account', action, ...params });
+  const call = forModule(getRequest, 'account');
 
   // Shared body for the ERC-20/721/1155 token-transfer endpoints, which differ
   // only by action string and result type. Kept private; the public methods

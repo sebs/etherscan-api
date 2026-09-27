@@ -1,3 +1,4 @@
+import { forModule } from './get-request.js';
 import type { GetRequest } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { BlockReward, BlockCountdown, BlockTransactionCount } from './results.js';
@@ -9,6 +10,8 @@ import type { BlockReward, BlockCountdown, BlockTransactionCount } from './resul
 const MAX_UNIX_SECONDS = 1e11;
 
 export function block(getRequest: GetRequest) {
+  const call = forModule(getRequest, 'block');
+
   /**
    * Find the block and uncle rewards for a block.
    * @param blockno - Block number
@@ -28,7 +31,7 @@ export function block(getRequest: GetRequest) {
     // Older callers pass (address, blockno); the address was never used by
     // the endpoint, so only the block number is sent.
     const blockno = legacyBlockno ?? first;
-    return getRequest<BlockReward>({ module: 'block', action: 'getblockreward', blockno });
+    return call<BlockReward>('getblockreward', { blockno });
   }
 
   return {
@@ -39,7 +42,7 @@ export function block(getRequest: GetRequest) {
      * @param blockno - Target block number
      */
     getblockcountdown(blockno: string | number): Promise<EtherscanResponse<BlockCountdown>> {
-      return getRequest<BlockCountdown>({ module: 'block', action: 'getblockcountdown', blockno });
+      return call<BlockCountdown>('getblockcountdown', { blockno });
     },
 
     /**
@@ -62,7 +65,7 @@ export function block(getRequest: GetRequest) {
           ),
         );
       }
-      return getRequest<string>({ module: 'block', action: 'getblocknobytime', timestamp: seconds, closest });
+      return call<string>('getblocknobytime', { timestamp: seconds, closest });
     },
 
     /**
@@ -71,7 +74,7 @@ export function block(getRequest: GetRequest) {
      * @param blockno - Block number
      */
     getblocktxnscount(blockno: string | number): Promise<EtherscanResponse<BlockTransactionCount>> {
-      return getRequest<BlockTransactionCount>({ module: 'block', action: 'getblocktxnscount', blockno });
+      return call<BlockTransactionCount>('getblocktxnscount', { blockno });
     },
   };
 }

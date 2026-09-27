@@ -1,8 +1,11 @@
+import { forModule } from './get-request.js';
 import type { GetRequest } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { ExecutionStatus, ReceiptStatus } from './results.js';
 
 export function transaction(getRequest: GetRequest) {
+  const call = forModule(getRequest, 'transaction');
+
   return {
     /**
      * Returns the contract-execution status of a transaction (was the tx itself
@@ -10,7 +13,7 @@ export function transaction(getRequest: GetRequest) {
      * @param txhash - Transaction hash
      */
     getstatus(txhash: string): Promise<EtherscanResponse<ExecutionStatus>> {
-      return getRequest<ExecutionStatus>({ module: 'transaction', action: 'getstatus', txhash });
+      return call<ExecutionStatus>('getstatus', { txhash });
     },
 
     /**
@@ -18,7 +21,7 @@ export function transaction(getRequest: GetRequest) {
      * @param txhash - Transaction hash
      */
     gettxreceiptstatus(txhash: string): Promise<EtherscanResponse<ReceiptStatus>> {
-      return getRequest<ReceiptStatus>({ module: 'transaction', action: 'gettxreceiptstatus', txhash });
+      return call<ReceiptStatus>('gettxreceiptstatus', { txhash });
     },
   };
 }

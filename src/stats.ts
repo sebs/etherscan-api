@@ -1,10 +1,13 @@
 import { emptyAsList } from './get-request.js';
+import { forModule } from './get-request.js';
 import type { GetRequest } from './get-request.js';
 import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
 import type { EthPrice, ChainSize } from './results.js';
 
 export function stats(getRequest: GetRequest) {
+  const call = forModule(getRequest, 'stats');
+
   /**
    * Returns the supply of a token, identified by its contract address.
    * @param tokenname - Name of the token (optional; pass `null`)
@@ -23,7 +26,7 @@ export function stats(getRequest: GetRequest) {
     if (!tokenname && !contractaddress) {
       throw new Error('tokensupply() needs a token contract address or a token name');
     }
-    return getRequest<string>(compact({ module: 'stats', action: 'tokensupply', tokenname, contractaddress }));
+    return call<string>('tokensupply', compact({ tokenname, contractaddress }));
   }
 
   return {
@@ -31,22 +34,22 @@ export function stats(getRequest: GetRequest) {
 
     /** Returns the total supply of ether. */
     ethsupply(): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'stats', action: 'ethsupply' });
+      return call<string>('ethsupply');
     },
 
     /** Returns the total supply of ether including Eth2 staking and burnt fees. */
     ethsupply2(): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'stats', action: 'ethsupply2' });
+      return call<string>('ethsupply2');
     },
 
     /** Returns the total number of discoverable nodes on the network. */
     nodecount(): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'stats', action: 'nodecount' });
+      return call<string>('nodecount');
     },
 
     /** Returns the current ether price. */
     ethprice(): Promise<EtherscanResponse<EthPrice>> {
-      return getRequest<EthPrice>({ module: 'stats', action: 'ethprice' });
+      return call<EthPrice>('ethprice');
     },
 
     /**
@@ -67,9 +70,7 @@ export function stats(getRequest: GetRequest) {
       sort: 'asc' | 'desc' = 'asc',
     ): Promise<EtherscanResponse<ChainSize[]>> {
       return emptyAsList(
-        getRequest<ChainSize[]>({
-          module: 'stats',
-          action: 'chainsize',
+        call<ChainSize[]>('chainsize', {
           startdate,
           enddate,
           clienttype,

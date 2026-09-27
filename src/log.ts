@@ -1,10 +1,12 @@
-import { emptyAsList } from './get-request.js';
+import { emptyAsList, forModule } from './get-request.js';
 import type { GetRequest } from './get-request.js';
 import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
 import type { EventLog } from './results.js';
 
 export function log(getRequest: GetRequest) {
+  const call = forModule(getRequest, 'logs');
+
   return {
     /**
      * The Event Log API — an alternative to the native `eth_getLogs`. Only the
@@ -44,8 +46,6 @@ export function log(getRequest: GetRequest) {
       topic1_3_opr?: string,
     ): Promise<EtherscanResponse<EventLog[]>> {
       const params = compact({
-        module: 'logs',
-        action: 'getLogs',
         address,
         fromBlock,
         toBlock,
@@ -62,7 +62,7 @@ export function log(getRequest: GetRequest) {
         page,
         offset,
       });
-      return emptyAsList(getRequest<EventLog[]>(params));
+      return emptyAsList(call<EventLog[]>('getLogs', params));
     },
   };
 }

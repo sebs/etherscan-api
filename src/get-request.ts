@@ -19,6 +19,18 @@ export interface RawGet {
   <T = unknown>(path: string): Promise<EtherscanResponse<T>>;
 }
 
+/** A request bound to one Etherscan module: callers name only the action and its params. */
+export type ModuleCall = <T = unknown>(action: string, params?: QueryParams) => Promise<EtherscanResponse<T>>;
+
+/**
+ * Bind a request function to one Etherscan `module`. `module` and `action` are
+ * set after the params, so a stray key in caller-supplied params cannot
+ * redirect the call to another endpoint.
+ */
+export function forModule(request: GetRequest | PostRequest, module: string): ModuleCall {
+  return <T = unknown>(action: string, params: QueryParams = {}) => request<T>({ ...params, module, action });
+}
+
 export interface RequestConfig {
   baseUrl: string;
   timeout: number;

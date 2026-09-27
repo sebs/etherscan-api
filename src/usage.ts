@@ -1,15 +1,18 @@
+import { forModule } from './get-request.js';
 import type { GetRequest, RawGet } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { ChainListResponse } from './results.js';
 
 export function usage(getRequest: GetRequest, rawGet: RawGet) {
+  const call = forModule(getRequest, 'getapilimit');
+
   return {
     /**
      * Returns the amount of API calls used and the daily limit for your API key.
      * (module `getapilimit`)
      */
     getapilimit(): Promise<EtherscanResponse> {
-      return getRequest({ module: 'getapilimit', action: 'getapilimit' });
+      return call('getapilimit');
     },
 
     /**

@@ -1,15 +1,18 @@
+import { forModule } from './get-request.js';
 import type { GetRequest } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { GasOracle } from './results.js';
 
 export function gastracker(getRequest: GetRequest) {
+  const call = forModule(getRequest, 'gastracker');
+
   return {
     /**
      * Returns the current Safe / Propose / Fast gas prices (in Gwei) along with
      * the suggested base fee and recent gas-used ratio.
      */
     gasoracle(): Promise<EtherscanResponse<GasOracle>> {
-      return getRequest<GasOracle>({ module: 'gastracker', action: 'gasoracle' });
+      return call<GasOracle>('gasoracle');
     },
 
     /**
@@ -18,7 +21,7 @@ export function gastracker(getRequest: GetRequest) {
      * @param gasprice - Gas price in wei
      */
     gasestimate(gasprice: string | number): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'gastracker', action: 'gasestimate', gasprice });
+      return call<string>('gasestimate', { gasprice });
     },
   };
 }

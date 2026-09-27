@@ -1,3 +1,4 @@
+import { forModule } from './get-request.js';
 import type { GetRequest, QueryParams } from './get-request.js';
 import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
@@ -23,9 +24,7 @@ function toQuantity(value: BlockTag): string {
 }
 
 export function proxy(getRequest: GetRequest) {
-  // Bind module:'proxy' once; every method names only its action and params.
-  const call = <T = unknown>(action: string, params: QueryParams = {}) =>
-    getRequest<T>({ module: 'proxy', action, ...params });
+  const call = forModule(getRequest, 'proxy');
 
   return {
     /** Returns the number of the most recent block (hex). */

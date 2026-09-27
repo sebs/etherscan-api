@@ -1,4 +1,4 @@
-import { emptyAsList, isUnsafeKey } from './get-request.js';
+import { emptyAsList, forModule, isUnsafeKey } from './get-request.js';
 import { compact } from './params.js';
 import type { GetRequest, PostRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
@@ -45,18 +45,18 @@ export interface VerifySourceCodeParams extends VerifyParams {
   compilerversion: string;
 }
 
-/** Build the form body for a verification POST, dropping undefined fields. */
-function verifyBody(action: string, params: VerifyParams): QueryParams {
+/**
+ * Build the form body for a verification POST, dropping undefined fields.
+ * `module`/`action` are set by the bound POST (see `forModule`), after these
+ * fields, so a stray key in the params cannot redirect the call.
+ */
+function verifyBody(params: VerifyParams): QueryParams {
   const body: QueryParams = {};
   for (const [key, value] of Object.entries(params)) {
     if (value !== undefined && !isUnsafeKey(key)) {
       body[key] = value;
     }
   }
-  // Set last so a stray `module`/`action` key in the params (possible from
-  // plain JS) cannot redirect the call to another endpoint.
-  body.module = 'contract';
-  body.action = action;
   return body;
 }
 
@@ -64,6 +64,9 @@ function verifyBody(action: string, params: VerifyParams): QueryParams {
 const MAX_CONTRACT_CREATION = 5;
 
 export function contract(getRequest: GetRequest, postRequest: PostRequest) {
+  const call = forModule(getRequest, 'contract');
+  const post = forModule(postRequest, 'contract');
+
   return {
     /**
      * Returns the creator address and creation transaction hash for one or more
@@ -80,7 +83,7 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
       }
       const value = list.join(',');
       return emptyAsList(
-        getRequest<ContractCreation[]>({ module: 'contract', action: 'getcontractcreation', contractaddresses: value }),
+        call<ContractCreation[]>('getcontractcreation', { contractaddresses: value }),
       );
     },
 
@@ -89,7 +92,7 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
      * @param address - Contract address
      */
     getabi(address: string): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'contract', action: 'getabi', address });
+      return call<string>('getabi', { address });
     },
 
     /**
@@ -97,7 +100,7 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
      * @param address - Contract address
      */
     getsourcecode(address: string): Promise<EtherscanResponse<ContractSource[]>> {
-      return emptyAsList(getRequest<ContractSource[]>({ module: 'contract', action: 'getsourcecode', address }));
+      return emptyAsList(call<ContractSource[]>('getsourcecode', { address }));
     },
 
     /**
@@ -106,7 +109,7 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
      * @param params - Verification fields ({@link VerifySourceCodeParams})
      */
     verifysourcecode(params: VerifySourceCodeParams): Promise<EtherscanResponse<string>> {
-      return postRequest<string>(verifyBody('verifysourcecode', params));
+      return post<string>('verifysourcecode', verifyBody(params));
     },
 
     /**
@@ -114,7 +117,7 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
      * @param params - Verification fields ({@link VerifyParams})
      */
     verifyvyper(params: VerifyParams): Promise<EtherscanResponse<string>> {
-      return postRequest<string>(verifyBody('verifyvyper', params));
+      return post<string>('verifyvyper', verifyBody(params));
     },
 
     /**
@@ -122,7 +125,7 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
      * @param params - Verification fields ({@link VerifyParams})
      */
     verifystylus(params: VerifyParams): Promise<EtherscanResponse<string>> {
-      return postRequest<string>(verifyBody('verifystylus', params));
+      return post<string>('verifystylus', verifyBody(params));
     },
 
     /**
@@ -130,7 +133,7 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
      * @param params - Verification fields ({@link VerifyParams}); include `compilerversion`
      */
     verifyzksyncsourcecode(params: VerifyParams): Promise<EtherscanResponse<string>> {
-      return postRequest<string>(verifyBody('verifyzksyncsourcecode', params));
+      return post<string>('verifyzksyncsourcecode', verifyBody(params));
     },
 
     /**
@@ -141,7 +144,7 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
      * @param guid - The GUID returned by `verifysourcecode`
      */
     checkverifystatus(guid: string): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'contract', action: 'checkverifystatus', guid });
+      return call<string>('checkverifystatus', { guid });
     },
 
     /**
@@ -151,9 +154,7 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
      * @param expectedimplementation - (optional) expected implementation address
      */
     verifyproxycontract(address: string, expectedimplementation?: string): Promise<EtherscanResponse<string>> {
-      return postRequest<string>(
-        compact({ module: 'contract', action: 'verifyproxycontract', address, expectedimplementation }),
-      );
+      return post<string>('verifyproxycontract', compact({ address, expectedimplementation }));
     },
 
     /**
@@ -163,7 +164,7 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
      * @param guid - The GUID returned by `verifyproxycontract`
      */
     checkproxyverification(guid: string): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'contract', action: 'checkproxyverification', guid });
+      return call<string>('checkproxyverification', { guid });
     },
   };
 }
