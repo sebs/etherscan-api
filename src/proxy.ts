@@ -1,4 +1,5 @@
 import type { GetRequest, QueryParams } from './get-request.js';
+import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
 
 /** A block number/index as JSON-RPC takes it: a hex quantity or a named tag. */
@@ -156,11 +157,7 @@ export function proxy(getRequest: GetRequest) {
       gas: string,
       data?: string,
     ): Promise<EtherscanResponse<string>> {
-      const params: QueryParams = { to, value, gasPrice, gas };
-      if (data) {
-        params.data = data;
-      }
-      return call<string>('eth_estimateGas', params);
+      return call<string>('eth_estimateGas', compact({ to, value, gasPrice, gas, data }));
     },
   };
 }

@@ -1,5 +1,6 @@
 import { emptyAsList } from './get-request.js';
-import type { GetRequest, QueryParams } from './get-request.js';
+import type { GetRequest } from './get-request.js';
+import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
 import type { EthPrice, ChainSize } from './results.js';
 
@@ -22,14 +23,7 @@ export function stats(getRequest: GetRequest) {
     if (!tokenname && !contractaddress) {
       throw new Error('tokensupply() needs a token contract address or a token name');
     }
-    const params: QueryParams = { module: 'stats', action: 'tokensupply' };
-    if (tokenname) {
-      params.tokenname = tokenname;
-    }
-    if (contractaddress) {
-      params.contractaddress = contractaddress;
-    }
-    return getRequest<string>(params);
+    return getRequest<string>(compact({ module: 'stats', action: 'tokensupply', tokenname, contractaddress }));
   }
 
   return {

@@ -1,4 +1,5 @@
 import { emptyAsList, isUnsafeKey } from './get-request.js';
+import { compact } from './params.js';
 import type { GetRequest, PostRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { ContractCreation, ContractSource } from './results.js';
@@ -150,11 +151,9 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
      * @param expectedimplementation - (optional) expected implementation address
      */
     verifyproxycontract(address: string, expectedimplementation?: string): Promise<EtherscanResponse<string>> {
-      const body: QueryParams = { module: 'contract', action: 'verifyproxycontract', address };
-      if (expectedimplementation) {
-        body.expectedimplementation = expectedimplementation;
-      }
-      return postRequest<string>(body);
+      return postRequest<string>(
+        compact({ module: 'contract', action: 'verifyproxycontract', address, expectedimplementation }),
+      );
     },
 
     /**

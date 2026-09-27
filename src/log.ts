@@ -1,21 +1,8 @@
 import { emptyAsList } from './get-request.js';
-import type { GetRequest, QueryParams } from './get-request.js';
+import type { GetRequest } from './get-request.js';
+import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
 import type { EventLog } from './results.js';
-
-/**
- * Copy a value onto the params object unless it was omitted. Unlike a truthy
- * check this keeps `0`, which is a meaningful block number (genesis) and a
- * meaningful page/offset.
- */
-function setIfPresent(
-  params: QueryParams,
-  key: string,
-  value: string | number | undefined | null,
-): void {
-  if (value === undefined || value === null || value === '') return;
-  params[key] = value;
-}
 
 export function log(getRequest: GetRequest) {
   return {
@@ -56,45 +43,25 @@ export function log(getRequest: GetRequest) {
       topic0_3_opr?: string,
       topic1_3_opr?: string,
     ): Promise<EtherscanResponse<EventLog[]>> {
-      const params: QueryParams = { module: 'logs', action: 'getLogs' };
-
-      if (address) {
-        params.address = address;
-      }
-      setIfPresent(params, 'fromBlock', fromBlock);
-      setIfPresent(params, 'toBlock', toBlock);
-      if (topic0) {
-        params.topic0 = topic0;
-      }
-      if (topic0_1_opr) {
-        params.topic0_1_opr = topic0_1_opr;
-      }
-      if (topic1) {
-        params.topic1 = topic1;
-      }
-      if (topic1_2_opr) {
-        params.topic1_2_opr = topic1_2_opr;
-      }
-      if (topic2) {
-        params.topic2 = topic2;
-      }
-      if (topic2_3_opr) {
-        params.topic2_3_opr = topic2_3_opr;
-      }
-      if (topic0_2_opr) {
-        params.topic0_2_opr = topic0_2_opr;
-      }
-      if (topic0_3_opr) {
-        params.topic0_3_opr = topic0_3_opr;
-      }
-      if (topic1_3_opr) {
-        params.topic1_3_opr = topic1_3_opr;
-      }
-      if (topic3) {
-        params.topic3 = topic3;
-      }
-      setIfPresent(params, 'page', page);
-      setIfPresent(params, 'offset', offset);
+      const params = compact({
+        module: 'logs',
+        action: 'getLogs',
+        address,
+        fromBlock,
+        toBlock,
+        topic0,
+        topic0_1_opr,
+        topic1,
+        topic1_2_opr,
+        topic2,
+        topic2_3_opr,
+        topic0_2_opr,
+        topic0_3_opr,
+        topic1_3_opr,
+        topic3,
+        page,
+        offset,
+      });
       return emptyAsList(getRequest<EventLog[]>(params));
     },
   };

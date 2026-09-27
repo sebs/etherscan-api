@@ -1,4 +1,5 @@
 import { emptyAsList } from './get-request.js';
+import { compact } from './params.js';
 import type { GetRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type {
@@ -30,15 +31,7 @@ export interface AdvancedFilter {
 /** Copy the defined advanced-filter fields onto a params object. */
 function applyFilter(params: QueryParams, filter?: AdvancedFilter): void {
   if (!filter) return;
-  if (filter.from) {
-    params.from = filter.from;
-  }
-  if (filter.to) {
-    params.to = filter.to;
-  }
-  if (filter.fromto_opr) {
-    params.fromto_opr = filter.fromto_opr;
-  }
+  Object.assign(params, compact({ from: filter.from, to: filter.to, fromto_opr: filter.fromto_opr }));
 }
 
 /** Sort order accepted by the list endpoints. */
@@ -122,14 +115,8 @@ export function account(getRequest: GetRequest) {
     sort?: SortOrder,
     filter?: AdvancedFilter,
   ): Promise<EtherscanResponse<T>> {
-    const params: QueryParams = {};
+    const params = compact({ address, contractaddress });
     listRange(params, startblock, endblock, page, offset, sort);
-    if (address) {
-      params.address = address;
-    }
-    if (contractaddress) {
-      params.contractaddress = contractaddress;
-    }
     applyFilter(params, filter);
     return emptyAsList(call<T>(action, params));
   }
@@ -241,11 +228,8 @@ export function account(getRequest: GetRequest) {
     if (!address && !filter?.from && !filter?.to) {
       throw new Error('txlist() needs an address or an advanced filter with from/to');
     }
-    const params: QueryParams = {};
+    const params = compact({ address });
     listRange(params, startblock, endblock, page, offset, sort);
-    if (address) {
-      params.address = address;
-    }
     applyFilter(params, filter);
     return emptyAsList(call<NormalTransaction[]>('txlist', params));
   }
@@ -266,17 +250,7 @@ export function account(getRequest: GetRequest) {
      * );
      */
     tokenbalance(address: string, tokenname?: string, contractaddress?: string): Promise<EtherscanResponse<string>> {
-      const params: QueryParams = { tag: 'latest' };
-      if (contractaddress) {
-        params.contractaddress = contractaddress;
-      }
-      if (tokenname) {
-        params.tokenname = tokenname;
-      }
-      if (address) {
-        params.address = address;
-      }
-      return call<string>('tokenbalance', params);
+      return call<string>('tokenbalance', compact({ tag: 'latest', contractaddress, tokenname, address }));
     },
 
     /**
@@ -302,30 +276,18 @@ export function account(getRequest: GetRequest) {
       page?: number,
       offset?: number,
     ): Promise<EtherscanResponse<InternalTransaction[]>> {
-      const params: QueryParams = {};
-      params.sort = checkSort(sort);
-
-      if (txhash) {
-        params.txhash = txhash;
-      } else {
-        if (address) {
-          params.address = address;
-        }
-        params.startblock = startblock ?? 0;
-        params.endblock = endblock ?? 'latest';
-      }
       // No paging defaults here, unlike listRange: callers who never paged
       // keep getting Etherscan's full (unpaged) result. What is given is
       // still validated.
       if (page !== undefined || offset !== undefined) {
         checkPaging(page ?? 1, offset ?? 1);
       }
-      if (page !== undefined) {
-        params.page = page;
-      }
-      if (offset !== undefined) {
-        params.offset = offset;
-      }
+      const params = compact({
+        sort: checkSort(sort),
+        ...(txhash ? { txhash } : { address, startblock: startblock ?? 0, endblock: endblock ?? 'latest' }),
+        page,
+        offset,
+      });
       applyFilter(params, filter);
       return emptyAsList(call<InternalTransaction[]>('txlistinternal', params));
     },
@@ -347,17 +309,7 @@ export function account(getRequest: GetRequest) {
       page?: number,
       offset?: number,
     ): Promise<EtherscanResponse<MinedBlock[]>> {
-      const params: QueryParams = { address };
-      if (blocktype) {
-        params.blocktype = blocktype;
-      }
-      if (page !== undefined) {
-        params.page = page;
-      }
-      if (offset !== undefined) {
-        params.offset = offset;
-      }
-      return emptyAsList(call<MinedBlock[]>('getminedblocks', params));
+      return emptyAsList(call<MinedBlock[]>('getminedblocks', compact({ address, blocktype, page, offset })));
     },
 
     /**
