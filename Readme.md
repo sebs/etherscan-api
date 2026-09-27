@@ -45,6 +45,8 @@ async function request(url, { timeout, method = 'GET', body }) {
     headers: body ? { 'Content-Type': 'application/x-www-form-urlencoded' } : undefined,
     signal: AbortSignal.timeout(timeout),
   });
+  // fetch resolves on any HTTP status; surface non-2xx as an error.
+  if (!res.ok) throw new Error(`Request failed with status code ${res.status}`);
   return res.json();
 }
 
@@ -73,9 +75,9 @@ const api = init('apikey', null, 10000, request);
 
 ### Overriding the transport options
 
-`init` only ever passes `timeout` to the transport, so `allowInsecure` and
-`maxResponseBytes` are set by wrapping the default transport, which is exported
-as `httpTransport`:
+The library passes the transport only `timeout` (plus `method` and `body` for
+the POST verification endpoints), so `allowInsecure` and `maxResponseBytes` are
+set by wrapping the default transport, which is exported as `httpTransport`:
 
 ```js
 import { init, httpTransport } from 'etherscan-api';

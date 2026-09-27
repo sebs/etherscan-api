@@ -197,6 +197,8 @@ const request: Transport = async (url, { timeout, method = 'GET', body } = {}) =
     headers: body ? { 'Content-Type': 'application/x-www-form-urlencoded' } : undefined,
     signal: AbortSignal.timeout(timeout ?? 10_000),
   });
+  // fetch resolves on any HTTP status; surface non-2xx as an error.
+  if (!res.ok) throw new Error(`Request failed with status code ${res.status}`);
   return res.json();
 };
 

@@ -174,7 +174,7 @@ describe('http transport', function () {
     );
   });
 
-  // The library only ever passes `timeout` to the transport, so maxResponseBytes
+  // The library passes only timeout (and method/body for POSTs), so maxResponseBytes
   // and allowInsecure are reachable from init() only by wrapping the exported
   // default transport. This pins that path end to end.
   it('lets an init() caller reach maxResponseBytes by wrapping the exported transport', async function () {
