@@ -3,15 +3,30 @@ import type { EtherscanResponse } from './types.js';
 import type { BlockReward, BlockCountdown, BlockTransactionCount } from './results.js';
 
 export function block(getRequest: GetRequest) {
+  /**
+   * Find the block and uncle rewards for a block.
+   * @param blockno - Block number
+   * @example
+   * api.block.getblockreward(2165403);
+   */
+  function getblockreward(blockno: string | number): Promise<EtherscanResponse<BlockReward>>;
+  /**
+   * @deprecated Etherscan's endpoint takes no address; call `getblockreward(blockno)`.
+   * The address is ignored.
+   */
+  function getblockreward(address: string, blockno: string | number): Promise<EtherscanResponse<BlockReward>>;
+  function getblockreward(
+    first: string | number,
+    legacyBlockno?: string | number,
+  ): Promise<EtherscanResponse<BlockReward>> {
+    // Older callers pass (address, blockno); the address was never used by
+    // the endpoint, so only the block number is sent.
+    const blockno = legacyBlockno ?? first;
+    return getRequest<BlockReward>({ module: 'block', action: 'getblockreward', blockno });
+  }
+
   return {
-    /**
-     * Find the block reward for a given address and block.
-     * @param address - Miner address
-     * @param blockno - Block number (defaults to 0)
-     */
-    getblockreward(address: string, blockno?: string | number): Promise<EtherscanResponse<BlockReward>> {
-      return getRequest<BlockReward>({ module: 'block', action: 'getblockreward', address, blockno: blockno ?? 0 });
-    },
+    getblockreward,
 
     /**
      * Returns the estimated time remaining, in seconds, until a certain block is mined.
