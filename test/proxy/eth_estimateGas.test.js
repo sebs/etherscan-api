@@ -47,4 +47,14 @@ describe('proxy.eth_estimateGas', function () {
   it('sends the api key', function () {
     assert.equal(queryOf(transport).get('apikey'), 'KEY');
   });
+
+  it('omits data when not given', function () {
+    assert.equal(queryOf(transport).get('data'), null);
+  });
+
+  it('sends the call data when given', async function () {
+    const mocked = mockApi(RPC_OK);
+    await mocked.api.proxy.eth_estimateGas(TO, '0x0', '0x051da038cc', '0xffffff', '0x4e71d92d');
+    assert.equal(queryOf(mocked.transport).get('data'), '0x4e71d92d');
+  });
 });

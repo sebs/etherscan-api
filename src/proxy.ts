@@ -125,9 +125,21 @@ export function proxy(getRequest: GetRequest) {
      * @param value - Value sent in the transaction
      * @param gasPrice - Gas price in wei
      * @param gas - Gas provided
+     * @param data - Call data (method signature hash plus encoded arguments), needed to
+     *   estimate a contract call rather than a plain transfer
      */
-    eth_estimateGas(to: string, value: string, gasPrice: string, gas: string): Promise<EtherscanResponse<string>> {
-      return call<string>('eth_estimateGas', { to, value, gasPrice, gas });
+    eth_estimateGas(
+      to: string,
+      value: string,
+      gasPrice: string,
+      gas: string,
+      data?: string,
+    ): Promise<EtherscanResponse<string>> {
+      const params: QueryParams = { to, value, gasPrice, gas };
+      if (data) {
+        params.data = data;
+      }
+      return call<string>('eth_estimateGas', params);
     },
   };
 }
