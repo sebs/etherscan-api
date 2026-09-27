@@ -276,6 +276,29 @@ describe('request layer (get-request)', function () {
     });
   });
 
+  describe('drops missing arguments instead of sending "undefined"', function () {
+    let query;
+
+    beforeEach(async function () {
+      const mocked = mockApi({ jsonrpc: '2.0', id: 1, result: '0x' });
+      await mocked.api.proxy.eth_call('0xa', '0xb');
+      await mocked.api.proxy.eth_call('0xa', '0xb', null);
+      query = [queryOf(mocked.transport, 0), queryOf(mocked.transport, 1)];
+    });
+
+    it('omits an undefined argument', function () {
+      assert.equal(query[0].get('tag'), null);
+    });
+
+    it('omits a null argument', function () {
+      assert.equal(query[1].get('tag'), null);
+    });
+
+    it('still sends the arguments that were given', function () {
+      assert.equal(query[0].get('data'), '0xb');
+    });
+  });
+
   describe('honours a caller-supplied transport function', function () {
     let calledUrl;
     let result;

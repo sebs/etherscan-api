@@ -36,11 +36,16 @@ export function isUnsafeKey(key: string): boolean {
   return UNSAFE_KEYS.has(key);
 }
 
-/** Merge endpoint params with the universal defaults and form-encode them. */
+/**
+ * Merge endpoint params with the universal defaults and form-encode them.
+ * `undefined`/`null` values are dropped: from plain JS a missing argument would
+ * otherwise be sent as the literal string "undefined" or "null".
+ */
 function serialize(params: QueryParams, defaults: Record<string, string | number>): string {
   const merged: Record<string, string> = {};
   for (const [key, value] of Object.entries({ ...params, ...defaults })) {
     if (isUnsafeKey(key)) continue;
+    if (value === undefined || value === null) continue;
     merged[key] = String(value);
   }
   return new URLSearchParams(merged).toString();
