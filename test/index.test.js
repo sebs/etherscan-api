@@ -49,6 +49,12 @@ describe('index exports', function () {
     assert.ok(pkg.init('KEY'));
   });
 
+  for (const key of [12345, {}, true]) {
+    it('init names the type of a non-string API key (' + typeof key + ')', function () {
+      assert.throws(function () { return pkg.init(key); }, new RegExp('Invalid API key: expected a string, got ' + typeof key));
+    });
+  }
+
   it('init trims whitespace around the API key (e.g. a trailing newline from a file)', async function () {
     let url;
     const api = pkg.init('  KEY\n', null, null, async (u) => { url = u; return { status: '1', result: 'x' }; });

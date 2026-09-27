@@ -48,6 +48,10 @@ export function init(
   // environment variable into confusing auth errors later. Surrounding
   // whitespace (a key read from a file keeps its trailing newline) is dropped,
   // as it is for chain names.
+  if (apiKey !== undefined && apiKey !== null && typeof apiKey !== 'string') {
+    // Reachable from plain JS: a key was given, just not as a string.
+    throw new Error(`Invalid API key: expected a string, got ${typeof apiKey}`);
+  }
   const key = typeof apiKey === 'string' ? apiKey.trim() : '';
   if (key === '') {
     throw new Error('An Etherscan API key is required: init(apiKey, chain?, timeout?, request?)');
