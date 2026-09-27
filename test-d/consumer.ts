@@ -23,3 +23,22 @@ export async function balances(): Promise<void> {
 
   void wei; void items; void first; void union;
 }
+
+export async function verification(): Promise<void> {
+  const base = { contractaddress: '0xa', sourceCode: 's', contractname: 'C', compilerversion: 'v0.8.24' };
+
+  await api.contract.verifysourcecode({ ...base, optimizationUsed: 1, runs: 200, libraryname1: 'L', libraryaddress1: '0xb' });
+
+  // @ts-expect-error — misspelt field: Etherscan would silently ignore it.
+  await api.contract.verifysourcecode({ ...base, optimisationUsed: 1 });
+
+  // @ts-expect-error — verifysourcecode needs a compilerversion.
+  await api.contract.verifysourcecode({ contractaddress: '0xa', sourceCode: 's', contractname: 'C' });
+}
+
+export async function tokenbalance(): Promise<void> {
+  await api.account.tokenbalance('0xa', '', '0xc');
+
+  // @ts-expect-error — the account address is required.
+  await api.account.tokenbalance();
+}

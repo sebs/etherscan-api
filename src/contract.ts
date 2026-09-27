@@ -3,7 +3,14 @@ import type { GetRequest, PostRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { ContractCreation, ContractSource } from './results.js';
 
-/** Common fields shared by the contract-verification endpoints. */
+/**
+ * Common fields shared by the contract-verification endpoints.
+ *
+ * The field set is closed so a misspelt name (`optimisationUsed`, say) is a
+ * compile error instead of a field Etherscan silently ignores. Every field is
+ * still forwarded at runtime, so for a field not listed here, widen the object
+ * with a type assertion.
+ */
 export interface VerifyParams {
   /** Address the contract is deployed at. */
   contractaddress: string;
@@ -11,22 +18,30 @@ export interface VerifyParams {
   sourceCode: string;
   /** Contract name (or `path:Name` for standard-json-input). */
   contractname: string;
+  /** e.g. `'solidity-single-file'`, `'solidity-standard-json-input'`, `'vyper-json'` or `'stylus'`. */
+  codeformat?: string;
+  /** Compiler version, e.g. `'v0.8.24+commit.e11b9ed9'`. */
+  compilerversion?: string;
   optimizationUsed?: 0 | 1 | string;
   runs?: number | string;
-  /** ABI-encoded constructor arguments (without the leading `0x`). */
+  /** ABI-encoded constructor arguments (without the leading `0x`). Etherscan's spelling. */
   constructorArguements?: string;
+  evmversion?: string;
   licenseType?: number | string;
-  /** Any further endpoint-specific fields are passed through. */
-  [key: string]: string | number | undefined;
+  /** zkSync compiler mode (`verifyzksyncsourcecode`). */
+  compilermode?: string;
+  /** zksolc version (`verifyzksyncsourcecode`). */
+  zksolcVersion?: string;
+  /** Linked library names, `libraryname1` … `libraryname10`. */
+  [library: `libraryname${number}`]: string | undefined;
+  /** Linked library addresses, `libraryaddress1` … `libraryaddress10`. */
+  [library: `libraryaddress${number}`]: string | undefined;
 }
 
 /** Parameters for `contract.verifysourcecode` (Solidity). */
 export interface VerifySourceCodeParams extends VerifyParams {
-  /** e.g. `'solidity-single-file'` or `'solidity-standard-json-input'`. */
-  codeformat?: string;
   /** Full compiler version, e.g. `'v0.8.24+commit.e11b9ed9'`. */
   compilerversion: string;
-  evmversion?: string;
 }
 
 /** Build the form body for a verification POST, dropping undefined fields. */
