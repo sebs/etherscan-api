@@ -58,7 +58,7 @@ function normalize(data: EtherscanResponse): EtherscanResponse {
   // return a bare `null`, which is valid JSON) or when a custom transport
   // resolves with nothing. Reject with the library's own error type rather than
   // letting the property reads below throw an opaque TypeError.
-  if (data === null || typeof data !== 'object') {
+  if (data === null || typeof data !== 'object' || Array.isArray(data)) {
     throw new EtherscanError('Unexpected response body from Etherscan (not a JSON object)', {
       result: data,
     });

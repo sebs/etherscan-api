@@ -185,6 +185,7 @@ describe('request layer (get-request)', function () {
       ['undefined', undefined],
       ['a number', 42],
       ['a string', 'not json'],
+      ['an array', [1, 2]],
     ];
 
     for (const [label, body] of CASES) {
