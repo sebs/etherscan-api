@@ -97,6 +97,13 @@ export async function listOptions(): Promise<void> {
   await api.log.getLogs({ topic0_1_opr: 'xor' });
 }
 
+export function initOptions(): void {
+  init({ apiKey: 'KEY', chain: 'sepolia', timeout: 5000, maxResponseBytes: 1024, allowInsecure: false });
+
+  // @ts-expect-error — apiKey is required in the options form.
+  init({ chain: 'sepolia' });
+}
+
 export async function tokenbalance(): Promise<void> {
   await api.account.tokenbalance('0xa', '', '0xc');
 

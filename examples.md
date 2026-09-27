@@ -25,6 +25,9 @@ const linea = init('YourApiKey', 59144);
 
 // With a custom timeout (ms)
 const slow = init('YourApiKey', 'mainnet', 30_000);
+
+// …or everything as one options object, including the transport limits
+const custom = init({ apiKey: 'YourApiKey', chain: 'base', timeout: 30_000, maxResponseBytes: 200 * 1024 * 1024 });
 ```
 
 Retired testnets throw immediately rather than silently hitting mainnet:

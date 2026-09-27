@@ -1,6 +1,6 @@
 import type { RequestContext } from './get-request.js';
-import { compact } from './params.js';
-import { isOptions, pagingParams } from './list-params.js';
+import { compact, isOptions } from './params.js';
+import { pagingParams } from './list-params.js';
 import type { EtherscanResponse } from './types.js';
 import type { EventLog } from './results.js';
 

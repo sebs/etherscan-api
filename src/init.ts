@@ -1,5 +1,6 @@
 import httpTransport from './transport.js';
-import { checkApiKey, checkTransport, resolveTimeout } from './validation.js';
+import { checkApiKey, checkTransport, resolveMaxResponseBytes, resolveTimeout } from './validation.js';
+import { isOptions } from './params.js';
 import { account } from './account.js';
 import { block } from './block.js';
 import { contract } from './contract.js';
@@ -48,6 +49,32 @@ const NAMESPACES: { [K in keyof EtherscanApi]: (ctx: RequestContext) => Ethersca
   usage,
 };
 
+/** Options for {@link init}. Only `apiKey` is required. */
+export interface InitOptions {
+  /** Your Etherscan API key (works across all chains in V2). */
+  apiKey: string;
+  /** Chain name (e.g. `'sepolia'`, `'arbitrum'`) or numeric chainid; defaults to Ethereum mainnet. */
+  chain?: string | number | null;
+  /** Request timeout in milliseconds (default 10000). A numeric string is accepted. */
+  timeout?: number | string | null;
+  /** Custom HTTP transport; defaults to the built-in `node:https` transport. */
+  transport?: Transport;
+  /** Cap on a response body in bytes (default 50 MB), passed to the transport. */
+  maxResponseBytes?: number;
+  /** Allow cleartext `http://` URLs (default `false`), passed to the transport. */
+  allowInsecure?: boolean;
+}
+
+/**
+ * Create an Etherscan API client from an options object.
+ *
+ * @param options - {@link InitOptions}: the API key, plus optional chain, timeout,
+ *   transport and transport limits
+ * @throws {EtherscanArgumentError} If an option is missing or invalid.
+ * @example
+ * const api = init({ apiKey: 'YourApiKey', chain: 'sepolia', maxResponseBytes: 200 * 1024 * 1024 });
+ */
+export function init(options: InitOptions): EtherscanApi;
 /**
  * Create an Etherscan API client.
  *
@@ -56,24 +83,42 @@ const NAMESPACES: { [K in keyof EtherscanApi]: (ctx: RequestContext) => Ethersca
  * @param timeout - Request timeout in milliseconds (default 10000); must be positive and finite.
  *   A numeric string, e.g. from an environment variable, is accepted.
  * @param request - Custom HTTP transport; defaults to a built-in `node:https`/`node:http` request
- * @throws {Error} If `apiKey` is missing or invalid, or `chain`, `timeout` or `request` is invalid.
+ * @throws {EtherscanArgumentError} If `apiKey` is missing or invalid, or `chain`, `timeout` or `request` is invalid.
  */
 export function init(
   apiKey?: string,
   chain?: string | number | null,
   timeout?: number | string | null,
   request?: Transport,
+): EtherscanApi;
+export function init(
+  first?: string | InitOptions,
+  chain?: string | number | null,
+  timeout?: number | string | null,
+  request?: Transport,
 ): EtherscanApi {
+  const options: Partial<InitOptions> = isOptions<InitOptions>(first)
+    ? first
+    : { apiKey: first, chain, timeout, transport: request };
+
   // Fail here rather than per request: a placeholder key only turns an unset
   // environment variable into confusing auth errors later.
-  const key = checkApiKey(apiKey);
-  const t = resolveTimeout(timeout);
-  const chainid = resolveChainId(chain);
-  const doRequest: Transport = checkTransport(request) ?? httpTransport;
+  const key = checkApiKey(options.apiKey);
+  const t = resolveTimeout(options.timeout);
+  const chainid = resolveChainId(options.chain);
+  const doRequest: Transport = checkTransport(options.transport) ?? httpTransport;
+  if (options.maxResponseBytes !== undefined) {
+    resolveMaxResponseBytes(options.maxResponseBytes);
+  }
 
   // apikey + chainid are injected centrally so namespaces never repeat them.
   const defaults = { apikey: key, chainid };
-  const config = { baseUrl: HOST, timeout: t };
+  const config = {
+    baseUrl: HOST,
+    timeout: t,
+    maxResponseBytes: options.maxResponseBytes,
+    allowInsecure: options.allowInsecure,
+  };
   const ctx = createRequestContext(doRequest, defaults, config);
 
   // Object.fromEntries loses the key types; NAMESPACES' annotation above is

@@ -81,7 +81,7 @@ describe('index exports', function () {
     assert.ok(pkg.init('KEY'));
   });
 
-  for (const key of [12345, {}, true]) {
+  for (const key of [12345, true]) {
     it('init names the type of a non-string API key (' + typeof key + ')', function () {
       assert.throws(function () { return pkg.init(key); }, new RegExp('Invalid API key: expected a string, got ' + typeof key));
     });
@@ -115,6 +115,44 @@ describe('index exports', function () {
     const api = pkg.init('KEY', null, '5000', async (url, o) => { options = o; return { status: '1', result: 'x' }; });
     await api.stats.ethsupply();
     assert.equal(options.timeout, 5000);
+  });
+
+  describe('init with an options object', function () {
+    it('builds the same client as the positional form', async function () {
+      let options;
+      const transport = async (url, o) => { options = { url, ...o }; return { status: '1', result: 'x' }; };
+      const api = pkg.init({ apiKey: ' KEY ', chain: 'sepolia', timeout: '5000', transport });
+      await api.stats.ethsupply();
+      const query = new URL(options.url).searchParams;
+      assert.deepEqual([query.get('apikey'), query.get('chainid'), options.timeout], ['KEY', '11155111', 5000]);
+    });
+
+    it('passes maxResponseBytes and allowInsecure to the transport', async function () {
+      let options;
+      const api = pkg.init({
+        apiKey: 'KEY',
+        maxResponseBytes: 1024,
+        allowInsecure: true,
+        transport: async (url, o) => { options = o; return { status: '1', result: 'x' }; },
+      });
+      await api.stats.ethsupply();
+      assert.deepEqual([options.maxResponseBytes, options.allowInsecure], [1024, true]);
+    });
+
+    it('does not add the limits to the transport options when they are not set', async function () {
+      let options;
+      const api = pkg.init({ apiKey: 'KEY', transport: async (url, o) => { options = o; return { status: '1', result: 'x' }; } });
+      await api.stats.ethsupply();
+      assert.deepEqual(options, { timeout: 10000 });
+    });
+
+    it('validates maxResponseBytes when the client is created', function () {
+      assert.throws(() => pkg.init({ apiKey: 'KEY', maxResponseBytes: -1 }), /Invalid maxResponseBytes -1/);
+    });
+
+    it('requires the API key', function () {
+      assert.throws(() => pkg.init({}), /API key is required/);
+    });
   });
 
   it('init quotes a rejected string timeout', function () {

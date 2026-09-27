@@ -60,11 +60,6 @@ export function fromPositional([startblock, endblock, page, offset, sort, filter
   return { startblock, endblock, page, offset, sort, filter };
 }
 
-/** True when an argument is an options object rather than a positional value. */
-export function isOptions<T extends object>(value: unknown): value is T {
-  return typeof value === 'object' && value !== null;
-}
-
 /** The advanced-filter params that were given. */
 export function filterParams(filter?: AdvancedFilter): QueryParams {
   return filter ? compact({ from: filter.from, to: filter.to, fromto_opr: filter.fromto_opr }) : {};

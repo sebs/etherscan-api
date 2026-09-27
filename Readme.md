@@ -70,15 +70,19 @@ const api = init('apikey', null, 10000, request);
 
 ### Overriding the transport options
 
-The library passes the transport only `timeout` (plus `method` and `body` for
-the POST verification endpoints), so `allowInsecure` and `maxResponseBytes` are
-set by wrapping the default transport, which is exported as `httpTransport`:
+`init` also takes an options object, where `maxResponseBytes` and
+`allowInsecure` are plain fields. Both are passed to the transport on every
+request (a custom transport receives them too):
 
 ```js
-import { init, httpTransport } from 'etherscan-api';
+import { init } from 'etherscan-api';
 
-const api = init('apikey', 'mainnet', 10000, (url, options) =>
-  httpTransport(url, { ...options, maxResponseBytes: 200 * 1024 * 1024 }));
+const api = init({
+  apiKey: 'apikey',
+  chain: 'mainnet',
+  timeout: 10000,
+  maxResponseBytes: 200 * 1024 * 1024,
+});
 ```
 
 ## Selecting a chain (Etherscan V2 / multichain)

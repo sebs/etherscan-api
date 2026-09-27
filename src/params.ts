@@ -18,3 +18,8 @@ export function compact(params: LooseParams): QueryParams {
   }
   return out;
 }
+
+/** True when an argument is an options object rather than a positional value. */
+export function isOptions<T extends object>(value: unknown): value is T {
+  return typeof value === 'object' && value !== null;
+}

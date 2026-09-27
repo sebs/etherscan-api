@@ -1,7 +1,7 @@
-import { compact } from './params.js';
+import { compact, isOptions } from './params.js';
 import type { RequestContext } from './get-request.js';
 import { EtherscanArgumentError } from './errors.js';
-import { blockRange, filterParams, fromPositional, isOptions, listParams, pagingParams } from './list-params.js';
+import { blockRange, filterParams, fromPositional, listParams, pagingParams } from './list-params.js';
 import type {
   AdvancedFilter,
   FilteredListOptions,

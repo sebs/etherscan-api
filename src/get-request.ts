@@ -43,6 +43,10 @@ export interface RequestContext {
 export interface RequestConfig {
   baseUrl: string;
   timeout: number;
+  /** Passed to the transport when set. */
+  maxResponseBytes?: number;
+  /** Passed to the transport when set. */
+  allowInsecure?: boolean;
 }
 
 /**
@@ -87,16 +91,16 @@ export function createRequestContext(
   config: RequestConfig,
 ): RequestContext {
   const apiUrl = config.baseUrl + '/v2/api';
+  // The transport options every request carries; the limits only when set.
+  const base: TransportOptions = { timeout: config.timeout };
+  if (config.maxResponseBytes !== undefined) base.maxResponseBytes = config.maxResponseBytes;
+  if (config.allowInsecure !== undefined) base.allowInsecure = config.allowInsecure;
+
   const get: ApiRequest = <T = unknown>(params: LooseParams) =>
-    send<EtherscanResponse<T>>(request, apiUrl + '?' + serialize(params, defaults), { timeout: config.timeout });
+    send<EtherscanResponse<T>>(request, apiUrl + '?' + serialize(params, defaults), base);
   const post: ApiRequest = <T = unknown>(params: LooseParams) =>
-    send<EtherscanResponse<T>>(request, apiUrl, {
-      timeout: config.timeout,
-      method: 'POST',
-      body: serialize(params, defaults),
-    });
-  const raw: RawGet = <R = EtherscanResponse>(path: string) =>
-    send<R>(request, config.baseUrl + path, { timeout: config.timeout });
+    send<EtherscanResponse<T>>(request, apiUrl, { ...base, method: 'POST', body: serialize(params, defaults) });
+  const raw: RawGet = <R = EtherscanResponse>(path: string) => send<R>(request, config.baseUrl + path, base);
 
   function module(name: string): ModuleRequests {
     // `module` and `action` are set after the params, so a stray key in

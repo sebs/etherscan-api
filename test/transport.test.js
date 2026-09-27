@@ -174,12 +174,18 @@ describe('http transport', function () {
     );
   });
 
-  // The library passes only timeout (and method/body for POSTs), so maxResponseBytes
-  // and allowInsecure are reachable from init() only by wrapping the exported
-  // default transport. This pins that path end to end.
+  // Wrapping the exported default transport still works alongside the
+  // init({ maxResponseBytes, allowInsecure }) options. This pins that path end to end.
   it('lets an init() caller reach maxResponseBytes by wrapping the exported transport', async function () {
     const api = init('KEY', 'mainnet', 1000, (url, options) =>
       httpTransport(base + '/big', { ...options, allowInsecure: true, maxResponseBytes: 1024 }));
+
+    await assert.rejects(() => api.stats.ethsupply(), /exceeded maximum size of 1024 bytes/);
+  });
+
+  it('lets an init() caller set maxResponseBytes and allowInsecure as options', async function () {
+    const api = init({ apiKey: 'KEY', maxResponseBytes: 1024, allowInsecure: true, transport: (url, options) =>
+      httpTransport(base + '/big', options) });
 
     await assert.rejects(() => api.stats.ethsupply(), /exceeded maximum size of 1024 bytes/);
   });
