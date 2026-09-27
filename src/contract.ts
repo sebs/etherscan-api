@@ -55,6 +55,9 @@ function verifyBody(action: string, params: VerifyParams): QueryParams {
   return body;
 }
 
+/** Etherscan's `getcontractcreation` accepts at most 5 addresses per call. */
+const MAX_CONTRACT_CREATION = 5;
+
 export function contract(getRequest: GetRequest, postRequest: PostRequest) {
   return {
     /**
@@ -63,6 +66,16 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
      * @param contractaddresses - A single contract address or an array of up to 5
      */
     getcontractcreation(contractaddresses: string | string[]): Promise<EtherscanResponse<ContractCreation[]>> {
+      if (
+        Array.isArray(contractaddresses) &&
+        (contractaddresses.length === 0 || contractaddresses.length > MAX_CONTRACT_CREATION)
+      ) {
+        return Promise.reject(
+          new Error(
+            `getcontractcreation() takes 1 to ${MAX_CONTRACT_CREATION} addresses, got ${contractaddresses.length}`,
+          ),
+        );
+      }
       const value = Array.isArray(contractaddresses) ? contractaddresses.join(',') : contractaddresses;
       return getRequest<ContractCreation[]>({ module: 'contract', action: 'getcontractcreation', contractaddresses: value });
     },

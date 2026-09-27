@@ -77,4 +77,20 @@ describe('account.balance', function () {
       assert.equal(queryOf(transport).get('address'), '0xaaa,0xbbb');
     });
   });
+
+  describe('with an out-of-range address list', function () {
+    for (const [label, list] of [['an empty list', []], ['21 addresses', Array(21).fill(ADDRESS)]]) {
+      it('rejects ' + label + ' without calling the API', async function () {
+        const mocked = mockApi({ status: '1', result: [] });
+        await assert.rejects(() => mocked.api.account.balance(list), /takes 1 to 20 addresses/);
+        assert.equal(mocked.transport.mock.callCount(), 0);
+      });
+    }
+
+    it('accepts exactly 20 addresses', async function () {
+      const mocked = mockApi({ status: '1', result: [] });
+      await mocked.api.account.balance(Array(20).fill(ADDRESS));
+      assert.equal(mocked.transport.mock.callCount(), 1);
+    });
+  });
 });

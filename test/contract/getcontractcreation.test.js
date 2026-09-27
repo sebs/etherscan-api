@@ -47,4 +47,20 @@ describe('contract.getcontractcreation', function () {
       assert.equal(queryOf(transport).get('contractaddresses'), '0xaaa,0xbbb');
     });
   });
+
+  describe('with an out-of-range address list', function () {
+    for (const [label, list] of [['an empty list', []], ['6 addresses', Array(6).fill(ADDRESS)]]) {
+      it('rejects ' + label + ' without calling the API', async function () {
+        const mocked = mockApi({ status: '1', result: [] });
+        await assert.rejects(() => mocked.api.contract.getcontractcreation(list), /takes 1 to 5 addresses/);
+        assert.equal(mocked.transport.mock.callCount(), 0);
+      });
+    }
+
+    it('accepts exactly 5 addresses', async function () {
+      const mocked = mockApi({ status: '1', result: [] });
+      await mocked.api.contract.getcontractcreation(Array(5).fill(ADDRESS));
+      assert.equal(mocked.transport.mock.callCount(), 1);
+    });
+  });
 });

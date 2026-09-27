@@ -60,6 +60,9 @@ function listRange(
   params.sort = sort || 'asc';
 }
 
+/** Etherscan's `balancemulti` accepts at most 20 addresses per call. */
+const MAX_BALANCEMULTI = 20;
+
 export function account(getRequest: GetRequest) {
   // Bind module:'account' once; every method names only its action and params.
   const call = <T = unknown>(action: string, params: QueryParams = {}) =>
@@ -117,7 +120,7 @@ export function account(getRequest: GetRequest) {
   function balance(address: string): Promise<EtherscanResponse<string>>;
   /**
    * Returns the balances of several accounts (uses the `balancemulti` action).
-   * @param address - An array of addresses
+   * @param address - An array of 1 to 20 addresses
    * @example
    * api.account.balance(['0xde0b…', '0x63a9…']);
    */
@@ -131,6 +134,11 @@ export function account(getRequest: GetRequest) {
     let action = 'balance';
     let addr: string;
     if (Array.isArray(address)) {
+      if (address.length === 0 || address.length > MAX_BALANCEMULTI) {
+        return Promise.reject(
+          new Error(`balance() takes 1 to ${MAX_BALANCEMULTI} addresses, got ${address.length}`),
+        );
+      }
       addr = address.join(',');
       action = 'balancemulti';
     } else {
