@@ -57,14 +57,10 @@ export function contract(ctx: RequestContext) {
      * contracts (up to 5).
      * @param contractaddresses - A single contract address or an array of up to 5
      */
-    getcontractcreation(contractaddresses: string | string[]): Promise<EtherscanResponse<ContractCreation[]>> {
+    async getcontractcreation(contractaddresses: string | string[]): Promise<EtherscanResponse<ContractCreation[]>> {
       // Count a comma-joined string's entries too, so it cannot bypass the limit.
       const addresses = Array.isArray(contractaddresses) ? contractaddresses : contractaddresses.split(',');
-      try {
-        checkAddressCount('getcontractcreation', addresses, MAX_CONTRACT_CREATION);
-      } catch (err) {
-        return Promise.reject(err);
-      }
+      checkAddressCount('getcontractcreation', addresses, MAX_CONTRACT_CREATION);
       return list<ContractCreation[]>('getcontractcreation', { contractaddresses: addresses.join(',') });
     },
 

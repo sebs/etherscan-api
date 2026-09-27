@@ -121,27 +121,21 @@ export function account(ctx: RequestContext) {
    * @param address - A single address, or an array of addresses
    */
   function balance(address: string | string[]): Promise<EtherscanResponse<string | MultiBalanceItem[]>>;
-  function balance(address: string | string[]): Promise<EtherscanResponse<string | MultiBalanceItem[]>> {
+  async function balance(address: string | string[]): Promise<EtherscanResponse<string | MultiBalanceItem[]>> {
     let action = 'balance';
     let addr: string;
     if (Array.isArray(address)) {
-      try {
-        checkAddressCount('balance', address, MAX_BALANCEMULTI);
-      } catch (err) {
-        return Promise.reject(err);
-      }
+      checkAddressCount('balance', address, MAX_BALANCEMULTI);
       addr = address.join(',');
       action = 'balancemulti';
     } else {
       // A comma-joined string would go to the single-address action (and the
       // string-typed overload), skipping the balancemulti limit; require an array.
       if (address.includes(',')) {
-        return Promise.reject(
-          new EtherscanArgumentError(
-            'balance() takes one address per string; pass an array for several addresses',
-            'address',
-            address,
-          ),
+        throw new EtherscanArgumentError(
+          'balance() takes one address per string; pass an array for several addresses',
+          'address',
+          address,
         );
       }
       addr = address;

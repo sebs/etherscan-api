@@ -44,17 +44,11 @@ export function block(ctx: RequestContext) {
      * @param timestamp - Unix timestamp in seconds, or a `Date`
      * @param closest - Return the closest block `'before'` (default) or `'after'` the timestamp
      */
-    getblocknobytime(
+    async getblocknobytime(
       timestamp: string | number | Date,
       closest: 'before' | 'after' = 'before',
     ): Promise<EtherscanResponse<string>> {
-      let seconds: number;
-      try {
-        seconds = unixSeconds(timestamp);
-      } catch (err) {
-        return Promise.reject(err);
-      }
-      return call<string>('getblocknobytime', { timestamp: seconds, closest });
+      return call<string>('getblocknobytime', { timestamp: unixSeconds(timestamp), closest });
     },
 
     /**
