@@ -41,9 +41,15 @@ describe('index exports', function () {
       });
   });
 
-  it('init works with no arguments (defaults)', function () {
-    assert.ok(pkg.init());
+  it('init works with only an API key (defaults)', function () {
+    assert.ok(pkg.init('KEY'));
   });
+
+  for (const key of [undefined, null, '']) {
+    it('init throws for a missing API key (' + JSON.stringify(key) + ')', function () {
+      assert.throws(function () { return pkg.init(key); }, /API key is required/);
+    });
+  }
 
   it('pickChainUrl throws a removed-in-v11 pointer error', function () {
     assert.throws(function () { return pkg.pickChainUrl(); }, /removed in v11/);

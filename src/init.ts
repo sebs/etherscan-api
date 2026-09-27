@@ -31,10 +31,11 @@ export interface EtherscanApi {
 /**
  * Create an Etherscan API client.
  *
- * @param apiKey - Your Etherscan API key (works across all chains in V2)
+ * @param apiKey - Your Etherscan API key (works across all chains in V2). Required.
  * @param chain - Chain name (e.g. `'sepolia'`, `'arbitrum'`) or numeric chainid; defaults to Ethereum mainnet
  * @param timeout - Request timeout in milliseconds (default 10000)
  * @param request - Custom HTTP transport; defaults to a built-in `node:https`/`node:http` request
+ * @throws {Error} If `apiKey` is missing or empty.
  */
 export function init(
   apiKey?: string,
@@ -42,7 +43,12 @@ export function init(
   timeout?: number,
   request?: Transport,
 ): EtherscanApi {
-  const key = apiKey || 'YourApiKeyToken';
+  // Fail here rather than per request: a placeholder key only turns an unset
+  // environment variable into confusing auth errors later.
+  if (typeof apiKey !== 'string' || apiKey === '') {
+    throw new Error('An Etherscan API key is required: init(apiKey, chain?, timeout?, request?)');
+  }
+  const key = apiKey;
   const t = timeout || 10000;
   const chainid = resolveChainId(chain);
   const doRequest: Transport = request || httpTransport;
