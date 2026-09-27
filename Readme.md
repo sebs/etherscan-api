@@ -20,11 +20,6 @@ const balance = await api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb6
 console.log(balance);
 ```
 
-## Example in the wild
-
-* [Polymer3 based example](https://github.com/hiherto-elements/test-app)
-
-
 ## Zero dependencies / custom HTTP transport
 
 This library has **no runtime dependencies** — requests use Node's built-in
