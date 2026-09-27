@@ -84,12 +84,20 @@ describe('chains.resolveChainId', function () {
     });
   }
 
-  const INVALID_NUMERIC_STRINGS = ['0', '-1'];
+  const INVALID_NUMERIC_STRINGS = ['0', '-1', '1e3', '1_000', '1.0', '+5'];
   for (const input of INVALID_NUMERIC_STRINGS) {
-    it('rejects the invalid numeric string ' + JSON.stringify(input), function () {
-      assert.throws(() => resolveChainId(input), /Invalid chainid|Unknown chain/);
+    it('rejects the invalid numeric string ' + JSON.stringify(input) + ' as an invalid chainid', function () {
+      assert.throws(() => resolveChainId(input), /Invalid chainid/);
     });
   }
+
+  it('says why a chainid past the safe-integer range is invalid', function () {
+    assert.throws(() => resolveChainId('9007199254740993'), /positive integer up to 9007199254740991/);
+  });
+
+  it('still treats a name containing digits as a name', function () {
+    assert.throws(() => resolveChainId('base2'), /Unknown chain "base2"/);
+  });
 
   const NON_STRING = [true, {}, []];
   for (const input of NON_STRING) {

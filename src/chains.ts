@@ -64,7 +64,7 @@ function describeValue(value: unknown): string {
 function checkChainId(id: number, original: string | number): number {
   if (!Number.isSafeInteger(id) || id <= 0) {
     throw new Error(
-      `Invalid chainid ${describeValue(original)}: expected a positive integer.`,
+      `Invalid chainid ${describeValue(original)}: expected a positive integer up to ${Number.MAX_SAFE_INTEGER}.`,
     );
   }
   return id;
@@ -104,6 +104,13 @@ export function resolveChainId(chain?: string | number | null): number {
   const trimmed = chain.trim();
   if (/^\d+$/.test(trimmed) || /^0x[0-9a-f]+$/i.test(trimmed)) {
     return checkChainId(Number(trimmed), chain);
+  }
+  // A number in another notation ('1e3', '1_000', '1.0', '-1') is a malformed
+  // chainid, not an unknown chain name.
+  if (/^[+-]?[\d_]*\.?\d[\d_]*(e[+-]?\d+)?$/i.test(trimmed)) {
+    throw new Error(
+      `Invalid chainid ${describeValue(chain)}: expected decimal digits or 0x hex, e.g. '137' or '0x89'.`,
+    );
   }
 
   // Own-property checks only: a plain lookup would resolve inherited names such
