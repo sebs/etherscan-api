@@ -1,7 +1,7 @@
 import { describe, it, before, after, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
-import { init, httpTransport } from '../lib/index.js';
+import { init, httpTransport, EtherscanHttpError } from '../lib/index.js';
 
 // Exercises the real built-in node:https/node:http transport against a local
 // server — no third-party HTTP mocking, no external network.
@@ -19,7 +19,7 @@ describe('http transport', function () {
         res.end('not json');
       } else if (req.url.startsWith('/403-json')) {
         // Etherscan can answer non-2xx with a normal error body.
-        res.writeHead(403, { 'content-type': 'application/json' });
+        res.writeHead(403, { 'content-type': 'application/json', 'retry-after': '5' });
         res.end(JSON.stringify({ status: '0', message: 'NOTOK', result: 'Max rate limit reached' }));
       } else if (req.url.startsWith('/500')) {
         res.writeHead(500);
@@ -192,6 +192,18 @@ describe('http transport', function () {
 
     it('surfaces the Etherscan message instead of discarding it', function () {
       assert.match(error.message, /Max rate limit reached/);
+    });
+
+    it('rejects with an EtherscanHttpError', function () {
+      assert.ok(error instanceof EtherscanHttpError);
+    });
+
+    it('exposes the status code', function () {
+      assert.equal(error.statusCode, 403);
+    });
+
+    it('exposes the response headers (e.g. Retry-After)', function () {
+      assert.equal(error.headers['retry-after'], '5');
     });
   });
 

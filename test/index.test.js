@@ -20,6 +20,10 @@ describe('index exports', function () {
     assert.equal(typeof pkg.EtherscanError, 'function');
   });
 
+  it('exposes the EtherscanHttpError class as a function', function () {
+    assert.equal(typeof pkg.EtherscanHttpError, 'function');
+  });
+
   // Exported so callers can wrap the default transport and reach the options
   // the library itself never passes (maxResponseBytes, allowInsecure).
   it('exposes httpTransport as a function', function () {

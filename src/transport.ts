@@ -1,6 +1,7 @@
 import https from 'node:https';
 import http from 'node:http';
 import type { IncomingMessage } from 'node:http';
+import { EtherscanHttpError } from './errors.js';
 import type { Transport, EtherscanResponse } from './types.js';
 
 /** Default cap on the response body size (50 MB). See `maxResponseBytes`. */
@@ -116,7 +117,13 @@ const httpTransport: Transport = function httpTransport(url, options) {
           // instead of discarding it. Only a parsed JSON object's own `result`
           // or `message` string is appended, so an HTML error page cannot echo
           // the request URL — and with it the API key — into the error.
-          fail(new Error('Request failed with status code ' + status + errorDetail(data)));
+          fail(
+            new EtherscanHttpError(
+              'Request failed with status code ' + status + errorDetail(data),
+              status,
+              res.headers,
+            ),
+          );
           return;
         }
         try {
