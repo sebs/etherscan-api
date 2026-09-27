@@ -54,6 +54,23 @@ export async function verification(): Promise<void> {
   await api.contract.verifysourcecode({ contractaddress: '0xa', sourceCode: 's', contractname: 'C' });
 }
 
+export async function identifyingArguments(): Promise<void> {
+  await api.account.txlist('0xa');
+  await api.account.txlist(undefined, 0, 'latest', 1, 10, 'asc', { from: '0xa' });
+  await api.stats.tokensupply(null, '0xc');
+
+  // @ts-expect-error — txlist needs an address (or the filter form).
+  await api.account.txlist();
+
+  // @ts-expect-error — the filter form needs the filter.
+  await api.account.txlist(undefined, 0, 'latest', 1, 10, 'asc');
+
+  await api.stats.tokensupply('DGD');
+
+  // @ts-expect-error — tokensupply needs a contract address or a token name.
+  await api.stats.tokensupply();
+}
+
 export async function tokenbalance(): Promise<void> {
   await api.account.tokenbalance('0xa', '', '0xc');
 

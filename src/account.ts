@@ -194,6 +194,62 @@ export function account(getRequest: GetRequest) {
     return call<string | MultiBalanceItem[]>(action, { tag: 'latest', address: addr });
   }
 
+  /**
+   * Get a list of transactions for a specific address.
+   * @param address - Account address
+   * @param startblock - Start block
+   * @param endblock - End block
+   * @param page - Page number
+   * @param offset - Max records to return
+   * @param sort - Sort asc/desc
+   * @param filter - Optional advanced filter (Beta): filter by `from`/`to` as well
+   * @example
+   * api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 1, 'latest', 1, 100, 'asc');
+   */
+  function txlist(
+    address: string,
+    startblock?: string | number,
+    endblock?: string | number,
+    page?: number,
+    offset?: number,
+    sort?: SortOrder,
+    filter?: AdvancedFilter,
+  ): Promise<EtherscanResponse<NormalTransaction[]>>;
+  /**
+   * Get a list of transactions matching an advanced filter (Beta) instead of an address.
+   * @param filter - Filter by `from` and/or `to`
+   */
+  function txlist(
+    address: undefined,
+    startblock: string | number | undefined,
+    endblock: string | number | undefined,
+    page: number | undefined,
+    offset: number | undefined,
+    sort: SortOrder | undefined,
+    filter: AdvancedFilter,
+  ): Promise<EtherscanResponse<NormalTransaction[]>>;
+  async function txlist(
+    address?: string,
+    startblock?: string | number,
+    endblock?: string | number,
+    page?: number,
+    offset?: number,
+    sort?: SortOrder,
+    filter?: AdvancedFilter,
+  ): Promise<EtherscanResponse<NormalTransaction[]>> {
+    // Without an address or a from/to filter, the request can only fail at Etherscan.
+    if (!address && !filter?.from && !filter?.to) {
+      throw new Error('txlist() needs an address or an advanced filter with from/to');
+    }
+    const params: QueryParams = {};
+    listRange(params, startblock, endblock, page, offset, sort);
+    if (address) {
+      params.address = address;
+    }
+    applyFilter(params, filter);
+    return emptyAsList(call<NormalTransaction[]>('txlist', params));
+  }
+
   return {
     balance,
 
@@ -274,35 +330,7 @@ export function account(getRequest: GetRequest) {
       return emptyAsList(call<InternalTransaction[]>('txlistinternal', params));
     },
 
-    /**
-     * Get a list of transactions for a specific address.
-     * @param address - Account address (optional when filtering with `filter`)
-     * @param startblock - Start block
-     * @param endblock - End block
-     * @param page - Page number
-     * @param offset - Max records to return
-     * @param sort - Sort asc/desc
-     * @param filter - Optional advanced filter (Beta): filter by `from`/`to` instead of `address`
-     * @example
-     * api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 1, 'latest', 1, 100, 'asc');
-     */
-    async txlist(
-      address?: string,
-      startblock?: string | number,
-      endblock?: string | number,
-      page?: number,
-      offset?: number,
-      sort?: SortOrder,
-      filter?: AdvancedFilter,
-    ): Promise<EtherscanResponse<NormalTransaction[]>> {
-      const params: QueryParams = {};
-      listRange(params, startblock, endblock, page, offset, sort);
-      if (address) {
-        params.address = address;
-      }
-      applyFilter(params, filter);
-      return emptyAsList(call<NormalTransaction[]>('txlist', params));
-    },
+    txlist,
 
     /**
      * Get a list of blocks that a specific account has mined.

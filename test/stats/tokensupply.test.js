@@ -77,4 +77,10 @@ describe('stats.tokensupply', function () {
       assert.equal(queryOf(transport).get('apikey'), 'KEY');
     });
   });
+
+  it('rejects a call with neither a contract address nor a token name, without calling the API', async function () {
+    const mocked = mockApi({ status: '1', result: '1' });
+    await assert.rejects(() => mocked.api.stats.tokensupply(), /needs a token contract address or a token name/);
+    assert.equal(mocked.transport.mock.callCount(), 0);
+  });
 });

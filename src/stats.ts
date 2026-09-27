@@ -4,24 +4,36 @@ import type { EtherscanResponse } from './types.js';
 import type { EthPrice, ChainSize } from './results.js';
 
 export function stats(getRequest: GetRequest) {
+  /**
+   * Returns the supply of a token, identified by its contract address.
+   * @param tokenname - Name of the token (optional; pass `null`)
+   * @param contractaddress - Token contract address
+   * @example
+   * api.stats.tokensupply(null, '0x57d90b64a1a57749b0f932f1a3395792e12e7055');
+   */
+  function tokensupply(tokenname: string | null | undefined, contractaddress: string): Promise<EtherscanResponse<string>>;
+  /**
+   * Returns the supply of a token, identified by its name.
+   * @param tokenname - Name of the token
+   */
+  function tokensupply(tokenname: string, contractaddress?: string): Promise<EtherscanResponse<string>>;
+  async function tokensupply(tokenname?: string | null, contractaddress?: string): Promise<EtherscanResponse<string>> {
+    // With neither, the request can only fail at Etherscan.
+    if (!tokenname && !contractaddress) {
+      throw new Error('tokensupply() needs a token contract address or a token name');
+    }
+    const params: QueryParams = { module: 'stats', action: 'tokensupply' };
+    if (tokenname) {
+      params.tokenname = tokenname;
+    }
+    if (contractaddress) {
+      params.contractaddress = contractaddress;
+    }
+    return getRequest<string>(params);
+  }
+
   return {
-    /**
-     * Returns the supply of a token.
-     * @param tokenname - Name of the token
-     * @param contractaddress - Token contract address
-     * @example
-     * api.stats.tokensupply(null, '0x57d90b64a1a57749b0f932f1a3395792e12e7055');
-     */
-    tokensupply(tokenname?: string | null, contractaddress?: string): Promise<EtherscanResponse<string>> {
-      const params: QueryParams = { module: 'stats', action: 'tokensupply' };
-      if (tokenname) {
-        params.tokenname = tokenname;
-      }
-      if (contractaddress) {
-        params.contractaddress = contractaddress;
-      }
-      return getRequest<string>(params);
-    },
+    tokensupply,
 
     /** Returns the total supply of ether. */
     ethsupply(): Promise<EtherscanResponse<string>> {

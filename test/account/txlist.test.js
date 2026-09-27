@@ -109,4 +109,10 @@ describe('account.txlist', function () {
       assert.equal(queryOf(transport).get('sort'), 'desc');
     });
   });
+
+  it('rejects a call with neither an address nor a from/to filter, without calling the API', async function () {
+    const mocked = mockApi({ status: '1', result: [] });
+    await assert.rejects(() => mocked.api.account.txlist(), /needs an address or an advanced filter/);
+    assert.equal(mocked.transport.mock.callCount(), 0);
+  });
 });
