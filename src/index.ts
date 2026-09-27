@@ -24,6 +24,7 @@ export type { EtherscanErrorDetails } from './errors.js';
 export type { EtherscanApi } from './init.js';
 export type { AdvancedFilter, SortOrder } from './account.js';
 export type { VerifyParams, VerifySourceCodeParams } from './contract.js';
+export type { BlockTag } from './proxy.js';
 export type { Transport, TransportOptions, EtherscanResponse } from './types.js';
 export type {
   MultiBalanceItem,

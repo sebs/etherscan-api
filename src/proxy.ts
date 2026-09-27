@@ -1,6 +1,26 @@
 import type { GetRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 
+/** A block number/index as JSON-RPC takes it: a hex quantity or a named tag. */
+export type BlockTag = string | number;
+
+/**
+ * Convert a block number or index to a JSON-RPC quantity. JSON-RPC takes hex
+ * (`0x7b`), but every other namespace here takes decimal block numbers, so a
+ * number or an all-digit string is converted. Named tags (`'latest'`,
+ * `'pending'`, `'earliest'`) and `0x` values pass through unchanged.
+ */
+function toQuantity(value: BlockTag): string {
+  if (typeof value === 'number' || /^\d+$/.test(value)) {
+    const n = Number(value);
+    if (!Number.isSafeInteger(n) || n < 0) {
+      throw new Error(`Invalid block number or index ${String(value)}: expected a non-negative integer`);
+    }
+    return '0x' + n.toString(16);
+  }
+  return value;
+}
+
 export function proxy(getRequest: GetRequest) {
   // Bind module:'proxy' once; every method names only its action and params.
   const call = <T = unknown>(action: string, params: QueryParams = {}) =>
@@ -14,11 +34,12 @@ export function proxy(getRequest: GetRequest) {
 
     /**
      * Returns information about a block by block number.
-     * @param tag - Block number tag, e.g. `'0x10d4f'`
+     * @param tag - Block number (decimal number/string, converted to hex), a hex tag such as
+     *   `'0x10d4f'`, or `'latest'` / `'pending'` / `'earliest'`
      * @param fullTransactions - When true (default) returns full transaction objects, otherwise only hashes
      */
-    eth_getBlockByNumber(tag: string, fullTransactions = true): Promise<EtherscanResponse> {
-      return call('eth_getBlockByNumber', { tag, boolean: fullTransactions });
+    async eth_getBlockByNumber(tag: BlockTag, fullTransactions = true): Promise<EtherscanResponse> {
+      return call('eth_getBlockByNumber', { tag: toQuantity(tag), boolean: fullTransactions });
     },
 
     /**
@@ -26,16 +47,16 @@ export function proxy(getRequest: GetRequest) {
      * @param tag - Block number tag
      * @param index - Uncle index position
      */
-    eth_getUncleByBlockNumberAndIndex(tag: string, index: string): Promise<EtherscanResponse> {
-      return call('eth_getUncleByBlockNumberAndIndex', { tag, index });
+    async eth_getUncleByBlockNumberAndIndex(tag: BlockTag, index: BlockTag): Promise<EtherscanResponse> {
+      return call('eth_getUncleByBlockNumberAndIndex', { tag: toQuantity(tag), index: toQuantity(index) });
     },
 
     /**
      * Returns the number of transactions in a block matching the given block number (hex).
      * @param tag - Block number tag
      */
-    eth_getBlockTransactionCountByNumber(tag: string): Promise<EtherscanResponse<string>> {
-      return call<string>('eth_getBlockTransactionCountByNumber', { tag });
+    async eth_getBlockTransactionCountByNumber(tag: BlockTag): Promise<EtherscanResponse<string>> {
+      return call<string>('eth_getBlockTransactionCountByNumber', { tag: toQuantity(tag) });
     },
 
     /**
@@ -51,8 +72,8 @@ export function proxy(getRequest: GetRequest) {
      * @param tag - Block number tag
      * @param index - Transaction index position
      */
-    eth_getTransactionByBlockNumberAndIndex(tag: string, index: string): Promise<EtherscanResponse> {
-      return call('eth_getTransactionByBlockNumberAndIndex', { tag, index });
+    async eth_getTransactionByBlockNumberAndIndex(tag: BlockTag, index: BlockTag): Promise<EtherscanResponse> {
+      return call('eth_getTransactionByBlockNumberAndIndex', { tag: toQuantity(tag), index: toQuantity(index) });
     },
 
     /**
@@ -61,10 +82,10 @@ export function proxy(getRequest: GetRequest) {
      * @param tag - Block parameter: `'latest'`, `'pending'` (the next nonce to use) or `'earliest'`;
      *   Etherscan defaults to `'latest'` when omitted
      */
-    eth_getTransactionCount(address: string, tag?: string): Promise<EtherscanResponse<string>> {
+    async eth_getTransactionCount(address: string, tag?: BlockTag): Promise<EtherscanResponse<string>> {
       const params: QueryParams = { address };
-      if (tag) {
-        params.tag = tag;
+      if (tag !== undefined && tag !== '') {
+        params.tag = toQuantity(tag);
       }
       return call<string>('eth_getTransactionCount', params);
     },
@@ -91,8 +112,8 @@ export function proxy(getRequest: GetRequest) {
      * @param data - Hash of the method signature and encoded parameters
      * @param tag - Block number tag
      */
-    eth_call(to: string, data: string, tag: string): Promise<EtherscanResponse<string>> {
-      return call<string>('eth_call', { to, data, tag });
+    async eth_call(to: string, data: string, tag: BlockTag): Promise<EtherscanResponse<string>> {
+      return call<string>('eth_call', { to, data, tag: toQuantity(tag) });
     },
 
     /**
@@ -100,8 +121,8 @@ export function proxy(getRequest: GetRequest) {
      * @param address - Address to get code from
      * @param tag - Block number tag
      */
-    eth_getCode(address: string, tag: string): Promise<EtherscanResponse<string>> {
-      return call<string>('eth_getCode', { address, tag });
+    async eth_getCode(address: string, tag: BlockTag): Promise<EtherscanResponse<string>> {
+      return call<string>('eth_getCode', { address, tag: toQuantity(tag) });
     },
 
     /**
@@ -110,8 +131,8 @@ export function proxy(getRequest: GetRequest) {
      * @param position - Storage position
      * @param tag - Block number tag
      */
-    eth_getStorageAt(address: string, position: string, tag: string): Promise<EtherscanResponse<string>> {
-      return call<string>('eth_getStorageAt', { address, position, tag });
+    async eth_getStorageAt(address: string, position: string, tag: BlockTag): Promise<EtherscanResponse<string>> {
+      return call<string>('eth_getStorageAt', { address, position, tag: toQuantity(tag) });
     },
 
     /** Returns the current price per gas in wei (hex). */
