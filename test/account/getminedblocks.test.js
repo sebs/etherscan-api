@@ -30,4 +30,31 @@ describe('account.getminedblocks', function () {
   it('sends the requested address', function () {
     assert.equal(queryOf(transport).get('address'), ADDRESS);
   });
+
+  it('omits blocktype, page and offset when not given', function () {
+    const query = queryOf(transport);
+    assert.deepEqual([query.get('blocktype'), query.get('page'), query.get('offset')], [null, null, null]);
+  });
+
+  describe('with blocktype, page and offset', function () {
+    let query;
+
+    beforeEach(async function () {
+      const mocked = mockApi({ status: '1', result: [] });
+      await mocked.api.account.getminedblocks(ADDRESS, 'uncles', 2, 10);
+      query = queryOf(mocked.transport);
+    });
+
+    it('sends the blocktype', function () {
+      assert.equal(query.get('blocktype'), 'uncles');
+    });
+
+    it('sends the page', function () {
+      assert.equal(query.get('page'), '2');
+    });
+
+    it('sends the offset', function () {
+      assert.equal(query.get('offset'), '10');
+    });
+  });
 });

@@ -234,11 +234,29 @@ export function account(getRequest: GetRequest) {
     /**
      * Get a list of blocks that a specific account has mined.
      * @param address - Account address
+     * @param blocktype - `'blocks'` for canonical blocks or `'uncles'` for uncles (Etherscan defaults to blocks)
+     * @param page - Page number
+     * @param offset - Max records to return
      * @example
-     * api.account.getminedblocks('0x9dd134d14d1e65f84b706d6f205cd5b1cd03a46b');
+     * api.account.getminedblocks('0x9dd134d14d1e65f84b706d6f205cd5b1cd03a46b', 'uncles', 1, 10);
      */
-    getminedblocks(address: string): Promise<EtherscanResponse<MinedBlock[]>> {
-      return call<MinedBlock[]>('getminedblocks', { address });
+    getminedblocks(
+      address: string,
+      blocktype?: 'blocks' | 'uncles',
+      page?: number,
+      offset?: number,
+    ): Promise<EtherscanResponse<MinedBlock[]>> {
+      const params: QueryParams = { address };
+      if (blocktype) {
+        params.blocktype = blocktype;
+      }
+      if (page !== undefined) {
+        params.page = page;
+      }
+      if (offset !== undefined) {
+        params.offset = offset;
+      }
+      return call<MinedBlock[]>('getminedblocks', params);
     },
 
     /**
