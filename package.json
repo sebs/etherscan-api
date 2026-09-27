@@ -4,6 +4,9 @@
   "description": "API to etherscan with a simple interface (Etherscan V2, multichain)",
   "type": "module",
   "main": "./lib/index.js",
+  "files": [
+    "lib"
+  ],
   "types": "./lib/index.d.ts",
   "exports": {
     ".": {

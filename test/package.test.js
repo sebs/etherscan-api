@@ -84,3 +84,17 @@ describe('CI runs the whole suite', function () {
     });
   }
 });
+
+// A .npmignore denylist publishes every root file it does not name (a local
+// .env with an API key, say), because npm then ignores .gitignore. The
+// allowlist in "files" ships only the build output (plus the README, LICENSE
+// and package.json, which npm always includes).
+describe('package.json publishes an allowlist', function () {
+  it('limits the published files to lib/', function () {
+    assert.deepEqual(pkg.files, ['lib']);
+  });
+
+  it('has no .npmignore to fall back on', function () {
+    assert.ok(!existsSync(path.join(root, '.npmignore')));
+  });
+});
