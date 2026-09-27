@@ -38,6 +38,14 @@ export const RETIRED_CHAINS: Readonly<Record<string, string>> = Object.freeze({
 });
 
 /**
+ * Render a rejected chain value for an error message. Numbers go through
+ * String(): JSON.stringify turns NaN and Infinity into "null".
+ */
+function describeValue(value: unknown): string {
+  return typeof value === 'number' ? String(value) : JSON.stringify(value);
+}
+
+/**
  * Validate a numeric chainid. Chain ids are positive integers, so anything else
  * — NaN, Infinity, a negative, a fraction, or a value past the safe-integer
  * range — is a mistake that would otherwise travel into the query string as
@@ -46,7 +54,7 @@ export const RETIRED_CHAINS: Readonly<Record<string, string>> = Object.freeze({
 function checkChainId(id: number, original: string | number): number {
   if (!Number.isSafeInteger(id) || id <= 0) {
     throw new Error(
-      `Invalid chainid ${JSON.stringify(original)}: expected a positive integer.`,
+      `Invalid chainid ${describeValue(original)}: expected a positive integer.`,
     );
   }
   return id;
@@ -78,7 +86,7 @@ export function resolveChainId(chain?: string | number | null): number {
     // Without this the name lookup below fails with an opaque
     // "chain.toLowerCase is not a function".
     throw new Error(
-      `Invalid chain ${JSON.stringify(chain)}: expected a chain name or a numeric chainid.`,
+      `Invalid chain ${describeValue(chain)}: expected a chain name or a numeric chainid.`,
     );
   }
 

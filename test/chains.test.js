@@ -56,6 +56,12 @@ describe('chains.resolveChainId', function () {
     });
   }
 
+  for (const [input, shown] of [[NaN, 'NaN'], [Infinity, 'Infinity'], [-Infinity, '-Infinity']]) {
+    it('names ' + shown + ' in the error, not "null"', function () {
+      assert.throws(() => resolveChainId(input), new RegExp('^Error: Invalid chainid ' + shown + ':'));
+    });
+  }
+
   const INVALID_NUMERIC_STRINGS = ['0', '-1'];
   for (const input of INVALID_NUMERIC_STRINGS) {
     it('rejects the invalid numeric string ' + JSON.stringify(input), function () {
