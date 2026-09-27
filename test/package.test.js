@@ -119,3 +119,11 @@ describe('CI triggers', function () {
     assert.match(body, /^\s+pull_request:/m);
   });
 });
+
+// npm version commits, tags and (postversion) pushes. A red suite must stop it
+// before the tag exists, not after the release workflow picks the tag up.
+describe('npm version runs the tests first', function () {
+  it('preversion runs npm test', function () {
+    assert.match(pkg.scripts.preversion, /\bnpm test\b/);
+  });
+});
