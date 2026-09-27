@@ -13,17 +13,19 @@ const MAX_TIMEOUT = 2 ** 31 - 1;
 /**
  * Resolve a caller-supplied timeout: `undefined`/`null` mean the 10 s default,
  * anything else must be a positive, finite number of milliseconds within Node's
- * timer range.
+ * timer range. A numeric string (e.g. straight from `process.env`) is accepted.
  * @throws {Error} If the timeout is invalid.
  */
-export function resolveTimeout(timeout: number | undefined | null): number {
+export function resolveTimeout(timeout: number | string | undefined | null): number {
   if (timeout === undefined || timeout === null) return DEFAULT_TIMEOUT;
-  if (typeof timeout !== 'number' || !Number.isFinite(timeout) || timeout <= 0 || timeout > MAX_TIMEOUT) {
+  const ms = typeof timeout === 'string' && /^\s*\d+(\.\d+)?\s*$/.test(timeout) ? Number(timeout) : timeout;
+  if (typeof ms !== 'number' || !Number.isFinite(ms) || ms <= 0 || ms > MAX_TIMEOUT) {
+    const shown = typeof timeout === 'string' ? JSON.stringify(timeout) : String(timeout);
     throw new Error(
-      `Invalid timeout ${String(timeout)}: expected a positive number of milliseconds up to ${MAX_TIMEOUT}.`,
+      `Invalid timeout ${shown} (${typeof timeout}): expected a positive number of milliseconds up to ${MAX_TIMEOUT}.`,
     );
   }
-  return timeout;
+  return ms;
 }
 
 /** Default cap on the response body size (50 MB). See `maxResponseBytes`. */

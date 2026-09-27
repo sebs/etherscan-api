@@ -65,6 +65,17 @@ describe('index exports', function () {
     });
   }
 
+  it('init accepts a numeric-string timeout (e.g. from process.env)', async function () {
+    let options;
+    const api = pkg.init('KEY', null, '5000', async (url, o) => { options = o; return { status: '1', result: 'x' }; });
+    await api.stats.ethsupply();
+    assert.equal(options.timeout, 5000);
+  });
+
+  it('init names the type of a rejected timeout', function () {
+    assert.throws(function () { return pkg.init('KEY', null, 'soon'); }, /Invalid timeout "soon" \(string\)/);
+  });
+
   it('init defaults a null timeout', function () {
     assert.ok(pkg.init('KEY', null, null));
   });
