@@ -81,6 +81,9 @@ export interface Erc20Transfer {
   cumulativeGasUsed: string;
   input: string;
   confirmations: string;
+  methodId: string;
+  functionName: string;
+  statusRep: string;
 }
 
 /** An ERC-721 transfer event (`account.tokennfttx`). */
@@ -104,6 +107,8 @@ export interface Erc721Transfer {
   cumulativeGasUsed: string;
   input: string;
   confirmations: string;
+  methodId: string;
+  functionName: string;
 }
 
 /** An ERC-1155 transfer event (`account.token1155tx`). */
@@ -127,6 +132,8 @@ export interface Erc1155Transfer {
   tokenName: string;
   tokenSymbol: string;
   confirmations: string;
+  methodId: string;
+  functionName: string;
 }
 
 /** A block validated by an address (`account.getminedblocks`). */
@@ -205,6 +212,9 @@ export interface ContractSource {
   Proxy: string;
   Implementation: string;
   SwarmSource: string;
+  CompilerType: string;
+  ContractFileName: string;
+  SimilarMatch: string;
 }
 
 /** Contract creation info (`contract.getcontractcreation`). */
@@ -212,6 +222,10 @@ export interface ContractCreation {
   contractAddress: string;
   contractCreator: string;
   txHash: string;
+  blockNumber: string;
+  timestamp: string;
+  contractFactory: string;
+  creationBytecode: string;
 }
 
 /** Contract execution status (`transaction.getstatus`). */

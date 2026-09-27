@@ -122,6 +122,13 @@ export async function internalTransactions(): Promise<void> {
   void index; void hash;
 }
 
+export async function addedFields(): Promise<void> {
+  const fn: string | undefined = (await api.account.tokentx('0xa')).result?.[0]?.functionName;
+  const file: string | undefined = (await api.contract.getsourcecode('0xa')).result?.[0]?.ContractFileName;
+  const factory: string | undefined = (await api.contract.getcontractcreation('0xa')).result?.[0]?.contractFactory;
+  void fn; void file; void factory;
+}
+
 export async function typedResults(): Promise<void> {
   const limit: number | undefined = (await api.usage.getapilimit()).result?.creditsAvailable;
   const funder: string | undefined = (await api.account.fundedby('0xa')).result?.fundingAddress;
