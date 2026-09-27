@@ -51,4 +51,23 @@ describe('block.getblocknobytime', function () {
       assert.equal(queryOf(transport).get('closest'), 'after');
     });
   });
+
+  it('converts a Date to Unix seconds', async function () {
+    const mocked = mockApi({ status: '1', result: 'ok' });
+    await mocked.api.block.getblocknobytime(new Date(1578638524000));
+    assert.equal(queryOf(mocked.transport).get('timestamp'), '1578638524');
+  });
+
+  it('rejects a millisecond timestamp (Date.now()) without calling the API', async function () {
+    const mocked = mockApi({ status: '1', result: 'ok' });
+    await assert.rejects(() => mocked.api.block.getblocknobytime(1578638524000), /looks like milliseconds/);
+    assert.equal(mocked.transport.mock.callCount(), 0);
+  });
+
+  for (const bad of ['yesterday', -1, 1.5, new Date('nope')]) {
+    it('rejects the invalid timestamp ' + String(bad), async function () {
+      const mocked = mockApi({ status: '1', result: 'ok' });
+      await assert.rejects(() => mocked.api.block.getblocknobytime(bad), /Invalid timestamp/);
+    });
+  }
 });

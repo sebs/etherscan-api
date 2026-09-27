@@ -2,6 +2,12 @@ import type { GetRequest } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { BlockReward, BlockCountdown, BlockTransactionCount } from './results.js';
 
+/**
+ * Largest timestamp accepted as Unix *seconds* (year ~5138). Anything above is
+ * almost certainly milliseconds — `Date.now()` — which is off by 1000×.
+ */
+const MAX_UNIX_SECONDS = 1e11;
+
 export function block(getRequest: GetRequest) {
   /**
    * Find the block and uncle rewards for a block.
@@ -38,14 +44,25 @@ export function block(getRequest: GetRequest) {
 
     /**
      * Returns the block number that was mined at a certain timestamp.
-     * @param timestamp - Unix timestamp in seconds
+     * @param timestamp - Unix timestamp in seconds, or a `Date`
      * @param closest - Return the closest block `'before'` (default) or `'after'` the timestamp
      */
     getblocknobytime(
-      timestamp: string | number,
+      timestamp: string | number | Date,
       closest: 'before' | 'after' = 'before',
     ): Promise<EtherscanResponse<string>> {
-      return getRequest<string>({ module: 'block', action: 'getblocknobytime', timestamp, closest });
+      const seconds = timestamp instanceof Date ? Math.floor(timestamp.getTime() / 1000) : Number(timestamp);
+      if (!Number.isSafeInteger(seconds) || seconds < 0) {
+        return Promise.reject(new Error(`Invalid timestamp ${String(timestamp)}: expected Unix seconds or a Date`));
+      }
+      if (seconds > MAX_UNIX_SECONDS) {
+        return Promise.reject(
+          new Error(
+            `Timestamp ${seconds} looks like milliseconds; pass Unix seconds (Math.floor(ms / 1000)) or a Date`,
+          ),
+        );
+      }
+      return getRequest<string>({ module: 'block', action: 'getblocknobytime', timestamp: seconds, closest });
     },
 
     /**
