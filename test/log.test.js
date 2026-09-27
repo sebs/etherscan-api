@@ -144,4 +144,28 @@ describe('log.getLogs', function () {
       assert.equal(queryOf(transport).get('offset'), '0');
     });
   });
+
+  describe('when the topic0_3 and topic1_3 operators are supplied', function () {
+    let query;
+
+    beforeEach(async function () {
+      const mocked = mockApi({ status: '1', result: [] });
+      await mocked.api.log.getLogs(
+        ADDRESS,
+        FROM_BLOCK, TO_BLOCK,
+        TOPIC0, undefined, '0x1', undefined, undefined, undefined, '0x3', undefined,
+        undefined, undefined,
+        'and', 'or'
+      );
+      query = queryOf(mocked.transport);
+    });
+
+    it('forwards topic0_3_opr', function () {
+      assert.equal(query.get('topic0_3_opr'), 'and');
+    });
+
+    it('forwards topic1_3_opr', function () {
+      assert.equal(query.get('topic1_3_opr'), 'or');
+    });
+  });
 });
