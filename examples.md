@@ -49,20 +49,21 @@ const multi = await api.account.balance([
   '0x63a9975ba31b0b9626b34300f7f627147df1f526',
 ]);
 
-// Normal transactions — result is NormalTransaction[]
-const txs = await api.account.txlist(
-  '0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae',
-  0, 'latest', 1, 100, 'desc',
-);
+// Normal transactions — result is NormalTransaction[]. List endpoints take an
+// options object (block range, page, offset, sort, filter); all fields optional.
+const txs = await api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', {
+  page: 1,
+  offset: 100,
+  sort: 'desc',
+});
 for (const tx of txs.result ?? []) {
   console.log(tx.hash, tx.from, '→', tx.to, tx.value);
 }
 
 // ERC-20 transfers for an address (optionally filtered by token)
-const transfers = await api.account.tokentx(
-  '0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae',
-  '0x6b175474e89094c44da98b954eedeac495271d0f', // DAI
-);
+const transfers = await api.account.tokentx('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', {
+  contractaddress: '0x6b175474e89094c44da98b954eedeac495271d0f', // DAI
+});
 ```
 
 ## Stats, gas & prices
@@ -93,12 +94,12 @@ const receipt = await api.proxy.eth_getTransactionReceipt(
 ## Event logs
 
 ```ts
-const logs = await api.log.getLogs(
-  '0x33990122638b9132ca29c723bdf037f1c891a925',
-  '379224',   // fromBlock
-  '400000',   // toBlock
-  '0xf63780e752c6a54a94fc52715dbc5518a3b4c3c2833d301a204226548a2a8545', // topic0
-);
+const logs = await api.log.getLogs({
+  address: '0x33990122638b9132ca29c723bdf037f1c891a925',
+  fromBlock: 379224,
+  toBlock: 400000,
+  topic0: '0xf63780e752c6a54a94fc52715dbc5518a3b4c3c2833d301a204226548a2a8545',
+});
 ```
 
 ## Contracts

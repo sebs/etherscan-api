@@ -122,26 +122,41 @@ describe('log.getLogs', function () {
     });
   });
 
-  describe('when page and offset are zero', function () {
-    let transport;
+  // Paging follows the same rule as every list endpoint: page and offset are
+  // positive integers (Etherscan pages from 1).
+  it('rejects page 0 without calling the API', async function () {
+    const mocked = mockApi({ status: '1', result: [] });
+    await assert.rejects(() => mocked.api.log.getLogs({ address: ADDRESS, page: 0, offset: 10 }), /Invalid page 0/);
+    assert.equal(mocked.transport.mock.callCount(), 0);
+  });
+
+  describe('with a LogQuery object', function () {
+    let query;
 
     beforeEach(async function () {
-      const mocked = mockApi({ status: '1', result: 'ok' });
-      transport = mocked.transport;
-      await mocked.api.log.getLogs(
-        ADDRESS,
-        FROM_BLOCK, TO_BLOCK,
-        undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-        0, 0
+      const mocked = mockApi({ status: '1', result: [] });
+      await mocked.api.log.getLogs({
+        address: ADDRESS,
+        fromBlock: 0,
+        toBlock: TO_BLOCK,
+        topic0: TOPIC0,
+        topic3: '0x3',
+        topic0_3_opr: 'and',
+        page: 2,
+        offset: 50,
+      });
+      query = queryOf(mocked.transport);
+    });
+
+    it('sends the same fields as the positional form', function () {
+      assert.deepEqual(
+        ['address', 'fromBlock', 'toBlock', 'topic0', 'topic3', 'topic0_3_opr', 'page', 'offset'].map((k) => query.get(k)),
+        [ADDRESS, '0', TO_BLOCK, TOPIC0, '0x3', 'and', '2', '50'],
       );
     });
 
-    it('forwards page 0', function () {
-      assert.equal(queryOf(transport).get('page'), '0');
-    });
-
-    it('forwards offset 0', function () {
-      assert.equal(queryOf(transport).get('offset'), '0');
+    it('omits the fields it does not set', function () {
+      assert.equal(query.get('topic1'), null);
     });
   });
 

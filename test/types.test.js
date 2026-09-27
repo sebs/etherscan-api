@@ -79,6 +79,24 @@ export async function chainlist(): Promise<void> {
   void total; void legend; void comment;
 }
 
+export async function listOptions(): Promise<void> {
+  await api.account.txlist('0xa', { page: 1, offset: 10, sort: 'desc' });
+  await api.account.txlist(undefined, { filter: { from: '0xa' } });
+  await api.account.tokentx('0xa', { contractaddress: '0xc', startblock: 0 });
+  await api.account.txsBeaconWithdrawal('0xa', { sort: 'asc' });
+  await api.account.txlistinternal({ txhash: '0xh' });
+  await api.log.getLogs({ address: '0xa', topic0: '0x0', topic0_1_opr: 'and' });
+
+  // @ts-expect-error — sort is 'asc' | 'desc'.
+  await api.account.txlist('0xa', { sort: 'DESC' });
+
+  // @ts-expect-error — the filter-only form needs a filter.
+  await api.account.txlist(undefined, { page: 1 });
+
+  // @ts-expect-error — topic operators are 'and' | 'or'.
+  await api.log.getLogs({ topic0_1_opr: 'xor' });
+}
+
 export async function tokenbalance(): Promise<void> {
   await api.account.tokenbalance('0xa', '', '0xc');
 

@@ -1,9 +1,16 @@
 import { compact } from './params.js';
 import type { RequestContext } from './get-request.js';
 import { EtherscanArgumentError } from './errors.js';
-import { checkAddressCount, checkPaging, checkSort } from './validation.js';
+import { blockRange, filterParams, fromPositional, isOptions, listParams, pagingParams } from './list-params.js';
+import type {
+  AdvancedFilter,
+  FilteredListOptions,
+  ListOptions,
+  PositionalFilteredList,
+  PositionalList,
+} from './list-params.js';
+import { checkAddressCount, checkSort } from './validation.js';
 import type { SortOrder } from './validation.js';
-import type { QueryParams } from './params.js';
 import type { EtherscanResponse } from './types.js';
 import type {
   MultiBalanceItem,
@@ -15,47 +22,39 @@ import type {
   MinedBlock,
 } from './results.js';
 
-/**
- * Advanced-filter fields (Beta) accepted by the transaction-list endpoints.
- * Filter by sender and/or recipient instead of a single `address`. Provide
- * `from`, `to`, or both; `fromto_opr` chooses whether both must match
- * (`'and'`) or either (`'or'`).
- * @see https://docs.etherscan.io/api-reference/endpoint/advanced-filter-txlist
- */
-export interface AdvancedFilter {
-  /** Sender address to filter by. */
-  from?: string;
-  /** Recipient address to filter by. */
-  to?: string;
-  /** Operator between `from` and `to`: `'and'` (both match) or `'or'` (either). */
-  fromto_opr?: 'and' | 'or';
+/** Options for the token-transfer lists: {@link FilteredListOptions} plus the token contract. */
+export interface TokenTransferOptions extends FilteredListOptions {
+  /** Token contract address; omit for all tokens. */
+  contractaddress?: string;
 }
 
-/** Copy the defined advanced-filter fields onto a params object. */
-function applyFilter(params: QueryParams, filter?: AdvancedFilter): void {
-  if (!filter) return;
-  Object.assign(params, compact({ from: filter.from, to: filter.to, fromto_opr: filter.fromto_opr }));
+/** Query for `txlistinternal`: one transaction's internal transactions, or an address's. */
+export interface InternalTxQuery extends FilteredListOptions {
+  /** Transaction hash. When given, `address` and the block range are ignored. */
+  txhash?: string;
+  /** Account address. */
+  address?: string;
 }
 
 /**
- * Apply the shared start/end block, paging and sort defaults to a params object
- * (the block repeated by the paged list endpoints), validating paging and sort.
- * @throws {Error} For an invalid sort or paging combination.
+ * A token-transfer list method (`tokentx`, `tokennfttx`, `token1155tx`):
+ * `(address, options?)`, where `address` may be `undefined` when
+ * `options.filter` selects by sender/recipient instead.
  */
-function listRange(
-  params: QueryParams,
-  startblock?: string | number,
-  endblock?: string | number,
-  page?: number,
-  offset?: number,
-  sort?: SortOrder,
-): void {
-  params.startblock = startblock ?? 0;
-  params.endblock = endblock ?? 'latest';
-  params.page = page ?? 1;
-  params.offset = offset ?? 100;
-  checkPaging(params.page, params.offset);
-  params.sort = checkSort(sort);
+export interface TokenTransferList<T> {
+  (address: string | undefined, options?: TokenTransferOptions): Promise<EtherscanResponse<T[]>>;
+  /** @deprecated Pass the list arguments as a {@link TokenTransferOptions} object. */
+  (address: string | undefined, contractaddress?: string, ...list: PositionalFilteredList): Promise<EtherscanResponse<T[]>>;
+}
+
+/**
+ * An address-scoped paged list method (`txsBeaconWithdrawal`, `getdeposittxs`,
+ * `getwithdrawaltxs`): `(address, options?)`.
+ */
+export interface AddressList<T> {
+  (address: string, options?: ListOptions): Promise<EtherscanResponse<T[]>>;
+  /** @deprecated Pass the list arguments as a {@link ListOptions} object. */
+  (address: string, ...list: PositionalList): Promise<EtherscanResponse<T[]>>;
 }
 
 /** Etherscan's `balancemulti` accepts at most 20 addresses per call. */
@@ -64,43 +63,25 @@ const MAX_BALANCEMULTI = 20;
 export function account(ctx: RequestContext) {
   const { call, list } = ctx.module('account');
 
-  // Shared body for the ERC-20/721/1155 token-transfer endpoints, which differ
-  // only by action string and result type. Kept private; the public methods
-  // below preserve their own signatures, JSDoc and result generics.
-  // async: a validation error from listRange becomes a rejection, not a throw.
-  async function tokenTransfers<T>(
-    action: string,
-    address?: string,
-    contractaddress?: string,
-    startblock?: string | number,
-    endblock?: string | number,
-    page?: number,
-    offset?: number,
-    sort?: SortOrder,
-    filter?: AdvancedFilter,
-  ): Promise<EtherscanResponse<T>> {
-    const params = compact({ address, contractaddress });
-    listRange(params, startblock, endblock, page, offset, sort);
-    applyFilter(params, filter);
-    return list<T>(action, params);
-  }
+  // One body for the ERC-20/721/1155 token-transfer lists, which differ only
+  // by action and result type.
+  const tokenTransfers = <T>(action: string): TokenTransferList<T> =>
+    (async (address?: string, ...args: [TokenTransferOptions?] | [string?, ...PositionalFilteredList]) => {
+      const [first] = args;
+      const options: TokenTransferOptions = isOptions<TokenTransferOptions>(first)
+        ? first
+        : { contractaddress: first, ...fromPositional(args.slice(1) as PositionalFilteredList) };
+      return list<T[]>(action, { ...compact({ address, contractaddress: options.contractaddress }), ...listParams(options) });
+    }) as TokenTransferList<T>;
 
-  // Shared body for the address-scoped paged list endpoints (beacon withdrawals
-  // and the L2 deposit/withdrawal lists), which differ only by action string.
-  const pagedByAddress =
-    (action: string) =>
-    async (
-      address: string,
-      startblock?: string | number,
-      endblock?: string | number,
-      page?: number,
-      offset?: number,
-      sort?: SortOrder,
-    ): Promise<EtherscanResponse> => {
-      const params: QueryParams = { address };
-      listRange(params, startblock, endblock, page, offset, sort);
-      return list(action, params);
-    };
+  // One body for the address-scoped paged lists (beacon withdrawals and the
+  // L2 deposit/withdrawal lists), which differ only by action.
+  const addressList = <T>(action: string): AddressList<T> =>
+    (async (address: string, ...args: [ListOptions?] | PositionalList) => {
+      const [first] = args;
+      const options = isOptions<ListOptions>(first) ? first : fromPositional(args as PositionalList);
+      return list<T[]>(action, { address, ...listParams(options) });
+    }) as AddressList<T>;
 
   // Overloads: the public docs are on `balance` in the returned object below,
   // which is where TypeDoc reads them.
@@ -134,16 +115,15 @@ export function account(ctx: RequestContext) {
 
   // Overloads: the public docs are on `txlist` in the returned object below.
   /** Transactions of an address. */
-  function txlist(
-    address: string,
-    startblock?: string | number,
-    endblock?: string | number,
-    page?: number,
-    offset?: number,
-    sort?: SortOrder,
-    filter?: AdvancedFilter,
-  ): Promise<EtherscanResponse<NormalTransaction[]>>;
+  function txlist(address: string, options?: FilteredListOptions): Promise<EtherscanResponse<NormalTransaction[]>>;
   /** Transactions matching an advanced filter (Beta) instead of an address. */
+  function txlist(
+    address: undefined,
+    options: FilteredListOptions & { filter: AdvancedFilter },
+  ): Promise<EtherscanResponse<NormalTransaction[]>>;
+  /** @deprecated Pass the list arguments as a {@link FilteredListOptions} object. */
+  function txlist(address: string, ...list: PositionalFilteredList): Promise<EtherscanResponse<NormalTransaction[]>>;
+  /** @deprecated Pass the list arguments as a {@link FilteredListOptions} object. */
   function txlist(
     address: undefined,
     startblock: string | number | undefined,
@@ -155,21 +135,54 @@ export function account(ctx: RequestContext) {
   ): Promise<EtherscanResponse<NormalTransaction[]>>;
   async function txlist(
     address?: string,
-    startblock?: string | number,
-    endblock?: string | number,
-    page?: number,
-    offset?: number,
-    sort?: SortOrder,
-    filter?: AdvancedFilter,
+    ...args: [FilteredListOptions?] | PositionalFilteredList
   ): Promise<EtherscanResponse<NormalTransaction[]>> {
+    const [first] = args;
+    const options = isOptions<FilteredListOptions>(first) ? first : fromPositional(args as PositionalFilteredList);
     // Without an address or a from/to filter, the request can only fail at Etherscan.
-    if (!address && !filter?.from && !filter?.to) {
+    if (!address && !options.filter?.from && !options.filter?.to) {
       throw new EtherscanArgumentError('txlist() needs an address or an advanced filter with from/to', 'address');
     }
-    const params = compact({ address });
-    listRange(params, startblock, endblock, page, offset, sort);
-    applyFilter(params, filter);
-    return list<NormalTransaction[]>('txlist', params);
+    return list<NormalTransaction[]>('txlist', { ...compact({ address }), ...listParams(options) });
+  }
+
+  // Overloads: the public docs are on `txlistinternal` in the returned object below.
+  /** Internal transactions of one transaction, an address, or an advanced filter. */
+  function txlistinternal(query: InternalTxQuery): Promise<EtherscanResponse<InternalTransaction[]>>;
+  /** @deprecated Pass an {@link InternalTxQuery} object. */
+  function txlistinternal(
+    txhash?: string,
+    address?: string,
+    startblock?: string | number,
+    endblock?: string | number,
+    sort?: SortOrder,
+    filter?: AdvancedFilter,
+    page?: number,
+    offset?: number,
+  ): Promise<EtherscanResponse<InternalTransaction[]>>;
+  async function txlistinternal(
+    first?: string | InternalTxQuery,
+    address?: string,
+    startblock?: string | number,
+    endblock?: string | number,
+    sort?: SortOrder,
+    filter?: AdvancedFilter,
+    page?: number,
+    offset?: number,
+  ): Promise<EtherscanResponse<InternalTransaction[]>> {
+    const query: InternalTxQuery = isOptions<InternalTxQuery>(first)
+      ? first
+      : { txhash: first, address, startblock, endblock, sort, filter, page, offset };
+    return list<InternalTransaction[]>('txlistinternal', {
+      ...compact(
+        query.txhash ? { txhash: query.txhash } : { address: query.address, ...blockRange(query.startblock, query.endblock) },
+      ),
+      // No paging defaults here, unlike the other lists: callers who never
+      // paged keep getting Etherscan's full (unpaged) result.
+      ...pagingParams(query.page, query.offset),
+      sort: checkSort(query.sort),
+      ...filterParams(query.filter),
+    });
   }
 
   return {
@@ -200,61 +213,30 @@ export function account(ctx: RequestContext) {
     },
 
     /**
-     * Get a list of internal transactions.
-     * @param txhash - Transaction hash. If specified then `address` is ignored
-     * @param address - Account address
-     * @param startblock - Start block
-     * @param endblock - End block
-     * @param sort - Sort asc/desc
-     * @param filter - Optional advanced filter (Beta): filter by `from`/`to` instead of `address`
-     * @param page - Page number (sent only when given)
-     * @param offset - Max records to return (sent only when given)
+     * Get the internal transactions of one transaction (`txhash`), of an
+     * address, or matching an advanced filter (Beta). Paging is sent only when
+     * given; without it Etherscan returns the unpaged result.
+     * @param query - {@link InternalTxQuery}: `txhash`, or `address` / `filter` plus {@link ListOptions}
      * @example
-     * api.account.txlistinternal('0x40eb908387324f2b575b4879cd9d7188f69c8fc9d87c901b9e2daaea4b442170');
+     * api.account.txlistinternal({ txhash: '0x40eb908387324f2b575b4879cd9d7188f69c8fc9d87c901b9e2daaea4b442170' });
+     * api.account.txlistinternal({ address: '0x2c1ba59d6f58433fb1eaee7d20b26ed83bda51a3', page: 1, offset: 50 });
      */
-    async txlistinternal(
-      txhash?: string,
-      address?: string,
-      startblock?: string | number,
-      endblock?: string | number,
-      sort?: SortOrder,
-      filter?: AdvancedFilter,
-      page?: number,
-      offset?: number,
-    ): Promise<EtherscanResponse<InternalTransaction[]>> {
-      // No paging defaults here, unlike listRange: callers who never paged
-      // keep getting Etherscan's full (unpaged) result. What is given is
-      // still validated.
-      if (page !== undefined || offset !== undefined) {
-        checkPaging(page ?? 1, offset ?? 1);
-      }
-      const params = compact({
-        sort: checkSort(sort),
-        ...(txhash ? { txhash } : { address, startblock: startblock ?? 0, endblock: endblock ?? 'latest' }),
-        page,
-        offset,
-      });
-      applyFilter(params, filter);
-      return list<InternalTransaction[]>('txlistinternal', params);
-    },
+    txlistinternal,
 
     /**
      * Get a list of normal transactions for an address, or for an advanced
      * filter (Beta) on `from`/`to` when `address` is `undefined`.
-     * @param address - Account address (`undefined` when filtering with `filter`)
-     * @param startblock - Start block
-     * @param endblock - End block
-     * @param page - Page number
-     * @param offset - Max records to return
-     * @param sort - Sort asc/desc
-     * @param filter - Optional advanced filter (Beta) by `from`/`to`; required without an address
+     * @param address - Account address (`undefined` when filtering with `options.filter`)
+     * @param options - {@link FilteredListOptions}: block range, paging, sort and filter
      * @example
-     * api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 1, 'latest', 1, 100, 'asc');
+     * api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', { page: 1, offset: 100, sort: 'desc' });
+     * api.account.txlist(undefined, { filter: { from: '0xde0b…', to: '0x63a9…', fromto_opr: 'and' } });
      */
     txlist,
 
     /**
-     * Get a list of blocks that a specific account has mined.
+     * Get a list of blocks that a specific account has mined. Paging is sent
+     * only when given.
      * @param address - Account address
      * @param blocktype - `'blocks'` for canonical blocks or `'uncles'` for uncles (Etherscan defaults to blocks)
      * @param page - Page number
@@ -262,119 +244,61 @@ export function account(ctx: RequestContext) {
      * @example
      * api.account.getminedblocks('0x9dd134d14d1e65f84b706d6f205cd5b1cd03a46b', 'uncles', 1, 10);
      */
-    getminedblocks(
+    async getminedblocks(
       address: string,
       blocktype?: 'blocks' | 'uncles',
       page?: number,
       offset?: number,
     ): Promise<EtherscanResponse<MinedBlock[]>> {
-      return list<MinedBlock[]>('getminedblocks', compact({ address, blocktype, page, offset }));
+      return list<MinedBlock[]>('getminedblocks', {
+        ...compact({ address, blocktype }),
+        ...pagingParams(page, offset, { window: false }),
+      });
     },
 
     /**
      * Get a list of "ERC20 - Token Transfer Events" by address.
-     * @param address - Account address (optional when filtering with `filter`)
-     * @param contractaddress - ERC20 token contract address (omit for all tokens)
-     * @param startblock - Start block
-     * @param endblock - End block
-     * @param page - Page number
-     * @param offset - Max records to return
-     * @param sort - Sort asc/desc
-     * @param filter - Optional advanced filter (Beta): filter by `from`/`to` instead of `address`
+     * @param address - Account address (`undefined` when filtering with `options.filter`)
+     * @param options - {@link TokenTransferOptions}: token contract, block range, paging, sort and filter
+     * @example
+     * api.account.tokentx('0xde0b…', { contractaddress: '0x6b175474e89094c44da98b954eedeac495271d0f' });
      */
-    tokentx(
-      address?: string,
-      contractaddress?: string,
-      startblock?: string | number,
-      endblock?: string | number,
-      page?: number,
-      offset?: number,
-      sort?: SortOrder,
-      filter?: AdvancedFilter,
-    ): Promise<EtherscanResponse<Erc20Transfer[]>> {
-      return tokenTransfers<Erc20Transfer[]>('tokentx', address, contractaddress, startblock, endblock, page, offset, sort, filter);
-    },
+    tokentx: tokenTransfers<Erc20Transfer>('tokentx'),
 
     /**
      * Get a list of "ERC721 - Token Transfer Events" by address.
-     * @param address - Account address (optional when filtering with `filter`)
-     * @param contractaddress - ERC721 token contract address (omit for all tokens)
-     * @param startblock - Start block
-     * @param endblock - End block
-     * @param page - Page number
-     * @param offset - Max records to return
-     * @param sort - Sort asc/desc
-     * @param filter - Optional advanced filter (Beta): filter by `from`/`to` instead of `address`
+     * @param address - Account address (`undefined` when filtering with `options.filter`)
+     * @param options - {@link TokenTransferOptions}: token contract, block range, paging, sort and filter
      */
-    tokennfttx(
-      address?: string,
-      contractaddress?: string,
-      startblock?: string | number,
-      endblock?: string | number,
-      page?: number,
-      offset?: number,
-      sort?: SortOrder,
-      filter?: AdvancedFilter,
-    ): Promise<EtherscanResponse<Erc721Transfer[]>> {
-      return tokenTransfers<Erc721Transfer[]>('tokennfttx', address, contractaddress, startblock, endblock, page, offset, sort, filter);
-    },
+    tokennfttx: tokenTransfers<Erc721Transfer>('tokennfttx'),
 
     /**
      * Get a list of "ERC1155 - Token Transfer Events" by address.
-     * @param address - Account address (optional when filtering with `filter`)
-     * @param contractaddress - ERC1155 token contract address (omit for all tokens)
-     * @param startblock - Start block
-     * @param endblock - End block
-     * @param page - Page number
-     * @param offset - Max records to return
-     * @param sort - Sort asc/desc
-     * @param filter - Optional advanced filter (Beta): filter by `from`/`to` instead of `address`
+     * @param address - Account address (`undefined` when filtering with `options.filter`)
+     * @param options - {@link TokenTransferOptions}: token contract, block range, paging, sort and filter
      */
-    token1155tx(
-      address?: string,
-      contractaddress?: string,
-      startblock?: string | number,
-      endblock?: string | number,
-      page?: number,
-      offset?: number,
-      sort?: SortOrder,
-      filter?: AdvancedFilter,
-    ): Promise<EtherscanResponse<Erc1155Transfer[]>> {
-      return tokenTransfers<Erc1155Transfer[]>('token1155tx', address, contractaddress, startblock, endblock, page, offset, sort, filter);
-    },
+    token1155tx: tokenTransfers<Erc1155Transfer>('token1155tx'),
 
     /**
      * Get the beacon chain withdrawals made to an address.
      * @param address - Account address
-     * @param startblock - Start block
-     * @param endblock - End block
-     * @param page - Page number
-     * @param offset - Max records to return
-     * @param sort - Sort asc/desc
+     * @param options - {@link ListOptions}: block range, paging and sort
      */
-    txsBeaconWithdrawal: pagedByAddress('txsBeaconWithdrawal'),
+    txsBeaconWithdrawal: addressList<unknown>('txsBeaconWithdrawal'),
 
     /**
      * Get the list of L2 deposit transactions for an address.
      * @param address - Account address
-     * @param startblock - Start block
-     * @param endblock - End block
-     * @param page - Page number
-     * @param offset - Max records to return
-     * @param sort - Sort asc/desc
+     * @param options - {@link ListOptions}: block range, paging and sort
      */
-    getdeposittxs: pagedByAddress('getdeposittxs'),
+    getdeposittxs: addressList<unknown>('getdeposittxs'),
 
     /**
      * Get the list of L2 withdrawal transactions for an address.
      * @param address - Account address
-     * @param startblock - Start block
-     * @param endblock - End block
-     * @param page - Page number
-     * @param offset - Max records to return
-     * @param sort - Sort asc/desc
+     * @param options - {@link ListOptions}: block range, paging and sort
      */
-    getwithdrawaltxs: pagedByAddress('getwithdrawaltxs'),
+    getwithdrawaltxs: addressList<unknown>('getwithdrawaltxs'),
 
     /**
      * Returns the address that first funded a given address.
@@ -388,11 +312,11 @@ export function account(ctx: RequestContext) {
      * Get the list of Plasma bridge deposit transactions received by an address
      * (Polygon, Gnosis and BitTorrent Chain).
      * @param address - Account address
-     * @param page - Page number
-     * @param offset - Max records to return
+     * @param page - Page number (default 1)
+     * @param offset - Max records to return (default 100)
      */
-    txnbridge(address: string, page?: number, offset?: number): Promise<EtherscanResponse> {
-      return list('txnbridge', { address, page: page ?? 1, offset: offset ?? 100 });
+    async txnbridge(address: string, page?: number, offset?: number): Promise<EtherscanResponse<unknown[]>> {
+      return list('txnbridge', { address, ...pagingParams(page, offset, { defaults: true, window: false }) });
     },
   };
 }

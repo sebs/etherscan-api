@@ -122,16 +122,17 @@ const MAX_RESULT_WINDOW = 10000;
 
 /**
  * Validate paging against Etherscan's rules: `page` and `offset` are positive
- * integers and `page × offset` stays within the 10 000-record result window.
+ * integers and, with `window` (the account list endpoints), `page × offset`
+ * stays within the 10 000-record result window.
  * @throws {EtherscanArgumentError} If the combination would be rejected by Etherscan.
  */
-export function checkPaging(page: number, offset: number): void {
+export function checkPaging(page: number, offset: number, window = true): void {
   for (const [name, value] of [['page', page], ['offset', offset]] as const) {
     if (!Number.isSafeInteger(value) || value < 1) {
       throw invalid(name, value, 'a positive integer');
     }
   }
-  if (page * offset > MAX_RESULT_WINDOW) {
+  if (window && page * offset > MAX_RESULT_WINDOW) {
     throw new EtherscanArgumentError(
       `page × offset (${page} × ${offset}) exceeds Etherscan's ${MAX_RESULT_WINDOW}-record result window`,
       'offset',

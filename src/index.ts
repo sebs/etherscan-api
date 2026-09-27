@@ -22,7 +22,15 @@ export { default as httpTransport } from './transport.js';
 export { EtherscanError, EtherscanHttpError, EtherscanArgumentError } from './errors.js';
 export type { EtherscanErrorDetails } from './errors.js';
 export type { EtherscanApi } from './init.js';
-export type { AdvancedFilter } from './account.js';
+export type {
+  AdvancedFilter,
+  ListOptions,
+  FilteredListOptions,
+  PositionalList,
+  PositionalFilteredList,
+} from './list-params.js';
+export type { TokenTransferOptions, InternalTxQuery, TokenTransferList, AddressList } from './account.js';
+export type { LogQuery, PositionalLogArgs, TopicOperator } from './log.js';
 export type { SortOrder } from './validation.js';
 export type { VerifyParams, VerifySourceCodeParams } from './contract.js';
 export type { BlockTag } from './proxy.js';
