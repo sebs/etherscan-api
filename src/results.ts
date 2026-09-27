@@ -36,11 +36,16 @@ export interface NormalTransaction {
   functionName: string;
 }
 
-/** An internal transaction (`account.txlistinternal`). */
+/**
+ * An internal transaction (`account.txlistinternal`). Looked up by `txhash`,
+ * the items omit `hash` (it is the one you passed) and `traceId`.
+ */
 export interface InternalTransaction {
   blockNumber: string;
   timeStamp: string;
-  hash: string;
+  /** Absent when looked up by `txhash`. */
+  hash?: string;
+  transactionIndex: string;
   from: string;
   to: string;
   value: string;
@@ -49,7 +54,8 @@ export interface InternalTransaction {
   type: string;
   gas: string;
   gasUsed: string;
-  traceId: string;
+  /** Absent when looked up by `txhash`. */
+  traceId?: string;
   isError: string;
   errCode: string;
 }

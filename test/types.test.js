@@ -113,6 +113,15 @@ export async function statsResults(): Promise<void> {
   void burnt; void nodes; void wrong;
 }
 
+export async function internalTransactions(): Promise<void> {
+  const [tx] = (await api.account.txlistinternal({ txhash: '0xh' })).result ?? [];
+  const index: string | undefined = tx?.transactionIndex;
+
+  // @ts-expect-error — hash is absent in the txhash form, so it may be undefined.
+  const hash: string = tx!.hash;
+  void index; void hash;
+}
+
 export async function typedResults(): Promise<void> {
   const limit: number | undefined = (await api.usage.getapilimit()).result?.creditsAvailable;
   const funder: string | undefined = (await api.account.fundedby('0xa')).result?.fundingAddress;
