@@ -1,4 +1,4 @@
-import httpTransport from './transport.js';
+import httpTransport, { resolveTimeout } from './transport.js';
 import { account } from './account.js';
 import { block } from './block.js';
 import { contract } from './contract.js';
@@ -33,14 +33,14 @@ export interface EtherscanApi {
  *
  * @param apiKey - Your Etherscan API key (works across all chains in V2). Required.
  * @param chain - Chain name (e.g. `'sepolia'`, `'arbitrum'`) or numeric chainid; defaults to Ethereum mainnet
- * @param timeout - Request timeout in milliseconds (default 10000)
+ * @param timeout - Request timeout in milliseconds (default 10000); must be positive and finite
  * @param request - Custom HTTP transport; defaults to a built-in `node:https`/`node:http` request
- * @throws {Error} If `apiKey` is missing or empty.
+ * @throws {Error} If `apiKey` is missing or empty, or `timeout` is invalid.
  */
 export function init(
   apiKey?: string,
   chain?: string | number | null,
-  timeout?: number,
+  timeout?: number | null,
   request?: Transport,
 ): EtherscanApi {
   // Fail here rather than per request: a placeholder key only turns an unset
@@ -49,7 +49,7 @@ export function init(
     throw new Error('An Etherscan API key is required: init(apiKey, chain?, timeout?, request?)');
   }
   const key = apiKey;
-  const t = timeout || 10000;
+  const t = resolveTimeout(timeout);
   const chainid = resolveChainId(chain);
   const doRequest: Transport = request || httpTransport;
 

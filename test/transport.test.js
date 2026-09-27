@@ -120,6 +120,15 @@ describe('http transport', function () {
     assert.ok(Date.now() - started < 1000, 'the timeout must bound the whole request, not just idle time');
   });
 
+  for (const timeout of [-5, Infinity, 0]) {
+    it('rejects the invalid timeout ' + String(timeout) + ' with a library error', async function () {
+      await assert.rejects(
+        () => httpTransport(base + '/ok', { timeout, allowInsecure: true }),
+        (err) => /^Invalid timeout/.test(err.message) && err.code === undefined,
+      );
+    });
+  }
+
   it('refuses cleartext http:// by default (no allowInsecure)', async function () {
     await assert.rejects(() => httpTransport(base + '/ok'), /cleartext/i);
   });

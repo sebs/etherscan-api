@@ -59,6 +59,16 @@ describe('index exports', function () {
     assert.throws(function () { return pkg.pickChainUrl(); }, /removed in v11/);
   });
 
+  for (const timeout of [0, -5, NaN, Infinity, 2 ** 31]) {
+    it('init rejects the invalid timeout ' + String(timeout), function () {
+      assert.throws(function () { return pkg.init('KEY', null, timeout); }, /Invalid timeout/);
+    });
+  }
+
+  it('init defaults a null timeout', function () {
+    assert.ok(pkg.init('KEY', null, null));
+  });
+
   it('init throws for a retired chain', function () {
     assert.throws(function () { return pkg.init('KEY', 'goerli'); }, /no longer supported/);
   });

@@ -4,6 +4,28 @@ import type { IncomingMessage } from 'node:http';
 import { EtherscanHttpError } from './errors.js';
 import type { Transport, EtherscanResponse } from './types.js';
 
+/** Default request timeout in milliseconds. */
+const DEFAULT_TIMEOUT = 10000;
+
+/** Node's timers cap at 2^31-1 ms; anything larger fires after 1 ms instead. */
+const MAX_TIMEOUT = 2 ** 31 - 1;
+
+/**
+ * Resolve a caller-supplied timeout: `undefined`/`null` mean the 10 s default,
+ * anything else must be a positive, finite number of milliseconds within Node's
+ * timer range.
+ * @throws {Error} If the timeout is invalid.
+ */
+export function resolveTimeout(timeout: number | undefined | null): number {
+  if (timeout === undefined || timeout === null) return DEFAULT_TIMEOUT;
+  if (typeof timeout !== 'number' || !Number.isFinite(timeout) || timeout <= 0 || timeout > MAX_TIMEOUT) {
+    throw new Error(
+      `Invalid timeout ${String(timeout)}: expected a positive number of milliseconds up to ${MAX_TIMEOUT}.`,
+    );
+  }
+  return timeout;
+}
+
 /** Default cap on the response body size (50 MB). See `maxResponseBytes`. */
 const DEFAULT_MAX_RESPONSE_BYTES = 50 * 1024 * 1024;
 
@@ -33,7 +55,12 @@ function errorDetail(body: string): string {
 }
 
 const httpTransport: Transport = function httpTransport(url, options) {
-  const timeout = (options && options.timeout) || 10000;
+  let timeout: number;
+  try {
+    timeout = resolveTimeout(options && options.timeout);
+  } catch (err) {
+    return Promise.reject(err);
+  }
   const method = (options && options.method) || 'GET';
   const body = options && options.body;
   const maxResponseBytes = (options && options.maxResponseBytes) || DEFAULT_MAX_RESPONSE_BYTES;
