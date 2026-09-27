@@ -1,6 +1,6 @@
 import type { RequestContext } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
-import type { ChainListResponse } from './results.js';
+import type { ApiLimit, ChainListResponse } from './results.js';
 
 export function usage(ctx: RequestContext) {
   const { call } = ctx.module('getapilimit');
@@ -10,8 +10,8 @@ export function usage(ctx: RequestContext) {
      * Returns the amount of API calls used and the daily limit for your API key.
      * (module `getapilimit`)
      */
-    getapilimit(): Promise<EtherscanResponse> {
-      return call('getapilimit');
+    getapilimit(): Promise<EtherscanResponse<ApiLimit>> {
+      return call<ApiLimit>('getapilimit');
     },
 
     /**

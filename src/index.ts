@@ -1,23 +1,5 @@
-import { init } from './init.js';
-import { resolveChainId } from './chains.js';
-
-/**
- * Removed in v11. The Etherscan V2 API uses a single base URL and selects the
- * network with a `chainid` parameter, so there is no longer a per-chain URL to
- * pick. Pass a chain name or numeric chainid to {@link init}, or call
- * {@link resolveChainId} if you need the id directly.
- *
- * @throws {Error} Always — this export only exists to point upgraders at the replacement.
- */
-export function pickChainUrl(): never {
-  throw new Error(
-    'pickChainUrl was removed in v11: Etherscan V2 uses one base URL with a ' +
-      'chainid parameter. Pass a chain name or numeric chainid to init(apiKey, chain), ' +
-      'or use resolveChainId(chain).',
-  );
-}
-
-export { init, resolveChainId };
+export { init } from './init.js';
+export { resolveChainId } from './chains.js';
 export { default as httpTransport } from './transport.js';
 export { EtherscanError, EtherscanHttpError, EtherscanArgumentError } from './errors.js';
 export type { EtherscanErrorDetails } from './errors.js';
@@ -57,5 +39,11 @@ export type {
   ChainSize,
   ChainListItem,
   ChainListResponse,
+  ApiLimit,
+  FundedBy,
+  BeaconWithdrawal,
+  L2Deposit,
+  L2Withdrawal,
+  PlasmaDeposit,
 } from './results.js';
 export { CHAINS, RETIRED_CHAINS } from './chains.js';

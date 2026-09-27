@@ -100,8 +100,8 @@ describe('index exports', function () {
     });
   }
 
-  it('pickChainUrl throws a removed-in-v11 pointer error', function () {
-    assert.throws(function () { return pkg.pickChainUrl(); }, /removed in v11/);
+  it('no longer exports the pickChainUrl stub (removed in v11)', function () {
+    assert.equal('pickChainUrl' in pkg, false);
   });
 
   for (const timeout of [0, -5, NaN, Infinity, 2 ** 31]) {

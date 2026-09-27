@@ -1,4 +1,5 @@
 import type { RequestContext } from './get-request.js';
+import type { SortOrder } from './validation.js';
 import { EtherscanArgumentError } from './errors.js';
 import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
@@ -66,7 +67,7 @@ export function stats(ctx: RequestContext) {
       enddate: string,
       clienttype: 'geth' | 'parity' = 'geth',
       syncmode: 'default' | 'archive' = 'default',
-      sort: 'asc' | 'desc' = 'asc',
+      sort: SortOrder = 'asc',
     ): Promise<EtherscanResponse<ChainSize[]>> {
       return list<ChainSize[]>('chainsize', { startdate, enddate, clienttype, syncmode, sort });
     },

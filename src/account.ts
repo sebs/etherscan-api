@@ -20,6 +20,11 @@ import type {
   Erc721Transfer,
   Erc1155Transfer,
   MinedBlock,
+  FundedBy,
+  BeaconWithdrawal,
+  L2Deposit,
+  L2Withdrawal,
+  PlasmaDeposit,
 } from './results.js';
 
 /** Options for the token-transfer lists: {@link FilteredListOptions} plus the token contract. */
@@ -284,28 +289,28 @@ export function account(ctx: RequestContext) {
      * @param address - Account address
      * @param options - {@link ListOptions}: block range, paging and sort
      */
-    txsBeaconWithdrawal: addressList<unknown>('txsBeaconWithdrawal'),
+    txsBeaconWithdrawal: addressList<BeaconWithdrawal>('txsBeaconWithdrawal'),
 
     /**
      * Get the list of L2 deposit transactions for an address.
      * @param address - Account address
      * @param options - {@link ListOptions}: block range, paging and sort
      */
-    getdeposittxs: addressList<unknown>('getdeposittxs'),
+    getdeposittxs: addressList<L2Deposit>('getdeposittxs'),
 
     /**
      * Get the list of L2 withdrawal transactions for an address.
      * @param address - Account address
      * @param options - {@link ListOptions}: block range, paging and sort
      */
-    getwithdrawaltxs: addressList<unknown>('getwithdrawaltxs'),
+    getwithdrawaltxs: addressList<L2Withdrawal>('getwithdrawaltxs'),
 
     /**
      * Returns the address that first funded a given address.
      * @param address - Account address
      */
-    fundedby(address: string): Promise<EtherscanResponse> {
-      return call('fundedby', { address });
+    fundedby(address: string): Promise<EtherscanResponse<FundedBy>> {
+      return call<FundedBy>('fundedby', { address });
     },
 
     /**
@@ -315,8 +320,8 @@ export function account(ctx: RequestContext) {
      * @param page - Page number (default 1)
      * @param offset - Max records to return (default 100)
      */
-    async txnbridge(address: string, page?: number, offset?: number): Promise<EtherscanResponse<unknown[]>> {
-      return list('txnbridge', { address, ...pagingParams(page, offset, { defaults: true, window: false }) });
+    async txnbridge(address: string, page?: number, offset?: number): Promise<EtherscanResponse<PlasmaDeposit[]>> {
+      return list<PlasmaDeposit[]>('txnbridge', { address, ...pagingParams(page, offset, { defaults: true, window: false }) });
     },
   };
 }

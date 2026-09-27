@@ -267,3 +267,109 @@ export interface ChainListResponse {
   result?: ChainListItem[];
   [key: string]: unknown;
 }
+
+// The shapes below follow Etherscan's documented example responses
+// (docs.etherscan.io/api-reference/endpoint/<action>), whose OpenAPI schemas
+// give the same string/number types.
+
+/**
+ * API credit usage (`usage.getapilimit`). Unlike most endpoints, the credit
+ * counts are JSON numbers.
+ */
+export interface ApiLimit {
+  creditsUsed: number;
+  creditsAvailable: number;
+  creditLimit: number;
+  /** e.g. `'daily'`. */
+  limitInterval: string;
+  /** Time until the interval resets, e.g. `'08:42:34'`. */
+  intervalExpiryTimespan: string;
+}
+
+/** The transaction that first funded an address (`account.fundedby`). `block` is a JSON number. */
+export interface FundedBy {
+  block: number;
+  timeStamp: string;
+  fundingAddress: string;
+  fundingTxn: string;
+  value: string;
+}
+
+/**
+ * A beacon chain withdrawal (`account.txsBeaconWithdrawal`). `amount` is in
+ * gwei. Note the lowercase `timestamp`, unlike the `timeStamp` elsewhere.
+ */
+export interface BeaconWithdrawal {
+  withdrawalIndex: string;
+  validatorIndex: string;
+  address: string;
+  amount: string;
+  blockNumber: string;
+  timestamp: string;
+}
+
+/** An L2 deposit transaction (`account.getdeposittxs`; Arbitrum and OP chains). */
+export interface L2Deposit {
+  blockNumber: string;
+  timeStamp: string;
+  blockHash: string;
+  hash: string;
+  nonce: string;
+  from: string;
+  to: string;
+  value: string;
+  gas: string;
+  gasPrice: string;
+  input: string;
+  cumulativeGasUsed: string;
+  gasUsed: string;
+  isError: string;
+  errDescription: string;
+  txreceipt_status: string;
+  queueIndex: string;
+  L1transactionhash: string;
+  L1TxOrigin: string;
+  tokenAddress: string;
+  tokenSentFrom: string;
+  tokenSentTo: string;
+  tokenValue: string;
+}
+
+/** An L2 withdrawal transaction (`account.getwithdrawaltxs`; Arbitrum and OP chains). */
+export interface L2Withdrawal {
+  blockNumber: string;
+  timeStamp: string;
+  blockHash: string;
+  hash: string;
+  nonce: string;
+  from: string;
+  to: string;
+  value: string;
+  gas: string;
+  gasPrice: string;
+  input: string;
+  cumulativeGasUsed: string;
+  gasUsed: string;
+  isError: string;
+  errDescription: string;
+  txreceipt_status: string;
+  /** The withdrawal's state, e.g. `'Waiting'`. */
+  status: string;
+  L1transactionhash: string;
+  tokenAddress: string;
+  tokenValue: string;
+}
+
+/** A Plasma bridge deposit (`account.txnbridge`; Polygon, Gnosis and BitTorrent Chain). */
+export interface PlasmaDeposit {
+  hash: string;
+  blockNumber: string;
+  timeStamp: string;
+  from: string;
+  address: string;
+  amount: string;
+  tokenName: string;
+  symbol: string;
+  contractAddress: string;
+  divisor: string;
+}

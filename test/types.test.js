@@ -104,6 +104,16 @@ export function initOptions(): void {
   init({ chain: 'sepolia' });
 }
 
+export async function typedResults(): Promise<void> {
+  const limit: number | undefined = (await api.usage.getapilimit()).result?.creditsAvailable;
+  const funder: string | undefined = (await api.account.fundedby('0xa')).result?.fundingAddress;
+  const gwei: string | undefined = (await api.account.txsBeaconWithdrawal('0xa')).result?.[0]?.amount;
+  const origin: string | undefined = (await api.account.getdeposittxs('0xa')).result?.[0]?.L1TxOrigin;
+  const state: string | undefined = (await api.account.getwithdrawaltxs('0xa')).result?.[0]?.status;
+  const symbol: string | undefined = (await api.account.txnbridge('0xa')).result?.[0]?.symbol;
+  void limit; void funder; void gwei; void origin; void state; void symbol;
+}
+
 export async function tokenbalance(): Promise<void> {
   await api.account.tokenbalance('0xa', '', '0xc');
 
