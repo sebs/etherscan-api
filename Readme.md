@@ -112,12 +112,13 @@ Supported chain names:
 | `polygon`                           | 137        |
 | `bsc`                               | 56         |
 | `avalanche`                         | 43114      |
+| `avalanche_fuji`                    | 43113      |
 
 Any other chain is reachable by passing its numeric chainid directly, e.g.
 `init('YourApiKey', 59144)` for Linea.
 
 Retired testnets (`ropsten`, `rinkeby`, `kovan`, `goerli`, `holesky`, `morden`,
-`arbitrum_rinkeby`, `avalanche_fuji`) have been removed and now **throw** an
+`arbitrum_rinkeby`) have been removed and now **throw** an
 error with a helpful message — use `sepolia` or `hoodi` instead.
 
 ## Install

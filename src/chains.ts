@@ -20,6 +20,7 @@ export const CHAINS: Record<string, number> = {
   polygon: 137,
   bsc: 56,
   avalanche: 43114,
+  avalanche_fuji: 43113,
 };
 
 /** Retired networks — recognised only so we can fail with a helpful message. */
@@ -31,7 +32,6 @@ export const RETIRED_CHAINS: Record<string, string> = {
   holesky: 'Holesky was shut down in 2025 and dropped from the Etherscan API; use Hoodi or Sepolia',
   morden: 'Morden was retired long ago; use Sepolia or Hoodi',
   arbitrum_rinkeby: 'Arbitrum Rinkeby was retired; use Arbitrum Sepolia',
-  avalanche_fuji: 'Snowtrace moved off the Etherscan API; pass a numeric chainid if you still need Fuji',
 };
 
 /**

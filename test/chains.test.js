@@ -17,6 +17,7 @@ describe('chains.resolveChainId', function () {
     ['arbitrum', 42161],
     ['base', 8453],
     ['hoodi', 560048],
+    ['avalanche_fuji', 43113],
   ];
   for (const [input, expected] of KNOWN_NAMES) {
     it('maps ' + input + ' to ' + expected, function () {
