@@ -7,8 +7,11 @@
  * @see https://docs.etherscan.io/etherscan-v2 (V1 was deprecated 2025-08-15)
  */
 
-/** Curated set of commonly requested chains → chainid. */
-export const CHAINS: Record<string, number> = {
+/**
+ * Curated set of commonly requested chains → chainid. Frozen: it is shared by
+ * every client in the process, so a mutation would silently redirect them all.
+ */
+export const CHAINS: Readonly<Record<string, number>> = Object.freeze({
   mainnet: 1,
   homestead: 1,
   ethereum: 1,
@@ -21,10 +24,10 @@ export const CHAINS: Record<string, number> = {
   bsc: 56,
   avalanche: 43114,
   avalanche_fuji: 43113,
-};
+});
 
-/** Retired networks — recognised only so we can fail with a helpful message. */
-export const RETIRED_CHAINS: Record<string, string> = {
+/** Retired networks — recognised only so we can fail with a helpful message. Frozen. */
+export const RETIRED_CHAINS: Readonly<Record<string, string>> = Object.freeze({
   ropsten: 'Ropsten was shut down in December 2022',
   rinkeby: 'Rinkeby was shut down in 2023',
   kovan: 'Kovan was shut down in 2023',
@@ -32,7 +35,7 @@ export const RETIRED_CHAINS: Record<string, string> = {
   holesky: 'Holesky was shut down in 2025 and dropped from the Etherscan API; use Hoodi or Sepolia',
   morden: 'Morden was retired long ago; use Sepolia or Hoodi',
   arbitrum_rinkeby: 'Arbitrum Rinkeby was retired; use Arbitrum Sepolia',
-};
+});
 
 /**
  * Validate a numeric chainid. Chain ids are positive integers, so anything else

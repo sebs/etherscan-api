@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { resolveChainId, CHAINS } from '../lib/chains.js';
+import { resolveChainId, CHAINS, RETIRED_CHAINS } from '../lib/chains.js';
 
 describe('chains.resolveChainId', function () {
 
@@ -101,5 +101,19 @@ describe('chains.resolveChainId', function () {
 
   it('exposes the curated map', function () {
     assert.equal(CHAINS.mainnet, 1);
+  });
+
+  // Shared by every client in the process: a mutation must not redirect them.
+  it('does not let callers remap a chain name', function () {
+    assert.throws(() => { CHAINS.mainnet = 5; }, TypeError);
+    assert.equal(resolveChainId('mainnet'), 1);
+  });
+
+  it('does not let callers add a chain name', function () {
+    assert.throws(() => { CHAINS.evil = 5; }, TypeError);
+  });
+
+  it('does not let callers un-retire a chain', function () {
+    assert.throws(() => { delete RETIRED_CHAINS.goerli; }, TypeError);
   });
 });
