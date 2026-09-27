@@ -56,7 +56,7 @@ jobs:
       # The release notes are the changelog: one line per commit since the
       # previous v* tag. GitHub's generated notes are built from merged pull
       # requests, which this repo does not use, so they would come out empty.
-      # Version-bump commits (subject "12.2.0") are left out. A stable release
+      # Version-bump commits (subject "12.2.0" or "13.0.0-beta.1") are left out. A stable release
       # is compared with the previous stable tag, skipping prereleases
       # (v13.0.0-beta.1), so it lists everything since the last stable release.
       - name: Write release notes
@@ -71,7 +71,7 @@ jobs:
             echo "## Changes"
             echo
             git log --no-merges --format='%h %s' "$range" |
-              awk '$2 !~ /^v?[0-9]+\.[0-9]+\.[0-9]+$/ { h = $1; sub(/^[^ ]+ /, ""); print "- " $0 " (" h ")" }'
+              awk '$2 !~ /^v?[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$/ { h = $1; sub(/^[^ ]+ /, ""); print "- " $0 " (" h ")" }'
             if [ -n "$prev" ]; then
               echo
               echo "**Full Changelog**: https://github.com/${GITHUB_REPOSITORY}/compare/${prev}...${GITHUB_REF_NAME}"
