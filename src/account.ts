@@ -108,7 +108,40 @@ export function account(getRequest: GetRequest) {
       return call(action, params);
     };
 
+  /**
+   * Returns the balance (wei, as a string) of a single account.
+   * @param address - Account address
+   * @example
+   * api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+   */
+  function balance(address: string): Promise<EtherscanResponse<string>>;
+  /**
+   * Returns the balances of several accounts (uses the `balancemulti` action).
+   * @param address - An array of addresses
+   * @example
+   * api.account.balance(['0xde0b…', '0x63a9…']);
+   */
+  function balance(address: string[]): Promise<EtherscanResponse<MultiBalanceItem[]>>;
+  /**
+   * Returns the balance of one account, or of several when given an array.
+   * @param address - A single address, or an array of addresses
+   */
+  function balance(address: string | string[]): Promise<EtherscanResponse<string | MultiBalanceItem[]>>;
+  function balance(address: string | string[]): Promise<EtherscanResponse<string | MultiBalanceItem[]>> {
+    let action = 'balance';
+    let addr: string;
+    if (Array.isArray(address)) {
+      addr = address.join(',');
+      action = 'balancemulti';
+    } else {
+      addr = address;
+    }
+    return call<string | MultiBalanceItem[]>(action, { tag: 'latest', address: addr });
+  }
+
   return {
+    balance,
+
     /**
      * Returns the amount of Tokens a specific account owns.
      * @param address - Account address
@@ -133,25 +166,6 @@ export function account(getRequest: GetRequest) {
         params.address = address;
       }
       return call<string>('tokenbalance', params);
-    },
-
-    /**
-     * Returns the balance of a specific account, or several accounts when given
-     * an array (uses the `balancemulti` action).
-     * @param address - A single address, or an array of addresses
-     * @example
-     * api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
-     */
-    balance(address: string | string[]): Promise<EtherscanResponse<string | MultiBalanceItem[]>> {
-      let action = 'balance';
-      let addr: string;
-      if (Array.isArray(address)) {
-        addr = address.join(',');
-        action = 'balancemulti';
-      } else {
-        addr = address;
-      }
-      return call<string | MultiBalanceItem[]>(action, { tag: 'latest', address: addr });
     },
 
     /**
