@@ -127,3 +127,11 @@ describe('npm version runs the tests first', function () {
     assert.match(pkg.scripts.preversion, /\bnpm test\b/);
   });
 });
+
+// `git push --tags` publishes every local tag, and each v* tag triggers the
+// release and docs workflows. Push only the annotated tag npm version made.
+describe('npm version pushes only its own tag', function () {
+  it('postversion does not push every local tag', function () {
+    assert.ok(!/--tags\b/.test(pkg.scripts.postversion), pkg.scripts.postversion);
+  });
+});

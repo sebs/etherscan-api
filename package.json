@@ -25,7 +25,7 @@
     "docs": "typedoc",
     "clean": "node -e \"for (const d of ['lib', 'out']) fs.rmSync(d, { recursive: true, force: true })\"",
     "preversion": "npm test",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push --follow-tags"
   },
   "keywords": [
     "arbiscan",
