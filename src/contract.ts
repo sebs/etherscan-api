@@ -46,12 +46,16 @@ export interface VerifySourceCodeParams extends VerifyParams {
 
 /** Build the form body for a verification POST, dropping undefined fields. */
 function verifyBody(action: string, params: VerifyParams): QueryParams {
-  const body: QueryParams = { module: 'contract', action };
+  const body: QueryParams = {};
   for (const [key, value] of Object.entries(params)) {
     if (value !== undefined && !isUnsafeKey(key)) {
       body[key] = value;
     }
   }
+  // Set last so a stray `module`/`action` key in the params (possible from
+  // plain JS) cannot redirect the call to another endpoint.
+  body.module = 'contract';
+  body.action = action;
   return body;
 }
 

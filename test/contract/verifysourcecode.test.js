@@ -96,4 +96,29 @@ describe('contract.verifysourcecode', function () {
       assert.equal(bodyOf(transport).get('constructorArguements'), null);
     });
   });
+
+  describe('with module/action keys smuggled into the params (plain JS)', function () {
+    let body;
+
+    beforeEach(async function () {
+      const mocked = mockApi({ status: '1', result: 'g' });
+      await mocked.api.contract.verifysourcecode({
+        contractaddress: '0xabc',
+        sourceCode: 'x',
+        contractname: 'C',
+        compilerversion: 'v0.8.24',
+        module: 'account',
+        action: 'verifyvyper',
+      });
+      body = bodyOf(mocked.transport);
+    });
+
+    it('keeps the contract module', function () {
+      assert.equal(body.get('module'), 'contract');
+    });
+
+    it('keeps the verifysourcecode action', function () {
+      assert.equal(body.get('action'), 'verifysourcecode');
+    });
+  });
 });
