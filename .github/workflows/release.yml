@@ -84,3 +84,5 @@ jobs:
         with:
           files: dist-artifacts/*.tgz
           body_path: RELEASE_NOTES.md
+          # A prerelease tag (v13.0.0-beta.1) must not become the "Latest" release.
+          prerelease: ${{ contains(github.ref_name, '-') }}

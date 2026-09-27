@@ -3,8 +3,9 @@ name: Docs
 # Builds the TypeDoc API docs and deploys them to GitHub Pages — replacing the
 # old `gh-pages` npm dependency with first-party GitHub Actions.
 #
-# Publishes on every new version tag (e.g. created by `npm version`), so the
-# docs site always reflects the latest release. Also runnable manually.
+# Publishes on every new stable version tag (e.g. created by `npm version`), so
+# the docs site always reflects the latest release. Prerelease tags
+# (v13.0.0-beta.1) are skipped. Also runnable manually.
 #
 # One-time repo setting: Settings -> Pages -> Build and deployment -> Source ->
 # "GitHub Actions".
@@ -12,6 +13,7 @@ on:
   push:
     tags:
       - 'v*'
+      - '!v*-*'
   workflow_dispatch:
 
 # Least-privilege token plus the Pages/OIDC scopes the deploy needs.
