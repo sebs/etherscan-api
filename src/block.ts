@@ -6,12 +6,8 @@ import type { BlockReward, BlockCountdown, BlockTransactionCount } from './resul
 export function block(ctx: RequestContext) {
   const { call } = ctx.module('block');
 
-  /**
-   * Find the block and uncle rewards for a block.
-   * @param blockno - Block number
-   * @example
-   * api.block.getblockreward(2165403);
-   */
+  // Overloads: the public docs are on `getblockreward` in the returned object below.
+  /** The block and uncle rewards for a block. */
   function getblockreward(blockno: string | number): Promise<EtherscanResponse<BlockReward>>;
   /**
    * @deprecated Etherscan's endpoint takes no address; call `getblockreward(blockno)`.
@@ -29,6 +25,13 @@ export function block(ctx: RequestContext) {
   }
 
   return {
+    /**
+     * Find the block and uncle rewards for a block.
+     * @param blockno - Block number (the older `(address, blockno)` form is
+     *   deprecated; its address is ignored)
+     * @example
+     * api.block.getblockreward(2165403);
+     */
     getblockreward,
 
     /**

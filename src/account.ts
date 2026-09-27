@@ -102,24 +102,13 @@ export function account(ctx: RequestContext) {
       return list(action, params);
     };
 
-  /**
-   * Returns the balance (wei, as a string) of a single account.
-   * @param address - Account address
-   * @example
-   * api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
-   */
+  // Overloads: the public docs are on `balance` in the returned object below,
+  // which is where TypeDoc reads them.
+  /** One account: the balance in wei, as a string. */
   function balance(address: string): Promise<EtherscanResponse<string>>;
-  /**
-   * Returns the balances of several accounts (uses the `balancemulti` action).
-   * @param address - An array of 1 to 20 addresses
-   * @example
-   * api.account.balance(['0xde0b…', '0x63a9…']);
-   */
+  /** 1 to 20 accounts (`balancemulti`): one `{ account, balance }` per address. */
   function balance(address: string[]): Promise<EtherscanResponse<MultiBalanceItem[]>>;
-  /**
-   * Returns the balance of one account, or of several when given an array.
-   * @param address - A single address, or an array of addresses
-   */
+  /** Either form. */
   function balance(address: string | string[]): Promise<EtherscanResponse<string | MultiBalanceItem[]>>;
   async function balance(address: string | string[]): Promise<EtherscanResponse<string | MultiBalanceItem[]>> {
     let action = 'balance';
@@ -143,18 +132,8 @@ export function account(ctx: RequestContext) {
     return call<string | MultiBalanceItem[]>(action, { tag: 'latest', address: addr });
   }
 
-  /**
-   * Get a list of transactions for a specific address.
-   * @param address - Account address
-   * @param startblock - Start block
-   * @param endblock - End block
-   * @param page - Page number
-   * @param offset - Max records to return
-   * @param sort - Sort asc/desc
-   * @param filter - Optional advanced filter (Beta): filter by `from`/`to` as well
-   * @example
-   * api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 1, 'latest', 1, 100, 'asc');
-   */
+  // Overloads: the public docs are on `txlist` in the returned object below.
+  /** Transactions of an address. */
   function txlist(
     address: string,
     startblock?: string | number,
@@ -164,10 +143,7 @@ export function account(ctx: RequestContext) {
     sort?: SortOrder,
     filter?: AdvancedFilter,
   ): Promise<EtherscanResponse<NormalTransaction[]>>;
-  /**
-   * Get a list of transactions matching an advanced filter (Beta) instead of an address.
-   * @param filter - Filter by `from` and/or `to`
-   */
+  /** Transactions matching an advanced filter (Beta) instead of an address. */
   function txlist(
     address: undefined,
     startblock: string | number | undefined,
@@ -197,6 +173,14 @@ export function account(ctx: RequestContext) {
   }
 
   return {
+    /**
+     * Returns the balance (wei, as a string) of one account, or the balances
+     * of several when given an array (the `balancemulti` action).
+     * @param address - An address, or an array of 1 to 20 addresses
+     * @example
+     * api.account.balance('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae');
+     * api.account.balance(['0xde0b…', '0x63a9…']); // → { account, balance }[]
+     */
     balance,
 
     /**
@@ -254,6 +238,19 @@ export function account(ctx: RequestContext) {
       return list<InternalTransaction[]>('txlistinternal', params);
     },
 
+    /**
+     * Get a list of normal transactions for an address, or for an advanced
+     * filter (Beta) on `from`/`to` when `address` is `undefined`.
+     * @param address - Account address (`undefined` when filtering with `filter`)
+     * @param startblock - Start block
+     * @param endblock - End block
+     * @param page - Page number
+     * @param offset - Max records to return
+     * @param sort - Sort asc/desc
+     * @param filter - Optional advanced filter (Beta) by `from`/`to`; required without an address
+     * @example
+     * api.account.txlist('0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae', 1, 'latest', 1, 100, 'asc');
+     */
     txlist,
 
     /**

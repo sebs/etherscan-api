@@ -7,18 +7,10 @@ import type { EthPrice, ChainSize } from './results.js';
 export function stats(ctx: RequestContext) {
   const { call, list } = ctx.module('stats');
 
-  /**
-   * Returns the supply of a token, identified by its contract address.
-   * @param tokenname - Name of the token (optional; pass `null`)
-   * @param contractaddress - Token contract address
-   * @example
-   * api.stats.tokensupply(null, '0x57d90b64a1a57749b0f932f1a3395792e12e7055');
-   */
+  // Overloads: the public docs are on `tokensupply` in the returned object below.
+  /** A token identified by its contract address. */
   function tokensupply(tokenname: string | null | undefined, contractaddress: string): Promise<EtherscanResponse<string>>;
-  /**
-   * Returns the supply of a token, identified by its name.
-   * @param tokenname - Name of the token
-   */
+  /** A token identified by its name. */
   function tokensupply(tokenname: string, contractaddress?: string): Promise<EtherscanResponse<string>>;
   async function tokensupply(tokenname?: string | null, contractaddress?: string): Promise<EtherscanResponse<string>> {
     // With neither, the request can only fail at Etherscan.
@@ -29,6 +21,14 @@ export function stats(ctx: RequestContext) {
   }
 
   return {
+    /**
+     * Returns the supply of a token, identified by its contract address (or,
+     * legacy, by its name).
+     * @param tokenname - Name of the token (pass `null` when using the contract address)
+     * @param contractaddress - Token contract address
+     * @example
+     * api.stats.tokensupply(null, '0x57d90b64a1a57749b0f932f1a3395792e12e7055');
+     */
     tokensupply,
 
     /** Returns the total supply of ether. */
