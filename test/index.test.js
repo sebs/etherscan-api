@@ -20,6 +20,38 @@ describe('index exports', function () {
     assert.equal(typeof pkg.EtherscanError, 'function');
   });
 
+  it('exposes the EtherscanArgumentError class as a function', function () {
+    assert.equal(typeof pkg.EtherscanArgumentError, 'function');
+  });
+
+  // Every argument check throws the same class, naming the argument, and it is
+  // an EtherscanError so one instanceof check covers every library error.
+  describe('argument errors', function () {
+    const CASES = [
+      ['chain', () => pkg.init('KEY', 'notachain')],
+      ['chainid', () => pkg.init('KEY', 0)],
+      ['timeout', () => pkg.init('KEY', null, -1)],
+      ['apiKey', () => pkg.init('')],
+      ['request', () => pkg.init('KEY', null, null, 'nope')],
+    ];
+    for (const [argument, call] of CASES) {
+      it('an invalid ' + argument + ' throws an EtherscanArgumentError naming it', function () {
+        assert.throws(call, (err) =>
+          err instanceof pkg.EtherscanArgumentError && err instanceof pkg.EtherscanError && err.argument === argument);
+      });
+    }
+
+    it('rejects a call-level argument the same way (sort)', async function () {
+      const api = pkg.init('KEY', null, null, async () => ({ status: '1', result: [] }));
+      await assert.rejects(() => api.account.txlist('0xa', 0, 'latest', 1, 10, 'DESC'), (err) =>
+        err instanceof pkg.EtherscanArgumentError && err.argument === 'sort' && err.value === 'DESC');
+    });
+
+    it('never puts a rejected API key value on the error', function () {
+      assert.throws(() => pkg.init({ secret: 'KEY' }), (err) => err.value === undefined && !/KEY/.test(err.message));
+    });
+  });
+
   it('exposes the EtherscanHttpError class as a function', function () {
     assert.equal(typeof pkg.EtherscanHttpError, 'function');
   });
@@ -85,8 +117,8 @@ describe('index exports', function () {
     assert.equal(options.timeout, 5000);
   });
 
-  it('init names the type of a rejected timeout', function () {
-    assert.throws(function () { return pkg.init('KEY', null, 'soon'); }, /Invalid timeout "soon" \(string\)/);
+  it('init quotes a rejected string timeout', function () {
+    assert.throws(function () { return pkg.init('KEY', null, 'soon'); }, /Invalid timeout "soon": expected a positive number/);
   });
 
   for (const request of ['nope', {}, 42]) {

@@ -1,4 +1,5 @@
-import httpTransport, { resolveTimeout } from './transport.js';
+import httpTransport from './transport.js';
+import { checkApiKey, checkTransport, resolveTimeout } from './validation.js';
 import { account } from './account.js';
 import { block } from './block.js';
 import { contract } from './contract.js';
@@ -64,23 +65,11 @@ export function init(
   request?: Transport,
 ): EtherscanApi {
   // Fail here rather than per request: a placeholder key only turns an unset
-  // environment variable into confusing auth errors later. Surrounding
-  // whitespace (a key read from a file keeps its trailing newline) is dropped,
-  // as it is for chain names.
-  if (apiKey !== undefined && apiKey !== null && typeof apiKey !== 'string') {
-    // Reachable from plain JS: a key was given, just not as a string.
-    throw new Error(`Invalid API key: expected a string, got ${typeof apiKey}`);
-  }
-  const key = typeof apiKey === 'string' ? apiKey.trim() : '';
-  if (key === '') {
-    throw new Error('An Etherscan API key is required: init(apiKey, chain?, timeout?, request?)');
-  }
+  // environment variable into confusing auth errors later.
+  const key = checkApiKey(apiKey);
   const t = resolveTimeout(timeout);
   const chainid = resolveChainId(chain);
-  if (request !== undefined && request !== null && typeof request !== 'function') {
-    throw new Error(`Invalid request transport: expected a function, got ${typeof request}`);
-  }
-  const doRequest: Transport = request || httpTransport;
+  const doRequest: Transport = checkTransport(request) ?? httpTransport;
 
   // apikey + chainid are injected centrally so namespaces never repeat them.
   const defaults = { apikey: key, chainid };

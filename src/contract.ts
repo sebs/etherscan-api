@@ -1,5 +1,6 @@
 import { compact } from './params.js';
 import type { RequestContext } from './get-request.js';
+import { checkAddressCount } from './validation.js';
 import type { EtherscanResponse } from './types.js';
 import type { ContractCreation, ContractSource } from './results.js';
 
@@ -59,10 +60,10 @@ export function contract(ctx: RequestContext) {
     getcontractcreation(contractaddresses: string | string[]): Promise<EtherscanResponse<ContractCreation[]>> {
       // Count a comma-joined string's entries too, so it cannot bypass the limit.
       const addresses = Array.isArray(contractaddresses) ? contractaddresses : contractaddresses.split(',');
-      if (addresses.length === 0 || addresses.length > MAX_CONTRACT_CREATION) {
-        return Promise.reject(
-          new Error(`getcontractcreation() takes 1 to ${MAX_CONTRACT_CREATION} addresses, got ${addresses.length}`),
-        );
+      try {
+        checkAddressCount('getcontractcreation', addresses, MAX_CONTRACT_CREATION);
+      } catch (err) {
+        return Promise.reject(err);
       }
       return list<ContractCreation[]>('getcontractcreation', { contractaddresses: addresses.join(',') });
     },

@@ -6,9 +6,11 @@ export interface EtherscanErrorDetails {
 
 /**
  * Error thrown when the Etherscan API returns a failure: a `status` of "0", a
- * NOTOK message, or a JSON-RPC error object. An HTTP-level failure from the
- * default transport is the subclass {@link EtherscanHttpError}, so one
- * `instanceof EtherscanError` check covers both.
+ * NOTOK message, or a JSON-RPC error object. Its subclasses cover an HTTP-level
+ * failure from the default transport ({@link EtherscanHttpError}) and an
+ * argument rejected before any request ({@link EtherscanArgumentError}), so one
+ * `instanceof EtherscanError` check covers every error the library raises for
+ * a call.
  */
 export class EtherscanError extends Error {
   /** The raw `result` (or `error`) field from the response, if any. */
@@ -52,5 +54,24 @@ export class EtherscanHttpError extends EtherscanError {
     this.name = 'EtherscanHttpError';
     this.statusCode = statusCode;
     this.headers = headers;
+  }
+}
+
+/**
+ * Error thrown when an argument fails validation, before any request is sent:
+ * an invalid chain, timeout, sort, paging, timestamp, block tag, address list,
+ * and so on. `argument` names the offending argument.
+ */
+export class EtherscanArgumentError extends EtherscanError {
+  /** The name of the rejected argument, e.g. `'timeout'` or `'sort'`. */
+  readonly argument: string;
+  /** The rejected value (left undefined where it could be a secret, i.e. the API key). */
+  readonly value?: unknown;
+
+  constructor(message: string, argument: string, value?: unknown) {
+    super(message);
+    this.name = 'EtherscanArgumentError';
+    this.argument = argument;
+    this.value = value;
   }
 }

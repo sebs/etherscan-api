@@ -1,4 +1,5 @@
 import type { RequestContext } from './get-request.js';
+import { EtherscanArgumentError } from './errors.js';
 import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
 import type { EthPrice, ChainSize } from './results.js';
@@ -22,7 +23,7 @@ export function stats(ctx: RequestContext) {
   async function tokensupply(tokenname?: string | null, contractaddress?: string): Promise<EtherscanResponse<string>> {
     // With neither, the request can only fail at Etherscan.
     if (!tokenname && !contractaddress) {
-      throw new Error('tokensupply() needs a token contract address or a token name');
+      throw new EtherscanArgumentError('tokensupply() needs a token contract address or a token name', 'contractaddress');
     }
     return call<string>('tokensupply', compact({ tokenname, contractaddress }));
   }

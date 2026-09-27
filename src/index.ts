@@ -19,10 +19,11 @@ export function pickChainUrl(): never {
 
 export { init, resolveChainId };
 export { default as httpTransport } from './transport.js';
-export { EtherscanError, EtherscanHttpError } from './errors.js';
+export { EtherscanError, EtherscanHttpError, EtherscanArgumentError } from './errors.js';
 export type { EtherscanErrorDetails } from './errors.js';
 export type { EtherscanApi } from './init.js';
-export type { AdvancedFilter, SortOrder } from './account.js';
+export type { AdvancedFilter } from './account.js';
+export type { SortOrder } from './validation.js';
 export type { VerifyParams, VerifySourceCodeParams } from './contract.js';
 export type { BlockTag } from './proxy.js';
 export type { Transport, TransportOptions, EtherscanResponse } from './types.js';

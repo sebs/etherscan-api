@@ -80,7 +80,7 @@ describe('chains.resolveChainId', function () {
 
   for (const [input, shown] of [[NaN, 'NaN'], [Infinity, 'Infinity'], [-Infinity, '-Infinity']]) {
     it('names ' + shown + ' in the error, not "null"', function () {
-      assert.throws(() => resolveChainId(input), new RegExp('^Error: Invalid chainid ' + shown + ':'));
+      assert.throws(() => resolveChainId(input), new RegExp('^EtherscanArgumentError: Invalid chainid ' + shown + ':'));
     });
   }
 
@@ -110,13 +110,13 @@ describe('chains.resolveChainId', function () {
   }
 
   it('explains a BigInt chainid instead of failing to serialize it', function () {
-    assert.throws(() => resolveChainId(1n), /^Error: Invalid chain 1n: expected a chain name or a numeric chainid/);
+    assert.throws(() => resolveChainId(1n), /^EtherscanArgumentError: Invalid chain 1n: expected a chain name or a numeric chainid/);
   });
 
   it('explains a circular object instead of failing to serialize it', function () {
     const circular = {};
     circular.self = circular;
-    assert.throws(() => resolveChainId(circular), /^Error: Invalid chain \[object Object\]/);
+    assert.throws(() => resolveChainId(circular), /^EtherscanArgumentError: Invalid chain \[object Object\]/);
   });
 
   const RETIRED = ['goerli', 'ropsten', 'rinkeby', 'kovan', 'holesky'];

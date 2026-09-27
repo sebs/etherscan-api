@@ -1,4 +1,5 @@
 import type { RequestContext } from './get-request.js';
+import { invalid } from './validation.js';
 import type { QueryParams } from './params.js';
 import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
@@ -16,7 +17,7 @@ function toQuantity(value: BlockTag): string {
   if (typeof value === 'number' || /^\d+$/.test(value)) {
     const n = Number(value);
     if (!Number.isSafeInteger(n) || n < 0) {
-      throw new Error(`Invalid block number or index ${String(value)}: expected a non-negative integer`);
+      throw invalid('block number or index', value, 'a non-negative integer');
     }
     return '0x' + n.toString(16);
   }

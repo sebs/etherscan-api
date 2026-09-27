@@ -1,5 +1,8 @@
 import { compact } from './params.js';
 import type { RequestContext } from './get-request.js';
+import { EtherscanArgumentError } from './errors.js';
+import { checkAddressCount, checkPaging, checkSort } from './validation.js';
+import type { SortOrder } from './validation.js';
 import type { QueryParams } from './params.js';
 import type { EtherscanResponse } from './types.js';
 import type {
@@ -32,43 +35,6 @@ export interface AdvancedFilter {
 function applyFilter(params: QueryParams, filter?: AdvancedFilter): void {
   if (!filter) return;
   Object.assign(params, compact({ from: filter.from, to: filter.to, fromto_opr: filter.fromto_opr }));
-}
-
-/** Sort order accepted by the list endpoints. */
-export type SortOrder = 'asc' | 'desc';
-
-/** Etherscan serves at most this many records per query: `page × offset` must not exceed it. */
-const MAX_RESULT_WINDOW = 10000;
-
-/**
- * Validate a sort order. An empty/omitted sort means `'asc'` (`||` rather than
- * `??`, so `''` is not sent as a bare `sort=`).
- * @throws {Error} For anything other than `'asc'` or `'desc'`.
- */
-function checkSort(sort?: string): SortOrder {
-  const order = sort || 'asc';
-  if (order !== 'asc' && order !== 'desc') {
-    throw new Error(`Invalid sort ${JSON.stringify(sort)}: expected 'asc' or 'desc'`);
-  }
-  return order;
-}
-
-/**
- * Validate paging against Etherscan's rules: `page` and `offset` are positive
- * integers and `page × offset` stays within the 10 000-record result window.
- * @throws {Error} If the combination would be rejected by Etherscan.
- */
-function checkPaging(page: number, offset: number): void {
-  for (const [name, value] of [['page', page], ['offset', offset]] as const) {
-    if (!Number.isSafeInteger(value) || value < 1) {
-      throw new Error(`Invalid ${name} ${String(value)}: expected a positive integer`);
-    }
-  }
-  if (page * offset > MAX_RESULT_WINDOW) {
-    throw new Error(
-      `page × offset (${page} × ${offset}) exceeds Etherscan's ${MAX_RESULT_WINDOW}-record result window`,
-    );
-  }
 }
 
 /**
@@ -159,10 +125,10 @@ export function account(ctx: RequestContext) {
     let action = 'balance';
     let addr: string;
     if (Array.isArray(address)) {
-      if (address.length === 0 || address.length > MAX_BALANCEMULTI) {
-        return Promise.reject(
-          new Error(`balance() takes 1 to ${MAX_BALANCEMULTI} addresses, got ${address.length}`),
-        );
+      try {
+        checkAddressCount('balance', address, MAX_BALANCEMULTI);
+      } catch (err) {
+        return Promise.reject(err);
       }
       addr = address.join(',');
       action = 'balancemulti';
@@ -171,7 +137,11 @@ export function account(ctx: RequestContext) {
       // string-typed overload), skipping the balancemulti limit; require an array.
       if (address.includes(',')) {
         return Promise.reject(
-          new Error('balance() takes one address per string; pass an array for several addresses'),
+          new EtherscanArgumentError(
+            'balance() takes one address per string; pass an array for several addresses',
+            'address',
+            address,
+          ),
         );
       }
       addr = address;
@@ -224,7 +194,7 @@ export function account(ctx: RequestContext) {
   ): Promise<EtherscanResponse<NormalTransaction[]>> {
     // Without an address or a from/to filter, the request can only fail at Etherscan.
     if (!address && !filter?.from && !filter?.to) {
-      throw new Error('txlist() needs an address or an advanced filter with from/to');
+      throw new EtherscanArgumentError('txlist() needs an address or an advanced filter with from/to', 'address');
     }
     const params = compact({ address });
     listRange(params, startblock, endblock, page, offset, sort);

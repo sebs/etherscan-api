@@ -3,34 +3,8 @@ import http from 'node:http';
 import type { IncomingMessage } from 'node:http';
 import { EtherscanHttpError } from './errors.js';
 import { etherscanMessage } from './response.js';
+import { resolveMaxResponseBytes, resolveTimeout } from './validation.js';
 import type { Transport, EtherscanResponse } from './types.js';
-
-/** Default request timeout in milliseconds. */
-const DEFAULT_TIMEOUT = 10000;
-
-/** Node's timers cap at 2^31-1 ms; anything larger fires after 1 ms instead. */
-const MAX_TIMEOUT = 2 ** 31 - 1;
-
-/**
- * Resolve a caller-supplied timeout: `undefined`/`null` mean the 10 s default,
- * anything else must be a positive, finite number of milliseconds within Node's
- * timer range. A numeric string (e.g. straight from `process.env`) is accepted.
- * @throws {Error} If the timeout is invalid.
- */
-export function resolveTimeout(timeout: number | string | undefined | null): number {
-  if (timeout === undefined || timeout === null) return DEFAULT_TIMEOUT;
-  const ms = typeof timeout === 'string' && /^\s*\d+(\.\d+)?\s*$/.test(timeout) ? Number(timeout) : timeout;
-  if (typeof ms !== 'number' || !Number.isFinite(ms) || ms <= 0 || ms > MAX_TIMEOUT) {
-    const shown = typeof timeout === 'string' ? JSON.stringify(timeout) : String(timeout);
-    throw new Error(
-      `Invalid timeout ${shown} (${typeof timeout}): expected a positive number of milliseconds up to ${MAX_TIMEOUT}.`,
-    );
-  }
-  return ms;
-}
-
-/** Default cap on the response body size (50 MB). See `maxResponseBytes`. */
-const DEFAULT_MAX_RESPONSE_BYTES = 50 * 1024 * 1024;
 
 /**
  * Default HTTP transport: performs a GET (or POST, for verification endpoints)
@@ -56,20 +30,15 @@ function errorDetail(body: string): string {
 
 const httpTransport: Transport = function httpTransport(url, options) {
   let timeout: number;
+  let maxResponseBytes: number;
   try {
     timeout = resolveTimeout(options && options.timeout);
+    maxResponseBytes = resolveMaxResponseBytes(options && options.maxResponseBytes);
   } catch (err) {
     return Promise.reject(err);
   }
   const method = (options && options.method) || 'GET';
   const body = options && options.body;
-  // `??`, not `||`: an explicit 0 ("reject any body") must not become 50 MB.
-  const maxResponseBytes = (options && options.maxResponseBytes) ?? DEFAULT_MAX_RESPONSE_BYTES;
-  if (typeof maxResponseBytes !== 'number' || Number.isNaN(maxResponseBytes) || maxResponseBytes < 0) {
-    return Promise.reject(
-      new Error(`Invalid maxResponseBytes ${String(maxResponseBytes)}: expected a non-negative number of bytes.`),
-    );
-  }
   const allowInsecure = !!(options && options.allowInsecure);
 
   return new Promise((resolve, reject) => {
