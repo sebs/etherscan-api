@@ -173,6 +173,27 @@ try {
 }
 ```
 
+When Etherscan answers with a non-2xx HTTP status (a 429 rate limit, a 5xx),
+the default transport rejects with an {@link EtherscanHttpError}. It is a
+subclass of `EtherscanError`, so the check above catches it too, and it adds
+the `statusCode` and response `headers` needed for backoff. A rate limit can
+arrive either way, as a 200 with `status: "0"` or as a 429:
+
+```ts
+import { EtherscanError, EtherscanHttpError } from 'etherscan-api';
+
+try {
+  await api.stats.ethsupply();
+} catch (err) {
+  if (err instanceof EtherscanHttpError && err.statusCode === 429) {
+    const retryAfter = Number(err.headers['retry-after'] ?? 1); // seconds
+    console.error(`rate limited, retry in ${retryAfter}s`);
+  } else if (err instanceof EtherscanError) {
+    console.error(err.message);
+  }
+}
+```
+
 An **empty** result (e.g. an address with no transactions) is **not** an error —
 Etherscan reports it as `status: "0"`, but the client resolves it with an empty
 array:
