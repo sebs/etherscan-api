@@ -35,6 +35,8 @@ export type {
   ExecutionStatus,
   ReceiptStatus,
   EthPrice,
+  EthSupply2,
+  NodeCount,
   GasOracle,
   ChainSize,
   ChainListItem,

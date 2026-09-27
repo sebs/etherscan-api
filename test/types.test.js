@@ -104,6 +104,15 @@ export function initOptions(): void {
   init({ chain: 'sepolia' });
 }
 
+export async function statsResults(): Promise<void> {
+  const burnt: string | undefined = (await api.stats.ethsupply2()).result?.BurntFees;
+  const nodes: string | undefined = (await api.stats.nodecount()).result?.TotalNodeCount;
+
+  // @ts-expect-error — ethsupply2 resolves an object, not a string.
+  const wrong: string | undefined = (await api.stats.ethsupply2()).result;
+  void burnt; void nodes; void wrong;
+}
+
 export async function typedResults(): Promise<void> {
   const limit: number | undefined = (await api.usage.getapilimit()).result?.creditsAvailable;
   const funder: string | undefined = (await api.account.fundedby('0xa')).result?.fundingAddress;

@@ -219,6 +219,25 @@ export interface ReceiptStatus {
   status: string;
 }
 
+/** Ether supply breakdown in wei (`stats.ethsupply2`). */
+export interface EthSupply2 {
+  /** Ether supply excluding Eth2 staking rewards and burnt fees. */
+  EthSupply: string;
+  /** Eth2 staking rewards. */
+  Eth2Staking: string;
+  /** Burnt fees (EIP-1559). */
+  BurntFees: string;
+  /** Total withdrawn from the beacon chain. */
+  WithdrawnTotal: string;
+}
+
+/** Number of discoverable nodes (`stats.nodecount`). */
+export interface NodeCount {
+  /** The day sampled, `yyyy-MM-dd`. */
+  UTCDate: string;
+  TotalNodeCount: string;
+}
+
 /** Ether price (`stats.ethprice`). */
 export interface EthPrice {
   ethbtc: string;

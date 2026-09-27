@@ -3,7 +3,7 @@ import type { SortOrder } from './validation.js';
 import { EtherscanArgumentError } from './errors.js';
 import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
-import type { EthPrice, ChainSize } from './results.js';
+import type { EthPrice, EthSupply2, NodeCount, ChainSize } from './results.js';
 
 export function stats(ctx: RequestContext) {
   const { call, list } = ctx.module('stats');
@@ -38,13 +38,13 @@ export function stats(ctx: RequestContext) {
     },
 
     /** Returns the total supply of ether including Eth2 staking and burnt fees. */
-    ethsupply2(): Promise<EtherscanResponse<string>> {
-      return call<string>('ethsupply2');
+    ethsupply2(): Promise<EtherscanResponse<EthSupply2>> {
+      return call<EthSupply2>('ethsupply2');
     },
 
     /** Returns the total number of discoverable nodes on the network. */
-    nodecount(): Promise<EtherscanResponse<string>> {
-      return call<string>('nodecount');
+    nodecount(): Promise<EtherscanResponse<NodeCount>> {
+      return call<NodeCount>('nodecount');
     },
 
     /** Returns the current ether price. */
