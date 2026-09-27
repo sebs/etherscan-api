@@ -41,8 +41,10 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       # Trusted publishing requires npm >= 11.5.1 (newer than the bundled npm).
+      # Pinned to an exact version: this job holds the publish credential, so it
+      # must not pick up whatever npm release is newest on the day.
       - name: Update npm
-        run: npm install -g npm@latest
+        run: npm install -g npm@11.20.0
 
       # The input reaches the shell as an environment variable, never spliced
       # into the script text, so a crafted value cannot inject commands.
