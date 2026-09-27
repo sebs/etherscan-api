@@ -1,6 +1,6 @@
-import { emptyAsList, forModule } from './get-request.js';
 import { compact } from './params.js';
-import type { QueryParams, RequestContext } from './get-request.js';
+import type { RequestContext } from './get-request.js';
+import type { QueryParams } from './params.js';
 import type { EtherscanResponse } from './types.js';
 import type {
   MultiBalanceItem,
@@ -96,7 +96,7 @@ function listRange(
 const MAX_BALANCEMULTI = 20;
 
 export function account(ctx: RequestContext) {
-  const call = forModule(ctx.get, 'account');
+  const { call, list } = ctx.module('account');
 
   // Shared body for the ERC-20/721/1155 token-transfer endpoints, which differ
   // only by action string and result type. Kept private; the public methods
@@ -116,7 +116,7 @@ export function account(ctx: RequestContext) {
     const params = compact({ address, contractaddress });
     listRange(params, startblock, endblock, page, offset, sort);
     applyFilter(params, filter);
-    return emptyAsList(call<T>(action, params));
+    return list<T>(action, params);
   }
 
   // Shared body for the address-scoped paged list endpoints (beacon withdrawals
@@ -133,7 +133,7 @@ export function account(ctx: RequestContext) {
     ): Promise<EtherscanResponse> => {
       const params: QueryParams = { address };
       listRange(params, startblock, endblock, page, offset, sort);
-      return emptyAsList(call(action, params));
+      return list(action, params);
     };
 
   /**
@@ -229,7 +229,7 @@ export function account(ctx: RequestContext) {
     const params = compact({ address });
     listRange(params, startblock, endblock, page, offset, sort);
     applyFilter(params, filter);
-    return emptyAsList(call<NormalTransaction[]>('txlist', params));
+    return list<NormalTransaction[]>('txlist', params);
   }
 
   return {
@@ -287,7 +287,7 @@ export function account(ctx: RequestContext) {
         offset,
       });
       applyFilter(params, filter);
-      return emptyAsList(call<InternalTransaction[]>('txlistinternal', params));
+      return list<InternalTransaction[]>('txlistinternal', params);
     },
 
     txlist,
@@ -307,7 +307,7 @@ export function account(ctx: RequestContext) {
       page?: number,
       offset?: number,
     ): Promise<EtherscanResponse<MinedBlock[]>> {
-      return emptyAsList(call<MinedBlock[]>('getminedblocks', compact({ address, blocktype, page, offset })));
+      return list<MinedBlock[]>('getminedblocks', compact({ address, blocktype, page, offset }));
     },
 
     /**
@@ -431,7 +431,7 @@ export function account(ctx: RequestContext) {
      * @param offset - Max records to return
      */
     txnbridge(address: string, page?: number, offset?: number): Promise<EtherscanResponse> {
-      return emptyAsList(call('txnbridge', { address, page: page ?? 1, offset: offset ?? 100 }));
+      return list('txnbridge', { address, page: page ?? 1, offset: offset ?? 100 });
     },
   };
 }

@@ -1,4 +1,3 @@
-import { forModule } from './get-request.js';
 import type { RequestContext } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { BlockReward, BlockCountdown, BlockTransactionCount } from './results.js';
@@ -10,7 +9,7 @@ import type { BlockReward, BlockCountdown, BlockTransactionCount } from './resul
 const MAX_UNIX_SECONDS = 1e11;
 
 export function block(ctx: RequestContext) {
-  const call = forModule(ctx.get, 'block');
+  const { call } = ctx.module('block');
 
   /**
    * Find the block and uncle rewards for a block.

@@ -1,4 +1,5 @@
-import type { QueryParams } from './get-request.js';
+/** Query parameters for one request, every field present. */
+export type QueryParams = Record<string, string | number | boolean>;
 
 /** A params object whose optional fields may still be missing. */
 export type LooseParams = Record<string, string | number | boolean | null | undefined>;

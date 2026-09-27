@@ -2,6 +2,7 @@ import https from 'node:https';
 import http from 'node:http';
 import type { IncomingMessage } from 'node:http';
 import { EtherscanHttpError } from './errors.js';
+import { etherscanMessage } from './response.js';
 import type { Transport, EtherscanResponse } from './types.js';
 
 /** Default request timeout in milliseconds. */
@@ -49,10 +50,7 @@ function errorDetail(body: string): string {
   } catch {
     return '';
   }
-  if (parsed === null || typeof parsed !== 'object') return '';
-  const { result, message } = parsed as { result?: unknown; message?: unknown };
-  const detail =
-    (typeof result === 'string' && result) || (typeof message === 'string' && message) || '';
+  const detail = etherscanMessage(parsed);
   return detail ? ': ' + detail : '';
 }
 

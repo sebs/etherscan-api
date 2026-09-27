@@ -1,10 +1,9 @@
-import { forModule } from './get-request.js';
 import type { RequestContext } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { ChainListResponse } from './results.js';
 
 export function usage(ctx: RequestContext) {
-  const call = forModule(ctx.get, 'getapilimit');
+  const { call } = ctx.module('getapilimit');
 
   return {
     /**

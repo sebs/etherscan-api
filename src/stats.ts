@@ -1,12 +1,10 @@
-import { emptyAsList } from './get-request.js';
-import { forModule } from './get-request.js';
 import type { RequestContext } from './get-request.js';
 import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
 import type { EthPrice, ChainSize } from './results.js';
 
 export function stats(ctx: RequestContext) {
-  const call = forModule(ctx.get, 'stats');
+  const { call, list } = ctx.module('stats');
 
   /**
    * Returns the supply of a token, identified by its contract address.
@@ -69,15 +67,7 @@ export function stats(ctx: RequestContext) {
       syncmode: 'default' | 'archive' = 'default',
       sort: 'asc' | 'desc' = 'asc',
     ): Promise<EtherscanResponse<ChainSize[]>> {
-      return emptyAsList(
-        call<ChainSize[]>('chainsize', {
-          startdate,
-          enddate,
-          clienttype,
-          syncmode,
-          sort,
-        }),
-      );
+      return list<ChainSize[]>('chainsize', { startdate, enddate, clienttype, syncmode, sort });
     },
   };
 }

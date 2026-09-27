@@ -1,6 +1,5 @@
-import { emptyAsList, forModule, isUnsafeKey } from './get-request.js';
 import { compact } from './params.js';
-import type { QueryParams, RequestContext } from './get-request.js';
+import type { RequestContext } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { ContractCreation, ContractSource } from './results.js';
 
@@ -45,27 +44,11 @@ export interface VerifySourceCodeParams extends VerifyParams {
   compilerversion: string;
 }
 
-/**
- * Build the form body for a verification POST, dropping undefined fields.
- * `module`/`action` are set by the bound POST (see `forModule`), after these
- * fields, so a stray key in the params cannot redirect the call.
- */
-function verifyBody(params: VerifyParams): QueryParams {
-  const body: QueryParams = {};
-  for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined && !isUnsafeKey(key)) {
-      body[key] = value;
-    }
-  }
-  return body;
-}
-
 /** Etherscan's `getcontractcreation` accepts at most 5 addresses per call. */
 const MAX_CONTRACT_CREATION = 5;
 
 export function contract(ctx: RequestContext) {
-  const call = forModule(ctx.get, 'contract');
-  const post = forModule(ctx.post, 'contract');
+  const { call, list, post } = ctx.module('contract');
 
   return {
     /**
@@ -75,16 +58,13 @@ export function contract(ctx: RequestContext) {
      */
     getcontractcreation(contractaddresses: string | string[]): Promise<EtherscanResponse<ContractCreation[]>> {
       // Count a comma-joined string's entries too, so it cannot bypass the limit.
-      const list = Array.isArray(contractaddresses) ? contractaddresses : contractaddresses.split(',');
-      if (list.length === 0 || list.length > MAX_CONTRACT_CREATION) {
+      const addresses = Array.isArray(contractaddresses) ? contractaddresses : contractaddresses.split(',');
+      if (addresses.length === 0 || addresses.length > MAX_CONTRACT_CREATION) {
         return Promise.reject(
-          new Error(`getcontractcreation() takes 1 to ${MAX_CONTRACT_CREATION} addresses, got ${list.length}`),
+          new Error(`getcontractcreation() takes 1 to ${MAX_CONTRACT_CREATION} addresses, got ${addresses.length}`),
         );
       }
-      const value = list.join(',');
-      return emptyAsList(
-        call<ContractCreation[]>('getcontractcreation', { contractaddresses: value }),
-      );
+      return list<ContractCreation[]>('getcontractcreation', { contractaddresses: addresses.join(',') });
     },
 
     /**
@@ -100,7 +80,7 @@ export function contract(ctx: RequestContext) {
      * @param address - Contract address
      */
     getsourcecode(address: string): Promise<EtherscanResponse<ContractSource[]>> {
-      return emptyAsList(call<ContractSource[]>('getsourcecode', { address }));
+      return list<ContractSource[]>('getsourcecode', { address });
     },
 
     /**
@@ -109,7 +89,7 @@ export function contract(ctx: RequestContext) {
      * @param params - Verification fields ({@link VerifySourceCodeParams})
      */
     verifysourcecode(params: VerifySourceCodeParams): Promise<EtherscanResponse<string>> {
-      return post<string>('verifysourcecode', verifyBody(params));
+      return post<string>('verifysourcecode', { ...params });
     },
 
     /**
@@ -117,7 +97,7 @@ export function contract(ctx: RequestContext) {
      * @param params - Verification fields ({@link VerifyParams})
      */
     verifyvyper(params: VerifyParams): Promise<EtherscanResponse<string>> {
-      return post<string>('verifyvyper', verifyBody(params));
+      return post<string>('verifyvyper', { ...params });
     },
 
     /**
@@ -125,7 +105,7 @@ export function contract(ctx: RequestContext) {
      * @param params - Verification fields ({@link VerifyParams})
      */
     verifystylus(params: VerifyParams): Promise<EtherscanResponse<string>> {
-      return post<string>('verifystylus', verifyBody(params));
+      return post<string>('verifystylus', { ...params });
     },
 
     /**
@@ -133,7 +113,7 @@ export function contract(ctx: RequestContext) {
      * @param params - Verification fields ({@link VerifyParams}); include `compilerversion`
      */
     verifyzksyncsourcecode(params: VerifyParams): Promise<EtherscanResponse<string>> {
-      return post<string>('verifyzksyncsourcecode', verifyBody(params));
+      return post<string>('verifyzksyncsourcecode', { ...params });
     },
 
     /**

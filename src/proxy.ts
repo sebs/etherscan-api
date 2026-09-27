@@ -1,5 +1,5 @@
-import { forModule } from './get-request.js';
-import type { QueryParams, RequestContext } from './get-request.js';
+import type { RequestContext } from './get-request.js';
+import type { QueryParams } from './params.js';
 import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
 
@@ -24,7 +24,7 @@ function toQuantity(value: BlockTag): string {
 }
 
 export function proxy(ctx: RequestContext) {
-  const call = forModule(ctx.get, 'proxy');
+  const { call } = ctx.module('proxy');
 
   return {
     /** Returns the number of the most recent block (hex). */

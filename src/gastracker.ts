@@ -1,10 +1,9 @@
-import { forModule } from './get-request.js';
 import type { RequestContext } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { GasOracle } from './results.js';
 
 export function gastracker(ctx: RequestContext) {
-  const call = forModule(ctx.get, 'gastracker');
+  const { call } = ctx.module('gastracker');
 
   return {
     /**
