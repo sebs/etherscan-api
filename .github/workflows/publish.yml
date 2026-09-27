@@ -33,18 +33,18 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: v${{ inputs.version }}
+          persist-credentials: false
 
       - name: Use Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 22.x
+          # Trusted publishing requires npm >= 11.5.1. Node 24 bundles it
+          # (since 24.5.0), so no npm is installed outside the lockfile.
+          node-version: 24.x
           registry-url: 'https://registry.npmjs.org'
-
-      # Trusted publishing requires npm >= 11.5.1 (newer than the bundled npm).
-      # Pinned to an exact version: this job holds the publish credential, so it
-      # must not pick up whatever npm release is newest on the day.
-      - name: Update npm
-        run: npm install -g npm@11.20.0
+          # No dependency cache in a workflow that publishes something: a
+          # poisoned cache would flow into the published output.
+          package-manager-cache: false
 
       # The input reaches the shell as an environment variable, never spliced
       # into the script text, so a crafted value cannot inject commands.
