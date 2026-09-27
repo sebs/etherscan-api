@@ -1,6 +1,6 @@
 import { emptyAsList, forModule, isUnsafeKey } from './get-request.js';
 import { compact } from './params.js';
-import type { GetRequest, PostRequest, QueryParams } from './get-request.js';
+import type { QueryParams, RequestContext } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { ContractCreation, ContractSource } from './results.js';
 
@@ -63,9 +63,9 @@ function verifyBody(params: VerifyParams): QueryParams {
 /** Etherscan's `getcontractcreation` accepts at most 5 addresses per call. */
 const MAX_CONTRACT_CREATION = 5;
 
-export function contract(getRequest: GetRequest, postRequest: PostRequest) {
-  const call = forModule(getRequest, 'contract');
-  const post = forModule(postRequest, 'contract');
+export function contract(ctx: RequestContext) {
+  const call = forModule(ctx.get, 'contract');
+  const post = forModule(ctx.post, 'contract');
 
   return {
     /**

@@ -1,10 +1,10 @@
 import { forModule } from './get-request.js';
-import type { GetRequest } from './get-request.js';
+import type { RequestContext } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { ExecutionStatus, ReceiptStatus } from './results.js';
 
-export function transaction(getRequest: GetRequest) {
-  const call = forModule(getRequest, 'transaction');
+export function transaction(ctx: RequestContext) {
+  const call = forModule(ctx.get, 'transaction');
 
   return {
     /**

@@ -1,11 +1,11 @@
 import { emptyAsList, forModule } from './get-request.js';
-import type { GetRequest } from './get-request.js';
+import type { RequestContext } from './get-request.js';
 import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
 import type { EventLog } from './results.js';
 
-export function log(getRequest: GetRequest) {
-  const call = forModule(getRequest, 'logs');
+export function log(ctx: RequestContext) {
+  const call = forModule(ctx.get, 'logs');
 
   return {
     /**

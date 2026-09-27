@@ -1,10 +1,10 @@
 import { forModule } from './get-request.js';
-import type { GetRequest, RawGet } from './get-request.js';
+import type { RequestContext } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { ChainListResponse } from './results.js';
 
-export function usage(getRequest: GetRequest, rawGet: RawGet) {
-  const call = forModule(getRequest, 'getapilimit');
+export function usage(ctx: RequestContext) {
+  const call = forModule(ctx.get, 'getapilimit');
 
   return {
     /**
@@ -21,7 +21,7 @@ export function usage(getRequest: GetRequest, rawGet: RawGet) {
      * key for it, so none is sent, but `init()` still requires one to create the client.
      */
     chainlist(): Promise<ChainListResponse> {
-      return rawGet('/v2/chainlist') as Promise<ChainListResponse>;
+      return ctx.raw<ChainListResponse>('/v2/chainlist');
     },
   };
 }

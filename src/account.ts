@@ -1,6 +1,6 @@
 import { emptyAsList, forModule } from './get-request.js';
 import { compact } from './params.js';
-import type { GetRequest, QueryParams } from './get-request.js';
+import type { QueryParams, RequestContext } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type {
   MultiBalanceItem,
@@ -95,8 +95,8 @@ function listRange(
 /** Etherscan's `balancemulti` accepts at most 20 addresses per call. */
 const MAX_BALANCEMULTI = 20;
 
-export function account(getRequest: GetRequest) {
-  const call = forModule(getRequest, 'account');
+export function account(ctx: RequestContext) {
+  const call = forModule(ctx.get, 'account');
 
   // Shared body for the ERC-20/721/1155 token-transfer endpoints, which differ
   // only by action string and result type. Kept private; the public methods

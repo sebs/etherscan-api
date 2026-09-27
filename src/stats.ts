@@ -1,12 +1,12 @@
 import { emptyAsList } from './get-request.js';
 import { forModule } from './get-request.js';
-import type { GetRequest } from './get-request.js';
+import type { RequestContext } from './get-request.js';
 import { compact } from './params.js';
 import type { EtherscanResponse } from './types.js';
 import type { EthPrice, ChainSize } from './results.js';
 
-export function stats(getRequest: GetRequest) {
-  const call = forModule(getRequest, 'stats');
+export function stats(ctx: RequestContext) {
+  const call = forModule(ctx.get, 'stats');
 
   /**
    * Returns the supply of a token, identified by its contract address.

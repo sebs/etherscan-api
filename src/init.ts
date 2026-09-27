@@ -9,7 +9,8 @@ import { transaction } from './transaction.js';
 import { gastracker } from './gastracker.js';
 import { usage } from './usage.js';
 import { resolveChainId } from './chains.js';
-import { createGetRequest, createPostRequest, createRawGet } from './get-request.js';
+import { createRequestContext } from './get-request.js';
+import type { RequestContext } from './get-request.js';
 import type { Transport } from './types.js';
 
 // Etherscan V2: one host for every chain; the network is chosen with `chainid`.
@@ -27,6 +28,24 @@ export interface EtherscanApi {
   gastracker: ReturnType<typeof gastracker>;
   usage: ReturnType<typeof usage>;
 }
+
+/**
+ * Every namespace factory, by the name it has on the client; {@link init}
+ * builds the client from this table. Typed against {@link EtherscanApi}, which
+ * stays a plain interface so the docs list the namespaces: a namespace missing
+ * from either one is a compile error, so the two cannot drift apart.
+ */
+const NAMESPACES: { [K in keyof EtherscanApi]: (ctx: RequestContext) => EtherscanApi[K] } = {
+  log,
+  proxy,
+  stats,
+  block,
+  transaction,
+  contract,
+  account,
+  gastracker,
+  usage,
+};
 
 /**
  * Create an Etherscan API client.
@@ -66,19 +85,11 @@ export function init(
   // apikey + chainid are injected centrally so namespaces never repeat them.
   const defaults = { apikey: key, chainid };
   const config = { baseUrl: HOST, timeout: t };
-  const getRequest = createGetRequest(doRequest, defaults, config);
-  const postRequest = createPostRequest(doRequest, defaults, config);
-  const rawGet = createRawGet(doRequest, config);
+  const ctx = createRequestContext(doRequest, defaults, config);
 
-  return {
-    log: log(getRequest),
-    proxy: proxy(getRequest),
-    stats: stats(getRequest),
-    block: block(getRequest),
-    transaction: transaction(getRequest),
-    contract: contract(getRequest, postRequest),
-    account: account(getRequest),
-    gastracker: gastracker(getRequest),
-    usage: usage(getRequest, rawGet),
-  };
+  // Object.fromEntries loses the key types; NAMESPACES' annotation above is
+  // what guarantees every EtherscanApi key is built.
+  return Object.fromEntries(
+    Object.entries(NAMESPACES).map(([name, create]) => [name, create(ctx)]),
+  ) as unknown as EtherscanApi;
 }

@@ -16,7 +16,7 @@ export interface PostRequest {
 
 /** A GET against an arbitrary path under the base URL (e.g. `/v2/chainlist`). */
 export interface RawGet {
-  <T = unknown>(path: string): Promise<EtherscanResponse<T>>;
+  <R = EtherscanResponse>(path: string): Promise<R>;
 }
 
 /** A request bound to one Etherscan module: callers name only the action and its params. */
@@ -140,52 +140,43 @@ export function emptyAsList<T>(response: Promise<EtherscanResponse<T>>): Promise
  * executor so a transport that throws synchronously still yields a rejection,
  * rather than an exception escaping from the API method.
  */
-function send(request: Transport, url: string, options: TransportOptions): Promise<EtherscanResponse> {
-  return new Promise<EtherscanResponse>((resolve) => resolve(request(url, options))).then(normalize);
+function send<R>(request: Transport, url: string, options: TransportOptions): Promise<R> {
+  return new Promise<EtherscanResponse>((resolve) => resolve(request(url, options))).then(normalize) as Promise<R>;
 }
 
 /**
- * Builds the shared GET request function. Every namespace passes a plain params
- * object; this injects the universal `apikey` and `chainid`, serialises the
- * query, performs the GET via the supplied transport, and normalises the result.
+ * Everything a namespace needs to talk to Etherscan, handed to each namespace
+ * as one object so they all share the same constructor signature.
  */
-export function createGetRequest(
+export interface RequestContext {
+  /** GET `/v2/api` with `apikey` and `chainid` added. */
+  get: GetRequest;
+  /** POST `/v2/api` with the params (plus `apikey`/`chainid`) as a form body. */
+  post: PostRequest;
+  /** GET an arbitrary path under the base URL, without `apikey`/`chainid`. */
+  raw: RawGet;
+}
+
+/**
+ * Build the request context: `get` and `post` inject the universal `apikey`
+ * and `chainid` and serialise the params; `raw` hits paths outside `/v2/api`
+ * (currently just `/v2/chainlist`). All three normalise the response.
+ */
+export function createRequestContext(
   request: Transport,
   defaults: Record<string, string | number>,
   config: RequestConfig,
-): GetRequest {
-  return function getRequest<T = unknown>(params: QueryParams): Promise<EtherscanResponse<T>> {
-    const url = config.baseUrl + '/v2/api?' + serialize(params, defaults);
-    return send(request, url, { timeout: config.timeout }) as Promise<EtherscanResponse<T>>;
-  };
-}
-
-/**
- * Builds a POST request function. Params (plus `apikey`/`chainid`) are sent as a
- * form-encoded body — required by the contract-verification endpoints.
- */
-export function createPostRequest(
-  request: Transport,
-  defaults: Record<string, string | number>,
-  config: RequestConfig,
-): PostRequest {
-  return function postRequest<T = unknown>(params: QueryParams): Promise<EtherscanResponse<T>> {
-    const url = config.baseUrl + '/v2/api';
-    const body = serialize(params, defaults);
-    return send(request, url, { timeout: config.timeout, method: 'POST', body }) as Promise<
-      EtherscanResponse<T>
-    >;
-  };
-}
-
-/**
- * Builds a raw GET function for endpoints that live outside `/v2/api` and take
- * no apikey/chainid — currently just `/v2/chainlist`.
- */
-export function createRawGet(request: Transport, config: RequestConfig): RawGet {
-  return function rawGet<T = unknown>(path: string): Promise<EtherscanResponse<T>> {
-    return send(request, config.baseUrl + path, { timeout: config.timeout }) as Promise<
-      EtherscanResponse<T>
-    >;
+): RequestContext {
+  const apiUrl = config.baseUrl + '/v2/api';
+  return {
+    get: <T = unknown>(params: QueryParams) =>
+      send<EtherscanResponse<T>>(request, apiUrl + '?' + serialize(params, defaults), { timeout: config.timeout }),
+    post: <T = unknown>(params: QueryParams) =>
+      send<EtherscanResponse<T>>(request, apiUrl, {
+        timeout: config.timeout,
+        method: 'POST',
+        body: serialize(params, defaults),
+      }),
+    raw: <R = EtherscanResponse>(path: string) => send<R>(request, config.baseUrl + path, { timeout: config.timeout }),
   };
 }
