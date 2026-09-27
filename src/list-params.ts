@@ -67,9 +67,13 @@ export function filterParams(filter?: AdvancedFilter): QueryParams {
 
 /**
  * Paging params, validated: positive integers and, with `window`, within
- * Etherscan's 10 000-record result window. With `defaults`, a missing page or
- * offset becomes 1 / 100; without, it is left out so Etherscan's own default
- * (usually the unpaged result) applies.
+ * Etherscan's 10 000-record result window.
+ *
+ * Etherscan pages only when it gets both `page` and `offset`; either one alone
+ * is ignored and the unpaged result comes back (checked live). So once either
+ * is given, or with `defaults`, the missing one is filled in as page 1 / 100
+ * records. With neither given and no `defaults`, both are left out so
+ * Etherscan's unpaged result applies.
  * @throws {EtherscanArgumentError} For invalid paging.
  */
 export function pagingParams(
@@ -77,12 +81,11 @@ export function pagingParams(
   offset: number | undefined,
   { defaults = false, window = true } = {},
 ): QueryParams {
-  const p = page ?? (defaults ? 1 : undefined);
-  const o = offset ?? (defaults ? 100 : undefined);
-  if (p !== undefined || o !== undefined) {
-    checkPaging(p ?? 1, o ?? 1, window);
-  }
-  return compact({ page: p, offset: o });
+  if (!defaults && page === undefined && offset === undefined) return {};
+  const p = page ?? 1;
+  const o = offset ?? 100;
+  checkPaging(p, o, window);
+  return { page: p, offset: o };
 }
 
 /** The block range, defaulting to the whole chain. */

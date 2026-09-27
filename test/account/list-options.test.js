@@ -81,4 +81,19 @@ describe('account list options', function () {
       assert.equal(mocked.transport.mock.callCount(), 0);
     });
   }
+
+  // Etherscan pages only with both page and offset; either alone is ignored
+  // (checked live), so the library fills in the missing half.
+  const HALVES = [
+    ['txlistinternal, offset only', (api) => api.account.txlistinternal({ address: ADDRESS, offset: 20 }), ['1', '20']],
+    ['txlistinternal, page only', (api) => api.account.txlistinternal({ address: ADDRESS, page: 3 }), ['3', '100']],
+    ['getLogs, offset only', (api) => api.log.getLogs({ address: ADDRESS, offset: 5 }), ['1', '5']],
+    ['getminedblocks, offset only', (api) => api.account.getminedblocks(ADDRESS, 'blocks', undefined, 5), ['1', '5']],
+  ];
+  for (const [name, call, [page, offset]] of HALVES) {
+    it(name + ': sends page ' + page + ' and offset ' + offset, async function () {
+      const query = await sent(call);
+      assert.deepEqual([query.page, query.offset], [page, offset]);
+    });
+  }
 });
