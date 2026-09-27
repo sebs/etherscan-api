@@ -49,6 +49,28 @@ describe('chains.resolveChainId', function () {
     assert.equal(resolveChainId('137'), 137);
   });
 
+  const HEX = [['0x1', 1], ['0xa4b1', 42161], ['0XAA36A7', 11155111]];
+  for (const [input, expected] of HEX) {
+    it('parses the hex chainid ' + input, function () {
+      assert.equal(resolveChainId(input), expected);
+    });
+  }
+
+  it('rejects the hex chainid 0x0', function () {
+    assert.throws(() => resolveChainId('0x0'), /Invalid chainid "0x0"/);
+  });
+
+  const PADDED = [[' sepolia ', 11155111], ['base\n', 8453], ['\t137 ', 137]];
+  for (const [input, expected] of PADDED) {
+    it('ignores surrounding whitespace in ' + JSON.stringify(input), function () {
+      assert.equal(resolveChainId(input), expected);
+    });
+  }
+
+  it('still rejects a whitespace-only chain', function () {
+    assert.throws(() => resolveChainId('   '), /Unknown chain/);
+  });
+
   const INVALID_NUMERIC = [NaN, Infinity, -Infinity, -1, 0, 1.5, 1e21];
   for (const input of INVALID_NUMERIC) {
     it('rejects the invalid chainid ' + String(input), function () {

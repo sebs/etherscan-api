@@ -74,8 +74,9 @@ function checkChainId(id: number, original: string | number): number {
  * Resolve a chain name or numeric chainid to a numeric chainid.
  *
  * - `null` / `undefined` / `''` defaults to Ethereum mainnet (1).
- * - A number, or an all-digit string, is passed through once validated as a
- *   positive integer.
+ * - A number, an all-digit string, or a `0x` hex string (the EIP-155 form that
+ *   `eth_chainId` returns) is passed through once validated as a positive integer.
+ * - Surrounding whitespace in a string is ignored (values from env/config files).
  * - A known name is mapped to its chainid.
  * - A retired or unknown name throws — silently switching networks on a
  *   blockchain client is dangerous (wrong-chain reads look successful).
@@ -100,13 +101,14 @@ export function resolveChainId(chain?: string | number | null): number {
     );
   }
 
-  if (/^\d+$/.test(chain)) {
-    return checkChainId(Number(chain), chain);
+  const trimmed = chain.trim();
+  if (/^\d+$/.test(trimmed) || /^0x[0-9a-f]+$/i.test(trimmed)) {
+    return checkChainId(Number(trimmed), chain);
   }
 
   // Own-property checks only: a plain lookup would resolve inherited names such
   // as 'constructor' or '__proto__' to Object's prototype members.
-  const key = chain.toLowerCase();
+  const key = trimmed.toLowerCase();
   if (Object.hasOwn(CHAINS, key)) {
     return CHAINS[key] as number;
   }
