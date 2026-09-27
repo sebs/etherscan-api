@@ -89,6 +89,12 @@ describe('index exports', function () {
     assert.throws(function () { return pkg.init('KEY', null, 'soon'); }, /Invalid timeout "soon" \(string\)/);
   });
 
+  for (const request of ['nope', {}, 42]) {
+    it('init rejects a non-function transport (' + typeof request + ')', function () {
+      assert.throws(function () { return pkg.init('KEY', null, null, request); }, /Invalid request transport: expected a function/);
+    });
+  }
+
   it('init defaults a null timeout', function () {
     assert.ok(pkg.init('KEY', null, null));
   });

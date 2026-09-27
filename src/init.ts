@@ -36,7 +36,7 @@ export interface EtherscanApi {
  * @param timeout - Request timeout in milliseconds (default 10000); must be positive and finite.
  *   A numeric string, e.g. from an environment variable, is accepted.
  * @param request - Custom HTTP transport; defaults to a built-in `node:https`/`node:http` request
- * @throws {Error} If `apiKey` is missing or empty, or `timeout` is invalid.
+ * @throws {Error} If `apiKey` is missing or invalid, or `chain`, `timeout` or `request` is invalid.
  */
 export function init(
   apiKey?: string,
@@ -58,6 +58,9 @@ export function init(
   }
   const t = resolveTimeout(timeout);
   const chainid = resolveChainId(chain);
+  if (request !== undefined && request !== null && typeof request !== 'function') {
+    throw new Error(`Invalid request transport: expected a function, got ${typeof request}`);
+  }
   const doRequest: Transport = request || httpTransport;
 
   // apikey + chainid are injected centrally so namespaces never repeat them.
