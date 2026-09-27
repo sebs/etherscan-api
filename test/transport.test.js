@@ -36,6 +36,20 @@ describe('http transport', function () {
         // Stream a large body (~1 MB) to exercise the response-size cap.
         res.writeHead(200, { 'content-type': 'application/json' });
         res.end('"' + 'x'.repeat(1024 * 1024) + '"');
+      } else if (req.url.startsWith('/drip')) {
+        // Keep the socket busy with one byte every 50 ms for ~2 s, so an
+        // inactivity timeout never fires.
+        res.writeHead(200, { 'content-type': 'application/json' });
+        const body = JSON.stringify({ status: '1', result: 'x'.repeat(20) });
+        let i = 0;
+        const timer = setInterval(() => {
+          if (i >= body.length || res.destroyed) {
+            clearInterval(timer);
+            res.end();
+            return;
+          }
+          res.write(body[i++]);
+        }, 50);
       } else if (req.url.startsWith('/slow')) {
         // never respond — the client should time out
       } else {
@@ -98,6 +112,12 @@ describe('http transport', function () {
 
   it('rejects when the request times out', async function () {
     await assert.rejects(() => httpTransport(base + '/slow', { timeout: 100, allowInsecure: true }), /timed out/);
+  });
+
+  it('times out a response that trickles in slower than the timeout', async function () {
+    const started = Date.now();
+    await assert.rejects(() => httpTransport(base + '/drip', { timeout: 200, allowInsecure: true }), /timed out after 200ms/);
+    assert.ok(Date.now() - started < 1000, 'the timeout must bound the whole request, not just idle time');
   });
 
   it('refuses cleartext http:// by default (no allowInsecure)', async function () {

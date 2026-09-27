@@ -43,14 +43,17 @@ const httpTransport: Transport = function httpTransport(url, options) {
     // handler can otherwise race: without this guard an aborted request could
     // still resolve truncated data, or reject and then resolve (double-settle).
     let settled = false;
+    let deadline: NodeJS.Timeout | undefined;
     const fail = (err: Error): void => {
       if (settled) return;
       settled = true;
+      clearTimeout(deadline);
       reject(err);
     };
     const succeed = (value: EtherscanResponse): void => {
       if (settled) return;
       settled = true;
+      clearTimeout(deadline);
       resolve(value);
     };
 
@@ -83,7 +86,7 @@ const httpTransport: Transport = function httpTransport(url, options) {
       headers['Content-Length'] = Buffer.byteLength(body);
     }
 
-    const req = lib.request(url, { method, headers, timeout }, (res: IncomingMessage) => {
+    const req = lib.request(url, { method, headers }, (res: IncomingMessage) => {
       const status = res.statusCode || 0;
       let data = '';
       let received = 0;
@@ -125,9 +128,13 @@ const httpTransport: Transport = function httpTransport(url, options) {
     });
 
     req.on('error', fail);
-    req.setTimeout(timeout, () => {
-      req.destroy(new Error('Request timed out after ' + timeout + 'ms'));
-    });
+    // A wall-clock deadline for the whole exchange. A socket timeout only fires
+    // after `timeout` ms of inactivity, so a server trickling bytes could hold
+    // the request open indefinitely.
+    deadline = setTimeout(() => {
+      fail(new Error('Request timed out after ' + timeout + 'ms'));
+      req.destroy();
+    }, timeout);
 
     if (method === 'POST' && body !== undefined) {
       req.write(body);
