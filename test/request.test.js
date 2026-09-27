@@ -136,6 +136,43 @@ describe('request layer (get-request)', function () {
     it('resolves with the "No records found" message', function () {
       assert.equal(result.message, 'No records found');
     });
+
+    // Regression: result used to resolve as '' although tokentx is typed as
+    // returning an array, so result.map(...) crashed.
+    it('resolves the empty result as an empty array', function () {
+      assert.deepEqual(result.result, []);
+    });
+  });
+
+  describe('resolves every list endpoint\'s empty result as []', function () {
+    const LISTS = [
+      ['account.txlist', (api) => api.account.txlist('0xa')],
+      ['account.txlistinternal', (api) => api.account.txlistinternal(undefined, '0xa')],
+      ['account.tokentx', (api) => api.account.tokentx('0xa')],
+      ['account.tokennfttx', (api) => api.account.tokennfttx('0xa')],
+      ['account.token1155tx', (api) => api.account.token1155tx('0xa')],
+      ['account.getminedblocks', (api) => api.account.getminedblocks('0xa')],
+      ['account.txsBeaconWithdrawal', (api) => api.account.txsBeaconWithdrawal('0xa')],
+      ['account.txnbridge', (api) => api.account.txnbridge('0xa')],
+      ['log.getLogs', (api) => api.log.getLogs('0xa')],
+      ['stats.chainsize', (api) => api.stats.chainsize('2019-02-01', '2019-02-28')],
+      ['contract.getcontractcreation', (api) => api.contract.getcontractcreation('0xa')],
+      ['contract.getsourcecode', (api) => api.contract.getsourcecode('0xa')],
+    ];
+
+    for (const [name, call] of LISTS) {
+      for (const empty of ['', null]) {
+        it(name + ' with result ' + JSON.stringify(empty), async function () {
+          const mocked = mockApi({ status: '0', message: 'No transactions found', result: empty });
+          assert.deepEqual((await call(mocked.api)).result, []);
+        });
+      }
+    }
+
+    it('leaves a non-list empty result alone (stats.ethsupply)', async function () {
+      const mocked = mockApi({ status: '0', message: 'No records found', result: '' });
+      assert.equal((await mocked.api.stats.ethsupply()).result, '');
+    });
   });
 
   describe('does not let the "no ... found" message swallow a real error payload', function () {

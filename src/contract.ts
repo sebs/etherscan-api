@@ -1,4 +1,4 @@
-import { isUnsafeKey } from './get-request.js';
+import { emptyAsList, isUnsafeKey } from './get-request.js';
 import type { GetRequest, PostRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { ContractCreation, ContractSource } from './results.js';
@@ -77,7 +77,9 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
         );
       }
       const value = Array.isArray(contractaddresses) ? contractaddresses.join(',') : contractaddresses;
-      return getRequest<ContractCreation[]>({ module: 'contract', action: 'getcontractcreation', contractaddresses: value });
+      return emptyAsList(
+        getRequest<ContractCreation[]>({ module: 'contract', action: 'getcontractcreation', contractaddresses: value }),
+      );
     },
 
     /**
@@ -93,7 +95,7 @@ export function contract(getRequest: GetRequest, postRequest: PostRequest) {
      * @param address - Contract address
      */
     getsourcecode(address: string): Promise<EtherscanResponse<ContractSource[]>> {
-      return getRequest<ContractSource[]>({ module: 'contract', action: 'getsourcecode', address });
+      return emptyAsList(getRequest<ContractSource[]>({ module: 'contract', action: 'getsourcecode', address }));
     },
 
     /**

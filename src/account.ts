@@ -1,3 +1,4 @@
+import { emptyAsList } from './get-request.js';
 import type { GetRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type {
@@ -91,7 +92,7 @@ export function account(getRequest: GetRequest) {
       params.contractaddress = contractaddress;
     }
     applyFilter(params, filter);
-    return call<T>(action, params);
+    return emptyAsList(call<T>(action, params));
   }
 
   // Shared body for the address-scoped paged list endpoints (beacon withdrawals
@@ -108,7 +109,7 @@ export function account(getRequest: GetRequest) {
     ): Promise<EtherscanResponse> => {
       const params: QueryParams = { address };
       listRange(params, startblock, endblock, page, offset, sort);
-      return call(action, params);
+      return emptyAsList(call(action, params));
     };
 
   /**
@@ -220,7 +221,7 @@ export function account(getRequest: GetRequest) {
         params.offset = offset;
       }
       applyFilter(params, filter);
-      return call<InternalTransaction[]>('txlistinternal', params);
+      return emptyAsList(call<InternalTransaction[]>('txlistinternal', params));
     },
 
     /**
@@ -250,7 +251,7 @@ export function account(getRequest: GetRequest) {
         params.address = address;
       }
       applyFilter(params, filter);
-      return call<NormalTransaction[]>('txlist', params);
+      return emptyAsList(call<NormalTransaction[]>('txlist', params));
     },
 
     /**
@@ -278,7 +279,7 @@ export function account(getRequest: GetRequest) {
       if (offset !== undefined) {
         params.offset = offset;
       }
-      return call<MinedBlock[]>('getminedblocks', params);
+      return emptyAsList(call<MinedBlock[]>('getminedblocks', params));
     },
 
     /**
@@ -402,7 +403,7 @@ export function account(getRequest: GetRequest) {
      * @param offset - Max records to return
      */
     txnbridge(address: string, page?: number, offset?: number): Promise<EtherscanResponse> {
-      return call('txnbridge', { address, page: page ?? 1, offset: offset ?? 100 });
+      return emptyAsList(call('txnbridge', { address, page: page ?? 1, offset: offset ?? 100 }));
     },
   };
 }

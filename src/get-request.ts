@@ -108,6 +108,18 @@ function normalize(data: EtherscanResponse): EtherscanResponse {
 }
 
 /**
+ * Resolve an empty list the way the list endpoints are typed. Etherscan answers
+ * "nothing found" with status "0" and a `result` of `[]`, `''` or `null`; the
+ * last two become `[]`, so callers can iterate a list result without a guard.
+ */
+export function emptyAsList<T>(response: Promise<EtherscanResponse<T>>): Promise<EtherscanResponse<T>> {
+  return response.then((res) => {
+    const result: unknown = res.result;
+    return result === '' || result === null || result === undefined ? { ...res, result: [] as T } : res;
+  });
+}
+
+/**
  * Call the transport and normalise its answer. The call runs inside the promise
  * executor so a transport that throws synchronously still yields a rejection,
  * rather than an exception escaping from the API method.

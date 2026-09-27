@@ -1,3 +1,4 @@
+import { emptyAsList } from './get-request.js';
 import type { GetRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { EventLog } from './results.js';
@@ -94,7 +95,7 @@ export function log(getRequest: GetRequest) {
       }
       setIfPresent(params, 'page', page);
       setIfPresent(params, 'offset', offset);
-      return getRequest<EventLog[]>(params);
+      return emptyAsList(getRequest<EventLog[]>(params));
     },
   };
 }

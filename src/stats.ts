@@ -1,3 +1,4 @@
+import { emptyAsList } from './get-request.js';
 import type { GetRequest, QueryParams } from './get-request.js';
 import type { EtherscanResponse } from './types.js';
 import type { EthPrice, ChainSize } from './results.js';
@@ -59,15 +60,17 @@ export function stats(getRequest: GetRequest) {
       syncmode: 'default' | 'archive' = 'default',
       sort: 'asc' | 'desc' = 'asc',
     ): Promise<EtherscanResponse<ChainSize[]>> {
-      return getRequest<ChainSize[]>({
-        module: 'stats',
-        action: 'chainsize',
-        startdate,
-        enddate,
-        clienttype,
-        syncmode,
-        sort,
-      });
+      return emptyAsList(
+        getRequest<ChainSize[]>({
+          module: 'stats',
+          action: 'chainsize',
+          startdate,
+          enddate,
+          clienttype,
+          syncmode,
+          sort,
+        }),
+      );
     },
   };
 }
