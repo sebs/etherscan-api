@@ -44,11 +44,15 @@ jobs:
       - name: Update npm
         run: npm install -g npm@latest
 
+      # The input reaches the shell as an environment variable, never spliced
+      # into the script text, so a crafted value cannot inject commands.
       - name: Verify package.json matches the requested version
+        env:
+          REQUESTED_VERSION: ${{ inputs.version }}
         run: |
           pkg="$(node -p "require('./package.json').version")"
-          if [ "$pkg" != "${{ inputs.version }}" ]; then
-            echo "::error::package.json version ('$pkg') does not match requested version ('${{ inputs.version }}')."
+          if [ "$pkg" != "$REQUESTED_VERSION" ]; then
+            echo "::error::package.json version ('$pkg') does not match requested version ('$REQUESTED_VERSION')."
             exit 1
           fi
 
