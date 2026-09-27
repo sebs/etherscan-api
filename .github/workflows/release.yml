@@ -40,8 +40,10 @@ jobs:
             exit 1
           fi
 
+      # npm ci installs exactly the lockfile, so the attached tarball is built
+      # from the dependency tree CI tested.
       - name: Install
-        run: npm install
+        run: npm ci
 
       - name: Test
         run: npm test
