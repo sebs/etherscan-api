@@ -30,7 +30,7 @@ describe('proxy.eth_getUncleByBlockNumberAndIndex', function () {
   });
 
   it('sends the requested tag', function () {
-    assert.equal(queryOf(transport).get('tag'), TAG);
+    assert.equal(queryOf(transport).get('tag'), TAG.toLowerCase());
   });
 
   it('sends the requested index', function () {

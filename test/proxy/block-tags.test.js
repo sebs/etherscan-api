@@ -13,6 +13,12 @@ describe('proxy block tags', function () {
     ['zero', 0, '0x0'],
     ['a hex tag', '0x10d4f', '0x10d4f'],
     ['latest', 'latest', 'latest'],
+    // Checked live: the node rejects these spellings, so they are normalised.
+    ['an uppercase 0X prefix', '0X10D4F', '0x10d4f'],
+    ['hex with leading zeros', '0x010d4f', '0x10d4f'],
+    ['hex zero with leading zeros', '0x00', '0x0'],
+    ['an uppercase named tag', 'LATEST', 'latest'],
+    ['a capitalised named tag', 'Pending', 'pending'],
   ];
 
   for (const [label, input, sent] of CASES) {
@@ -22,6 +28,12 @@ describe('proxy block tags', function () {
       assert.equal(queryOf(mocked.transport).get('tag'), sent);
     });
   }
+
+  it('normalises a hex index too', async function () {
+    const mocked = mockApi(RPC_OK);
+    await mocked.api.proxy.eth_getTransactionByBlockNumberAndIndex('0x7b', '0X0A');
+    assert.equal(queryOf(mocked.transport).get('index'), '0xa');
+  });
 
   it('converts the index too (eth_getTransactionByBlockNumberAndIndex)', async function () {
     const mocked = mockApi(RPC_OK);

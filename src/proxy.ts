@@ -10,10 +10,16 @@ export type BlockTag = string | number;
 /**
  * Convert a block number or index to a JSON-RPC quantity. JSON-RPC takes hex
  * (`0x7b`), but every other namespace here takes decimal block numbers, so a
- * number or an all-digit string is converted. Named tags (`'latest'`,
- * `'pending'`, `'earliest'`) and `0x` values pass through unchanged.
+ * number or an all-digit string is converted. A `0x` value is put in the
+ * canonical form the node accepts (lowercase `0x`, no leading zeros: checked
+ * live, `'0X10D4F'` and `'0x010d4f'` are rejected), and a named tag is
+ * lowercased (`'LATEST'` is rejected too).
  */
-function toQuantity(value: BlockTag): string {
+function toQuantity(value: BlockTag): string;
+function toQuantity(value: BlockTag | null | undefined): string | undefined;
+function toQuantity(value: BlockTag | null | undefined): string | undefined {
+  // A tag missing from plain JS is left out of the request rather than sent.
+  if (value === undefined || value === null) return undefined;
   if (typeof value === 'number' || /^\d+$/.test(value)) {
     const n = Number(value);
     if (!Number.isSafeInteger(n) || n < 0) {
@@ -21,7 +27,10 @@ function toQuantity(value: BlockTag): string {
     }
     return '0x' + n.toString(16);
   }
-  return value;
+  if (/^0x[0-9a-f]+$/i.test(value)) {
+    return '0x' + BigInt(value).toString(16);
+  }
+  return value.toLowerCase();
 }
 
 export function proxy(ctx: RequestContext) {
