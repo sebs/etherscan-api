@@ -100,20 +100,26 @@ import { init } from 'etherscan-api';
 const api = init('YourApiKey', 'sepolia', 3000);
 ```
 
-Supported chain names:
+Supported chain names, and whether a free API key can use them:
 
-| Name                                | chainid    |
-| ----------------------------------- | ---------- |
-| `mainnet` / `homestead` / `ethereum`| 1          |
-| `sepolia`                           | 11155111   |
-| `hoodi`                             | 560048     |
-| `arbitrum`                          | 42161      |
-| `optimism`                          | 10         |
-| `base`                              | 8453       |
-| `polygon`                           | 137        |
-| `bsc`                               | 56         |
-| `avalanche`                         | 43114      |
-| `avalanche_fuji`                    | 43113      |
+| Name                                | chainid    | Free key |
+| ----------------------------------- | ---------- | -------- |
+| `mainnet` / `homestead` / `ethereum`| 1          | yes      |
+| `sepolia`                           | 11155111   | yes      |
+| `hoodi`                             | 560048     | yes      |
+| `arbitrum`                          | 42161      | yes      |
+| `optimism`                          | 10         | **no**   |
+| `base`                              | 8453       | **no**   |
+| `polygon`                           | 137        | yes      |
+| `bsc`                               | 56         | **no**   |
+| `avalanche`                         | 43114      | **no**   |
+| `avalanche_fuji`                    | 43113      | yes      |
+
+On a chain marked **no**, every call with a free key fails with *"Free API
+access is not supported for this chain"*. Etherscan sets this per chain and can
+change it; the table reflects November 2026. For the current list, call
+`api.usage.chainlist()` (no paid plan needed): each entry's `comment` says
+`Free-tier available` or `Paid Plan required`.
 
 Any other chain is reachable by passing its numeric chainid directly, e.g.
 `init('YourApiKey', 59144)` for Linea.
