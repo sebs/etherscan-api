@@ -151,6 +151,29 @@ try {
 }
 ```
 
+## Paging
+
+The list endpoints differ in what they return when you pass no `page` or
+`offset`:
+
+| Without paging options | Endpoints |
+| ---------------------- | --------- |
+| **First 100 records** (`page: 1, offset: 100` is sent) | `account.txlist`, `tokentx`, `tokennfttx`, `token1155tx`, `txsBeaconWithdrawal`, `getdeposittxs`, `getwithdrawaltxs`, `txnbridge` |
+| **Etherscan's unpaged result**, up to its own cap | `account.txlistinternal`, `getminedblocks`, `log.getLogs` (capped at 1 000 records) |
+
+So `api.account.txlist(address)` returns at most 100 transactions, even for an
+address with thousands. Pass `page` and `offset` to get more, and page through
+larger results. Giving only one of them fills in the other (`page` 1, `offset`
+100), because Etherscan ignores either one on its own.
+
+`page × offset` may not exceed 10 000, Etherscan's result window, so the
+library rejects such a call before sending it. Past that, narrow the block
+range (`startblock` / `endblock`) instead:
+
+```js
+const page = await api.account.txlist(address, { page: 2, offset: 1000, sort: 'desc' });
+```
+
 ## Install
 
  ```bash
