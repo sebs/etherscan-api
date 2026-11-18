@@ -150,6 +150,12 @@ export async function tokenbalance(): Promise<void> {
   // @ts-expect-error — the account address is required.
   await api.account.tokenbalance();
 }
+
+export async function estimateGas(): Promise<void> {
+  await api.proxy.eth_estimateGas('0xa', '0x1');
+  await api.proxy.eth_estimateGas('0xa', '0x1', undefined, undefined, '0x4e71d92d');
+  await api.proxy.eth_estimateGas('0xa', '0x1', '0x2', '0x5208');
+}
 `;
 
 const TSCONFIG = {

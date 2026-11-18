@@ -57,4 +57,28 @@ describe('proxy.eth_estimateGas', function () {
     await mocked.api.proxy.eth_estimateGas(TO, '0x0', '0x051da038cc', '0xffffff', '0x4e71d92d');
     assert.equal(queryOf(mocked.transport).get('data'), '0x4e71d92d');
   });
+
+  // Checked live: Etherscan estimates a plain transfer from to and value alone.
+  describe('without gasPrice and gas', function () {
+    let query;
+
+    beforeEach(async function () {
+      const mocked = mockApi(RPC_OK);
+      await mocked.api.proxy.eth_estimateGas(TO, '0x1');
+      query = queryOf(mocked.transport);
+    });
+
+    it('omits gasPrice', function () {
+      assert.equal(query.get('gasPrice'), null);
+    });
+
+    it('omits gas', function () {
+      assert.equal(query.get('gas'), null);
+    });
+
+    it('still sends to and value', function () {
+      assert.equal(query.get('to'), TO);
+      assert.equal(query.get('value'), '0x1');
+    });
+  });
 });

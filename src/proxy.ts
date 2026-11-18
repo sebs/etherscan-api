@@ -145,16 +145,18 @@ export function proxy(ctx: RequestContext) {
      * Estimates the gas needed for a transaction without adding it to the chain (hex).
      * @param to - Address to interact with
      * @param value - Value sent in the transaction
-     * @param gasPrice - Gas price in wei
-     * @param gas - Gas provided
+     * @param gasPrice - Gas price in wei (optional; omitted when not given)
+     * @param gas - Gas provided (optional; omitted when not given)
      * @param data - Call data (method signature hash plus encoded arguments), needed to
      *   estimate a contract call rather than a plain transfer
+     * @example
+     * api.proxy.eth_estimateGas('0xf0160428a8552ac9bb7e050d90eeade4ddd52843', '0xff22');
      */
     eth_estimateGas(
       to: string,
       value: string,
-      gasPrice: string,
-      gas: string,
+      gasPrice?: string,
+      gas?: string,
       data?: string,
     ): Promise<EtherscanResponse<string>> {
       return call<string>('eth_estimateGas', compact({ to, value, gasPrice, gas, data }));
