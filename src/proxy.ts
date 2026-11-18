@@ -7,17 +7,40 @@ import type { EtherscanResponse } from './types.js';
 /** A block number/index as JSON-RPC takes it: a hex quantity or a named tag. */
 export type BlockTag = string | number;
 
+/** The named tags the block lookups and `eth_getTransactionCount` accept. */
+const BLOCK_NAMES: readonly string[] = ['latest', 'pending', 'earliest'];
+/**
+ * The named tags the state reads accept. Checked live: `'safe'` and
+ * `'finalized'` work for `eth_call`, `eth_getCode` and `eth_getStorageAt`, but
+ * fail with "invalid hex string" on the block lookups and `eth_getTransactionCount`.
+ */
+const STATE_NAMES: readonly string[] = [...BLOCK_NAMES, 'safe', 'finalized'];
+
+/** `['a', 'b', 'c']` → `'a', 'b' or 'c'`. */
+function quoteList(names: readonly string[]): string {
+  const quoted = names.map((name) => `'${name}'`);
+  return quoted.length > 1 ? quoted.slice(0, -1).join(', ') + ' or ' + quoted[quoted.length - 1] : quoted.join('');
+}
+
 /**
  * Convert a block number or index to a JSON-RPC quantity. JSON-RPC takes hex
  * (`0x7b`), but every other namespace here takes decimal block numbers, so a
  * number or an all-digit string is converted. A `0x` value is put in the
  * canonical form the node accepts (lowercase `0x`, no leading zeros: checked
  * live, `'0X10D4F'` and `'0x010d4f'` are rejected), and a named tag is
- * lowercased (`'LATEST'` is rejected too).
+ * lowercased (`'LATEST'` is rejected too). A name the method does not accept
+ * is rejected before the request rather than with the node's "invalid hex string".
+ * @param argument - The parameter being converted, for the error.
+ * @param names - The named tags this method accepts; none for an index.
+ * @throws {EtherscanArgumentError} For a negative or fractional number, or a name the method does not accept.
  */
-function toQuantity(value: BlockTag): string;
-function toQuantity(value: BlockTag | null | undefined): string | undefined;
-function toQuantity(value: BlockTag | null | undefined): string | undefined {
+function toQuantity(value: BlockTag, argument: 'tag' | 'index', names?: readonly string[]): string;
+function toQuantity(value: BlockTag | null | undefined, argument: 'tag' | 'index', names?: readonly string[]): string | undefined;
+function toQuantity(
+  value: BlockTag | null | undefined,
+  argument: 'tag' | 'index',
+  names: readonly string[] = [],
+): string | undefined {
   // A tag missing from plain JS is left out of the request rather than sent.
   if (value === undefined || value === null) return undefined;
   if (typeof value === 'number' || /^\d+$/.test(value)) {
@@ -30,7 +53,10 @@ function toQuantity(value: BlockTag | null | undefined): string | undefined {
   if (/^0x[0-9a-f]+$/i.test(value)) {
     return '0x' + BigInt(value).toString(16);
   }
-  return value.toLowerCase();
+  const name = value.toLowerCase();
+  if (names.includes(name)) return name;
+  const expected = names.length ? 'a block number, 0x hex or ' + quoteList(names) : 'a non-negative integer or 0x hex';
+  throw invalid(argument, value, expected);
 }
 
 export function proxy(ctx: RequestContext) {
@@ -49,7 +75,7 @@ export function proxy(ctx: RequestContext) {
      * @param fullTransactions - When true (default) returns full transaction objects, otherwise only hashes
      */
     async eth_getBlockByNumber(tag: BlockTag, fullTransactions = true): Promise<EtherscanResponse> {
-      return call('eth_getBlockByNumber', { tag: toQuantity(tag), boolean: fullTransactions });
+      return call('eth_getBlockByNumber', { tag: toQuantity(tag, 'tag', BLOCK_NAMES), boolean: fullTransactions });
     },
 
     /**
@@ -58,7 +84,7 @@ export function proxy(ctx: RequestContext) {
      * @param index - Uncle index position
      */
     async eth_getUncleByBlockNumberAndIndex(tag: BlockTag, index: BlockTag): Promise<EtherscanResponse> {
-      return call('eth_getUncleByBlockNumberAndIndex', { tag: toQuantity(tag), index: toQuantity(index) });
+      return call('eth_getUncleByBlockNumberAndIndex', { tag: toQuantity(tag, 'tag', BLOCK_NAMES), index: toQuantity(index, 'index') });
     },
 
     /**
@@ -66,7 +92,7 @@ export function proxy(ctx: RequestContext) {
      * @param tag - Block number tag
      */
     async eth_getBlockTransactionCountByNumber(tag: BlockTag): Promise<EtherscanResponse<string>> {
-      return call<string>('eth_getBlockTransactionCountByNumber', { tag: toQuantity(tag) });
+      return call<string>('eth_getBlockTransactionCountByNumber', { tag: toQuantity(tag, 'tag', BLOCK_NAMES) });
     },
 
     /**
@@ -83,7 +109,7 @@ export function proxy(ctx: RequestContext) {
      * @param index - Transaction index position
      */
     async eth_getTransactionByBlockNumberAndIndex(tag: BlockTag, index: BlockTag): Promise<EtherscanResponse> {
-      return call('eth_getTransactionByBlockNumberAndIndex', { tag: toQuantity(tag), index: toQuantity(index) });
+      return call('eth_getTransactionByBlockNumberAndIndex', { tag: toQuantity(tag, 'tag', BLOCK_NAMES), index: toQuantity(index, 'index') });
     },
 
     /**
@@ -95,7 +121,7 @@ export function proxy(ctx: RequestContext) {
     async eth_getTransactionCount(address: string, tag?: BlockTag): Promise<EtherscanResponse<string>> {
       const params: QueryParams = { address };
       if (tag !== undefined && tag !== '') {
-        params.tag = toQuantity(tag);
+        params.tag = toQuantity(tag, 'tag', BLOCK_NAMES);
       }
       return call<string>('eth_getTransactionCount', params);
     },
@@ -120,29 +146,29 @@ export function proxy(ctx: RequestContext) {
      * Executes a new message call immediately without creating a transaction (hex).
      * @param to - Address to execute against
      * @param data - Hash of the method signature and encoded parameters
-     * @param tag - Block number tag
+     * @param tag - Block number, hex tag, or `'latest'`, `'pending'`, `'earliest'`, `'safe'` or `'finalized'`
      */
     async eth_call(to: string, data: string, tag: BlockTag): Promise<EtherscanResponse<string>> {
-      return call<string>('eth_call', { to, data, tag: toQuantity(tag) });
+      return call<string>('eth_call', { to, data, tag: toQuantity(tag, 'tag', STATE_NAMES) });
     },
 
     /**
      * Returns code at a given address (hex).
      * @param address - Address to get code from
-     * @param tag - Block number tag
+     * @param tag - Block number, hex tag, or `'latest'`, `'pending'`, `'earliest'`, `'safe'` or `'finalized'`
      */
     async eth_getCode(address: string, tag: BlockTag): Promise<EtherscanResponse<string>> {
-      return call<string>('eth_getCode', { address, tag: toQuantity(tag) });
+      return call<string>('eth_getCode', { address, tag: toQuantity(tag, 'tag', STATE_NAMES) });
     },
 
     /**
      * Returns the value from a storage position at a given address (hex).
      * @param address - Address to get storage from
      * @param position - Storage position
-     * @param tag - Block number tag
+     * @param tag - Block number, hex tag, or `'latest'`, `'pending'`, `'earliest'`, `'safe'` or `'finalized'`
      */
     async eth_getStorageAt(address: string, position: string, tag: BlockTag): Promise<EtherscanResponse<string>> {
-      return call<string>('eth_getStorageAt', { address, position, tag: toQuantity(tag) });
+      return call<string>('eth_getStorageAt', { address, position, tag: toQuantity(tag, 'tag', STATE_NAMES) });
     },
 
     /** Returns the current price per gas in wei (hex). */
