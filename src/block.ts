@@ -44,14 +44,17 @@ export function block(ctx: RequestContext) {
 
     /**
      * Returns the block number that was mined at a certain timestamp.
-     * @param timestamp - Unix timestamp in seconds, or a `Date`
+     * @param timestamp - Unix timestamp in seconds (a fraction is rounded toward `closest`), or a `Date`
      * @param closest - Return the closest block `'before'` (default) or `'after'` the timestamp
      */
     async getblocknobytime(
       timestamp: string | number | Date,
       closest: 'before' | 'after' = 'before',
     ): Promise<EtherscanResponse<string>> {
-      return call<string>('getblocknobytime', { timestamp: unixSeconds(timestamp), closest });
+      // Round a fractional time toward `closest`, so the block found never
+      // lies on the wrong side of it.
+      const seconds = unixSeconds(timestamp, closest === 'after' ? Math.ceil : Math.floor);
+      return call<string>('getblocknobytime', { timestamp: seconds, closest });
     },
 
     /**

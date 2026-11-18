@@ -192,13 +192,20 @@ export function checkAddressCount(method: string, addresses: readonly string[], 
 const MAX_UNIX_SECONDS = 1e11;
 
 /**
- * Convert a timestamp (Unix seconds, a numeric string, or a `Date`) to Unix
- * seconds.
- * @throws {EtherscanArgumentError} For a non-integer, negative or millisecond value.
+ * Convert a timestamp (Unix seconds, a numeric string, or a `Date`) to whole
+ * Unix seconds. A fractional value (`Date.now() / 1000`, a `Date` with
+ * milliseconds) is rounded with `round`: down by default, up when the caller
+ * needs the result not to fall before the given time.
+ * @param round - `Math.floor` (default) or `Math.ceil`.
+ * @throws {EtherscanArgumentError} For a non-numeric, negative or millisecond value.
  */
-export function unixSeconds(timestamp: string | number | Date): number {
-  const seconds = timestamp instanceof Date ? Math.floor(timestamp.getTime() / 1000) : Number(timestamp);
-  if (!Number.isSafeInteger(seconds) || seconds < 0) {
+export function unixSeconds(timestamp: string | number | Date, round: (x: number) => number = Math.floor): number {
+  const raw = timestamp instanceof Date ? timestamp.getTime() / 1000 : Number(timestamp);
+  if (!Number.isFinite(raw) || raw < 0) {
+    throw invalid('timestamp', timestamp, 'Unix seconds or a Date');
+  }
+  const seconds = round(raw);
+  if (!Number.isSafeInteger(seconds)) {
     throw invalid('timestamp', timestamp, 'Unix seconds or a Date');
   }
   if (seconds > MAX_UNIX_SECONDS) {

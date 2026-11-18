@@ -64,7 +64,26 @@ describe('block.getblocknobytime', function () {
     assert.equal(mocked.transport.mock.callCount(), 0);
   });
 
-  for (const bad of ['yesterday', -1, 1.5, new Date('nope')]) {
+  // A fractional timestamp (Date.now() / 1000) is rounded toward the side
+  // `closest` asks for, so the block found never lies on the wrong side of it.
+  const ROUNDING = [
+    ['a fractional number', 1578638524.4, 'before', '1578638524'],
+    ['a fractional number', 1578638524.4, 'after', '1578638525'],
+    ['a fractional string', '1578638524.5', 'before', '1578638524'],
+    ['a fractional string', '1578638524.5', 'after', '1578638525'],
+    ['a Date with milliseconds', new Date(1578638524250), 'before', '1578638524'],
+    ['a Date with milliseconds', new Date(1578638524250), 'after', '1578638525'],
+    ['a whole number', 1578638524, 'after', '1578638524'],
+  ];
+  for (const [label, input, closest, sent] of ROUNDING) {
+    it('rounds ' + label + ' for closest="' + closest + '" to ' + sent, async function () {
+      const mocked = mockApi({ status: '1', result: 'ok' });
+      await mocked.api.block.getblocknobytime(input, closest);
+      assert.equal(queryOf(mocked.transport).get('timestamp'), sent);
+    });
+  }
+
+  for (const bad of ['yesterday', -1, -0.5, new Date('nope')]) {
     it('rejects the invalid timestamp ' + String(bad), async function () {
       const mocked = mockApi({ status: '1', result: 'ok' });
       await assert.rejects(() => mocked.api.block.getblocknobytime(bad), /Invalid timestamp/);
