@@ -28,6 +28,34 @@ export function invalid(argument: string, value: unknown, expected: string): Eth
   return new EtherscanArgumentError(`Invalid ${argument} ${describeValue(value)}: expected ${expected}`, argument, value);
 }
 
+/** A 20-byte address: `0x` and 40 hex digits, in any case (the checksum is not checked). */
+const ADDRESS = /^0x[0-9a-f]{40}$/i;
+/** A 32-byte transaction hash: `0x` and 64 hex digits. */
+const TX_HASH = /^0x[0-9a-f]{64}$/i;
+
+/**
+ * Validate an address. Etherscan answers a malformed one on the account
+ * endpoints with a plausible success (`balance('0x123')` → `"0"`), so a typo
+ * would otherwise go unnoticed.
+ * @throws {EtherscanArgumentError} If the value is not a 0x-prefixed 20-byte hex address.
+ */
+export function checkAddress(argument: string, value: unknown): void {
+  if (typeof value !== 'string' || !ADDRESS.test(value)) {
+    throw invalid(argument, value, 'a 0x-prefixed address of 40 hex digits');
+  }
+}
+
+/**
+ * Validate a transaction hash. Etherscan answers a malformed one on the
+ * transaction endpoints with "no error" rather than a failure.
+ * @throws {EtherscanArgumentError} If the value is not a 0x-prefixed 32-byte hex hash.
+ */
+export function checkTxHash(argument: string, value: unknown): void {
+  if (typeof value !== 'string' || !TX_HASH.test(value)) {
+    throw invalid(argument, value, 'a 0x-prefixed transaction hash of 64 hex digits');
+  }
+}
+
 /**
  * Validate an API key and return it trimmed (a key read from a file keeps its
  * trailing newline). The value is never echoed into the message: it may be the

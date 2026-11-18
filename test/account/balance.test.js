@@ -49,7 +49,7 @@ describe('account.balance', function () {
     beforeEach(async function () {
       const mocked = mockApi({ status: '1', result: 'ok' });
       transport = mocked.transport;
-      const res = await mocked.api.account.balance(['0xaaa', '0xbbb']);
+      const res = await mocked.api.account.balance(['0xaaa0000000000000000000000000000000000000', '0xbbb0000000000000000000000000000000000000']);
       result = res.result;
     });
 
@@ -74,7 +74,7 @@ describe('account.balance', function () {
     });
 
     it('sends the addresses comma-joined', function () {
-      assert.equal(queryOf(transport).get('address'), '0xaaa,0xbbb');
+      assert.equal(queryOf(transport).get('address'), '0xaaa0000000000000000000000000000000000000,0xbbb0000000000000000000000000000000000000');
     });
   });
 

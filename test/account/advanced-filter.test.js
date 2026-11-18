@@ -51,12 +51,12 @@ describe('account advanced filter (from/to/fromto_opr)', function () {
   // from/to; fromto_opr is required once from or to is set; 'and' needs both.
   describe('rejects an address combined with a from/to filter, before any request', function () {
     const calls = {
-      txlist: (api) => api.account.txlist('0xabc', { filter: { from: '0xfff', fromto_opr: 'or' } }),
-      'txlist (positional)': (api) => api.account.txlist('0xabc', 0, 'latest', 1, 10, 'asc', { from: '0xfff' }),
-      txlistinternal: (api) => api.account.txlistinternal({ address: '0xabc', filter: { to: '0xfff' } }),
-      tokentx: (api) => api.account.tokentx('0xabc', { filter: { from: '0xfff' } }),
-      tokennfttx: (api) => api.account.tokennfttx('0xabc', { filter: { to: '0xfff' } }),
-      token1155tx: (api) => api.account.token1155tx('0xabc', { filter: { from: '0xfff' } }),
+      txlist: (api) => api.account.txlist('0xabc0000000000000000000000000000000000000', { filter: { from: '0xfff0000000000000000000000000000000000000', fromto_opr: 'or' } }),
+      'txlist (positional)': (api) => api.account.txlist('0xabc0000000000000000000000000000000000000', 0, 'latest', 1, 10, 'asc', { from: '0xfff0000000000000000000000000000000000000' }),
+      txlistinternal: (api) => api.account.txlistinternal({ address: '0xabc0000000000000000000000000000000000000', filter: { to: '0xfff0000000000000000000000000000000000000' } }),
+      tokentx: (api) => api.account.tokentx('0xabc0000000000000000000000000000000000000', { filter: { from: '0xfff0000000000000000000000000000000000000' } }),
+      tokennfttx: (api) => api.account.tokennfttx('0xabc0000000000000000000000000000000000000', { filter: { to: '0xfff0000000000000000000000000000000000000' } }),
+      token1155tx: (api) => api.account.token1155tx('0xabc0000000000000000000000000000000000000', { filter: { from: '0xfff0000000000000000000000000000000000000' } }),
     };
     for (const [name, call] of Object.entries(calls)) {
       it(name, async function () {
@@ -69,42 +69,42 @@ describe('account advanced filter (from/to/fromto_opr)', function () {
 
   it('still sends an address with a filter that sets only fromto_opr', async function () {
     const { api, transport } = mockApi({ status: '1', result: [] });
-    await api.account.txlist('0xabc', { filter: { fromto_opr: 'and' } });
-    assert.equal(queryOf(transport).get('address'), '0xabc');
+    await api.account.txlist('0xabc0000000000000000000000000000000000000', { filter: { fromto_opr: 'and' } });
+    assert.equal(queryOf(transport).get('address'), '0xabc0000000000000000000000000000000000000');
   });
 
   it('ignores the filter for a txhash lookup, so an address there is no conflict', async function () {
     const { api, transport } = mockApi({ status: '1', result: [] });
-    await api.account.txlistinternal({ txhash: '0xh', address: '0xabc', filter: { from: '0xfff', fromto_opr: 'or' } });
-    assert.equal(queryOf(transport).get('txhash'), '0xh');
+    await api.account.txlistinternal({ txhash: '0x1111111111111111111111111111111111111111111111111111111111111111', address: '0xabc0000000000000000000000000000000000000', filter: { from: '0xfff0000000000000000000000000000000000000', fromto_opr: 'or' } });
+    assert.equal(queryOf(transport).get('txhash'), '0x1111111111111111111111111111111111111111111111111111111111111111');
   });
 
   describe('defaults fromto_opr to "or" when only one side is given', function () {
     for (const side of ['from', 'to']) {
       it('for ' + side, async function () {
         const { api, transport } = mockApi({ status: '1', result: [] });
-        await api.account.txlist(undefined, { filter: { [side]: '0xfff' } });
+        await api.account.txlist(undefined, { filter: { [side]: '0xfff0000000000000000000000000000000000000' } });
         assert.equal(queryOf(transport).get('fromto_opr'), 'or');
       });
     }
 
     it('for txlistinternal', async function () {
       const { api, transport } = mockApi({ status: '1', result: [] });
-      await api.account.txlistinternal({ filter: { to: '0xfff' } });
+      await api.account.txlistinternal({ filter: { to: '0xfff0000000000000000000000000000000000000' } });
       assert.equal(queryOf(transport).get('fromto_opr'), 'or');
     });
   });
 
   it('keeps an explicit "or" with one side', async function () {
     const { api, transport } = mockApi({ status: '1', result: [] });
-    await api.account.tokentx(undefined, { filter: { from: '0xfff', fromto_opr: 'or' } });
+    await api.account.tokentx(undefined, { filter: { from: '0xfff0000000000000000000000000000000000000', fromto_opr: 'or' } });
     assert.equal(queryOf(transport).get('fromto_opr'), 'or');
   });
 
   it('rejects "and" with only one side, before any request', async function () {
     const { api, transport } = mockApi({ status: '1', result: [] });
     await assert.rejects(
-      () => api.account.txlist(undefined, { filter: { from: '0xfff', fromto_opr: 'and' } }),
+      () => api.account.txlist(undefined, { filter: { from: '0xfff0000000000000000000000000000000000000', fromto_opr: 'and' } }),
       (err) => err instanceof EtherscanArgumentError && err.argument === 'fromto_opr',
     );
     assert.equal(transport.mock.callCount(), 0);
@@ -113,7 +113,7 @@ describe('account advanced filter (from/to/fromto_opr)', function () {
   it('rejects from and to without fromto_opr, before any request', async function () {
     const { api, transport } = mockApi({ status: '1', result: [] });
     await assert.rejects(
-      () => api.account.txlist(undefined, { filter: { from: '0xaaa', to: '0xbbb' } }),
+      () => api.account.txlist(undefined, { filter: { from: '0xaaa0000000000000000000000000000000000000', to: '0xbbb0000000000000000000000000000000000000' } }),
       (err) => err instanceof EtherscanArgumentError && err.argument === 'fromto_opr',
     );
     assert.equal(transport.mock.callCount(), 0);
@@ -125,7 +125,7 @@ describe('account advanced filter (from/to/fromto_opr)', function () {
     beforeEach(async function () {
       const mocked = mockApi({ status: '1', result: [] });
       transport = mocked.transport;
-      await mocked.api.account.txlist('0xabc', undefined, undefined, undefined, undefined, undefined, {});
+      await mocked.api.account.txlist('0xabc0000000000000000000000000000000000000', undefined, undefined, undefined, undefined, undefined, {});
     });
 
     it('omits the from filter', function () {
@@ -188,9 +188,9 @@ describe('account advanced filter (from/to/fromto_opr)', function () {
       beforeEach(async function () {
         const mocked = mockApi({ status: '1', result: [] });
         transport = mocked.transport;
-        await mocked.api.account[method](undefined, '0xcontract', 0, 'latest', 1, 10, 'desc', {
-          from: '0xaaa',
-          to: '0xbbb',
+        await mocked.api.account[method](undefined, '0xcccccccccccccccccccccccccccccccccccccccc', 0, 'latest', 1, 10, 'desc', {
+          from: '0xaaa0000000000000000000000000000000000000',
+          to: '0xbbb0000000000000000000000000000000000000',
           fromto_opr: 'and',
         });
       });
@@ -204,15 +204,15 @@ describe('account advanced filter (from/to/fromto_opr)', function () {
       });
 
       it('sends the contract address', function () {
-        assert.equal(queryOf(transport).get('contractaddress'), '0xcontract');
+        assert.equal(queryOf(transport).get('contractaddress'), '0xcccccccccccccccccccccccccccccccccccccccc');
       });
 
       it('sends the from filter', function () {
-        assert.equal(queryOf(transport).get('from'), '0xaaa');
+        assert.equal(queryOf(transport).get('from'), '0xaaa0000000000000000000000000000000000000');
       });
 
       it('sends the to filter', function () {
-        assert.equal(queryOf(transport).get('to'), '0xbbb');
+        assert.equal(queryOf(transport).get('to'), '0xbbb0000000000000000000000000000000000000');
       });
 
       it('sends the fromto_opr filter', function () {

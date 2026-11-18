@@ -1,7 +1,7 @@
 import { EtherscanArgumentError } from './errors.js';
 import { compact } from './params.js';
 import type { QueryParams } from './params.js';
-import { checkPaging, checkSort } from './validation.js';
+import { checkAddress, checkPaging, checkSort } from './validation.js';
 import type { SortOrder } from './validation.js';
 
 /**
@@ -78,6 +78,8 @@ export function filterParams(filter?: AdvancedFilter, address?: string): QueryPa
   const params = filter ? compact({ from: filter.from, to: filter.to, fromto_opr: filter.fromto_opr }) : {};
   const sides = Number(params.from !== undefined) + Number(params.to !== undefined);
   if (sides === 0) return params;
+  if (params.from !== undefined) checkAddress('from', params.from);
+  if (params.to !== undefined) checkAddress('to', params.to);
   if (address) {
     throw new EtherscanArgumentError(
       'An advanced filter on from/to cannot be combined with an address; pass one or the other',

@@ -9,7 +9,7 @@ import type {
   PositionalFilteredList,
   PositionalList,
 } from './list-params.js';
-import { checkAddressCount, checkSort } from './validation.js';
+import { checkAddress, checkAddressCount, checkSort, checkTxHash } from './validation.js';
 import type { SortOrder } from './validation.js';
 import type { EtherscanResponse } from './types.js';
 import type {
@@ -76,6 +76,8 @@ export function account(ctx: RequestContext) {
       const options: TokenTransferOptions = isOptions<TokenTransferOptions>(first)
         ? first
         : { contractaddress: first, ...fromPositional(args.slice(1) as PositionalFilteredList) };
+      if (address !== undefined) checkAddress('address', address);
+      if (options.contractaddress) checkAddress('contractaddress', options.contractaddress);
       return list<T[]>(action, {
         ...compact({ address, contractaddress: options.contractaddress }),
         ...listParams(options, address),
@@ -88,6 +90,7 @@ export function account(ctx: RequestContext) {
     (async (address: string, ...args: [ListOptions?] | PositionalList) => {
       const [first] = args;
       const options = isOptions<ListOptions>(first) ? first : fromPositional(args as PositionalList);
+      checkAddress('address', address);
       return list<T[]>(action, { address, ...listParams(options) });
     }) as AddressList<T>;
 
@@ -104,6 +107,7 @@ export function account(ctx: RequestContext) {
     let addr: string;
     if (Array.isArray(address)) {
       checkAddressCount('balance', address, MAX_BALANCEMULTI);
+      for (const a of address) checkAddress('address', a);
       addr = address.join(',');
       action = 'balancemulti';
     } else {
@@ -116,6 +120,7 @@ export function account(ctx: RequestContext) {
           address,
         );
       }
+      checkAddress('address', address);
       addr = address;
     }
     return call<string | MultiBalanceItem[]>(action, { tag: 'latest', address: addr });
@@ -151,6 +156,7 @@ export function account(ctx: RequestContext) {
     if (!address && !options.filter?.from && !options.filter?.to) {
       throw new EtherscanArgumentError('txlist() needs an address or an advanced filter with from/to', 'address');
     }
+    if (address) checkAddress('address', address);
     return list<NormalTransaction[]>('txlist', { ...compact({ address }), ...listParams(options, address) });
   }
 
@@ -181,6 +187,9 @@ export function account(ctx: RequestContext) {
     const query: InternalTxQuery = isOptions<InternalTxQuery>(first)
       ? first
       : { txhash: first, address, startblock, endblock, sort, filter, page, offset };
+    // Only what is sent is checked: a txhash lookup ignores the address.
+    if (query.txhash) checkTxHash('txhash', query.txhash);
+    else if (query.address) checkAddress('address', query.address);
     return list<InternalTransaction[]>('txlistinternal', {
       ...compact(
         query.txhash ? { txhash: query.txhash } : { address: query.address, ...blockRange(query.startblock, query.endblock) },
@@ -230,6 +239,8 @@ export function account(ctx: RequestContext) {
           'contractaddress',
         );
       }
+      checkAddress('address', address);
+      checkAddress('contractaddress', contractaddress);
       return call<string>('tokenbalance', compact({ tag: 'latest', contractaddress, address }));
     },
 
@@ -271,6 +282,7 @@ export function account(ctx: RequestContext) {
       page?: number,
       offset?: number,
     ): Promise<EtherscanResponse<MinedBlock[]>> {
+      checkAddress('address', address);
       return list<MinedBlock[]>('getminedblocks', {
         ...compact({ address, blocktype }),
         // Past the window Etherscan answered 'No transactions found' rather
@@ -327,7 +339,8 @@ export function account(ctx: RequestContext) {
      * Returns the address that first funded a given address.
      * @param address - Account address
      */
-    fundedby(address: string): Promise<EtherscanResponse<FundedBy>> {
+    async fundedby(address: string): Promise<EtherscanResponse<FundedBy>> {
+      checkAddress('address', address);
       return call<FundedBy>('fundedby', { address });
     },
 
@@ -339,6 +352,7 @@ export function account(ctx: RequestContext) {
      * @param offset - Max records to return (default 100)
      */
     async txnbridge(address: string, page?: number, offset?: number): Promise<EtherscanResponse<PlasmaDeposit[]>> {
+      checkAddress('address', address);
       return list<PlasmaDeposit[]>('txnbridge', { address, ...pagingParams(page, offset, { defaults: true }) });
     },
   };

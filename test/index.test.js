@@ -43,7 +43,7 @@ describe('index exports', function () {
 
     it('rejects a call-level argument the same way (sort)', async function () {
       const api = pkg.init('KEY', null, null, async () => ({ status: '1', result: [] }));
-      await assert.rejects(() => api.account.txlist('0xa', 0, 'latest', 1, 10, 'DESC'), (err) =>
+      await assert.rejects(() => api.account.txlist('0xa000000000000000000000000000000000000000', 0, 'latest', 1, 10, 'DESC'), (err) =>
         err instanceof pkg.EtherscanArgumentError && err.argument === 'sort' && err.value === 'DESC');
     });
 

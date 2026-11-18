@@ -71,7 +71,7 @@ describe('request layer (get-request)', function () {
 
     beforeEach(async function () {
       const mocked = mockApi({ status: '1', message: 'OK', result: '123' });
-      result = await mocked.api.account.balance('0xabc');
+      result = await mocked.api.account.balance('0xabc0000000000000000000000000000000000000');
     });
 
     it('resolves with status "1"', function () {
@@ -88,7 +88,7 @@ describe('request layer (get-request)', function () {
 
     beforeEach(async function () {
       const mocked = mockApi({ status: '0', message: 'NOTOK', result: 'Invalid address format' });
-      error = await mocked.api.account.balance('bad').then(function () { return null; }, function (e) { return e; });
+      error = await mocked.api.account.balance('0xabc0000000000000000000000000000000000000').then(function () { return null; }, function (e) { return e; });
     });
 
     it('throws an EtherscanError', function () {
@@ -117,7 +117,7 @@ describe('request layer (get-request)', function () {
 
     beforeEach(async function () {
       const mocked = mockApi({ status: '0', message: 'No transactions found', result: [] });
-      result = await mocked.api.account.txlist('0xabc');
+      result = await mocked.api.account.txlist('0xabc0000000000000000000000000000000000000');
     });
 
     it('resolves with status "0"', function () {
@@ -134,7 +134,7 @@ describe('request layer (get-request)', function () {
 
     beforeEach(async function () {
       const mocked = mockApi({ status: '0', message: 'No records found', result: '' });
-      result = await mocked.api.account.tokentx('0xabc');
+      result = await mocked.api.account.tokentx('0xabc0000000000000000000000000000000000000');
     });
 
     it('resolves with the "No records found" message', function () {
@@ -150,18 +150,18 @@ describe('request layer (get-request)', function () {
 
   describe('resolves every list endpoint\'s empty result as []', function () {
     const LISTS = [
-      ['account.txlist', (api) => api.account.txlist('0xa')],
-      ['account.txlistinternal', (api) => api.account.txlistinternal(undefined, '0xa')],
-      ['account.tokentx', (api) => api.account.tokentx('0xa')],
-      ['account.tokennfttx', (api) => api.account.tokennfttx('0xa')],
-      ['account.token1155tx', (api) => api.account.token1155tx('0xa')],
-      ['account.getminedblocks', (api) => api.account.getminedblocks('0xa')],
-      ['account.txsBeaconWithdrawal', (api) => api.account.txsBeaconWithdrawal('0xa')],
-      ['account.txnbridge', (api) => api.account.txnbridge('0xa')],
-      ['log.getLogs', (api) => api.log.getLogs('0xa')],
+      ['account.txlist', (api) => api.account.txlist('0xa000000000000000000000000000000000000000')],
+      ['account.txlistinternal', (api) => api.account.txlistinternal(undefined, '0xa000000000000000000000000000000000000000')],
+      ['account.tokentx', (api) => api.account.tokentx('0xa000000000000000000000000000000000000000')],
+      ['account.tokennfttx', (api) => api.account.tokennfttx('0xa000000000000000000000000000000000000000')],
+      ['account.token1155tx', (api) => api.account.token1155tx('0xa000000000000000000000000000000000000000')],
+      ['account.getminedblocks', (api) => api.account.getminedblocks('0xa000000000000000000000000000000000000000')],
+      ['account.txsBeaconWithdrawal', (api) => api.account.txsBeaconWithdrawal('0xa000000000000000000000000000000000000000')],
+      ['account.txnbridge', (api) => api.account.txnbridge('0xa000000000000000000000000000000000000000')],
+      ['log.getLogs', (api) => api.log.getLogs('0xa000000000000000000000000000000000000000')],
       ['stats.chainsize', (api) => api.stats.chainsize('2019-02-01', '2019-02-28')],
-      ['contract.getcontractcreation', (api) => api.contract.getcontractcreation('0xa')],
-      ['contract.getsourcecode', (api) => api.contract.getsourcecode('0xa')],
+      ['contract.getcontractcreation', (api) => api.contract.getcontractcreation('0xa000000000000000000000000000000000000000')],
+      ['contract.getsourcecode', (api) => api.contract.getsourcecode('0xa000000000000000000000000000000000000000')],
     ];
 
     for (const [name, call] of LISTS) {
@@ -189,7 +189,7 @@ describe('request layer (get-request)', function () {
         result: 'Error! Invalid address format',
       });
       try {
-        await mocked.api.account.tokentx('not-an-address');
+        await mocked.api.account.tokentx('0xabc0000000000000000000000000000000000000');
       } catch (err) {
         error = err;
       }
@@ -215,7 +215,7 @@ describe('request layer (get-request)', function () {
     for (const [label, body] of CASES) {
       it('rejects ' + label, async function () {
         const mocked = mockApi(body);
-        await assert.rejects(() => mocked.api.account.txlist('0xabc'), EtherscanError);
+        await assert.rejects(() => mocked.api.account.txlist('0xabc0000000000000000000000000000000000000'), EtherscanError);
       });
     }
   });
@@ -339,7 +339,7 @@ describe('request layer (get-request)', function () {
 
     for (const [label, call] of [
       ['a GET', (api) => api.stats.ethsupply()],
-      ['a POST', (api) => api.contract.verifyproxycontract('0xabc')],
+      ['a POST', (api) => api.contract.verifyproxycontract('0xabc0000000000000000000000000000000000000')],
       ['a raw GET', (api) => api.usage.chainlist()],
     ]) {
       it('for ' + label, async function () {
@@ -356,8 +356,8 @@ describe('request layer (get-request)', function () {
 
     beforeEach(async function () {
       const mocked = mockApi({ jsonrpc: '2.0', id: 1, result: '0x' });
-      await mocked.api.proxy.eth_call('0xa', '0xb');
-      await mocked.api.proxy.eth_call('0xa', '0xb', null);
+      await mocked.api.proxy.eth_call('0xa000000000000000000000000000000000000000', '0xb');
+      await mocked.api.proxy.eth_call('0xa000000000000000000000000000000000000000', '0xb', null);
       query = [queryOf(mocked.transport, 0), queryOf(mocked.transport, 1)];
     });
 

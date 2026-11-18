@@ -2,7 +2,7 @@ import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { mockApi, queryOf } from '../helpers.js';
 
-const TXHASH = '0xdeadbeef';
+const TXHASH = '0xdeadbeef00000000000000000000000000000000000000000000000000000000';
 
 describe('transaction.getstatus', function () {
   let transport;

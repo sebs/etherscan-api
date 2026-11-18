@@ -2,7 +2,7 @@ import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { mockApi, queryOf } from '../helpers.js';
 
-const ADDRESS = '0xabc';
+const ADDRESS = '0xabc0000000000000000000000000000000000000';
 
 describe('account.fundedby', function () {
   let transport;

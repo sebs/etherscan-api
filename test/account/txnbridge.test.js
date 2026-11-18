@@ -64,7 +64,7 @@ describe('account.txnbridge', function () {
     beforeEach(async function () {
       const mocked = mockApi({ status: '1', result: [] });
       transport = mocked.transport;
-      await mocked.api.account.txnbridge('0xabc', 3, 25);
+      await mocked.api.account.txnbridge('0xabc0000000000000000000000000000000000000', 3, 25);
     });
 
     it('sends the explicit page', function () {

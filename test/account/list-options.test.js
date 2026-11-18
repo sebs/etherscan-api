@@ -43,8 +43,8 @@ describe('account list options', function () {
     ],
     [
       'txlistinternal by hash',
-      (api) => api.account.txlistinternal({ txhash: '0xabc' }),
-      (api) => api.account.txlistinternal('0xabc'),
+      (api) => api.account.txlistinternal({ txhash: '0xabc0000000000000000000000000000000000000000000000000000000000000' }),
+      (api) => api.account.txlistinternal('0xabc0000000000000000000000000000000000000000000000000000000000000'),
     ],
   ];
 

@@ -65,7 +65,7 @@ describe('account.txlist', function () {
     beforeEach(async function () {
       const mocked = mockApi({ status: '1', result: 'ok' });
       transport = mocked.transport;
-      const res = await mocked.api.account.txlist('0xabc', 5, 99, 2, 50, 'desc');
+      const res = await mocked.api.account.txlist('0xabc0000000000000000000000000000000000000', 5, 99, 2, 50, 'desc');
       result = res.result;
     });
 
@@ -86,7 +86,7 @@ describe('account.txlist', function () {
     });
 
     it('sends the address', function () {
-      assert.equal(queryOf(transport).get('address'), '0xabc');
+      assert.equal(queryOf(transport).get('address'), '0xabc0000000000000000000000000000000000000');
     });
 
     it('sends the explicit startblock', function () {
