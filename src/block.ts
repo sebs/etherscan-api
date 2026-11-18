@@ -1,4 +1,5 @@
 import type { RequestContext } from './get-request.js';
+import { EtherscanError } from './errors.js';
 import { unixSeconds } from './validation.js';
 import type { EtherscanResponse } from './types.js';
 import type { BlockReward, BlockCountdown, BlockTransactionCount } from './results.js';
@@ -21,7 +22,19 @@ export function block(ctx: RequestContext) {
     // Older callers pass (address, blockno); the address was never used by
     // the endpoint, so only the block number is sent.
     const blockno = legacyBlockno ?? first;
-    return call<BlockReward>('getblockreward', { blockno });
+    return call<BlockReward>('getblockreward', { blockno }).catch((err: unknown) => {
+      // A block not mined yet answers a bare "No record found" (checked live);
+      // say which block and why, keeping Etherscan's own fields.
+      if (err instanceof EtherscanError && typeof err.responseMessage === 'string' && /^no record found/i.test(err.responseMessage)) {
+        throw new EtherscanError(`No block reward record for block ${blockno}: it has probably not been mined yet`, {
+          result: err.result,
+          status: err.status,
+          responseMessage: err.responseMessage,
+          cause: err,
+        });
+      }
+      throw err;
+    });
   }
 
   return {
