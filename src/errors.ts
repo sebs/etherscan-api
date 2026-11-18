@@ -2,6 +2,8 @@ export interface EtherscanErrorDetails {
   result?: unknown;
   status?: unknown;
   responseMessage?: unknown;
+  /** The underlying error, e.g. a socket error from the default transport. */
+  cause?: unknown;
 }
 
 /**
@@ -24,7 +26,7 @@ export class EtherscanError extends Error {
   readonly responseMessage?: unknown;
 
   constructor(message: string, details: EtherscanErrorDetails = {}) {
-    super(message);
+    super(message, details.cause === undefined ? undefined : { cause: details.cause });
     this.name = 'EtherscanError';
     this.result = details.result;
     this.status = details.status;

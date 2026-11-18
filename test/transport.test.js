@@ -259,4 +259,36 @@ describe('http transport', function () {
     const data = await httpTransport(base + '/ok', { allowInsecure: true, maxResponseBytes: 1024 });
     assert.equal(data.result, '42');
   });
+
+  // EtherscanError's contract: one instanceof check covers every error a call
+  // can raise, including the transport's own failures.
+  describe('rejects every transport failure with an EtherscanError', function () {
+    const failures = {
+      'a timeout': () => httpTransport(base + '/slow', { timeout: 100, allowInsecure: true }),
+      'an oversized body': () => httpTransport(base + '/big', { maxResponseBytes: 1024, allowInsecure: true }),
+      'an unparseable body': () => httpTransport(base + '/bad-json', { allowInsecure: true }),
+      'a cleartext refusal': () => httpTransport(base + '/ok'),
+      'an invalid URL': () => httpTransport('not a url'),
+      'a non-HTTP scheme': () => httpTransport('ftp://example.com/'),
+      'a refused connection': () => httpTransport('http://127.0.0.1:1/', { allowInsecure: true }),
+    };
+    for (const [name, call] of Object.entries(failures)) {
+      it('for ' + name, async function () {
+        await assert.rejects(call, (err) => err instanceof EtherscanError);
+      });
+    }
+
+    it('keeps a socket error as the cause', async function () {
+      await assert.rejects(
+        () => httpTransport('http://127.0.0.1:1/', { allowInsecure: true }),
+        (err) => err.cause instanceof Error && err.cause.code === 'ECONNREFUSED',
+      );
+    });
+
+    it('surfaces the timeout through init() as an EtherscanError', async function () {
+      const api = init({ apiKey: 'KEY', timeout: 100, allowInsecure: true, transport: (url, options) =>
+        httpTransport(base + '/slow', options) });
+      await assert.rejects(() => api.stats.ethsupply(), (err) => err instanceof EtherscanError && /timed out/.test(err.message));
+    });
+  });
 });

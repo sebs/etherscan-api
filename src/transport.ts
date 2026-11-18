@@ -1,7 +1,7 @@
 import https from 'node:https';
 import http from 'node:http';
 import type { IncomingHttpHeaders, IncomingMessage } from 'node:http';
-import { EtherscanHttpError } from './errors.js';
+import { EtherscanError, EtherscanHttpError } from './errors.js';
 import { etherscanMessage } from './response.js';
 import { resolveMaxResponseBytes, resolveTimeout } from './validation.js';
 import type { Transport, TransportOptions, EtherscanResponse } from './types.js';
@@ -40,24 +40,24 @@ function resolveOptions(options: TransportOptions = {}): ResolvedOptions {
  * Pick `node:https` or `node:http` for a URL. The scheme comes from URL
  * parsing, so the cleartext refusal is robust to case and leading whitespace
  * (`'HTTP://'` and `' http://'` are still http).
- * @throws {Error} For an unparseable URL, a non-HTTP scheme, or `http:` without `allowInsecure`.
+ * @throws {EtherscanError} For an unparseable URL, a non-HTTP scheme, or `http:` without `allowInsecure`.
  */
 function clientFor(url: string, allowInsecure: boolean): typeof https | typeof http {
   let protocol: string;
   try {
     protocol = new URL(url).protocol;
   } catch {
-    throw new Error('Invalid request URL');
+    throw new EtherscanError('Invalid request URL');
   }
   if (protocol === 'https:') return https;
   if (protocol !== 'http:') {
-    throw new Error('Unsupported URL protocol (expected https: or http:)');
+    throw new EtherscanError('Unsupported URL protocol (expected https: or http:)');
   }
   if (!allowInsecure) {
     // Refuse cleartext by default: the API key rides in the URL/query, so an
     // accidental http:// base must not transmit it unencrypted. The message
     // deliberately omits the URL to avoid leaking the key.
-    throw new Error('Refusing to send request over cleartext http:// (set allowInsecure to override)');
+    throw new EtherscanError('Refusing to send request over cleartext http:// (set allowInsecure to override)');
   }
   return http;
 }
@@ -88,7 +88,11 @@ function exchange(client: typeof https | typeof http, url: string, options: Reso
       clearTimeout(deadline);
       settle();
     };
-    const fail = (err: Error): void => finish(() => reject(err));
+    // A socket or stream error from Node is wrapped, keeping it as the cause,
+    // so every rejection is an EtherscanError. Its message (e.g. "connect
+    // ECONNREFUSED 1.2.3.4:443") names the host, never the URL or its query.
+    const fail = (err: Error): void =>
+      finish(() => reject(err instanceof EtherscanError ? err : new EtherscanError(err.message, { cause: err })));
 
     const req = client.request(url, { method: options.method, headers: requestHeaders(options) }, (res: IncomingMessage) => {
       let body = '';
@@ -106,7 +110,7 @@ function exchange(client: typeof https | typeof http, url: string, options: Reso
           // Stop buffering and abort. Destroy without an error argument so no
           // 'error' is re-emitted; we reject explicitly via fail().
           res.destroy();
-          fail(new Error('Response body exceeded maximum size of ' + options.maxResponseBytes + ' bytes'));
+          fail(new EtherscanError('Response body exceeded maximum size of ' + options.maxResponseBytes + ' bytes'));
           return;
         }
         body += chunk;
@@ -119,7 +123,7 @@ function exchange(client: typeof https | typeof http, url: string, options: Reso
     // after `timeout` ms of inactivity, so a server trickling bytes could hold
     // the request open indefinitely.
     deadline = setTimeout(() => {
-      fail(new Error('Request timed out after ' + options.timeout + 'ms'));
+      fail(new EtherscanError('Request timed out after ' + options.timeout + 'ms'));
       req.destroy();
     }, options.timeout);
 
@@ -149,7 +153,7 @@ function errorDetail(body: string): string {
 /**
  * Turn a complete response into the parsed JSON body.
  * @throws {EtherscanHttpError} For a non-2xx status.
- * @throws {Error} When the body is not valid JSON.
+ * @throws {EtherscanError} When the body is not valid JSON.
  */
 function parseResponse({ status, headers, body }: RawResponse): EtherscanResponse {
   if (status < 200 || status >= 300) {
@@ -163,7 +167,7 @@ function parseResponse({ status, headers, body }: RawResponse): EtherscanRespons
   try {
     return JSON.parse(body);
   } catch (err) {
-    throw new Error('Failed to parse response body: ' + (err as Error).message);
+    throw new EtherscanError('Failed to parse response body: ' + (err as Error).message, { cause: err });
   }
 }
 
