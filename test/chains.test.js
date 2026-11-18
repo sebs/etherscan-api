@@ -1,13 +1,25 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { resolveChainId, CHAINS, RETIRED_CHAINS } from '../lib/chains.js';
+import { EtherscanArgumentError } from '../lib/index.js';
 
 describe('chains.resolveChainId', function () {
 
-  const DEFAULTS = [null, undefined, ''];
+  const DEFAULTS = [null, undefined];
   for (const input of DEFAULTS) {
     it('defaults to mainnet (1) for ' + JSON.stringify(input), function () {
       assert.equal(resolveChainId(input), 1);
+    });
+  }
+
+  // An empty value (say an empty CHAIN= in a .env file) is a mistake, not a
+  // choice of mainnet: silently picking a network is what this function avoids.
+  for (const input of ['', '   ', '\n']) {
+    it('rejects the empty chain ' + JSON.stringify(input), function () {
+      assert.throws(
+        () => resolveChainId(input),
+        (err) => err instanceof EtherscanArgumentError && err.argument === 'chain' && /empty/.test(err.message),
+      );
     });
   }
 
@@ -66,10 +78,6 @@ describe('chains.resolveChainId', function () {
       assert.equal(resolveChainId(input), expected);
     });
   }
-
-  it('still rejects a whitespace-only chain', function () {
-    assert.throws(() => resolveChainId('   '), /Unknown chain/);
-  });
 
   const INVALID_NUMERIC = [NaN, Infinity, -Infinity, -1, 0, 1.5, 1e21];
   for (const input of INVALID_NUMERIC) {

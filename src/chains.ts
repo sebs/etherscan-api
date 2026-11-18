@@ -56,7 +56,8 @@ function checkChainId(id: number, original: string | number): number {
 /**
  * Resolve a chain name or numeric chainid to a numeric chainid.
  *
- * - `null` / `undefined` / `''` defaults to Ethereum mainnet (1).
+ * - `null` / `undefined` defaults to Ethereum mainnet (1); an empty or blank
+ *   string throws, since it is more likely a missing setting than a choice.
  * - A number, an all-digit string, or a `0x` hex string (the EIP-155 form that
  *   `eth_chainId` returns) is passed through once validated as a positive integer.
  * - Surrounding whitespace in a string is ignored (values from env/config files).
@@ -67,7 +68,7 @@ function checkChainId(id: number, original: string | number): number {
  * @throws {EtherscanArgumentError} If the chain is invalid, retired or unknown.
  */
 export function resolveChainId(chain?: string | number | null): number {
-  if (chain === null || chain === undefined || chain === '') {
+  if (chain === null || chain === undefined) {
     return 1;
   }
 
@@ -83,6 +84,14 @@ export function resolveChainId(chain?: string | number | null): number {
   }
 
   const trimmed = chain.trim();
+  if (trimmed === '') {
+    // Say an empty CHAIN= in a .env file: a mistake, not a choice of mainnet.
+    throw new EtherscanArgumentError(
+      'Chain is empty; pass a chain name or chainid, or leave it out (null/undefined) for mainnet',
+      'chain',
+      chain,
+    );
+  }
   if (/^\d+$/.test(trimmed) || /^0x[0-9a-f]+$/i.test(trimmed)) {
     return checkChainId(Number(trimmed), chain);
   }
