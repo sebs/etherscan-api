@@ -65,9 +65,10 @@ export async function identifyingArguments(): Promise<void> {
   // @ts-expect-error — the filter form needs the filter.
   await api.account.txlist(undefined, 0, 'latest', 1, 10, 'asc');
 
+  // @ts-expect-error — Etherscan V2 needs the contract address, not a token name.
   await api.stats.tokensupply('DGD');
 
-  // @ts-expect-error — tokensupply needs a contract address or a token name.
+  // @ts-expect-error — tokensupply needs a contract address.
   await api.stats.tokensupply();
 }
 
@@ -141,6 +142,10 @@ export async function typedResults(): Promise<void> {
 
 export async function tokenbalance(): Promise<void> {
   await api.account.tokenbalance('0xa', '', '0xc');
+  await api.account.tokenbalance('0xa', undefined, '0xc');
+
+  // @ts-expect-error — Etherscan V2 needs the contract address, not a token name.
+  await api.account.tokenbalance('0xa', 'USDT');
 
   // @ts-expect-error — the account address is required.
   await api.account.tokenbalance();

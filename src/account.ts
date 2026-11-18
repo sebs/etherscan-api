@@ -208,8 +208,9 @@ export function account(ctx: RequestContext) {
     /**
      * Returns the amount of Tokens a specific account owns.
      * @param address - Account address
-     * @param tokenname - Name of the token
-     * @param contractaddress - Token contract address
+     * @param tokenname - Deprecated and ignored: Etherscan V2 no longer looks a
+     *   token up by name. Pass `''` or `undefined`.
+     * @param contractaddress - Token contract address (required)
      * @example
      * api.account.tokenbalance(
      *   '0x4366ddc115d8cf213c564da36e64c8ebaa30cdbd',
@@ -217,8 +218,19 @@ export function account(ctx: RequestContext) {
      *   '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a'
      * );
      */
-    tokenbalance(address: string, tokenname?: string, contractaddress?: string): Promise<EtherscanResponse<string>> {
-      return call<string>('tokenbalance', compact({ tag: 'latest', contractaddress, tokenname, address }));
+    async tokenbalance(
+      address: string,
+      tokenname: string | null | undefined,
+      contractaddress: string,
+    ): Promise<EtherscanResponse<string>> {
+      void tokenname; // Deprecated: Etherscan V2 no longer looks a token up by name.
+      if (!contractaddress) {
+        throw new EtherscanArgumentError(
+          'tokenbalance() needs the token contract address; Etherscan no longer looks tokens up by name',
+          'contractaddress',
+        );
+      }
+      return call<string>('tokenbalance', compact({ tag: 'latest', contractaddress, address }));
     },
 
     /**
