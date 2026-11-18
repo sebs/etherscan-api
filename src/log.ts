@@ -1,4 +1,5 @@
 import type { RequestContext } from './get-request.js';
+import { EtherscanArgumentError } from './errors.js';
 import { compact, isOptions } from './params.js';
 import { pagingParams } from './list-params.js';
 import type { EtherscanResponse } from './types.js';
@@ -8,7 +9,8 @@ import type { EventLog } from './results.js';
 export type TopicOperator = 'and' | 'or';
 
 /**
- * Query for `log.getLogs`. Only the fields you set are sent.
+ * Query for `log.getLogs`. Only the fields you set are sent. It needs an
+ * `address` or at least one topic.
  * @see https://docs.etherscan.io/api-endpoints/logs
  */
 export interface LogQuery {
@@ -80,6 +82,10 @@ export function log(ctx: RequestContext) {
         address: first, fromBlock, toBlock, topic0, topic1, topic2, topic3, page, offset,
         topic0_1_opr, topic0_2_opr, topic0_3_opr, topic1_2_opr, topic1_3_opr, topic2_3_opr,
       } as LogQuery;
+    }
+    // Without either, Etherscan answers a bare "Error!" (checked live).
+    if (!query.address && !query.topic0 && !query.topic1 && !query.topic2 && !query.topic3) {
+      throw new EtherscanArgumentError('getLogs() needs an address or a topic (topic0–topic3)', 'address');
     }
     const { page, offset, ...filters } = query;
     return list<EventLog[]>('getLogs', { ...compact({ ...filters }), ...pagingParams(page, offset) });

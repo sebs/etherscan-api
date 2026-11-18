@@ -1,5 +1,6 @@
 import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
+import { EtherscanArgumentError } from '../lib/index.js';
 import { mockApi, queryOf } from './helpers.js';
 
 const ADDRESS = '0x33990122638b9132ca29c723bdf037f1c891a925';
@@ -182,5 +183,32 @@ describe('log.getLogs', function () {
     it('forwards topic1_3_opr', function () {
       assert.equal(query.get('topic1_3_opr'), 'or');
     });
+  });
+
+  // Checked live: without an address or a topic Etherscan answers a bare
+  // "Error!"; a topic alone, or an address alone, is enough.
+  describe('needs an address or a topic', function () {
+    it('rejects a query with neither, before any request', async function () {
+      const mocked = mockApi({ status: '1', result: [] });
+      await assert.rejects(
+        () => mocked.api.log.getLogs({ fromBlock: 1, toBlock: 2 }),
+        (err) => err instanceof EtherscanArgumentError && err.argument === 'address' && /address or a topic/.test(err.message),
+      );
+      assert.equal(mocked.transport.mock.callCount(), 0);
+    });
+
+    it('rejects a call with no arguments, before any request', async function () {
+      const mocked = mockApi({ status: '1', result: [] });
+      await assert.rejects(() => mocked.api.log.getLogs(), EtherscanArgumentError);
+      assert.equal(mocked.transport.mock.callCount(), 0);
+    });
+
+    for (const topic of ['topic0', 'topic1', 'topic2', 'topic3']) {
+      it('accepts ' + topic + ' without an address', async function () {
+        const mocked = mockApi({ status: '1', result: [] });
+        await mocked.api.log.getLogs({ [topic]: TOPIC0 });
+        assert.equal(mocked.transport.mock.callCount(), 1);
+      });
+    }
   });
 });
