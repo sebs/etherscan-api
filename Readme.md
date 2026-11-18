@@ -122,6 +122,29 @@ Retired testnets (`ropsten`, `rinkeby`, `kovan`, `goerli`, `holesky`, `morden`,
 `arbitrum_rinkeby`) have been removed and now **throw** an
 error with a helpful message — use `sepolia` or `hoodi` instead.
 
+## Errors
+
+Every error a call raises is an `EtherscanError`: a failure Etherscan reports,
+an HTTP or network failure (`EtherscanHttpError`, with `statusCode` and
+`headers`), or an argument rejected before any request
+(`EtherscanArgumentError`, with `argument`). Etherscan's own text becomes the
+message, e.g. `Contract source code not verified`.
+
+Etherscan reports an exceeded rate limit as an ordinary failure (an HTTP 200
+with status `"0"`). `rateLimited` tells it apart, so you can back off and retry:
+
+```js
+import { EtherscanError } from 'etherscan-api';
+
+try {
+  await api.account.balance(address);
+} catch (err) {
+  if (err instanceof EtherscanError && err.rateLimited) {
+    // e.g. "Max calls per sec rate limit reached (3/sec)": wait, then retry
+  }
+}
+```
+
 ## Install
 
  ```bash

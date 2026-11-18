@@ -32,6 +32,18 @@ export class EtherscanError extends Error {
     this.status = details.status;
     this.responseMessage = details.responseMessage;
   }
+
+  /**
+   * Whether Etherscan refused the call for exceeding a rate limit, per second
+   * or per day. Etherscan reports that as an HTTP 200 with status "0" and a
+   * "… rate limit reached" message (or, through some proxies, as a non-2xx
+   * status), so this reads the message rather than the error type.
+   * @example
+   * catch (err) { if (err instanceof EtherscanError && err.rateLimited) await backOff(); }
+   */
+  get rateLimited(): boolean {
+    return /\brate limit\b/i.test(this.message);
+  }
 }
 
 /**
@@ -56,6 +68,11 @@ export class EtherscanHttpError extends EtherscanError {
     this.name = 'EtherscanHttpError';
     this.statusCode = statusCode;
     this.headers = headers;
+  }
+
+  /** Also true for an HTTP 429, whatever the body says. */
+  override get rateLimited(): boolean {
+    return this.statusCode === 429 || super.rateLimited;
   }
 }
 
