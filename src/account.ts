@@ -76,7 +76,10 @@ export function account(ctx: RequestContext) {
       const options: TokenTransferOptions = isOptions<TokenTransferOptions>(first)
         ? first
         : { contractaddress: first, ...fromPositional(args.slice(1) as PositionalFilteredList) };
-      return list<T[]>(action, { ...compact({ address, contractaddress: options.contractaddress }), ...listParams(options) });
+      return list<T[]>(action, {
+        ...compact({ address, contractaddress: options.contractaddress }),
+        ...listParams(options, address),
+      });
     }) as TokenTransferList<T>;
 
   // One body for the address-scoped paged lists (beacon withdrawals and the
@@ -148,7 +151,7 @@ export function account(ctx: RequestContext) {
     if (!address && !options.filter?.from && !options.filter?.to) {
       throw new EtherscanArgumentError('txlist() needs an address or an advanced filter with from/to', 'address');
     }
-    return list<NormalTransaction[]>('txlist', { ...compact({ address }), ...listParams(options) });
+    return list<NormalTransaction[]>('txlist', { ...compact({ address }), ...listParams(options, address) });
   }
 
   // Overloads: the public docs are on `txlistinternal` in the returned object below.
@@ -186,7 +189,8 @@ export function account(ctx: RequestContext) {
       // paged keep getting Etherscan's full (unpaged) result.
       ...pagingParams(query.page, query.offset),
       sort: checkSort(query.sort),
-      ...filterParams(query.filter),
+      // A txhash lookup sends no address, so only an address lookup can conflict.
+      ...filterParams(query.filter, query.txhash ? undefined : query.address),
     });
   }
 

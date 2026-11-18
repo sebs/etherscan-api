@@ -1,3 +1,4 @@
+import { EtherscanArgumentError } from './errors.js';
 import { compact } from './params.js';
 import type { QueryParams } from './params.js';
 import { checkPaging, checkSort } from './validation.js';
@@ -5,9 +6,11 @@ import type { SortOrder } from './validation.js';
 
 /**
  * Advanced-filter fields (Beta) accepted by the transaction-list endpoints.
- * Filter by sender and/or recipient instead of a single `address`. Provide
- * `from`, `to`, or both; `fromto_opr` chooses whether both must match
- * (`'and'`) or either (`'or'`).
+ * Filter by sender and/or recipient instead of a single `address`; Etherscan
+ * rejects an address combined with `from`/`to`. Provide `from`, `to`, or both.
+ * With both, `fromto_opr` is required and chooses whether both must match
+ * (`'and'`) or either (`'or'`); with one, it defaults to `'or'`, the only
+ * value Etherscan accepts there.
  * @see https://docs.etherscan.io/api-reference/endpoint/advanced-filter-txlist
  */
 export interface AdvancedFilter {
@@ -15,7 +18,10 @@ export interface AdvancedFilter {
   from?: string;
   /** Recipient address to filter by. */
   to?: string;
-  /** Operator between `from` and `to`: `'and'` (both match) or `'or'` (either). */
+  /**
+   * Operator between `from` and `to`: `'and'` (both match) or `'or'` (either).
+   * Required when both are set; defaults to `'or'` when only one is.
+   */
   fromto_opr?: 'and' | 'or';
 }
 
@@ -39,7 +45,7 @@ export interface ListOptions {
 
 /** {@link ListOptions} plus an advanced filter (Beta) on sender/recipient. */
 export interface FilteredListOptions extends ListOptions {
-  /** Filter by `from`/`to`, in addition to or instead of an address. */
+  /** Filter by `from`/`to` instead of an address (Etherscan rejects the two combined). */
   filter?: AdvancedFilter;
 }
 
@@ -60,9 +66,41 @@ export function fromPositional([startblock, endblock, page, offset, sort, filter
   return { startblock, endblock, page, offset, sort, filter };
 }
 
-/** The advanced-filter params that were given. */
-export function filterParams(filter?: AdvancedFilter): QueryParams {
-  return filter ? compact({ from: filter.from, to: filter.to, fromto_opr: filter.fromto_opr }) : {};
+/**
+ * The advanced-filter params, checked against Etherscan's rules (verified
+ * live): `from`/`to` cannot be combined with an `address`, `fromto_opr` is
+ * required once either is set, and `'and'` needs both. With one side and no
+ * operator, `'or'` is filled in, as the only value Etherscan accepts.
+ * @param address - The address the request also sends, if any.
+ * @throws {EtherscanArgumentError} For a combination Etherscan would reject.
+ */
+export function filterParams(filter?: AdvancedFilter, address?: string): QueryParams {
+  const params = filter ? compact({ from: filter.from, to: filter.to, fromto_opr: filter.fromto_opr }) : {};
+  const sides = Number(params.from !== undefined) + Number(params.to !== undefined);
+  if (sides === 0) return params;
+  if (address) {
+    throw new EtherscanArgumentError(
+      'An advanced filter on from/to cannot be combined with an address; pass one or the other',
+      'filter',
+      filter,
+    );
+  }
+  if (params.fromto_opr === undefined) {
+    if (sides === 2) {
+      throw new EtherscanArgumentError(
+        "A filter on both from and to needs fromto_opr: 'and' (both match) or 'or' (either)",
+        'fromto_opr',
+      );
+    }
+    params.fromto_opr = 'or';
+  } else if (params.fromto_opr === 'and' && sides === 1) {
+    throw new EtherscanArgumentError(
+      "fromto_opr 'and' needs both from and to; use 'or' to filter on one side",
+      'fromto_opr',
+      'and',
+    );
+  }
+  return params;
 }
 
 /**
@@ -96,13 +134,14 @@ export function blockRange(startblock?: string | number, endblock?: string | num
 /**
  * The full, validated params of a paged list query: block range, paging with
  * defaults, sort and filter.
- * @throws {EtherscanArgumentError} For an invalid sort or paging.
+ * @param address - The address the request also sends, if any (see {@link filterParams}).
+ * @throws {EtherscanArgumentError} For an invalid sort, paging or filter.
  */
-export function listParams(options: FilteredListOptions): QueryParams {
+export function listParams(options: FilteredListOptions, address?: string): QueryParams {
   return {
     ...blockRange(options.startblock, options.endblock),
     ...pagingParams(options.page, options.offset, { defaults: true }),
     sort: checkSort(options.sort),
-    ...filterParams(options.filter),
+    ...filterParams(options.filter, address),
   };
 }

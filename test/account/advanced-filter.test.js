@@ -1,5 +1,6 @@
 import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
+import { EtherscanArgumentError } from '../../lib/index.js';
 import { mockApi, queryOf } from '../helpers.js';
 
 describe('account advanced filter (from/to/fromto_opr)', function () {
@@ -46,30 +47,76 @@ describe('account advanced filter (from/to/fromto_opr)', function () {
     });
   });
 
-  describe('txlist still includes address alongside a filter when both are given', function () {
-    let transport;
+  // Etherscan's rules, checked live: an address cannot be combined with
+  // from/to; fromto_opr is required once from or to is set; 'and' needs both.
+  describe('rejects an address combined with a from/to filter, before any request', function () {
+    const calls = {
+      txlist: (api) => api.account.txlist('0xabc', { filter: { from: '0xfff', fromto_opr: 'or' } }),
+      'txlist (positional)': (api) => api.account.txlist('0xabc', 0, 'latest', 1, 10, 'asc', { from: '0xfff' }),
+      txlistinternal: (api) => api.account.txlistinternal({ address: '0xabc', filter: { to: '0xfff' } }),
+      tokentx: (api) => api.account.tokentx('0xabc', { filter: { from: '0xfff' } }),
+      tokennfttx: (api) => api.account.tokennfttx('0xabc', { filter: { to: '0xfff' } }),
+      token1155tx: (api) => api.account.token1155tx('0xabc', { filter: { from: '0xfff' } }),
+    };
+    for (const [name, call] of Object.entries(calls)) {
+      it(name, async function () {
+        const { api, transport } = mockApi({ status: '1', result: [] });
+        await assert.rejects(() => call(api), (err) => err instanceof EtherscanArgumentError && err.argument === 'filter');
+        assert.equal(transport.mock.callCount(), 0);
+      });
+    }
+  });
 
-    beforeEach(async function () {
-      const mocked = mockApi({ status: '1', result: [] });
-      transport = mocked.transport;
-      await mocked.api.account.txlist('0xabc', 0, 'latest', 1, 10, 'asc', { from: '0xfff' });
-    });
+  it('still sends an address with a filter that sets only fromto_opr', async function () {
+    const { api, transport } = mockApi({ status: '1', result: [] });
+    await api.account.txlist('0xabc', { filter: { fromto_opr: 'and' } });
+    assert.equal(queryOf(transport).get('address'), '0xabc');
+  });
 
-    it('sends the address', function () {
-      assert.equal(queryOf(transport).get('address'), '0xabc');
-    });
+  it('ignores the filter for a txhash lookup, so an address there is no conflict', async function () {
+    const { api, transport } = mockApi({ status: '1', result: [] });
+    await api.account.txlistinternal({ txhash: '0xh', address: '0xabc', filter: { from: '0xfff', fromto_opr: 'or' } });
+    assert.equal(queryOf(transport).get('txhash'), '0xh');
+  });
 
-    it('sends the from filter', function () {
-      assert.equal(queryOf(transport).get('from'), '0xfff');
-    });
+  describe('defaults fromto_opr to "or" when only one side is given', function () {
+    for (const side of ['from', 'to']) {
+      it('for ' + side, async function () {
+        const { api, transport } = mockApi({ status: '1', result: [] });
+        await api.account.txlist(undefined, { filter: { [side]: '0xfff' } });
+        assert.equal(queryOf(transport).get('fromto_opr'), 'or');
+      });
+    }
 
-    it('omits the to filter', function () {
-      assert.equal(queryOf(transport).get('to'), null);
+    it('for txlistinternal', async function () {
+      const { api, transport } = mockApi({ status: '1', result: [] });
+      await api.account.txlistinternal({ filter: { to: '0xfff' } });
+      assert.equal(queryOf(transport).get('fromto_opr'), 'or');
     });
+  });
 
-    it('omits the fromto_opr filter', function () {
-      assert.equal(queryOf(transport).get('fromto_opr'), null);
-    });
+  it('keeps an explicit "or" with one side', async function () {
+    const { api, transport } = mockApi({ status: '1', result: [] });
+    await api.account.tokentx(undefined, { filter: { from: '0xfff', fromto_opr: 'or' } });
+    assert.equal(queryOf(transport).get('fromto_opr'), 'or');
+  });
+
+  it('rejects "and" with only one side, before any request', async function () {
+    const { api, transport } = mockApi({ status: '1', result: [] });
+    await assert.rejects(
+      () => api.account.txlist(undefined, { filter: { from: '0xfff', fromto_opr: 'and' } }),
+      (err) => err instanceof EtherscanArgumentError && err.argument === 'fromto_opr',
+    );
+    assert.equal(transport.mock.callCount(), 0);
+  });
+
+  it('rejects from and to without fromto_opr, before any request', async function () {
+    const { api, transport } = mockApi({ status: '1', result: [] });
+    await assert.rejects(
+      () => api.account.txlist(undefined, { filter: { from: '0xaaa', to: '0xbbb' } }),
+      (err) => err instanceof EtherscanArgumentError && err.argument === 'fromto_opr',
+    );
+    assert.equal(transport.mock.callCount(), 0);
   });
 
   describe('a filter with no defined fields adds nothing', function () {
