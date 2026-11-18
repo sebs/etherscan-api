@@ -1,4 +1,5 @@
 import type { RequestContext } from './get-request.js';
+import { isoDate } from './validation.js';
 import type { SortOrder } from './validation.js';
 import { EtherscanArgumentError } from './errors.js';
 import type { EtherscanResponse } from './types.js';
@@ -51,22 +52,28 @@ export function stats(ctx: RequestContext) {
 
     /**
      * Returns the size of the blockchain, in bytes, sampled daily over a date range.
-     * @param startdate - Start date, `yyyy-MM-dd`
-     * @param enddate - End date, `yyyy-MM-dd`
+     * @param startdate - Start date, `YYYY-MM-DD` or a `Date` (taken in UTC)
+     * @param enddate - End date, `YYYY-MM-DD` or a `Date` (taken in UTC)
      * @param clienttype - Node client to measure: `'geth'` (default) or `'parity'`
      * @param syncmode - Sync mode: `'default'` (default) or `'archive'`
      * @param sort - Sort asc/desc (default `'asc'`)
      * @example
      * api.stats.chainsize('2019-02-01', '2019-02-28');
      */
-    chainsize(
-      startdate: string,
-      enddate: string,
+    async chainsize(
+      startdate: string | Date,
+      enddate: string | Date,
       clienttype: 'geth' | 'parity' = 'geth',
       syncmode: 'default' | 'archive' = 'default',
       sort: SortOrder = 'asc',
     ): Promise<EtherscanResponse<ChainSize[]>> {
-      return list<ChainSize[]>('chainsize', { startdate, enddate, clienttype, syncmode, sort });
+      return list<ChainSize[]>('chainsize', {
+        startdate: isoDate('startdate', startdate),
+        enddate: isoDate('enddate', enddate),
+        clienttype,
+        syncmode,
+        sort,
+      });
     },
   };
 }

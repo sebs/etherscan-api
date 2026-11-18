@@ -1,5 +1,6 @@
 import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
+import { EtherscanArgumentError } from '../../lib/index.js';
 import { mockApi, queryOf } from '../helpers.js';
 
 const START = '2019-02-01';
@@ -76,4 +77,30 @@ describe('stats.chainsize', function () {
       assert.equal(queryOf(transport).get('sort'), 'desc');
     });
   });
+
+  // Checked live: Etherscan takes YYYY-MM-DD only; '01/01/2024' or a Date
+  // stringified by String() fail with a bare "Error! Invalid parameter".
+  it('formats Date arguments as UTC YYYY-MM-DD', async function () {
+    const mocked = mockApi({ status: '1', result: [] });
+    await mocked.api.stats.chainsize(new Date('2019-02-01T23:30:00Z'), new Date(Date.UTC(2019, 1, 28)));
+    const query = queryOf(mocked.transport);
+    assert.deepEqual([query.get('startdate'), query.get('enddate')], ['2019-02-01', '2019-02-28']);
+  });
+
+  for (const [argument, args] of [
+    ['startdate', ['01/02/2019', END]],
+    ['startdate', ['2019-2-1', END]],
+    ['enddate', [START, '2019-02-30']],
+    ['enddate', [START, new Date('nope')]],
+    ['startdate', [undefined, END]],
+  ]) {
+    it('rejects the ' + argument + ' ' + String(args[argument === 'startdate' ? 0 : 1]) + ' before any request', async function () {
+      const mocked = mockApi({ status: '1', result: [] });
+      await assert.rejects(
+        () => mocked.api.stats.chainsize(...args),
+        (err) => err instanceof EtherscanArgumentError && err.argument === argument,
+      );
+      assert.equal(mocked.transport.mock.callCount(), 0);
+    });
+  }
 });

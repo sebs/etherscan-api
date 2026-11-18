@@ -151,6 +151,11 @@ export async function tokenbalance(): Promise<void> {
   await api.account.tokenbalance();
 }
 
+export async function chainsize(): Promise<void> {
+  await api.stats.chainsize('2019-02-01', '2019-02-28');
+  await api.stats.chainsize(new Date(), new Date());
+}
+
 export async function estimateGas(): Promise<void> {
   await api.proxy.eth_estimateGas('0xa', '0x1');
   await api.proxy.eth_estimateGas('0xa', '0x1', undefined, undefined, '0x4e71d92d');

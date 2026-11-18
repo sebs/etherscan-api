@@ -217,3 +217,22 @@ export function unixSeconds(timestamp: string | number | Date, round: (x: number
   }
   return seconds;
 }
+
+/**
+ * Convert a date to the `YYYY-MM-DD` form Etherscan's daily-stats endpoints
+ * take. A `Date` is formatted in UTC; a string must already be a real
+ * calendar date in that form (Etherscan answers anything else with a bare
+ * "Error! Invalid parameter").
+ * @throws {EtherscanArgumentError} For another format, an impossible date, or an invalid Date.
+ */
+export function isoDate(argument: string, value: string | Date): string {
+  let date: Date | undefined;
+  if (value instanceof Date) date = value;
+  else if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) date = new Date(value + 'T00:00:00Z');
+  const text = date && !Number.isNaN(date.getTime()) ? date.toISOString().slice(0, 10) : undefined;
+  // A string that round-trips differently (2019-02-30 → 2019-03-02) is not a real date.
+  if (text === undefined || (typeof value === 'string' && text !== value)) {
+    throw invalid(argument, value, 'a YYYY-MM-DD date or a Date');
+  }
+  return text;
+}
